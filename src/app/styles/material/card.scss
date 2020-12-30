@@ -1,0 +1,15 @@
+@import '../variables';
+
+
+
+.mat-card {
+  box-shadow: $big-shadow;
+  border-radius: $border-radius-primary !important;
+  overflow: hidden;
+  padding: 50px 30px !important;
+
+}
+.mat-card:not([class*=mat-elevation-z]){
+  box-shadow: $big-shadow;
+}
+

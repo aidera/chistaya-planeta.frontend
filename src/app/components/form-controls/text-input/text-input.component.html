@@ -1,0 +1,59 @@
+<mat-form-field appearance="standard" [ngClass]="{'has-icon': icon}">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    [formControl]="control"
+    [id]="fieldId"
+    [type]="type"
+    autocomplete="off"
+    matInput
+  />
+
+  <span
+    class="icon"
+    *ngIf="icon && fieldType !== 'password'" [inlineSVG]="icon"
+  ></span>
+
+
+  <span
+    class="icon"
+    [inlineSVG]="'../assets/icons/show.svg'"
+    *ngIf="fieldType === 'password' && type === 'password'"
+    (click)="changePasswordFieldType()"
+  ></span>
+
+
+  <span
+    class="icon"
+    [inlineSVG]="'../assets/icons/hide.svg'"
+    *ngIf="fieldType === 'password' && type !== 'password'"
+    (click)="changePasswordFieldType()"
+  ></span>
+
+
+<!--  <mat-icon *ngIf="icon && type !== 'password'" matSuffix>-->
+
+<!--  </mat-icon>-->
+
+<!--  <mat-icon-->
+<!--    *ngIf="fieldType === 'password' && type === 'password'"-->
+<!--    matSuffix-->
+<!--    class="password-button"-->
+<!--    (click)="changePasswordFieldType()"-->
+<!--  >-->
+<!--    {{ icons.passwordShow }}-->
+<!--  </mat-icon>-->
+
+<!--  <mat-icon-->
+<!--    *ngIf="fieldType === 'password' && type !== 'password'"-->
+<!--    matSuffix-->
+<!--    class="password-button"-->
+<!--    (click)="changePasswordFieldType()"-->
+<!--  >-->
+<!--    {{ icons.passwordHide }}-->
+<!--  </mat-icon>-->
+
+  <mat-hint *ngIf="currentErrorMessage && control.touched">{{
+    currentErrorMessage
+  }}</mat-hint>
+<!--  <mat-hint >Hint</mat-hint>-->
+</mat-form-field>

@@ -1,0 +1,9 @@
+@import '../variables';
+
+.mat-tooltip {
+  background: $color-primary !important;
+  padding: 16px !important;
+  border-radius: $border-radius-primary !important;
+  font-size: $font-size-small !important;
+  box-shadow: $normal-shadow;
+}

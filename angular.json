@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "chistaya-planeta"
+    }
+  },
+  "defaultProject": "chistaya-planeta",
+  "cli": {
+    "analytics": "b515b9bd-d944-4098-bc90-a0d82adb0500"
+  }
 }

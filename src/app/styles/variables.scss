@@ -1,0 +1,45 @@
+@import '~@angular/material/theming';
+
+@import "palettes";
+
+/* Breakpoints */
+$bp-xxl: 1400px;
+$bp-xl: 1200px;
+$bp-lg: 992px;
+$bp-md: 768px;
+$bp-sm: 576px;
+$bp-xs: 350px;
+
+/* Colors */
+$color-primary:  mat-color($app-primary-palette, 500);
+$color-accent:  mat-color($app-secondary-palette, 100);
+
+$body-background-color: #F5F9F1;
+$card-background-color: #ffffff;
+
+$divider-color: #DDDDDD;
+
+$text-color-primary: #5B5B5B;
+$text-color-secondary: #f1f1f1;
+$link-color: $color-primary;
+
+$error-color: #F44336;
+
+$disable-color: #c8c8c8;
+
+/* Font */
+$font-family: 'Ruda', sans-serif;
+$font-size-normal: 16px;
+$font-size-small: 14px;
+
+/* Border-radius */
+$border-radius-primary: 16px;
+$border-radius-secondary: 4px;
+
+/* Transition */
+$transition-1: 0.25s ease-in-out;
+
+/* Shadows */
+$big-shadow: 0px 49px 51px -21px rgba(0, 0, 0, 0.1);
+$normal-shadow: 0px 6px 10px 2px rgba(0, 0, 0, 0.1);
+$small-shadow: 0px 16px 18px -12px rgba(0, 0, 0, 0.25);

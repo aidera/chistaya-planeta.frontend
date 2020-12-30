@@ -1,0 +1,21 @@
+@import '../../styles/variables';
+
+
+:host {
+  display: inline-block;
+}
+
+.question {
+  width: 16px;
+  transform: translateY(2px);
+  cursor: pointer;
+
+  span {
+    transition: $transition-1;
+
+    &:hover {
+      fill: $color-primary;
+    }
+  }
+
+}

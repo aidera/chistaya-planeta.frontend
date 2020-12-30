@@ -1,0 +1,162 @@
+@import '../variables';
+
+.mat-form-field {
+  width: 100%;
+  padding-bottom: 16px;
+
+  .icon {
+    cursor: pointer;
+    fill: $text-color-primary;
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    transition: $transition-1;
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.mat-form-field-underline {
+  display: none;
+}
+
+.mat-form-field.mat-focused {
+  .icon {
+    fill: $color-primary;
+  }
+}
+
+.mat-form-field-appearance-standard .mat-form-field-flex {
+  padding: 0;
+}
+
+.mat-form-field-subscript-wrapper {
+  position: relative !important;
+  margin: 0 !important;
+  padding-top: 4px;
+}
+
+.mat-form-field-appearance-standard .mat-form-field-flex {
+  padding: 0 !important;
+}
+
+.mat-form-field-wrapper {
+  padding: 0 !important;
+}
+
+.mat-form-field-infix {
+  padding: 0 !important;
+  padding-top: 8px !important;
+}
+
+.mat-hint {
+  font-size: $font-size-small;
+}
+
+
+/* Input + Textarea */
+.mat-form-field-infix {
+  input, textarea {
+    border: 1px solid $text-color-primary;
+    border-radius: $border-radius-secondary;
+    padding: 12px 14px !important;
+    transition: $transition-1;
+  }
+  textarea {
+    resize: none !important;
+  }
+}
+.mat-form-field.mat-focused {
+  input, textarea {
+    border-color: $color-primary;
+  }
+}
+
+
+.mat-form-field-label {
+  transform: translateY(14px) translateX(14px) scale(1) !important;
+}
+.mat-form-field-should-float{
+  .mat-form-field-label {
+    transform: translateY(-16px) translateX(0) scale(0.75) !important;
+    left: 0 !important;
+  }
+}
+
+
+
+.mat-form-field.has-icon {
+  .mat-form-field-infix {
+    input {
+      padding-right: 48px;
+    }
+  }
+}
+
+
+
+
+  /* Checkbox */
+.mat-checkbox {
+  width: 100%;
+  padding-bottom: 16px;
+  display: block;
+
+  .mat-checkbox-inner-container {
+    width: 20px;
+    height: 20px;
+  }
+  .mat-checkbox-frame {
+    border-radius: $border-radius-secondary;
+    border-width: 1px;
+  }
+  .mat-checkbox-background {
+    border-radius: $border-radius-secondary;
+  }
+}
+
+
+
+/* Select */
+
+.mat-select {
+  border: 1px solid $text-color-primary;
+  border-radius: $border-radius-secondary;
+  transition: $transition-1;
+
+  .mat-select-trigger {
+    padding: 12px 14px !important;
+  }
+
+  .mat-select-arrow-wrapper {
+    transform: translateY(0) !important;;
+  }
+
+}
+
+.mat-focused {
+  .mat-select {
+    border-color: $color-primary;
+  }
+}
+
+.mat-select-panel {
+  box-shadow: $normal-shadow !important;
+  border-radius: $border-radius-secondary !important;
+}
+
+
+.mat-option {
+  border-bottom: 1px solid $divider-color;
+}
+
+
+.mat-option.mat-active:not(:hover) {
+  background: white !important;
+}
+.mat-option.mat-active:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+

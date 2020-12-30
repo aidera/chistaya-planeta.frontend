@@ -1,0 +1,89 @@
+@import '../variables';
+
+
+.mat-button, .mat-raised-button {
+  font-family: $font-family;
+  font-weight: 200;
+  text-transform: uppercase;
+  color: $text-color-primary;
+  &:hover {
+    opacity: 1;
+  }
+
+  > span {
+    line-height: 1;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+  }
+
+
+  svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 16px;
+    fill: $text-color-primary;
+  }
+}
+
+a.mat-button, a.mat-raised-button {
+  color: $text-color-primary;
+}
+
+.mat-button.mat-primary {
+  svg {
+    fill: $color-primary;
+  }
+}
+
+.mat-button.mat-accent {
+  svg {
+    fill: $color-primary;
+  }
+}
+
+.mat-button.mat-warn {
+  svg {
+    fill: $error-color;
+  }
+}
+
+.mat-button.mat-button-disabled, {
+  svg {
+    fill: $disable-color;
+  }
+}
+
+.mat-raised-button {
+  box-shadow: $small-shadow !important;
+}
+
+
+.mat-raised-button.mat-primary,
+.mat-raised-button.mat-accent,
+.mat-raised-button.mat-warn, {
+  svg {
+    fill: white;
+  }
+}
+
+.mat-raised-button.mat-button-disabled, {
+  svg {
+    fill: $disable-color;
+  }
+}
+
+.mat-raised-button.mat-primary {
+  background: linear-gradient(90deg, #91B62A 0%, #6C8426 100%);
+}
+
+.mat-button.mat-button-disabled {
+  color: $disable-color !important;
+
+  span {
+    color: $disable-color !important;
+  }
+}
+

@@ -1,0 +1,8 @@
+<mat-form-field appearance="standard">
+  <mat-label>{{ label }}</mat-label>
+  <mat-select [value]="value">
+    <mat-option *ngFor="let option of options" [value]="option.value">
+      {{option.text}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

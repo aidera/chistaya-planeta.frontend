@@ -1,0 +1,35 @@
+@import '../variables';
+
+
+.mat-body,
+.mat-body-1,
+.mat-typography {
+  font-size: $font-size-normal;
+  line-height: 1.25;
+  font-family: $font-family;
+  font-weight: 400;
+}
+
+.mat-typography h1,
+.mat-typography h2,
+.mat-typography h3,
+.mat-typography h4,
+.mat-typography h5 {
+  font-family: $font-family;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.mat-typography h1,
+h1 {
+  font-size: 36px;
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.mat-typography h2,
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
