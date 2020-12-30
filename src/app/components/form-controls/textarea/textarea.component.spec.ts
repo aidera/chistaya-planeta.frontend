@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TextareaComponent } from './textarea.component';
 
 import { By } from '@angular/platform-browser';
-import {MaterialModule} from '../../../modules/material.module';
+import {MaterialModule} from '../../../modules/material/material.module';
 
 describe('TextareaComponent', () => {
   let component: TextareaComponent;

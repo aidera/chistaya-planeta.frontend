@@ -8,7 +8,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TextInputComponent } from './text-input.component';
-import {MaterialModule} from '../../../modules/material.module';
+import {MaterialModule} from '../../../modules/material/material.module';
 import { By } from '@angular/platform-browser';
 
 describe('TextInputComponent', () => {

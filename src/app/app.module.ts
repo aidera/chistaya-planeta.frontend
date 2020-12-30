@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {MaterialModule} from './modules/material.module';
+import {MaterialModule} from './modules/material/material.module';
 import { AbstractFormControlComponent } from './components/form-controls/abstract-form-control.component';
 import { TextInputComponent } from './components/form-controls/text-input/text-input.component';
 import { TextareaComponent } from './components/form-controls/textarea/textarea.component';

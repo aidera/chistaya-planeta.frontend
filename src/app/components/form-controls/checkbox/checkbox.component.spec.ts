@@ -8,7 +8,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CheckboxComponent } from './checkbox.component';
-import {MaterialModule} from '../../../modules/material.module';
+import {MaterialModule} from '../../../modules/material/material.module';
 import { By } from '@angular/platform-browser';
 
 describe('CheckboxComponent', () => {
