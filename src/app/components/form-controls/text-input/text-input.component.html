@@ -16,18 +16,11 @@
 
   <span
     class="icon"
-    [inlineSVG]="'../assets/icons/show.svg'"
-    *ngIf="fieldType === 'password' && type === 'password'"
+    [inlineSVG]="type === 'password' ? '../assets/icons/show.svg' : '../assets/icons/hide.svg'"
+    *ngIf="fieldType === 'password'"
     (click)="changePasswordFieldType()"
   ></span>
 
-
-  <span
-    class="icon"
-    [inlineSVG]="'../assets/icons/hide.svg'"
-    *ngIf="fieldType === 'password' && type !== 'password'"
-    (click)="changePasswordFieldType()"
-  ></span>
 
 
 <!--  <mat-icon *ngIf="icon && type !== 'password'" matSuffix>-->
