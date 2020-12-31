@@ -1,0 +1,24 @@
+<mat-form-field appearance="standard">
+  <mat-label>{{ label }} <span class="required-field-star" *ngIf="isRequired">*</span></mat-label>
+  <input
+    [formControl]="control"
+    [matDatepicker]="picker"
+    autocomplete="off"
+    matInput
+    disabled="false"
+    [min]="minDate" [max]="maxDate"
+  />
+
+  <mat-datepicker #picker disabled="false"></mat-datepicker>
+
+  <span
+    class="icon"
+    [inlineSVG]="'../assets/icons/calendar.svg'"
+    (click)="picker.open()"
+  ></span>
+
+  <mat-hint *ngIf="currentErrorMessage && control.touched">{{
+    currentErrorMessage
+    }}</mat-hint>
+
+</mat-form-field>

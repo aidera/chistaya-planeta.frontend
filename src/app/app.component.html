@@ -2,13 +2,25 @@
   <mat-card>
     <h1>Заголовок 1</h1>
     <h2>Заголовок 2</h2>
-    <strong>жирный текст</strong><br>
-    <i>курсив</i><br>
+    <strong>жирный текст</strong>
+    <br>
+    <br>
+    <p>обычный текст</p>
+    <br>
+    <small>маленький текст</small>
+    <br>
+    <br>
+    <i>курсив</i>
+    <br>
+    <br>
     <a href="#">ссылка</a>
+    <br>
+    <br>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus est exercitationem itaque laborum odio
       pariatur provident qui repellendus similique. Magni.
       <app-question-hint description="this is a hint"></app-question-hint>
     </p>
+    <br>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus est exercitationem itaque laborum odio
       pariatur provident qui repellendus similique. Magni.
       <app-question-hint description="This is a big hint Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus dolorum
@@ -73,7 +85,7 @@
 
   <mat-card class="form">
 
-    <app-text-input [label]="'Label'"></app-text-input>
+    <app-text-input [label]="'Label'" [isRequired]="true"></app-text-input>
 
     <app-text-input [label]="'Label'" icon="../assets/icons/floppy-disk.svg"></app-text-input>
 
@@ -83,11 +95,25 @@
 
     <app-checkbox [label]="'Label'"></app-checkbox>
 
+    <app-checkbox [label]="'Label'" [isRequired]="true"></app-checkbox>
+
     <app-select
-      [label]="'Label'"
+      [label]="'Select'"
       [options]="[{value: '1', text: 'Option 1'}, {value: '2', text: 'Option 2'}, {value: '3', text: 'Option 3'}]"
       [value]="'2'"
+      [isRequired]="true"
     ></app-select>
+
+    <app-select
+      [label]="'Multiple select'"
+      [isMultiple]="true"
+      [options]="[{value: '1', text: 'Option 1'}, {value: '2', text: 'Option 2'}, {value: '3', text: 'Option 3'}]"
+      [value]="['2', '1']"
+    ></app-select>
+
+    <app-date-input label="Date input" [isRequired]="true"></app-date-input>
+
+    <app-date-input label="Date input min date" [minDate]="dateNow"></app-date-input>
   </mat-card>
 
 </section>

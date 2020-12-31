@@ -9,6 +9,7 @@ export class AbstractFormControlComponent implements DoCheck {
   @Input() control: FormControl | AbstractControl | null = null;
   @Input() label?: string;
   @Input() errorMessages?: { [key: string]: string };
+  @Input() isRequired?: true;
 
   currentErrorMessage: string | null = null;
 

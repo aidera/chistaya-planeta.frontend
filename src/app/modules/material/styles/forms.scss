@@ -80,8 +80,9 @@
 }
 .mat-form-field-should-float{
   .mat-form-field-label {
-    transform: translateY(-16px) translateX(0) scale(0.75) !important;
+    transform: translateY(-18px) translateX(0) scale(0.8671) !important;
     left: 0 !important;
+    color: $text-color-primary
   }
 }
 
@@ -160,3 +161,8 @@
   background: rgba(0, 0, 0, 0.04) !important;
 }
 
+
+
+.required-field-star {
+  color: $error-color;
+}

@@ -1,5 +1,5 @@
 <mat-form-field appearance="standard" [ngClass]="{'has-icon': icon}">
-  <mat-label>{{ label }}</mat-label>
+  <mat-label>{{ label }} <span class="required-field-star" *ngIf="isRequired">*</span></mat-label>
   <input
     [formControl]="control"
     [id]="fieldId"
@@ -13,7 +13,6 @@
     *ngIf="icon && fieldType !== 'password'" [inlineSVG]="icon"
   ></span>
 
-
   <span
     class="icon"
     [inlineSVG]="type === 'password' ? '../assets/icons/show.svg' : '../assets/icons/hide.svg'"
@@ -21,32 +20,8 @@
     (click)="changePasswordFieldType()"
   ></span>
 
-
-
-<!--  <mat-icon *ngIf="icon && type !== 'password'" matSuffix>-->
-
-<!--  </mat-icon>-->
-
-<!--  <mat-icon-->
-<!--    *ngIf="fieldType === 'password' && type === 'password'"-->
-<!--    matSuffix-->
-<!--    class="password-button"-->
-<!--    (click)="changePasswordFieldType()"-->
-<!--  >-->
-<!--    {{ icons.passwordShow }}-->
-<!--  </mat-icon>-->
-
-<!--  <mat-icon-->
-<!--    *ngIf="fieldType === 'password' && type !== 'password'"-->
-<!--    matSuffix-->
-<!--    class="password-button"-->
-<!--    (click)="changePasswordFieldType()"-->
-<!--  >-->
-<!--    {{ icons.passwordHide }}-->
-<!--  </mat-icon>-->
-
   <mat-hint *ngIf="currentErrorMessage && control.touched">{{
     currentErrorMessage
   }}</mat-hint>
-<!--  <mat-hint >Hint</mat-hint>-->
+
 </mat-form-field>

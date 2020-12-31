@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { InlineSVGModule } from 'ng-inline-svg';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InlineSVGModule } from 'ng-inline-svg';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,7 @@ import { TextareaComponent } from './components/form-controls/textarea/textarea.
 import { CheckboxComponent } from './components/form-controls/checkbox/checkbox.component';
 import { SelectComponent } from './components/form-controls/select/select.component';
 import { QuestionHintComponent } from './components/question-hint/question-hint.component';
+import { DateInputComponent } from './components/form-controls/date-input/date-input.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { QuestionHintComponent } from './components/question-hint/question-hint.
     CheckboxComponent,
     SelectComponent,
     QuestionHintComponent,
+    DateInputComponent,
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,8 @@ import {OptionType} from '../../../models/OptionType';
 })
 export class SelectComponent extends AbstractFormControlComponent implements OnInit {
   @Input() options: OptionType[];
-  @Input() value: string;
+  @Input() value: string | string[];
+  @Input() isMultiple?: boolean;
 
   ngOnInit(): void {
   }

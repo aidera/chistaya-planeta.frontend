@@ -1,6 +1,6 @@
 <mat-form-field appearance="standard">
-  <mat-label>{{ label }}</mat-label>
-  <mat-select [value]="value">
+  <mat-label>{{ label }} <span class="required-field-star" *ngIf="isRequired">*</span></mat-label>
+  <mat-select [value]="value" [multiple]="isMultiple">
     <mat-option *ngFor="let option of options" [value]="option.value">
       {{option.text}}
     </mat-option>
