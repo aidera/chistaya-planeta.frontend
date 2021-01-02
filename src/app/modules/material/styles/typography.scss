@@ -1,6 +1,5 @@
 @import '../../../styles/variables';
 
-
 .mat-body,
 .mat-body-1,
 .mat-typography {
@@ -14,25 +13,34 @@
 .mat-typography h2,
 .mat-typography h3,
 .mat-typography h4,
-.mat-typography h5 {
+.mat-typography h5,
+.mat-typography .h1,
+.mat-typography .h2,
+.mat-typography .h3,
+.mat-typography .h4,
+.mat-typography .h5 {
   font-family: $font-family;
   line-height: 1.4;
   text-transform: uppercase;
+  margin: 0;
 }
 
 .mat-typography h1,
-h1 {
+h1,
+.mat-typography .h1,
+.h1 {
   font-size: 36px;
   line-height: 1.2;
   font-weight: 900;
 }
 
 .mat-typography h2,
-h2 {
+h2,
+.mat-typography .h2,
+.h2 {
   font-size: 24px;
   font-weight: 600;
 }
-
 
 .mat-typography p {
   margin: 0;

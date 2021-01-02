@@ -1,0 +1,153 @@
+<section class="container">
+  <mat-card>
+    <h1>Заголовок 1</h1>
+    <h2>Заголовок 2</h2>
+    <strong>жирный текст</strong>
+    <br />
+    <br />
+    <p>обычный текст</p>
+    <br />
+    <small>маленький текст</small>
+    <br />
+    <br />
+    <i>курсив</i>
+    <br />
+    <br />
+    <a href="#">ссылка</a>
+    <br />
+    <br />
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus est
+      exercitationem itaque laborum odio pariatur provident qui repellendus
+      similique. Magni.
+      <app-question-hint description="this is a hint"></app-question-hint>
+    </p>
+    <br />
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus est
+      exercitationem itaque laborum odio pariatur provident qui repellendus
+      similique. Magni.
+      <app-question-hint
+        description="This is a big hint Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus dolorum
+        excepturi incidunt iusto laboriosam nobis provident quisquam reprehenderit tenetur voluptatem."
+      >
+      </app-question-hint>
+    </p>
+  </mat-card>
+  <mat-card>
+    <div>
+      <button mat-button>Basic</button>
+      <button mat-button color="primary">Primary</button>
+      <button mat-button color="accent">Accent</button>
+      <button mat-button color="warn">Warn</button>
+      <button mat-button disabled>Disabled</button>
+      <a mat-button href="https://www.google.com/" target="_blank">Link</a>
+    </div>
+    <div>
+      <button mat-button>Basic</button>
+      <button mat-button color="primary">Primary</button>
+      <button mat-button color="accent">Accent</button>
+      <button mat-button color="warn">Warn</button>
+      <button mat-button disabled>Disabled</button>
+      <a mat-button href="https://www.google.com/" target="_blank">Link</a>
+    </div>
+    <div>
+      <button mat-raised-button>
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-raised-button color="primary">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-raised-button color="accent">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-raised-button color="warn">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-raised-button disabled>
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <a mat-raised-button href="https://www.google.com/" target="_blank">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span></a
+      >
+    </div>
+    <div>
+      <button mat-button>
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-button color="primary">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-button color="accent">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-button color="warn">
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <button mat-button disabled>
+        <span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span>
+      </button>
+      <a mat-button href="https://www.google.com/" target="_blank"
+        ><span [inlineSVG]="'../assets/icons/floppy-disk.svg'"></span>
+        <span>Basic</span></a
+      >
+    </div>
+  </mat-card>
+
+  <mat-card class="form">
+    <app-text-input [label]="'Label'" [isRequired]="true"></app-text-input>
+
+    <app-text-input
+      [label]="'Label'"
+      icon="../assets/icons/floppy-disk.svg"
+    ></app-text-input>
+
+    <app-text-input [label]="'Password'" fieldType="password"></app-text-input>
+
+    <app-textarea [label]="'Label'"></app-textarea>
+
+    <app-checkbox [label]="'Label'"></app-checkbox>
+
+    <app-checkbox [label]="'Label'" [isRequired]="true"></app-checkbox>
+
+    <app-select
+      [label]="'Select'"
+      [options]="[
+        { value: '1', text: 'Option 1' },
+        { value: '2', text: 'Option 2' },
+        { value: '3', text: 'Option 3' }
+      ]"
+      [value]="'2'"
+      [isRequired]="true"
+    ></app-select>
+
+    <app-select
+      [label]="'Multiple select'"
+      [isMultiple]="true"
+      [options]="[
+        { value: '1', text: 'Option 1' },
+        { value: '2', text: 'Option 2' },
+        { value: '3', text: 'Option 3' }
+      ]"
+      [value]="['2', '1']"
+    ></app-select>
+
+    <app-date-input label="Date input" [isRequired]="true"></app-date-input>
+
+    <app-date-input
+      label="Date input min date"
+      [minDate]="dateNow"
+    ></app-date-input>
+  </mat-card>
+</section>
