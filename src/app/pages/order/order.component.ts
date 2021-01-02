@@ -53,7 +53,10 @@ export class OrderComponent implements OnInit {
       customerOrganizationLegalName: new FormControl(),
       customerOrganizationActualName: new FormControl(),
       customerContactName: new FormControl('', Validators.required),
-      customerContactPhone: new FormControl('', Validators.required),
+      customerContactPhone: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+      ]),
       remunerationPaymentMethod: new FormControl('', Validators.required),
       remunerationPaymentMethodData: new FormControl(),
       comment: new FormControl(),

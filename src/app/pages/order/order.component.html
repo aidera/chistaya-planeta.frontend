@@ -167,9 +167,14 @@
       [control]="form.get('customerContactPhone')"
       fieldId="customerContactPhone"
       label="Контактный телефон"
+      mask="(000) 000-00-00"
+      prefix="+7 "
       [isRequired]="true"
       labelHint="Телефон принимающего лица, необязательно ваш собственный"
-      [errorMessages]="{ required: 'Обязательное поле' }"
+      [errorMessages]="{
+        required: 'Обязательное поле',
+        minlength: 'Слишком короткий номер телефона'
+      }"
     ></app-text-input>
   </div>
 

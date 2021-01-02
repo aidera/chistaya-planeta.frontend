@@ -12,6 +12,8 @@ export class TextInputComponent
   implements OnInit {
   @Input() icon?: string;
   @Input() fieldType?: 'text' | 'email' | 'password' | 'number' = 'text';
+  @Input() mask?: string;
+  @Input() prefix?: string;
   @ViewChild('inputRef') inputRef: ElementRef;
 
   type?: 'text' | 'email' | 'password' | 'number';
