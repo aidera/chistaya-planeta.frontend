@@ -1,11 +1,19 @@
 <mat-form-field appearance="standard">
-  <mat-label>{{ label }}</mat-label>
+  <label [for]="fieldId">
+    {{ label }}
+    <span class="required-field-star" *ngIf="isRequired">*</span>
+    <app-question-hint
+      *ngIf="labelHint"
+      [description]="labelHint"
+    ></app-question-hint>
+  </label>
+
   <textarea
     [formControl]="control"
     [id]="fieldId"
     autocomplete="off"
     matInput
-    rows="3"
+    rows="4"
   ></textarea>
 
   <mat-hint *ngIf="currentErrorMessage && control.touched">{{

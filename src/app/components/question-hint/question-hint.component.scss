@@ -1,6 +1,5 @@
 @import '../../styles/variables';
 
-
 :host {
   display: inline-block;
 }
@@ -12,10 +11,10 @@
 
   span {
     transition: $transition-1;
+    fill: $text-color-primary;
 
     &:hover {
       fill: $color-primary;
     }
   }
-
 }

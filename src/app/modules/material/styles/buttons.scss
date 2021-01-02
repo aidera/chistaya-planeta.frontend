@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
-
-.mat-button, .mat-raised-button {
+.mat-button,
+.mat-raised-button {
   font-family: $font-family;
   font-weight: 200;
   text-transform: uppercase;
@@ -19,7 +19,6 @@
     padding: 15px 0;
   }
 
-
   svg {
     width: 18px;
     height: 18px;
@@ -28,7 +27,8 @@
   }
 }
 
-a.mat-button, a.mat-raised-button {
+a.mat-button,
+a.mat-raised-button {
   color: $text-color-primary;
 }
 
@@ -50,7 +50,7 @@ a.mat-button, a.mat-raised-button {
   }
 }
 
-.mat-button.mat-button-disabled, {
+.mat-button.mat-button-disabled {
   svg {
     fill: $disable-color;
   }
@@ -58,25 +58,27 @@ a.mat-button, a.mat-raised-button {
 
 .mat-raised-button {
   box-shadow: $small-shadow !important;
+  &:hover {
+    box-shadow: $small-shadow-hover !important;
+  }
 }
-
 
 .mat-raised-button.mat-primary,
 .mat-raised-button.mat-accent,
-.mat-raised-button.mat-warn, {
+.mat-raised-button.mat-warn {
   svg {
     fill: white;
   }
 }
 
-.mat-raised-button.mat-button-disabled, {
+.mat-raised-button.mat-button-disabled {
   svg {
     fill: $disable-color;
   }
 }
 
 .mat-raised-button.mat-primary {
-  background: linear-gradient(90deg, #91B62A 0%, #6C8426 100%);
+  background: linear-gradient(90deg, #91b62a 0%, #6c8426 100%);
 }
 
 .mat-button.mat-button-disabled {
@@ -86,4 +88,3 @@ a.mat-button, a.mat-raised-button {
     color: $disable-color !important;
   }
 }
-

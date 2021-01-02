@@ -1,1 +1,226 @@
-<p>order works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <h1>Оставить заявку</h1>
+
+  <br />
+  <br />
+
+  <small>
+    Если вы хотите следить за статусом заявки, использовать шаблон, повторять
+    заявку без повторного заполнения или создавать ее каждые 7, 14, 30 дней без
+    входа в личный кабинет, то <a [routerLink]="['/']">авторизируйтесь</a> или
+    <a [routerLink]="['/']">зарегистрируйте новый аккаунт</a>.
+  </small>
+
+  <br />
+  <br />
+  <br />
+  <br />
+
+  <div class="order-block">
+    <h2>Сырье</h2>
+
+    <app-select
+      [control]="form.get('rawType')"
+      fieldId="rawType"
+      label="Тип"
+      [isRequired]="true"
+      [isMultiple]="true"
+      [options]="selectRawTypeOptions"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-select>
+
+    <div class="combined-fields">
+      <app-text-input
+        [control]="form.get('rawAmount')"
+        fieldId="rawAmount"
+        label="Приблизительное количество"
+        [isRequired]="true"
+        fieldType="number"
+        [errorMessages]="{
+          required: 'Обязательное поле',
+          min: 'Не может быть меньше 1'
+        }"
+      ></app-text-input>
+
+      <app-select
+        [control]="form.get('rawAmountUnit')"
+        fieldId="rawAmountUnit"
+        [options]="selectRawUnitOptions"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-select>
+    </div>
+  </div>
+
+  <div class="order-block">
+    <h2>Доставка</h2>
+
+    <app-select
+      [control]="form.get('deliveryType')"
+      fieldId="deliveryType"
+      label="Тип доставки"
+      [isRequired]="true"
+      [options]="selectDeliveryTypeOptions"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-select>
+
+    <app-select
+      *ngIf="form.get('deliveryType').value === deliveryTypeEnum.company + ''"
+      [control]="form.get('deliveryAddressCity')"
+      fieldId="deliveryAddressCity"
+      label="Город"
+      [isRequired]="true"
+      [options]="selectCitiesOptions"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-select>
+
+    <div
+      class="combined-fields"
+      *ngIf="form.get('deliveryType').value === deliveryTypeEnum.company + ''"
+    >
+      <app-text-input
+        [control]="form.get('deliveryAddressStreet')"
+        fieldId="deliveryAddressStreet"
+        label="Улица"
+        [isRequired]="true"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-text-input>
+
+      <app-text-input
+        [control]="form.get('deliveryAddressHouse')"
+        fieldId="deliveryAddressHouse"
+        label="Дом"
+        [isRequired]="true"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-text-input>
+    </div>
+
+    <app-text-input
+      *ngIf="form.get('deliveryType').value === deliveryTypeEnum.pickup + ''"
+      [control]="form.get('deliveryCustomerCarNumber')"
+      fieldId="deliveryCustomerCarNumber"
+      label="Номер автомобиля"
+      labelHint="Чтобы определить ваш автомобиль в пункте приёма"
+      [isRequired]="true"
+      [errorMessages]="{
+        required: 'Обязательное поле',
+        minlength: 'Слишком короткий номер'
+      }"
+    ></app-text-input>
+
+    <div class="combined-fields">
+      <app-date-input
+        [control]="form.get('desiredPickupDate')"
+        fieldId="desiredPickupDate"
+        [label]="
+          form.get('deliveryType').value === deliveryTypeEnum.pickup + ''
+            ? 'Предположительная дата приезда'
+            : 'Желаемая дата вывоза'
+        "
+        [isRequired]="true"
+        [minDate]="desiredPickupDateMinDate"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-date-input>
+
+      <app-select
+        [control]="form.get('desiredPickupTime')"
+        fieldId="desiredPickupTime"
+        label="Время"
+        [isRequired]="true"
+        [options]="selectTimeOptions"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-select>
+    </div>
+
+    <app-checkbox
+      *ngIf="form.get('deliveryType').value === deliveryTypeEnum.company + ''"
+      [control]="form.get('hasAssistant')"
+      fieldId="hasAssistant"
+      label="Есть помошник?"
+      labelHint="Поставьте галочку, если на месте будет человек, котрый поможет загрузить сырье"
+    ></app-checkbox>
+  </div>
+
+  <div class="order-block">
+    <h2>Заказчик</h2>
+
+    <app-text-input
+      [control]="form.get('customerOrganizationLegalName')"
+      fieldId="customerOrganizationLegalName"
+      label="Юридическое наиманование организации"
+    ></app-text-input>
+
+    <app-text-input
+      [control]="form.get('customerOrganizationActualName')"
+      fieldId="customerOrganizationActualName"
+      label="Фактическое наиманование организации"
+    ></app-text-input>
+
+    <app-text-input
+      [control]="form.get('customerContactName')"
+      fieldId="customerContactName"
+      label="Контактное лицо"
+      [isRequired]="true"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-text-input>
+
+    <app-text-input
+      [control]="form.get('customerContactPhone')"
+      fieldId="customerContactPhone"
+      label="Контактный телефон"
+      [isRequired]="true"
+      labelHint="Телефон принимающего лица, необязательно ваш собственный"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-text-input>
+  </div>
+
+  <div class="order-block">
+    <h2>Вознаграждение</h2>
+
+    <app-select
+      [control]="form.get('remunerationPaymentMethod')"
+      fieldId="remunerationPaymentMethod"
+      label="Способ оплаты"
+      [options]="selectPaymentMethodOptions"
+      [isRequired]="true"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-select>
+
+    <app-textarea
+      *ngIf="
+        form.get('remunerationPaymentMethod').value ===
+          paymentMethodEnum.card + '' ||
+        form.get('remunerationPaymentMethod').value ===
+          paymentMethodEnum.nonCash + ''
+      "
+      [control]="form.get('remunerationPaymentMethodData')"
+      fieldId="remunerationPaymentMethodData"
+      label="Информация для платежа"
+      labelHint="Номер карты или данные счёта, по которым мы сможем отправить вознаграждение"
+      [isRequired]="true"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-textarea>
+  </div>
+
+  <div class="order-block">
+    <h2>Комментарий</h2>
+
+    <app-textarea
+      [control]="form.get('comment')"
+      fieldId="comment"
+    ></app-textarea>
+  </div>
+
+  <button type="submit" mat-raised-button color="primary" class="submit-button">
+    Отправить
+  </button>
+
+  <br />
+  <br />
+
+  <small>
+    Если вы хотите следить за статусом заявки, использовать шаблон, повторять
+    заявку без повторного заполнения или создавать ее каждые 7, 14, 30 дней без
+    входа в личный кабинет, то <a [routerLink]="['/']">авторизируйтесь</a> или
+    <a [routerLink]="['/']">зарегистрируйте новый аккаунт</a>.
+  </small>
+</form>

@@ -5,11 +5,12 @@ import { AbstractControl, FormControl } from '@angular/forms';
   template: '',
 })
 export class AbstractFormControlComponent implements DoCheck {
-  @Input() fieldId: string | null = null;
+  @Input() fieldId?: string;
   @Input() control: FormControl | AbstractControl | null = null;
   @Input() label?: string;
   @Input() errorMessages?: { [key: string]: string };
-  @Input() isRequired?: true;
+  @Input() isRequired?: boolean;
+  @Input() labelHint?: string;
 
   currentErrorMessage: string | null = null;
 

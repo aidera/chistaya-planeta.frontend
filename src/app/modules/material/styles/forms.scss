@@ -8,14 +8,19 @@
     cursor: pointer;
     fill: $text-color-primary;
     position: absolute;
-    top: 18px;
+    top: 50%;
     right: 16px;
+    transform: translateY(-50%);
     transition: $transition-1;
     svg {
       width: 22px;
       height: 22px;
     }
   }
+}
+
+.input-wrapper {
+  position: relative;
 }
 
 .mat-form-field-underline {
@@ -48,17 +53,29 @@
 
 .mat-form-field-infix {
   padding: 0 !important;
-  padding-top: 8px !important;
+  border: 0 !important;
 }
 
 .mat-hint {
   font-size: $font-size-small;
 }
 
+.mat-form-field {
+  &.ng-touched.ng-invalid {
+    .mat-hint {
+      color: $error-color;
+    }
+
+    .icon {
+      fill: $error-color;
+    }
+  }
+}
 
 /* Input + Textarea */
 .mat-form-field-infix {
-  input, textarea {
+  input,
+  textarea {
     border: 1px solid $text-color-primary;
     border-radius: $border-radius-secondary;
     padding: 12px 14px !important;
@@ -68,25 +85,37 @@
     resize: none !important;
   }
 }
+.mat-form-field {
+  &.ng-touched.ng-invalid {
+    .mat-form-field-infix {
+      input,
+      textarea {
+        border-color: $error-color;
+      }
+    }
+  }
+}
 .mat-form-field.mat-focused {
-  input, textarea {
+  input,
+  textarea {
     border-color: $color-primary;
   }
 }
 
+textarea.mat-input-element {
+  margin: 0 !important;
+}
 
 .mat-form-field-label {
   transform: translateY(14px) translateX(14px) scale(1) !important;
 }
-.mat-form-field-should-float{
+.mat-form-field-should-float {
   .mat-form-field-label {
     transform: translateY(-18px) translateX(0) scale(0.8671) !important;
     left: 0 !important;
-    color: $text-color-primary
+    color: $text-color-primary;
   }
 }
-
-
 
 .mat-form-field.has-icon {
   .mat-form-field-infix {
@@ -96,10 +125,7 @@
   }
 }
 
-
-
-
-  /* Checkbox */
+/* Checkbox */
 .mat-checkbox {
   width: 100%;
   padding-bottom: 16px;
@@ -118,8 +144,6 @@
   }
 }
 
-
-
 /* Select */
 
 .mat-select {
@@ -132,9 +156,16 @@
   }
 
   .mat-select-arrow-wrapper {
-    transform: translateY(0) !important;;
+    transform: translateY(0) !important;
   }
+}
 
+.mat-form-field {
+  &.ng-touched.ng-invalid {
+    .mat-select {
+      border-color: $error-color;
+    }
+  }
 }
 
 .mat-focused {
@@ -148,21 +179,14 @@
   border-radius: $border-radius-secondary !important;
 }
 
-
 .mat-option {
   border-bottom: 1px solid $divider-color;
+  user-select: none;
 }
-
 
 .mat-option.mat-active:not(:hover) {
   background: white !important;
 }
 .mat-option.mat-active:hover {
   background: rgba(0, 0, 0, 0.04) !important;
-}
-
-
-
-.required-field-star {
-  color: $error-color;
 }

@@ -1,24 +1,35 @@
 <mat-form-field appearance="standard">
-  <mat-label>{{ label }} <span class="required-field-star" *ngIf="isRequired">*</span></mat-label>
-  <input
-    [formControl]="control"
-    [matDatepicker]="picker"
-    autocomplete="off"
-    matInput
-    disabled="false"
-    [min]="minDate" [max]="maxDate"
-  />
+  <label [for]="fieldId">
+    {{ label }}
+    <span class="required-field-star" *ngIf="isRequired">*</span>
+    <app-question-hint
+      *ngIf="labelHint"
+      [description]="labelHint"
+    ></app-question-hint>
+  </label>
 
-  <mat-datepicker #picker disabled="false"></mat-datepicker>
+  <div class="input-wrapper">
+    <input
+      [formControl]="control"
+      [id]="fieldId"
+      [matDatepicker]="picker"
+      autocomplete="off"
+      matInput
+      [min]="minDate"
+      [max]="maxDate"
+      [value]="control.value"
+    />
 
-  <span
-    class="icon"
-    [inlineSVG]="'../assets/icons/calendar.svg'"
-    (click)="picker.open()"
-  ></span>
+    <mat-datepicker #picker></mat-datepicker>
+
+    <span
+      class="icon"
+      [inlineSVG]="'../assets/icons/calendar.svg'"
+      (click)="picker.open()"
+    ></span>
+  </div>
 
   <mat-hint *ngIf="currentErrorMessage && control.touched">{{
     currentErrorMessage
-    }}</mat-hint>
-
+  }}</mat-hint>
 </mat-form-field>

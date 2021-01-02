@@ -1,8 +1,20 @@
 <mat-form-field appearance="standard">
-  <mat-label>{{ label }} <span class="required-field-star" *ngIf="isRequired">*</span></mat-label>
-  <mat-select [value]="value" [multiple]="isMultiple">
+  <label [for]="fieldId">
+    {{ label }}
+    <span class="required-field-star" *ngIf="isRequired">*</span>
+    <app-question-hint
+      *ngIf="labelHint"
+      [description]="labelHint"
+    ></app-question-hint>
+  </label>
+
+  <mat-select [formControl]="control" [multiple]="isMultiple" [id]="fieldId">
     <mat-option *ngFor="let option of options" [value]="option.value">
-      {{option.text}}
+      {{ option.text }}
     </mat-option>
   </mat-select>
+
+  <mat-hint *ngIf="currentErrorMessage && control.touched">{{
+    currentErrorMessage
+  }}</mat-hint>
 </mat-form-field>

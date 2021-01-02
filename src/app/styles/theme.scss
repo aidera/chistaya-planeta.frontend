@@ -1,8 +1,9 @@
-@import "variables";
-@import "fonts";
-@import "reset";
-@import "../modules/material/styles/index";
+@import 'variables';
+@import 'fonts';
+@import 'reset';
+@import '../modules/material/styles/index';
 
+/* Material theme files are located in modules/material/styles */
 
 html,
 body {
@@ -34,16 +35,31 @@ a:visited,
 a:active {
   color: $color-primary;
   transition: $transition-1;
+  text-decoration: underline;
   &:hover {
-    opacity: 0.8;
+    text-decoration: none;
   }
 }
 
-
 small {
   font-size: $font-size-small;
+  * {
+    font-size: $font-size-small;
+  }
 }
 
+label {
+  font-size: $font-size-small;
+  display: block;
+  margin-bottom: 4px;
+  * {
+    font-size: $font-size-small;
+  }
+  .required-field-star {
+    color: $error-color;
+    margin-right: 8px;
+  }
+}
 
 .container {
   width: 1100px;
@@ -55,7 +71,43 @@ small {
   }
 }
 
+.combined-fields {
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: $bp-sm) {
+    flex-wrap: wrap;
+  }
 
+  label {
+    min-height: $font-size-small;
+  }
 
+  > *:nth-child(1) {
+    width: 72%;
+    @media (max-width: $bp-sm) {
+      width: 100%;
+    }
+  }
+  > *:nth-child(2) {
+    width: 25%;
+    @media (max-width: $bp-sm) {
+      width: 100%;
+    }
+  }
+}
 
+.submit-button {
+  width: 100%;
+}
 
+/* Remove arrows and spinners in number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Material theme files are located in modules/material/styles */

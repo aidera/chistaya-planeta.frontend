@@ -10,8 +10,8 @@ const routes: Routes = [
     path: '',
     component: SimpleLayoutComponent,
     children: [
-      { path: '', redirectTo: '/', pathMatch: 'full' },
-      { path: '', component: OrderComponent },
+      { path: '', redirectTo: '/order', pathMatch: 'full' },
+      { path: 'order', component: OrderComponent },
     ],
   },
 ];

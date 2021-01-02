@@ -11,17 +11,13 @@ export class TextInputComponent
   extends AbstractFormControlComponent
   implements OnInit {
   @Input() icon?: string;
-  @Input() fieldType?: 'text' | 'email' | 'password' = 'text';
+  @Input() fieldType?: 'text' | 'email' | 'password' | 'number' = 'text';
   @ViewChild('inputRef') inputRef: ElementRef;
 
-  type?: 'text' | 'email' | 'password';
+  type?: 'text' | 'email' | 'password' | 'number';
 
   ngOnInit(): void {
     this.type = this.fieldType;
-  }
-
-  public focusInput(): void {
-    this.inputRef.nativeElement.focus();
   }
 
   public changePasswordFieldType(): void {
