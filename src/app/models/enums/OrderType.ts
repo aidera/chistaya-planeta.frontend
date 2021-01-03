@@ -1,12 +1,12 @@
 /*
  * Тип заказа:
- * -- одноразовый
- * -- периодический
+ * -- Продажа вторсырья
+ * -- Вывоз мусора
  */
 
 enum OrderType {
-  oneTime,
-  periodic,
+  recyclable,
+  garbage,
 }
 
 export default OrderType;

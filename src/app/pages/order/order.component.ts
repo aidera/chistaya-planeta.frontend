@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import rawTypeOptions from '../../data/rawTypeOptions';
+import orderTypeOptions from '../../data/orderTypeOptions';
+import rawRecyclableTypeOptions from '../../data/rawRecyclableTypeOptions';
 import rawUnitOptions from '../../data/rawUnitOptions';
 import deliveryTypeOptions from '../../data/deliveryTypeOptions';
 import paymentMethodOptions from '../../data/paymentMethodOptions';
@@ -10,6 +11,7 @@ import timeOptions from '../../data/timeOptions';
 import { tomorrow } from '../../utils/date.functions';
 import DeliveryType from '../../models/enums/DeliveryType';
 import PaymentMethod from '../../models/enums/PaymentMethod';
+import OrderType from '../../models/enums/OrderType';
 
 @Component({
   selector: 'app-order',
@@ -17,10 +19,12 @@ import PaymentMethod from '../../models/enums/PaymentMethod';
   styleUrls: ['./order.component.scss'],
 })
 export class OrderComponent implements OnInit {
+  public orderTypeEnum = OrderType;
   public deliveryTypeEnum = DeliveryType;
   public paymentMethodEnum = PaymentMethod;
 
-  public selectRawTypeOptions = rawTypeOptions;
+  public selectOrderTypeOptions = orderTypeOptions;
+  public selectRawTypeOptions = rawRecyclableTypeOptions;
   public selectRawUnitOptions = rawUnitOptions;
   public selectDeliveryTypeOptions = deliveryTypeOptions;
   public selectPaymentMethodOptions = paymentMethodOptions;
@@ -39,6 +43,7 @@ export class OrderComponent implements OnInit {
 
   private formInit(): void {
     this.form = new FormGroup({
+      type: new FormControl('', Validators.required),
       rawType: new FormControl('', Validators.required),
       rawAmount: new FormControl('', [Validators.required, Validators.min(1)]),
       rawAmountUnit: new FormControl('0', Validators.required),
@@ -62,40 +67,78 @@ export class OrderComponent implements OnInit {
       comment: new FormControl(),
     });
 
-    this.form.get('deliveryType').valueChanges.subscribe((value) => {
-      if (value === DeliveryType.company + '') {
-        this.form.get('deliveryAddressCity').setValidators(Validators.required);
+    /* --- Смена валидаторов на "Тип заказа" ("Я хочу...") --- */
+    /* Если тип заказа выбран "Продать вторсырье", то дополнительно активизируются поля:
+    тип сырья, единица измерения сырья, тип доставки, группа полей вознаграждения */
+    /* Если тип заказа выбран "Вывести мусор", то поля вторсырья убираются */
+    this.form.get('type').valueChanges.subscribe((value) => {
+      if (value === OrderType.recyclable + '') {
+        this.form.get('rawType').setValidators(Validators.required);
+        this.form.get('rawAmountUnit').setValidators(Validators.required);
+        this.form.get('deliveryType').setValidators(Validators.required);
         this.form
-          .get('deliveryAddressStreet')
+          .get('remunerationPaymentMethod')
           .setValidators(Validators.required);
-        this.form
-          .get('deliveryAddressHouse')
-          .setValidators(Validators.required);
-        this.form.get('deliveryCustomerCarNumber').clearValidators();
+        this.deliveryTypeValidatorsChange(this.form.get('deliveryType').value);
+        this.remunerationPaymentMethodValidatorsChange(
+          this.form.get('remunerationPaymentMethod').value
+        );
       } else {
-        this.form.get('deliveryAddressCity').clearValidators();
-        this.form.get('deliveryAddressStreet').clearValidators();
-        this.form.get('deliveryAddressHouse').clearValidators();
-        this.form
-          .get('deliveryCustomerCarNumber')
-          .setValidators([Validators.required, Validators.minLength(5)]);
+        this.form.get('rawType').clearValidators();
+        this.form.get('rawAmountUnit').clearValidators();
+        this.form.get('deliveryType').clearValidators();
+        this.form.get('deliveryCustomerCarNumber').clearValidators();
+        this.form.get('remunerationPaymentMethod').clearValidators();
+        this.form.get('remunerationPaymentMethodData').clearValidators();
       }
     });
 
+    /* --- Смена валидаторов на "Тип доставки" --- */
+    /* Если тип доставки выбран "Компанией", то должны показатся поля с городом,
+    адресом, улицей и домом, а также помошником */
+    /* Если тип доставки выбран "Самовывоз", то поля с городом, адремос, улицей,
+    домом и помошником убираются, но появляется номер автомобиля заказчика */
+    this.form.get('deliveryType').valueChanges.subscribe((value) => {
+      this.deliveryTypeValidatorsChange(value);
+    });
+
+    /* --- Смена валидаторов на "Тип оплаты" --- */
+    /* Если тип оплыта картой или безналом, то появляется поле с информацие
+    о счёте/карте заказчика */
     this.form
       .get('remunerationPaymentMethod')
       .valueChanges.subscribe((value) => {
-        if (
-          value === PaymentMethod.card + '' ||
-          value === PaymentMethod.nonCash + ''
-        ) {
-          this.form
-            .get('remunerationPaymentMethodData')
-            .setValidators(Validators.required);
-        } else {
-          this.form.get('remunerationPaymentMethodData').clearValidators();
-        }
+        this.remunerationPaymentMethodValidatorsChange(value);
       });
+  }
+
+  private deliveryTypeValidatorsChange(value): void {
+    if (value === DeliveryType.company + '') {
+      this.form.get('deliveryAddressCity').setValidators(Validators.required);
+      this.form.get('deliveryAddressStreet').setValidators(Validators.required);
+      this.form.get('deliveryAddressHouse').setValidators(Validators.required);
+      this.form.get('deliveryCustomerCarNumber').clearValidators();
+    } else {
+      this.form.get('deliveryAddressCity').clearValidators();
+      this.form.get('deliveryAddressStreet').clearValidators();
+      this.form.get('deliveryAddressHouse').clearValidators();
+      this.form
+        .get('deliveryCustomerCarNumber')
+        .setValidators([Validators.required, Validators.minLength(5)]);
+    }
+  }
+
+  public remunerationPaymentMethodValidatorsChange(value): void {
+    if (
+      value === PaymentMethod.card + '' ||
+      value === PaymentMethod.nonCash + ''
+    ) {
+      this.form
+        .get('remunerationPaymentMethodData')
+        .setValidators(Validators.required);
+    } else {
+      this.form.get('remunerationPaymentMethodData').clearValidators();
+    }
   }
 
   public submit(): void {

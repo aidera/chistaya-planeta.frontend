@@ -8,11 +8,11 @@
  */
 
 enum RawType {
+  bagGarbageAndSolidHouseholdWaste,
   cardboard,
   whitePaper,
   stretchAndHighPressurePolyethyleneFilm,
   petBottleUpTo5l,
-  bagGarbageAndSolidHouseholdWaste,
 }
 
 export default RawType;

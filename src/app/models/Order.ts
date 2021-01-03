@@ -4,9 +4,11 @@ import RawUnit from './enums/RawUnit';
 import PaymentMethod from './enums/PaymentMethod';
 import Address from './types/Address';
 import OrderStatus from './enums/OrderStatus';
+import OrderType from './enums/OrderType';
 
 interface Order {
   _id: string;
+  type: OrderType;
   scheduledOrderId: string | null;
   delivery: {
     type: DeliveryType;

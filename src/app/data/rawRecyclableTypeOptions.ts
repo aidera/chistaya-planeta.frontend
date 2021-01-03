@@ -1,7 +1,7 @@
 import { OptionType } from '../models/types/OptionType';
 import RawType from '../models/enums/RawType';
 
-const rawTypeOptions: OptionType[] = [
+const rawRecyclableTypeOptions: OptionType[] = [
   { text: 'Картон', value: RawType.cardboard + '' },
   { text: 'Белая бумага', value: RawType.whitePaper + '' },
   {
@@ -12,10 +12,6 @@ const rawTypeOptions: OptionType[] = [
     text: 'Пэт бутылка до 5 л включительно',
     value: RawType.petBottleUpTo5l + '',
   },
-  {
-    text: 'Мусор мешочный / ТКО',
-    value: RawType.bagGarbageAndSolidHouseholdWaste + '',
-  },
 ];
 
-export default rawTypeOptions;
+export default rawRecyclableTypeOptions;
