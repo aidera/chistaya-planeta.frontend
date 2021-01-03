@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { OrderComponent } from './pages/order/order.component';
-import { UiComponent } from './pages/ui/ui.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout/simple-layout.component';
 import { OrderCompletedComponent } from './pages/order-completed/order-completed.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -11,7 +10,6 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RestorePasswordComponent } from './pages/restore-password/restore-password.component';
 
 const routes: Routes = [
-  { path: 'ui', component: UiComponent },
   {
     path: '',
     component: SimpleLayoutComponent,
