@@ -1,0 +1,15 @@
+@import '../../styles/variables';
+
+.main-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin-bottom: 32px;
+  .icon {
+    max-width: 170px;
+    max-height: 170px;
+    width: 100%;
+    fill: $color-primary;
+  }
+}

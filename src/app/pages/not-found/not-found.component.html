@@ -1,0 +1,18 @@
+<div class="main-icon">
+  <span class="icon" [inlineSVG]="'../../assets/icons/warning.svg'"></span>
+</div>
+<h1>СТраница не найдена</h1>
+<br />
+<p>
+  Страница, на которую вы хотите перейти, не существует или временно недоступна.
+</p>
+<br />
+<p>
+  Вы можете <a [routerLink]="['/login']">авторизоваться</a>,
+  <a [routerLink]="['/sign-up']">зарегистрироваться</a> или
+  <a [routerLink]="['/']">оставить заявку</a>.
+</p>
+<br /><br />
+<a [routerLink]="['/']" mat-raised-button color="primary" class="submit-button"
+  >На главную</a
+>

@@ -36,6 +36,7 @@ a:active {
   color: $color-primary;
   transition: $transition-1;
   text-decoration: underline;
+  cursor: pointer;
   &:hover {
     text-decoration: none;
   }
@@ -98,6 +99,15 @@ label {
 
 .submit-button {
   width: 100%;
+}
+
+.form-control-hint {
+  display: block;
+  position: relative;
+  margin-top: -12px;
+  &.error {
+    color: $error-color !important;
+  }
 }
 
 /* Remove arrows and spinners in number inputs */

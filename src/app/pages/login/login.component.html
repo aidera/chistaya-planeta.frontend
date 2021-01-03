@@ -1,0 +1,42 @@
+<form [formGroup]="form" (submit)="submit()">
+  <h1>Авторизация</h1>
+  <br />
+  <br />
+
+  <app-text-input
+    [control]="form.get('email')"
+    label="E-mail"
+    [errorMessages]="{
+      required: 'Обязательное поле',
+      email: 'Некорретный e-mail'
+    }"
+  ></app-text-input>
+
+  <app-text-input
+    [control]="form.get('password')"
+    label="Пароль"
+    fieldType="password"
+    [errorMessages]="{
+      required: 'Обязательное поле',
+      minlength: 'Пароль должен содержать не менее 6 символов'
+    }"
+  ></app-text-input>
+  <small class="form-control-hint"
+    ><a [routerLink]="['/restore-password']">Забыли пароль?</a></small
+  >
+
+  <br />
+  <br />
+
+  <button type="submit" mat-raised-button color="primary" class="submit-button">
+    Войти
+  </button>
+
+  <br />
+  <br />
+  <small>
+    Нет аккаунта? <a [routerLink]="['/sign-up']">Зарегистрируйтесь!</a>
+    <br />
+    Хочу просто <a [routerLink]="['/order']">оставить единоразовую заявку</a>.
+  </small>
+</form>

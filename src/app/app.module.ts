@@ -19,6 +19,11 @@ import { DateInputComponent } from './components/form-controls/date-input/date-i
 import { UiComponent } from './pages/ui/ui.component';
 import { OrderComponent } from './pages/order/order.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout/simple-layout.component';
+import { OrderCompletedComponent } from './pages/order-completed/order-completed.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { RestorePasswordComponent } from './pages/restore-password/restore-password.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +38,11 @@ import { SimpleLayoutComponent } from './layouts/simple-layout/simple-layout.com
     UiComponent,
     OrderComponent,
     SimpleLayoutComponent,
+    OrderCompletedComponent,
+    NotFoundComponent,
+    LoginComponent,
+    SignUpComponent,
+    RestorePasswordComponent,
   ],
   imports: [
     BrowserModule,

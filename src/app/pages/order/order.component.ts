@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import orderTypeOptions from '../../data/orderTypeOptions';
 import rawRecyclableTypeOptions from '../../data/rawRecyclableTypeOptions';
@@ -35,7 +36,7 @@ export class OrderComponent implements OnInit {
 
   public desiredPickupDateMinDate = tomorrow;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.formInit();
@@ -150,6 +151,7 @@ export class OrderComponent implements OnInit {
 
     if (this.form.valid) {
       console.log('form is valid');
+      this.router.navigate(['/order-completed']);
     } else {
       let hasOneElementToScroll = false;
 

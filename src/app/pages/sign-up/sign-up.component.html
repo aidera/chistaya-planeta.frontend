@@ -1,0 +1,79 @@
+<form [formGroup]="form" (submit)="submit()">
+  <h1>Регистрация</h1>
+  <br />
+  <br />
+
+  <app-text-input
+    [control]="form.get('email')"
+    label="E-mail"
+    [errorMessages]="{
+      required: 'Обязательное поле',
+      email: 'Некорретный e-mail'
+    }"
+  ></app-text-input>
+
+  <app-text-input
+    [control]="form.get('phone')"
+    label="Телефон"
+    [errorMessages]="{
+      required: 'Обязательное поле',
+      minlength: 'Слишком короткий телефон'
+    }"
+    mask="(000) 000-00-00"
+    prefix="+7 "
+  ></app-text-input>
+
+  <app-text-input
+    [control]="form.get('name')"
+    label="Как к Вам обращаться?"
+    [errorMessages]="{
+      required: 'Обязательное поле'
+    }"
+  ></app-text-input>
+
+  <app-text-input
+    [control]="form.get('password')"
+    label="Пароль"
+    fieldType="password"
+    [errorMessages]="{
+      required: 'Обязательное поле',
+      minlength: 'Пароль должен содержать не менее 6 символов'
+    }"
+  ></app-text-input>
+
+  <app-text-input
+    [control]="form.get('confirmPassword')"
+    label="Повторите пароль"
+    fieldType="password"
+    [errorMessages]="{
+      required: 'Обязательное поле',
+      minlength: 'Пароль должен содержать не менее 6 символов'
+    }"
+  ></app-text-input>
+
+  <small
+    *ngIf="
+      form.get('password').touched &&
+      form.get('confirmPassword').touched &&
+      form.errors &&
+      form.errors.passwordNotMatch
+    "
+    class="form-control-hint error"
+    >Пароли не совпадают</small
+  >
+
+  <br />
+  <br />
+
+  <button type="submit" mat-raised-button color="primary" class="submit-button">
+    Зарегистрироваться
+  </button>
+
+  <br />
+  <br />
+  <small>
+    Уже есть аккаунт? <a [routerLink]="['/login']">Войти!</a>
+    <br />
+    Хочу просто <a [routerLink]="['/order']">оставить единоразовую заявку</a>.
+  </small>
+</form>
