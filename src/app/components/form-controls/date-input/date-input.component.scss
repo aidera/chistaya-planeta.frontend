@@ -1,0 +1,11 @@
+@import '../../../styles/variables';
+
+.input-wrapper {
+  cursor: pointer;
+  * {
+    cursor: pointer;
+  }
+  input {
+    color: $text-color-primary;
+  }
+}

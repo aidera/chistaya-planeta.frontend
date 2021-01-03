@@ -10,4 +10,6 @@ import { AbstractFormControlComponent } from '../abstract-form-control.component
 export class DateInputComponent extends AbstractFormControlComponent {
   @Input() minDate?: Date;
   @Input() maxDate?: Date;
+
+  isDatepickerOpen = false;
 }

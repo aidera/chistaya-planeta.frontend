@@ -1,4 +1,4 @@
-<mat-form-field appearance="standard">
+<mat-form-field appearance="standard" [class.mat-focused]="isDatepickerOpen">
   <label [for]="fieldId">
     {{ label }}
     <span class="required-field-star" *ngIf="isRequired">*</span>
@@ -8,7 +8,7 @@
     ></app-question-hint>
   </label>
 
-  <div class="input-wrapper">
+  <div class="input-wrapper" (click)="picker.open(); isDatepickerOpen = true">
     <input
       [formControl]="control"
       [id]="fieldId"
@@ -18,15 +18,16 @@
       [min]="minDate"
       [max]="maxDate"
       [value]="control.value"
+      disabled
     />
 
-    <mat-datepicker #picker></mat-datepicker>
+    <mat-datepicker
+      #picker
+      disabled="false"
+      (closed)="isDatepickerOpen = false"
+    ></mat-datepicker>
 
-    <span
-      class="icon"
-      [inlineSVG]="'../assets/icons/calendar.svg'"
-      (click)="picker.open()"
-    ></span>
+    <span class="icon" [inlineSVG]="'../assets/icons/calendar.svg'"></span>
   </div>
 
   <mat-hint *ngIf="currentErrorMessage && control.touched">{{

@@ -183,6 +183,14 @@ textarea.mat-input-element {
   border-radius: $border-radius-secondary !important;
 }
 
+.mat-select-value {
+  color: $text-color-primary;
+}
+
+.mat-option-text {
+  color: $text-color-primary;
+}
+
 .mat-option {
   border-bottom: 1px solid $divider-color;
   user-select: none;
