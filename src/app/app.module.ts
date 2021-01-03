@@ -16,7 +16,6 @@ import { CheckboxComponent } from './components/form-controls/checkbox/checkbox.
 import { SelectComponent } from './components/form-controls/select/select.component';
 import { QuestionHintComponent } from './components/question-hint/question-hint.component';
 import { DateInputComponent } from './components/form-controls/date-input/date-input.component';
-import { UiComponent } from './pages/ui/ui.component';
 import { OrderComponent } from './pages/order/order.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout/simple-layout.component';
 import { OrderCompletedComponent } from './pages/order-completed/order-completed.component';
@@ -35,7 +34,6 @@ import { RestorePasswordComponent } from './pages/restore-password/restore-passw
     SelectComponent,
     QuestionHintComponent,
     DateInputComponent,
-    UiComponent,
     OrderComponent,
     SimpleLayoutComponent,
     OrderCompletedComponent,

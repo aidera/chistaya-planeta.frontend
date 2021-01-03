@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { AbstractFormControlComponent } from '../abstract-form-control.component';
 
@@ -14,7 +14,6 @@ export class TextInputComponent
   @Input() fieldType?: 'text' | 'email' | 'password' | 'number' = 'text';
   @Input() mask?: string;
   @Input() prefix?: string;
-  @ViewChild('inputRef') inputRef: ElementRef;
 
   type?: 'text' | 'email' | 'password' | 'number';
 
