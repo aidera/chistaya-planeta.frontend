@@ -51,10 +51,7 @@
 
       <div
         class="combined-fields"
-        *ngIf="
-          form.get('type').value === orderTypeEnum.recyclable + '';
-          else rawAmountIfTypeIsGarbage
-        "
+        *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
       >
         <app-text-input
           [control]="form.get('rawAmount')"
@@ -78,24 +75,29 @@
         ></app-select>
       </div>
 
-      <ng-template #rawAmountIfTypeIsGarbage>
-        <app-text-input
-          [control]="form.get('rawAmount')"
-          fieldId="rawAmount"
-          [label]="'Приблизительное количество, куб.'"
-          labelHint="Нужно, чтобы определить тип автомобиля"
-          [isRequired]="true"
-          fieldType="number"
-          [errorMessages]="{
-            required: 'Обязательное поле',
-            min: 'Не может быть меньше 1'
-          }"
-        ></app-text-input>
-      </ng-template>
+      <app-text-input
+        *ngIf="form.get('type').value === orderTypeEnum.garbage + ''"
+        [control]="form.get('rawAmount')"
+        fieldId="rawAmount"
+        [label]="'Приблизительное количество, куб.'"
+        labelHint="Нужно, чтобы определить тип автомобиля"
+        [isRequired]="true"
+        fieldType="number"
+        [errorMessages]="{
+          required: 'Обязательное поле',
+          min: 'Не может быть меньше 1'
+        }"
+      ></app-text-input>
     </div>
 
     <div class="order-block">
-      <h2>Доставка</h2>
+      <h2>
+        {{
+          form.get('type').value === orderTypeEnum.recyclable + ''
+            ? 'Доставка'
+            : 'Вывоз'
+        }}
+      </h2>
 
       <app-select
         *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
@@ -240,7 +242,7 @@
         [control]="form.get('remunerationPaymentMethod')"
         fieldId="remunerationPaymentMethod"
         label="Способ оплаты"
-        [options]="selectPaymentMethodOptions"
+        [options]="selectPaymentMethodRecyclableOptions"
         [isRequired]="true"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>
@@ -259,6 +261,22 @@
         [isRequired]="true"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-textarea>
+    </div>
+
+    <div
+      class="order-block"
+      *ngIf="form.get('type').value === orderTypeEnum.garbage + ''"
+    >
+      <h2>Оплата</h2>
+
+      <app-select
+        [control]="form.get('remunerationPaymentMethod')"
+        fieldId="remunerationPaymentMethod"
+        label="Способ оплаты"
+        [options]="selectPaymentMethodGarbageOptions"
+        [isRequired]="true"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-select>
     </div>
 
     <div class="order-block">

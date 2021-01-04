@@ -6,7 +6,8 @@ import orderTypeOptions from '../../data/orderTypeOptions';
 import rawRecyclableTypeOptions from '../../data/rawRecyclableTypeOptions';
 import rawUnitOptions from '../../data/rawUnitOptions';
 import deliveryTypeOptions from '../../data/deliveryTypeOptions';
-import paymentMethodOptions from '../../data/paymentMethodOptions';
+import paymentMethodRecyclableOptions from '../../data/paymentMethodRecyclableOptions';
+import paymentMethodGarbageOptions from '../../data/paymentMethodGarbageOptions';
 import citiesOptions from '../../data/citiesOptions';
 import timeOptions from '../../data/timeOptions';
 import { tomorrow } from '../../utils/date.functions';
@@ -28,7 +29,8 @@ export class OrderComponent implements OnInit {
   public selectRawTypeOptions = rawRecyclableTypeOptions;
   public selectRawUnitOptions = rawUnitOptions;
   public selectDeliveryTypeOptions = deliveryTypeOptions;
-  public selectPaymentMethodOptions = paymentMethodOptions;
+  public selectPaymentMethodRecyclableOptions = paymentMethodRecyclableOptions;
+  public selectPaymentMethodGarbageOptions = paymentMethodGarbageOptions;
   public selectCitiesOptions = citiesOptions;
   public selectTimeOptions = timeOptions;
 
@@ -77,9 +79,6 @@ export class OrderComponent implements OnInit {
         this.form.get('rawType').setValidators(Validators.required);
         this.form.get('rawAmountUnit').setValidators(Validators.required);
         this.form.get('deliveryType').setValidators(Validators.required);
-        this.form
-          .get('remunerationPaymentMethod')
-          .setValidators(Validators.required);
         this.deliveryTypeValidatorsChange(this.form.get('deliveryType').value);
         this.remunerationPaymentMethodValidatorsChange(
           this.form.get('remunerationPaymentMethod').value
@@ -89,7 +88,6 @@ export class OrderComponent implements OnInit {
         this.form.get('rawAmountUnit').clearValidators();
         this.form.get('deliveryType').clearValidators();
         this.form.get('deliveryCustomerCarNumber').clearValidators();
-        this.form.get('remunerationPaymentMethod').clearValidators();
         this.form.get('remunerationPaymentMethodData').clearValidators();
       }
     });
