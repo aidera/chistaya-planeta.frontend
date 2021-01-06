@@ -6,10 +6,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { NgxMaskModule } from 'ngx-mask';
+import { HttpClientModule } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { TextInputComponent } from './text-input.component';
-import {MaterialModule} from '../../../modules/material/material.module';
-import { By } from '@angular/platform-browser';
 
 describe('TextInputComponent', () => {
   let component: TextInputComponent;
@@ -18,7 +22,15 @@ describe('TextInputComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TextInputComponent],
-      imports: [ReactiveFormsModule, MaterialModule, BrowserAnimationsModule],
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        InlineSVGModule.forRoot(),
+        NgxMaskModule.forRoot(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TextInputComponent);
@@ -35,7 +47,7 @@ describe('TextInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not display an error message, at the beginning and without blur', () => {
+  it('should not display an error message, at the beginning', () => {
     const textField = fixture.debugElement.query(By.css('input')).nativeElement;
     const messageToCheck = 'This field is required';
 
@@ -48,7 +60,7 @@ describe('TextInputComponent', () => {
     expect(htmlErrorElement).toBeFalsy();
   });
 
-  it('should display an error message, when blur', () => {
+  it('should display an error message, if it has', () => {
     const textField = fixture.debugElement.query(By.css('input')).nativeElement;
     const messageToCheck = 'This field is required';
 
@@ -63,17 +75,14 @@ describe('TextInputComponent', () => {
     expect(htmlErrorElement.innerHTML).toContain(messageToCheck);
   });
 
-  it('should display a modules icon if it have to', () => {
-
+  it('should display an icon if it have to', () => {
+    component.icon = '../assets/icons/show.svg';
     fixture.detectChanges();
-    let htmlIconElement = fixture.debugElement.query(By.css('.mat-icon'))
-      .nativeElement;
-    expect(htmlIconElement.innerHTML).toContain('local_post_office');
+    expect(fixture.debugElement.query(By.css('.icon'))).toBeTruthy();
 
     component.icon = undefined;
     fixture.detectChanges();
-    htmlIconElement = fixture.debugElement.query(By.css('.mat-icon'));
-    expect(htmlIconElement).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('.icon'))).toBeFalsy();
   });
 
   it('should be a password type if it have to', () => {

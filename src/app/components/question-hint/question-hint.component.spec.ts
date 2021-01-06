@@ -1,4 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { InlineSVGModule } from 'ng-inline-svg';
 
 import { QuestionHintComponent } from './question-hint.component';
 
@@ -8,9 +11,9 @@ describe('QuestionHintComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuestionHintComponent ]
-    })
-    .compileComponents();
+      declarations: [QuestionHintComponent],
+      imports: [HttpClientModule, InlineSVGModule.forRoot(), MatTooltipModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

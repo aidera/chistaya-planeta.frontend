@@ -6,10 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { CheckboxComponent } from './checkbox.component';
-import { MaterialModule } from '../../../modules/material/material.module';
-import { By } from '@angular/platform-browser';
 
 describe('CheckboxComponent', () => {
   let component: CheckboxComponent;
@@ -18,7 +18,11 @@ describe('CheckboxComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [CheckboxComponent],
-      imports: [ReactiveFormsModule, MaterialModule, BrowserAnimationsModule],
+      imports: [
+        ReactiveFormsModule,
+        MatCheckboxModule,
+        BrowserAnimationsModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CheckboxComponent);
@@ -52,7 +56,7 @@ describe('CheckboxComponent', () => {
     const htmlCheckboxElement = fixture.debugElement.query(
       By.css('.mat-checkbox')
     ).nativeElement;
-    expect(htmlCheckboxElement.classList).toContain('error');
+    expect(htmlCheckboxElement.classList).toContain('ng-invalid');
   });
 
   it('should display label if it have to', () => {

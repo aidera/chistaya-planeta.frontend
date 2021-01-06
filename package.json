@@ -3,14 +3,15 @@
   "version": "0.0.0",
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && ng lint"
+      "pre-commit": "pretty-quick --staged && ng lint && npm run test-once"
     }
   },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --watch=true",
+    "test-once": "ng test --watch=false",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

@@ -6,11 +6,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { NgxMaskModule } from 'ngx-mask';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { TextareaComponent } from './textarea.component';
-
-import { By } from '@angular/platform-browser';
-import {MaterialModule} from '../../../modules/material/material.module';
 
 describe('TextareaComponent', () => {
   let component: TextareaComponent;
@@ -19,7 +22,15 @@ describe('TextareaComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TextareaComponent],
-      imports: [ReactiveFormsModule, MaterialModule, BrowserAnimationsModule],
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        InlineSVGModule.forRoot(),
+        NgxMaskModule.forRoot(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TextareaComponent);
@@ -36,7 +47,7 @@ describe('TextareaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not display an error message, at the beginning and without blur', () => {
+  it('should not display an error message, at the beginning', () => {
     const textField = fixture.debugElement.query(By.css('textarea'))
       .nativeElement;
     const messageToCheck = 'This field is required';
@@ -50,7 +61,7 @@ describe('TextareaComponent', () => {
     expect(htmlErrorElement).toBeFalsy();
   });
 
-  it('should display an error message, when blur', () => {
+  it('should display an error message if the field has no focus', () => {
     const textField = fixture.debugElement.query(By.css('textarea'))
       .nativeElement;
     const messageToCheck = 'This field is required';
