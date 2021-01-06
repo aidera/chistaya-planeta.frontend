@@ -113,12 +113,10 @@ export class OrderComponent implements OnInit {
 
   private deliveryTypeValidatorsChange(value): void {
     if (value === DeliveryType.company + '') {
-      this.form.get('deliveryAddressCity').setValidators(Validators.required);
       this.form.get('deliveryAddressStreet').setValidators(Validators.required);
       this.form.get('deliveryAddressHouse').setValidators(Validators.required);
       this.form.get('deliveryCustomerCarNumber').clearValidators();
     } else {
-      this.form.get('deliveryAddressCity').clearValidators();
       this.form.get('deliveryAddressStreet').clearValidators();
       this.form.get('deliveryAddressHouse').clearValidators();
       this.form

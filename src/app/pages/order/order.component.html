@@ -4,13 +4,7 @@
   <br />
   <br />
 
-  <small>
-    Если вы хотите следить за статусом заявки, использовать шаблон, повторять
-    заявку без повторного заполнения или создавать ее каждые 7, 14, 30 дней без
-    входа в личный кабинет, то
-    <a [routerLink]="['/login']">авторизируйтесь</a> или
-    <a [routerLink]="['/sign-up']">зарегистрируйте новый аккаунт</a>.
-  </small>
+  <app-auth-notify></app-auth-notify>
 
   <br />
   <br />
@@ -110,10 +104,6 @@
       ></app-select>
 
       <app-select
-        *ngIf="
-          form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
-          form.get('type').value === orderTypeEnum.garbage + ''
-        "
         [control]="form.get('deliveryAddressCity')"
         fieldId="deliveryAddressCity"
         label="Город"
@@ -187,7 +177,10 @@
       </div>
 
       <app-checkbox
-        *ngIf="form.get('deliveryType').value === deliveryTypeEnum.company + ''"
+        *ngIf="
+          form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
+          form.get('type').value === orderTypeEnum.garbage + ''
+        "
         [control]="form.get('hasAssistant')"
         fieldId="hasAssistant"
         label="Есть помошник?"
@@ -296,11 +289,5 @@
   <br />
   <br />
 
-  <small>
-    Если вы хотите следить за статусом заявки, использовать шаблон, повторять
-    заявку без повторного заполнения или создавать ее каждые 7, 14, 30 дней без
-    входа в личный кабинет, то
-    <a [routerLink]="['/login']">авторизируйтесь</a> или
-    <a [routerLink]="['/sign-up']">зарегистрируйте новый аккаунт</a>.
-  </small>
+  <app-auth-notify></app-auth-notify>
 </form>
