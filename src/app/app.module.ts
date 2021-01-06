@@ -18,12 +18,13 @@ import { QuestionHintComponent } from './components/question-hint/question-hint.
 import { DateInputComponent } from './components/form-controls/date-input/date-input.component';
 import { OrderComponent } from './pages/order/order.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout/simple-layout.component';
-import { OrderCompletedComponent } from './pages/order-completed/order-completed.component';
+import { OrderSucceedComponent } from './pages/order-succeed/order-succeed.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RestorePasswordComponent } from './pages/restore-password/restore-password.component';
 import { AuthNotifyComponent } from './components/auth-notify/auth-notify.component';
+import { NgrxModule } from './store/ngrx.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { AuthNotifyComponent } from './components/auth-notify/auth-notify.compon
     DateInputComponent,
     OrderComponent,
     SimpleLayoutComponent,
-    OrderCompletedComponent,
+    OrderSucceedComponent,
     NotFoundComponent,
     LoginComponent,
     SignUpComponent,
@@ -53,6 +54,7 @@ import { AuthNotifyComponent } from './components/auth-notify/auth-notify.compon
     MaterialModule,
     InlineSVGModule.forRoot(),
     NgxMaskModule.forRoot(),
+    NgrxModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

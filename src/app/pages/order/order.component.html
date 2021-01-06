@@ -104,13 +104,48 @@
       ></app-select>
 
       <app-select
-        [control]="form.get('deliveryAddressCity')"
-        fieldId="deliveryAddressCity"
-        label="Город"
+        [control]="form.get('deliveryAddressLocality')"
+        fieldId="deliveryAddressLocality"
+        label="Населённый пункт"
         [isRequired]="true"
-        [options]="selectCitiesOptions"
+        [options]="selectLocalitiesOptions"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>
+
+      <ng-container
+        *ngIf="
+          form.get('type').value === orderTypeEnum.recyclable + '' &&
+          form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
+          selectDivisionsOptions.length > 1
+        "
+      >
+        <app-select
+          [control]="form.get('division')"
+          fieldId="division"
+          label="Пункт приёма"
+          [isRequired]="true"
+          [options]="selectDivisionsOptions"
+          [errorMessages]="{ required: 'Обязательное поле' }"
+        ></app-select>
+        <small class="form-control-hint"><a>Показать на карте</a></small>
+        <br />
+      </ng-container>
+
+      <div
+        *ngIf="
+          form.get('type').value === orderTypeEnum.recyclable + '' &&
+          form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
+          selectDivisionsOptions.length === 1
+        "
+      >
+        <small>Адрес пункта приёма:</small>
+        <br />
+        <p>{{ selectDivisionsOptions[0].text }}</p>
+        <small><a>Показать на карте</a></small>
+
+        <br />
+        <br />
+      </div>
 
       <div
         class="combined-fields"
@@ -232,8 +267,8 @@
       <h2>Вознаграждение</h2>
 
       <app-select
-        [control]="form.get('remunerationPaymentMethod')"
-        fieldId="remunerationPaymentMethod"
+        [control]="form.get('paymentMethod')"
+        fieldId="paymentMethod"
         label="Способ оплаты"
         [options]="selectPaymentMethodRecyclableOptions"
         [isRequired]="true"
@@ -242,13 +277,11 @@
 
       <app-textarea
         *ngIf="
-          form.get('remunerationPaymentMethod').value ===
-            paymentMethodEnum.card + '' ||
-          form.get('remunerationPaymentMethod').value ===
-            paymentMethodEnum.nonCash + ''
+          form.get('paymentMethod').value === paymentMethodEnum.card + '' ||
+          form.get('paymentMethod').value === paymentMethodEnum.nonCash + ''
         "
-        [control]="form.get('remunerationPaymentMethodData')"
-        fieldId="remunerationPaymentMethodData"
+        [control]="form.get('paymentMethodData')"
+        fieldId="paymentMethodData"
         label="Информация для платежа"
         labelHint="Номер карты или данные счёта, по которым мы сможем отправить вознаграждение"
         [isRequired]="true"
@@ -263,8 +296,8 @@
       <h2>Оплата</h2>
 
       <app-select
-        [control]="form.get('remunerationPaymentMethod')"
-        fieldId="remunerationPaymentMethod"
+        [control]="form.get('paymentMethod')"
+        fieldId="paymentMethod"
         label="Способ оплаты"
         [options]="selectPaymentMethodGarbageOptions"
         [isRequired]="true"
@@ -282,9 +315,20 @@
     </div>
   </ng-container>
 
-  <button type="submit" mat-raised-button color="primary" class="submit-button">
+  <button
+    type="submit"
+    mat-raised-button
+    color="primary"
+    class="submit-button"
+    [disabled]="isFetching$ | async"
+  >
     Отправить
   </button>
+
+  <p style="color: red" *ngIf="serverError !== null">
+    <br />Ошибка сервера. Попробуйте оставить заявку позже или свяжитесь с нами
+    по телефону.
+  </p>
 
   <br />
   <br />

@@ -81,6 +81,17 @@ a.mat-raised-button {
   background: linear-gradient(90deg, #91b62a 0%, #6c8426 100%);
 }
 
+.mat-raised-button.mat-primary.mat-button-disabled {
+  background: $disable-color;
+  color: white !important;
+  &:hover {
+    box-shadow: $small-shadow !important;
+  }
+  span {
+    color: white !important;
+  }
+}
+
 .mat-button.mat-button-disabled {
   color: $disable-color !important;
 
