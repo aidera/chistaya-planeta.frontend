@@ -127,7 +127,7 @@ describe('LoginComponent', () => {
     expect(field.errors.minlength).toBeTruthy();
   });
 
-  it('should dispatch an employee login action if the fields is correct', () => {
+  it('should dispatch an employee login action if the fields are correct', () => {
     storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
 
     component.isEmployee = true;
@@ -148,7 +148,7 @@ describe('LoginComponent', () => {
     );
   });
 
-  it('should dispatch a client login action if the fields is correct', () => {
+  it('should dispatch a client login action if the fields are correct', () => {
     storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
 
     component.isEmployee = false;
@@ -169,7 +169,7 @@ describe('LoginComponent', () => {
     );
   });
 
-  it('should not dispatch a client login action if the fields is not correct', () => {
+  it('should not dispatch a client login action if the fields are not correct', () => {
     storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
 
     component.form.controls.email.setValue('test@t.t');

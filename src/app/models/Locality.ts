@@ -5,6 +5,6 @@ export interface ILocality {
   isActive: boolean;
   name: string;
   divisions: (IDivision | string)[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

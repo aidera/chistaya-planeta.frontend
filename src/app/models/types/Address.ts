@@ -1,5 +1,7 @@
+import { ILocality } from '../Locality';
+
 type Address = {
-  city: string;
+  locality: string | ILocality;
   street: string;
   house: string;
 };
