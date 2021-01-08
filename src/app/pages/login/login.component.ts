@@ -1,18 +1,96 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Data, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+
+import * as fromRoot from '../../store/root.reducer';
+import * as UserActions from '../../store/user/user.actions';
+import * as UserSelectors from '../../store/user/user.selectors';
+import { UserType } from '../../models/enums/UserType';
+import { responseCodes } from '../../data/responseCodes';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  public isEmployee: boolean;
   public form: FormGroup;
 
-  constructor() {}
+  private isLoginSucceed$: Subscription;
+  private isFetching$: Subscription;
+  public isFetching: boolean;
+  private serverError$: Subscription;
+  public serverError: string | null;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<fromRoot.State>
+  ) {}
 
   ngOnInit(): void {
+    this.route.data.subscribe((data: Data) => {
+      this.isEmployee = data.isEmployee;
+    });
+
+    this.isLoginSucceed$ = this.store
+      .select(UserSelectors.selectIsLoginSucceed)
+      .subscribe((status) => {
+        if (status === true) {
+          this.router.navigate(['/order-succeed']);
+        }
+      });
+
+    this.isFetching$ = this.store
+      .select(UserSelectors.selectIsLoggingIn)
+      .subscribe((status) => {
+        this.isFetching = status;
+      });
+
+    this.serverError$ = this.store
+      .select(UserSelectors.selectServerError)
+      .subscribe((error) => {
+        if (error) {
+          let errorCode: string;
+          if (error.code === responseCodes.validationFailed) {
+            errorCode = error.errors[0].msg;
+          } else {
+            errorCode = error.code;
+          }
+
+          switch (errorCode) {
+            case responseCodes.emailOrPasswordIsNotCorrect:
+              this.serverError = 'Неправильный e-mail или пароль';
+              break;
+            case responseCodes.invalidEmail:
+              this.serverError = 'Некорректный e-mail';
+              break;
+            default:
+              this.serverError =
+                'Ошибка сервера. Попробуйте авторизироваться позже.';
+              break;
+          }
+        } else {
+          this.serverError = null;
+        }
+      });
+
     this.formInit();
+  }
+
+  ngOnDestroy(): void {
+    if (this.isLoginSucceed$) {
+      this.isLoginSucceed$.unsubscribe();
+    }
+    if (this.serverError$) {
+      this.serverError$.unsubscribe();
+    }
+    if (this.isLoginSucceed$) {
+      this.isLoginSucceed$.unsubscribe();
+    }
   }
 
   private formInit(): void {
@@ -22,6 +100,10 @@ export class LoginComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
+    });
+
+    this.form.valueChanges.subscribe((val) => {
+      this.serverError = null;
     });
   }
 
@@ -33,11 +115,13 @@ export class LoginComponent implements OnInit {
     });
 
     if (this.form.valid) {
-      console.log('form is valid');
+      this.store.dispatch(
+        UserActions.loginRequest({
+          userType: this.isEmployee ? UserType.employee : UserType.client,
+          email: this.form.get('email').value,
+          password: this.form.get('password').value,
+        })
+      );
     }
-
-    console.log('Form submitted: ', this.form);
-    const formData = { ...this.form.value };
-    console.log('Form Data:', formData);
   }
 }

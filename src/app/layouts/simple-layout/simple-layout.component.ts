@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Data } from '@angular/router';
 
 @Component({
   selector: 'app-simple-layout',
@@ -6,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./simple-layout.component.scss'],
 })
 export class SimpleLayoutComponent implements OnInit {
-  constructor() {}
+  public isEmployee: boolean;
 
-  ngOnInit(): void {}
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.data.subscribe((data: Data) => {
+      this.isEmployee = data.isEmployee;
+    });
+  }
 }

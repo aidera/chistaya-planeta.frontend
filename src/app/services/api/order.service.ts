@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import OrderType from '../../../models/enums/OrderType';
-import DeliveryType from '../../../models/enums/DeliveryType';
-import RawType from '../../../models/enums/RawType';
-import RawUnit from '../../../models/enums/RawUnit';
-import PaymentMethod from '../../../models/enums/PaymentMethod';
-import { environment } from '../../../../environments/environment';
-import { IOrder } from '../../../models/Order';
-import ServerResponse from '../../../models/ServerResponse';
+import OrderType from '../../models/enums/OrderType';
+import DeliveryType from '../../models/enums/DeliveryType';
+import RawType from '../../models/enums/RawType';
+import RawUnit from '../../models/enums/RawUnit';
+import PaymentMethod from '../../models/enums/PaymentMethod';
+import { environment } from '../../../environments/environment';
+import { IOrder } from '../../models/Order';
+import ServerResponse from '../../models/ServerResponse';
 
 export interface IAddOrderRequest {
   type: OrderType;
@@ -41,6 +41,8 @@ export interface IAddOrderResponse extends ServerResponse {
   providedIn: 'root',
 })
 export class OrderService {
+  private path = 'orders';
+
   constructor(private http: HttpClient) {}
 
   add(order: IAddOrderRequest): Observable<IAddOrderResponse> {
@@ -85,7 +87,7 @@ export class OrderService {
     );
 
     return this.http.put<IAddOrderResponse>(
-      `${environment.serverURL}/orders/`,
+      `${environment.serverURL}/${this.path}/`,
       newOrder
     );
   }

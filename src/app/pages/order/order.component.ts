@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -28,13 +28,14 @@ import { ServerError } from '../../models/ServerResponse';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
   private localities$: Subscription;
   private localities: ILocality[];
 
-  public isAddOrderSucceed$: Subscription;
-  public isFetching$: Observable<boolean>;
-  public serverError$: Subscription;
+  private isAddOrderSucceed$: Subscription;
+  private isFetching$: Subscription;
+  public isFetching: boolean;
+  private serverError$: Subscription;
   public serverError: ServerError;
 
   public orderTypeEnum = OrderType;
@@ -83,15 +84,32 @@ export class OrderComponent implements OnInit {
         }
       });
 
-    this.isFetching$ = this.store.select(
-      OrderSelectors.selectAddOrderIsFetching
-    );
+    this.isFetching$ = this.store
+      .select(OrderSelectors.selectAddOrderIsFetching)
+      .subscribe((status) => {
+        this.isFetching = status;
+      });
 
     this.serverError$ = this.store
       .select(OrderSelectors.selectAddOrderError)
       .subscribe((error) => {
         this.serverError = error;
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.localities$) {
+      this.localities$.unsubscribe();
+    }
+    if (this.isFetching$) {
+      this.isFetching$.unsubscribe();
+    }
+    if (this.serverError$) {
+      this.serverError$.unsubscribe();
+    }
+    if (this.isAddOrderSucceed$) {
+      this.isAddOrderSucceed$.unsubscribe();
+    }
   }
 
   private formInit(): void {

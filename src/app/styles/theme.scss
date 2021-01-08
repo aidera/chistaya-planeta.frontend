@@ -110,6 +110,10 @@ label {
   }
 }
 
+.server-error {
+  color: $error-color;
+}
+
 /* Remove arrows and spinners in number inputs */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

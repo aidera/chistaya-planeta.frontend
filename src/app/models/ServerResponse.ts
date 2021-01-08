@@ -11,5 +11,5 @@ export interface ServerError {
 
 export default interface ServerResponse {
   message?: string;
-  error: ServerError;
+  error?: ServerError;
 }

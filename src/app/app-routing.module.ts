@@ -11,6 +11,14 @@ import { RestorePasswordComponent } from './pages/restore-password/restore-passw
 
 const routes: Routes = [
   {
+    path: 'employee',
+    component: SimpleLayoutComponent,
+    data: { isEmployee: true },
+    children: [
+      { path: 'login', component: LoginComponent, data: { isEmployee: true } },
+    ],
+  },
+  {
     path: '',
     component: SimpleLayoutComponent,
     children: [

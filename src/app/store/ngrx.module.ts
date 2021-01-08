@@ -11,7 +11,9 @@ import * as fromRoot from './root.reducer';
 @NgModule({
   declarations: [],
   imports: [
-    StoreModule.forRoot(fromRoot.rootReducer),
+    StoreModule.forRoot(fromRoot.rootReducer, {
+      metaReducers: [fromRoot.clearState],
+    }),
     EffectsModule.forRoot(rootEffects),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     StoreRouterConnectingModule.forRoot(),

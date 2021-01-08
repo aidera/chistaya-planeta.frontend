@@ -1,5 +1,5 @@
 <form [formGroup]="form" (submit)="submit()">
-  <h1>Авторизация</h1>
+  <h1>{{ isEmployee ? 'Авторизация сотрудника' : 'Авторизация' }}</h1>
   <br />
   <br />
 
@@ -21,22 +21,34 @@
       minlength: 'Пароль должен содержать не менее 6 символов'
     }"
   ></app-text-input>
-  <small class="form-control-hint"
+  <small *ngIf="!isEmployee" class="form-control-hint"
     ><a [routerLink]="['/restore-password']">Забыли пароль?</a></small
   >
 
   <br />
   <br />
 
-  <button type="submit" mat-raised-button color="primary" class="submit-button">
+  <button
+    type="submit"
+    mat-raised-button
+    color="primary"
+    class="submit-button"
+    [disabled]="isFetching"
+  >
     Войти
   </button>
 
-  <br />
-  <br />
-  <small>
-    Нет аккаунта? <a [routerLink]="['/sign-up']">Зарегистрируйтесь!</a>
+  <p class="server-error" *ngIf="serverError !== null">
+    <br />{{ serverError }}
+  </p>
+
+  <ng-container *ngIf="!isEmployee">
     <br />
-    Хочу просто <a [routerLink]="['/order']">оставить единоразовую заявку</a>.
-  </small>
+    <br />
+    <small>
+      Нет аккаунта? <a [routerLink]="['/sign-up']">Зарегистрируйтесь!</a>
+      <br />
+      Хочу просто <a [routerLink]="['/order']">оставить единоразовую заявку</a>.
+    </small>
+  </ng-container>
 </form>

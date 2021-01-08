@@ -320,12 +320,12 @@
     mat-raised-button
     color="primary"
     class="submit-button"
-    [disabled]="isFetching$ | async"
+    [disabled]="isFetching"
   >
     Отправить
   </button>
 
-  <p style="color: red" *ngIf="serverError !== null">
+  <p class="server-error" *ngIf="serverError !== null">
     <br />Ошибка сервера. Попробуйте оставить заявку позже или свяжитесь с нами
     по телефону.
   </p>

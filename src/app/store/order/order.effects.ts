@@ -4,8 +4,8 @@ import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import * as OrderActions from './order.actions';
-import { OrderService } from '../../services/api/order/order.service';
-import { LocalityService } from '../../services/api/locality/locality.service';
+import { OrderService } from '../../services/api/order.service';
+import { LocalityService } from '../../services/api/locality.service';
 
 @Injectable()
 export class OrderEffects {
@@ -35,7 +35,7 @@ export class OrderEffects {
             catchError((errorRes) => {
               return of(
                 OrderActions.addOrderFailure({
-                  error: errorRes.error,
+                  error: errorRes.error.error,
                 })
               );
             })

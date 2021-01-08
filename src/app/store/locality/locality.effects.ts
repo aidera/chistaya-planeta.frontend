@@ -4,7 +4,7 @@ import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import * as LocalityActions from './locality.actions';
-import { LocalityService } from '../../services/api/locality/locality.service';
+import { LocalityService } from '../../services/api/locality.service';
 
 @Injectable()
 export class LocalityEffects {
@@ -31,7 +31,7 @@ export class LocalityEffects {
           catchError((errorRes) => {
             return of(
               LocalityActions.getLocalitiesFailure({
-                error: errorRes,
+                error: errorRes.error.error,
               })
             );
           })
