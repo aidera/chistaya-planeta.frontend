@@ -34,7 +34,7 @@ export interface IAddOrderRequest {
 }
 
 export interface IAddOrderResponse extends ServerResponse {
-  order?: IOrder;
+  createdOrder?: IOrder;
 }
 
 @Injectable({

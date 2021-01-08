@@ -25,7 +25,7 @@ export class OrderEffects {
           })
           .pipe(
             map((resData) => {
-              if (resData && resData.order) {
+              if (resData && resData.createdOrder) {
                 return OrderActions.addOrderSuccess();
               }
               return OrderActions.addOrderFailure({

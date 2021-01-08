@@ -6,7 +6,7 @@ export interface ServerError {
     msg: string;
     param: string;
     location: string;
-  };
+  }[];
 }
 
 export default interface ServerResponse {
