@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as OrderActions from '../../store/order/order.actions';
@@ -22,6 +22,7 @@ import { ILocality } from '../../models/Locality';
 import { OptionType } from '../../models/types/OptionType';
 import { IDivision } from 'src/app/models/Division';
 import { ServerError } from '../../models/ServerResponse';
+import RawUnit from '../../models/enums/RawUnit';
 
 @Component({
   selector: 'app-order',
@@ -117,14 +118,14 @@ export class OrderComponent implements OnInit, OnDestroy {
       type: new FormControl('', Validators.required),
       rawType: new FormControl('', Validators.required),
       rawAmount: new FormControl('', [Validators.required, Validators.min(1)]),
-      rawAmountUnit: new FormControl('0', Validators.required),
-      deliveryType: new FormControl('0', Validators.required),
+      rawAmountUnit: new FormControl(RawUnit.kg + '', Validators.required),
+      deliveryType: new FormControl('', Validators.required),
       deliveryAddressLocality: new FormControl('', Validators.required),
       deliveryAddressStreet: new FormControl('', Validators.required),
       deliveryAddressHouse: new FormControl('', Validators.required),
       deliveryCustomerCarNumber: new FormControl(''),
-      desiredPickupDate: new FormControl(tomorrow),
-      desiredPickupTime: new FormControl(timeOptions[0].value),
+      desiredPickupDate: new FormControl(tomorrow, Validators.required),
+      desiredPickupTime: new FormControl('', Validators.required),
       hasAssistant: new FormControl(false),
       customerOrganizationLegalName: new FormControl(),
       customerOrganizationActualName: new FormControl(),
@@ -188,7 +189,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   private deliveryTypeValidatorsChange(value): void {
-    if (value === DeliveryType.company + '') {
+    if (
+      value === DeliveryType.company + '' &&
+      this.form.get('type').value === OrderType.recyclable + ''
+    ) {
       this.form.get('deliveryAddressStreet').setValidators(Validators.required);
       this.form.get('deliveryAddressHouse').setValidators(Validators.required);
       this.form.get('deliveryCustomerCarNumber').clearValidators();
@@ -198,6 +202,9 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.form
         .get('deliveryCustomerCarNumber')
         .setValidators([Validators.required, Validators.minLength(5)]);
+    }
+    if (this.form.get('type').value === OrderType.garbage + '') {
+      this.form.get('deliveryCustomerCarNumber').clearValidators();
     }
   }
 
@@ -211,12 +218,14 @@ export class OrderComponent implements OnInit, OnDestroy {
         const currentLocality = this.localities.find((locality) => {
           return locality._id === value;
         });
-        currentLocality.divisions.forEach((division: IDivision) => {
-          this.selectDivisionsOptions.push({
-            value: division._id,
-            text: `${division.name} (${division.address.street}, ${division.address.house})`,
+        if (currentLocality) {
+          currentLocality.divisions.forEach((division: IDivision) => {
+            this.selectDivisionsOptions.push({
+              value: division._id,
+              text: `${division.name} (${division.address.street}, ${division.address.house})`,
+            });
           });
-        });
+        }
       }
       this.form.get('division').setValidators(Validators.required);
       if (this.selectDivisionsOptions.length === 1) {
@@ -287,12 +296,14 @@ export class OrderComponent implements OnInit, OnDestroy {
           hasOneElementToScroll = true;
 
           const fieldId = document.getElementById(field);
-          const fieldOffset = fieldId.getBoundingClientRect().top;
+          if (fieldId) {
+            const fieldOffset = fieldId.getBoundingClientRect().top;
 
-          window.scrollTo({
-            top: fieldOffset + window.pageYOffset - window.innerHeight / 2,
-            behavior: 'smooth',
-          });
+            window.scrollTo({
+              top: fieldOffset + window.pageYOffset - window.innerHeight / 2,
+              behavior: 'smooth',
+            });
+          }
         }
       });
     }

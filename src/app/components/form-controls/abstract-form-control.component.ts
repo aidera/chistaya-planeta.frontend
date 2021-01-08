@@ -5,7 +5,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
   template: '',
 })
 export class AbstractFormControlComponent implements DoCheck {
-  @Input() fieldId?: string;
+  @Input() fieldId: string;
   @Input() control: FormControl | AbstractControl | null = null;
   @Input() label?: string;
   @Input() errorMessages?: { [key: string]: string };
