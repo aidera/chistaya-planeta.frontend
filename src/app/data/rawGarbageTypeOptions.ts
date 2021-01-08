@@ -4,7 +4,7 @@ import RawType from '../models/enums/RawType';
 const rawRecyclableTypeOptions: OptionType[] = [
   {
     text: 'Мусор мешочный / ТКО',
-    value: RawType.bagGarbageAndSolidHouseholdWaste + '',
+    value: RawType.garbage + '',
   },
 ];
 
