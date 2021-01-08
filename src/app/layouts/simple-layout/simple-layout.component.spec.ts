@@ -32,4 +32,26 @@ describe('SimpleLayoutComponent', () => {
     expect(logoImage).toBeTruthy();
     expect(logoImage.getAttribute('src')).toContain('logo.png');
   });
+
+  it('should has employee identification, if the page belongs to the employees flow', () => {
+    component.isEmployee = true;
+    fixture.detectChanges();
+
+    const identification = fixture.debugElement.query(
+      By.css('.employee-definer')
+    );
+
+    expect(identification).toBeTruthy();
+  });
+
+  it('should not has employee identification, if the page belongs to the client flow', () => {
+    component.isEmployee = false;
+    fixture.detectChanges();
+
+    const identification = fixture.debugElement.query(
+      By.css('.employee-definer')
+    );
+
+    expect(identification).toBeFalsy();
+  });
 });
