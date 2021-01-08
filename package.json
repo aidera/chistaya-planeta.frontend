@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && ng lint && npm run test-once"
+      "pre-commit": "pretty-quick --staged && ng lint"
     }
   },
   "scripts": {
