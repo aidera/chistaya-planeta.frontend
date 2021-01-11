@@ -1,0 +1,14 @@
+<div class="fullscreen-menu" *ngIf="isFullscreenMenuOpen" [@fullscreen-menu]>
+  <div class="fullscreen-menu__company">
+    <img src="../../../assets/images/logo.png" alt='Логотип "Чистая планета"' />
+    <p class="employee-definer" *ngIf="isEmployee">Личный кабинет сотрудника</p>
+    <h3>Чистая планета</h3>
+    <strong>сохраним природу детям</strong>
+  </div>
+  <nav class="fullscreen-menu__menu-links">
+    <app-menu-link
+      *ngFor="let menuItem of menuLinks"
+      [menuLink]="menuItem"
+    ></app-menu-link>
+  </nav>
+</div>

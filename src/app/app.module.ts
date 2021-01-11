@@ -16,7 +16,7 @@ import { CheckboxComponent } from './components/form-controls/checkbox/checkbox.
 import { SelectComponent } from './components/form-controls/select/select.component';
 import { QuestionHintComponent } from './components/question-hint/question-hint.component';
 import { DateInputComponent } from './components/form-controls/date-input/date-input.component';
-import { OrderComponent } from './pages/order/order.component';
+import { AddOrderNoAuthComponent } from './pages/add-order-no-auth/add-order-no-auth.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout/simple-layout.component';
 import { OrderSucceedComponent } from './pages/order-succeed/order-succeed.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -25,6 +25,12 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RestorePasswordComponent } from './pages/restore-password/restore-password.component';
 import { AuthNotifyComponent } from './components/auth-notify/auth-notify.component';
 import { NgrxModule } from './store/ngrx.module';
+import { CabinetLayoutComponent } from './layouts/cabinet-layout/cabinet-layout.component';
+import { OrdersComponent } from './pages/cabinet/orders/orders.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { MenuLinkComponent } from './components/menu-link/menu-link.component';
+import { MobileHeaderComponent } from './components/mobile-header/mobile-header.component';
+import { FullscreenMenuComponent } from './components/fullscreen-menu/fullscreen-menu.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +42,7 @@ import { NgrxModule } from './store/ngrx.module';
     SelectComponent,
     QuestionHintComponent,
     DateInputComponent,
-    OrderComponent,
+    AddOrderNoAuthComponent,
     SimpleLayoutComponent,
     OrderSucceedComponent,
     NotFoundComponent,
@@ -44,6 +50,12 @@ import { NgrxModule } from './store/ngrx.module';
     SignUpComponent,
     RestorePasswordComponent,
     AuthNotifyComponent,
+    CabinetLayoutComponent,
+    OrdersComponent,
+    SidebarComponent,
+    MenuLinkComponent,
+    MobileHeaderComponent,
+    FullscreenMenuComponent,
   ],
   imports: [
     BrowserModule,

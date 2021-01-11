@@ -25,11 +25,11 @@ import { ServerError } from '../../models/ServerResponse';
 import RawUnit from '../../models/enums/RawUnit';
 
 @Component({
-  selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+  selector: 'app-add-order-no-auth',
+  templateUrl: './add-order-no-auth.component.html',
+  styleUrls: ['./add-order-no-auth.component.scss'],
 })
-export class OrderComponent implements OnInit, OnDestroy {
+export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   private localities$: Subscription;
   private localities: ILocality[];
 

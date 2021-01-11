@@ -1,0 +1,41 @@
+@import '../../styles/variables';
+
+.fullscreen-menu {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: $card-background-color;
+  overflow-y: auto;
+  z-index: 499;
+}
+
+.fullscreen-menu__company {
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+
+  img {
+    width: 135px;
+    min-height: 135px;
+  }
+
+  .employee-definer {
+    text-transform: uppercase;
+    font-size: 13.5px;
+    line-height: 2;
+  }
+  h3 {
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  strong {
+    font-size: 14px;
+    line-height: 1;
+  }
+}
+
+.fullscreen-menu__menu-links {
+  text-align: center;
+}

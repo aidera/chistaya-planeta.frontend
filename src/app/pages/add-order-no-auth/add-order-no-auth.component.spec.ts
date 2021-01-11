@@ -8,7 +8,7 @@ import { InlineSVGModule } from 'ng-inline-svg';
 import { HttpClientModule } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
 
-import { OrderComponent } from './order.component';
+import { AddOrderNoAuthComponent } from './add-order-no-auth.component';
 import { TextInputComponent } from '../../components/form-controls/text-input/text-input.component';
 import { DateInputComponent } from '../../components/form-controls/date-input/date-input.component';
 import { SelectComponent } from '../../components/form-controls/select/select.component';
@@ -30,13 +30,13 @@ let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
 
 describe('OrderComponent', () => {
-  let component: OrderComponent;
-  let fixture: ComponentFixture<OrderComponent>;
+  let component: AddOrderNoAuthComponent;
+  let fixture: ComponentFixture<AddOrderNoAuthComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OrderComponent,
+        AddOrderNoAuthComponent,
         TextInputComponent,
         TextareaComponent,
         DateInputComponent,
@@ -68,7 +68,7 @@ describe('OrderComponent', () => {
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);
-    fixture = TestBed.createComponent(OrderComponent);
+    fixture = TestBed.createComponent(AddOrderNoAuthComponent);
     component = fixture.componentInstance;
     component.ngOnInit();
     fixture.detectChanges();

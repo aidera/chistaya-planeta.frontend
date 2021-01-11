@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -32,9 +32,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: Data) => {
-      this.isEmployee = data.isEmployee;
-    });
+    if (this.route.parent) {
+      this.isEmployee = this.route.parent.snapshot.data.isEmployee;
+    }
 
     this.isLoginSucceed$ = this.store
       .select(UserSelectors.selectIsLoginSucceed)

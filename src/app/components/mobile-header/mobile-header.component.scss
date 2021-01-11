@@ -1,0 +1,70 @@
+@import '../../styles/variables';
+
+.mobile-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 500;
+  box-shadow: $normal-shadow;
+  display: flex;
+  border-bottom-right-radius: $border-radius-primary;
+  background-color: $card-background-color;
+
+  button {
+    width: 48px;
+    height: 48px;
+    padding: 8px;
+  }
+
+  .mobile-header__backlink {
+    .icon {
+      fill: $text-color-primary;
+    }
+  }
+
+  .mobile-header__menu-trigger {
+    position: relative;
+
+    span {
+      width: 24px;
+      height: 2px;
+      border-radius: 2px;
+      background-color: $text-color-primary;
+      display: block;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: $transition-1;
+
+      &:nth-child(1) {
+        top: 35%;
+      }
+
+      &:nth-child(2) {
+        top: 50%;
+      }
+
+      &:nth-child(3) {
+        top: 65%;
+      }
+    }
+
+    &.active {
+      span {
+        &:nth-child(1) {
+          top: 50%;
+          transform: translateX(-50%) rotate(45deg);
+        }
+
+        &:nth-child(2) {
+          width: 0;
+        }
+
+        &:nth-child(3) {
+          top: 50%;
+          transform: translateX(-50%) rotate(-45deg);
+        }
+      }
+    }
+  }
+}

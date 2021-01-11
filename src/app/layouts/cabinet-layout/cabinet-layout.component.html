@@ -1,0 +1,16 @@
+<div class="cabinet-layout">
+  <div class="cabinet-layout__sidebar">
+    <app-sidebar [isEmployee]="isEmployee"></app-sidebar>
+  </div>
+  <div class="cabinet-layout__mobile-header">
+    <app-mobile-header [useBacklink]="useBacklink"></app-mobile-header>
+  </div>
+  <div class="cabinet-layout__fullscreen-menu">
+    <app-fullscreen-menu [isEmployee]="isEmployee"></app-fullscreen-menu>
+  </div>
+  <div class="cabinet-layout__content">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="mobile-header">
+  <button
+    *ngIf="useBacklink"
+    class="mobile-header__backlink"
+    (click)="goToPreviousPage()"
+  >
+    <span class="icon" [inlineSVG]="'../../assets/icons/left-arrow.svg'"></span>
+  </button>
+  <button
+    class="mobile-header__menu-trigger"
+    [class.active]="isFullscreenMenuOpen"
+    (click)="toggleFullscreenMenu()"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</div>

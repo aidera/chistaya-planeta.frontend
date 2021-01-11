@@ -1,0 +1,7 @@
+<div [routerLink]="[menuLink.link]" class="menu-link" routerLinkActive="active">
+  <div class="menu-link__gradient"></div>
+  <div class="menu-link__container">
+    <div class="icon" [inlineSVG]="'../../' + menuLink.iconPath"></div>
+    <p>{{ menuLink.title }}</p>
+  </div>
+</div>
