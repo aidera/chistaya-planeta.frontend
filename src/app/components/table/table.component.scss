@@ -1,0 +1,152 @@
+@import '../../styles/variables';
+
+.table-wrapper {
+  box-shadow: $big-shadow;
+  border-radius: $border-radius-primary;
+  overflow: hidden;
+  background-color: $card-background-color;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+:host ::ng-deep .cell-header__container {
+  max-width: 400px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+
+:host ::ng-deep .cell-header__text {
+}
+
+:host ::ng-deep .cell-header__actions {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+
+  button {
+    margin-left: 16px;
+    padding: 0;
+
+    .icon {
+      display: inline-block;
+      fill: $color-primary;
+      cursor: pointer;
+      line-height: 1;
+      transition: $transition-1;
+    }
+  }
+
+  .cell-header__sorting-button {
+    line-height: 12px;
+
+    .icon {
+      width: 15px;
+      &.desc {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+
+  .cell-header__filter-button {
+    line-height: 20px;
+
+    .icon {
+      width: 18px;
+      height: 20px;
+    }
+  }
+}
+
+:host ::ng-deep .cell__container {
+  max-width: 400px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+table {
+  border-collapse: separate;
+
+  thead {
+    text-align: left;
+
+    tr {
+      th {
+        background-color: $card-background-color-secondary;
+        padding: 15px 20px;
+        vertical-align: middle;
+        white-space: nowrap;
+        font-weight: normal;
+        border-bottom: 1px solid $border-color;
+        border-right: 1px solid $border-color;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        &:first-child {
+          left: 0;
+          position: sticky;
+          z-index: 1;
+
+          button {
+            line-height: 24px;
+          }
+
+          .icon {
+            height: 24px;
+            width: 24px;
+            display: inline-block;
+            fill: $color-primary;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  tbody {
+    text-align: left;
+
+    tr {
+      cursor: pointer;
+
+      td {
+        padding: 15px 20px;
+        background-color: $card-background-color;
+        transition: $transition-1;
+        white-space: nowrap;
+        border-right: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        &:first-child {
+          left: 0;
+          position: sticky;
+          z-index: 1;
+        }
+
+        .cell-container {
+          max-width: 100px;
+          overflow: hidden;
+        }
+      }
+
+      &:hover {
+        td {
+          background-color: $hover-color;
+        }
+      }
+    }
+  }
+}

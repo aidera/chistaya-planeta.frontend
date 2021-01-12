@@ -1,0 +1,76 @@
+<div class="table-wrapper">
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <div class="cell-header__container" style="text-align: center">
+              <button mat-icon-button>
+                <span
+                  class="icon"
+                  [inlineSVG]="'../assets/icons/settings.svg'"
+                ></span>
+              </button>
+            </div>
+          </th>
+          <th *ngFor="let column of displayedColumns">
+            <div
+              class="cell-header__container"
+              [style]="
+                columnsData[column]
+                  ? 'width: ' + columnsData[column].width + 'px'
+                  : undefined
+              "
+            >
+              <div class="cell-header__text">
+                {{ columnsData[column] ? columnsData[column].title : '' }}
+              </div>
+              <div class="cell-header__actions">
+                <button
+                  (click)="onSort(column)"
+                  mat-icon-button
+                  class="cell-header__sorting-button"
+                >
+                  <span
+                    class="icon"
+                    [class.desc]="
+                      sorting.field === column && sorting.type === 'desc'
+                    "
+                    [inlineSVG]="
+                      sorting.field !== column
+                        ? '../assets/icons/sorting.svg'
+                        : '../assets/icons/sorting-active.svg'
+                    "
+                  ></span>
+                </button>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let row of data; let i = index" [routerLink]="['/']">
+          <td style="text-align: center">
+            <div class="cell__container">{{ i + 1 }}</div>
+          </td>
+          <td *ngFor="let column of displayedColumns">
+            <div
+              class="cell__container"
+              [style]="
+                columnsData[column]
+                  ? 'width: ' + columnsData[column].width + 'px'
+                  : undefined
+              "
+              [innerHTML]="
+                columnsData[column].modificator
+                  ? columnsData[column].modificator(row[column])
+                  : row[column] || '-'
+              "
+            ></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

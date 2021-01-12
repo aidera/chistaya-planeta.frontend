@@ -31,6 +31,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MenuLinkComponent } from './components/menu-link/menu-link.component';
 import { MobileHeaderComponent } from './components/mobile-header/mobile-header.component';
 import { FullscreenMenuComponent } from './components/fullscreen-menu/fullscreen-menu.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { FullscreenMenuComponent } from './components/fullscreen-menu/fullscreen
     MenuLinkComponent,
     MobileHeaderComponent,
     FullscreenMenuComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,

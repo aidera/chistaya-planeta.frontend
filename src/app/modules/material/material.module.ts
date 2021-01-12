@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
 
 const modules: any[] = [
   MatButtonModule,
@@ -22,6 +23,7 @@ const modules: any[] = [
   MatTooltipModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatTableModule,
 ];
 
 @NgModule({

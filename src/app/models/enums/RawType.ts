@@ -16,3 +16,13 @@ enum RawType {
 }
 
 export default RawType;
+
+const rawTypeStrings: string[] = [];
+rawTypeStrings[RawType.garbage] = 'смешанные отходы / мусор';
+rawTypeStrings[RawType.cardboard] = 'картон';
+rawTypeStrings[RawType.whitePaper] = 'белая бумага';
+rawTypeStrings[RawType.stretchAndHighPressurePolyethyleneFilm] =
+  'пленка стрейтч/ПВД';
+rawTypeStrings[RawType.petBottleUpTo5l] = 'ПЭТ бутылки';
+
+export { rawTypeStrings };

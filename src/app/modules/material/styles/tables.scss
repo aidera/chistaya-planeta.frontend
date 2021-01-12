@@ -1,0 +1,17 @@
+@import '../../../styles/variables';
+
+.mat-table {
+  vertical-align: middle;
+}
+
+.mat-header-row {
+  vertical-align: middle;
+}
+
+.mat-header-cell {
+  vertical-align: top;
+  padding: 8px 16px !important;
+  background-color: $card-background-color-secondary;
+  font-size: $font-size-normal;
+  color: $text-color-primary;
+}

@@ -10,3 +10,9 @@ enum RawUnit {
 }
 
 export default RawUnit;
+
+const rawUnitStrings: string[] = [];
+rawUnitStrings[RawUnit.kg] = 'кг';
+rawUnitStrings[RawUnit.cube] = 'куб';
+
+export { rawUnitStrings };

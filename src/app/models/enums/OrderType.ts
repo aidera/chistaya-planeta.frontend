@@ -10,3 +10,9 @@ enum OrderType {
 }
 
 export default OrderType;
+
+const orderTypeStrings: string[] = [];
+orderTypeStrings[OrderType.recyclable] = 'продажа вторсырья';
+orderTypeStrings[OrderType.garbage] = 'вывоз муcора';
+
+export { orderTypeStrings };

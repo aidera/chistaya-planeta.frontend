@@ -16,6 +16,7 @@ $color-accent: mat-color($app-secondary-palette, 100);
 
 $body-background-color: #f5f9f1;
 $card-background-color: #ffffff;
+$card-background-color-secondary: #e9f0d4;
 
 $divider-color: #dddddd;
 
@@ -28,6 +29,11 @@ $error-color: #f44336;
 $disable-color: #c8c8c8;
 $hover-color: #f1f1f1;
 $border-color: #dddddd;
+
+$red-color: $error-color;
+$green-color: $color-primary;
+$blue-color: #2a8cb6;
+$yellow-color: #eae000;
 
 /* Font */
 $font-family: 'Ruda', sans-serif;

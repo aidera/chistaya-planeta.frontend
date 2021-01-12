@@ -114,6 +114,22 @@ label {
   color: $error-color;
 }
 
+.yellow-text {
+  color: $yellow-color;
+}
+
+.red-text {
+  color: $red-color;
+}
+
+.green-text {
+  color: $green-color;
+}
+
+.blue-text {
+  color: $blue-color;
+}
+
 /* Remove arrows and spinners in number inputs */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
