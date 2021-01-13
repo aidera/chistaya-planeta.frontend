@@ -132,12 +132,19 @@ textarea.mat-input-element {
 /* Checkbox */
 .mat-checkbox {
   width: 100%;
-  padding-bottom: 16px;
   display: block;
+
+  .mat-checkbox-layout {
+    white-space: pre-wrap;
+    align-items: flex-start;
+  }
 
   .mat-checkbox-inner-container {
     width: 20px;
     height: 20px;
+    margin: 0;
+    margin-right: 8px;
+    margin-top: 2px;
   }
   .mat-checkbox-frame {
     border-radius: $border-radius-secondary;

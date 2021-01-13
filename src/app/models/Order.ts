@@ -7,7 +7,7 @@ import OrderStatus from './enums/OrderStatus';
 import OrderType from './enums/OrderType';
 import { IDivision } from './Division';
 
-export interface IOrder extends Document {
+export interface IOrder {
   _id: string;
   type: OrderType;
   scheduledOrder?: string;

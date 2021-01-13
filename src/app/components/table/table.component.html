@@ -5,25 +5,34 @@
         <tr>
           <th>
             <div class="cell-header__container" style="text-align: center">
-              <button mat-icon-button>
+              <button mat-icon-button [matMenuTriggerFor]="tableSettings">
                 <span
                   class="icon"
                   [inlineSVG]="'../assets/icons/settings.svg'"
                 ></span>
               </button>
+              <mat-menu #tableSettings="matMenu">
+                <div class="table__menu" (click)="$event.stopPropagation()">
+                  <div
+                    *ngFor="let column of columnsData"
+                    class="table__checkbox-container"
+                  >
+                    <mat-checkbox
+                      [ngModel]="displayedColumns.includes(column.key)"
+                      (ngModelChange)="
+                        onDisplay({ field: column.key, status: $event })
+                      "
+                      >{{ column.title }}</mat-checkbox
+                    >
+                  </div>
+                </div>
+              </mat-menu>
             </div>
           </th>
           <th *ngFor="let column of displayedColumns">
-            <div
-              class="cell-header__container"
-              [style]="
-                columnsData[column]
-                  ? 'width: ' + columnsData[column].width + 'px'
-                  : undefined
-              "
-            >
+            <div class="cell-header__container">
               <div class="cell-header__text">
-                {{ columnsData[column] ? columnsData[column].title : '' }}
+                {{ findColumnInfo(column) ? findColumnInfo(column).title : '' }}
               </div>
               <div class="cell-header__actions">
                 <button
@@ -43,6 +52,124 @@
                     "
                   ></span>
                 </button>
+
+                <button
+                  mat-icon-button
+                  class="cell-header__filter-button"
+                  *ngIf="
+                    findColumnInfo(column) && findColumnInfo(column).filter
+                  "
+                  [matMenuTriggerFor]="tableFilter"
+                >
+                  <!-- Multi-values filter -->
+                  <ng-container
+                    *ngIf="
+                      findColumnInfo(column).filter.type === filterType.values
+                    "
+                  >
+                    <span
+                      class="icon"
+                      [inlineSVG]="
+                        findFilterInfo(column) &&
+                        findFilterInfo(column).value &&
+                        findFilterInfo(column).value.length !==
+                          findColumnInfo(column).filter.values.length &&
+                        findFilterInfo(column).value.length > 0
+                          ? '../assets/icons/funnel-active.svg'
+                          : '../assets/icons/funnel.svg'
+                      "
+                    ></span>
+                  </ng-container>
+
+                  <!-- Text filter -->
+                  <ng-container
+                    *ngIf="
+                      findColumnInfo(column).filter.type === filterType.text
+                    "
+                  >
+                    <span
+                      class="icon"
+                      [inlineSVG]="
+                        findFilterInfo(column) && findFilterInfo(column).value
+                          ? '../assets/icons/funnel-active.svg'
+                          : '../assets/icons/funnel.svg'
+                      "
+                    ></span>
+                  </ng-container>
+                </button>
+
+                <mat-menu #tableFilter="matMenu">
+                  <div class="table__menu" (click)="$event.stopPropagation()">
+                    <!-- Multi-values filter -->
+                    <ng-container
+                      *ngIf="
+                        findColumnInfo(column).filter &&
+                        findColumnInfo(column).filter.type === filterType.values
+                      "
+                    >
+                      <div
+                        *ngFor="
+                          let filterOption of findColumnInfo(column).filter
+                            .values
+                        "
+                        class="table__checkbox-container"
+                      >
+                        <mat-checkbox
+                          [ngModel]="
+                            findFilterInfo(column)
+                              ? findFilterInfo(column).value.includes(
+                                  filterOption.value
+                                )
+                              : true
+                          "
+                          (ngModelChange)="
+                            onFilter({
+                              field: column,
+                              type: filterType.values,
+                              value: $event,
+                              parameter: filterOption.value
+                            })
+                          "
+                          >{{ filterOption.text }}</mat-checkbox
+                        >
+                      </div>
+                    </ng-container>
+
+                    <!-- Text filter -->
+                    <ng-container
+                      *ngIf="
+                        findColumnInfo(column) &&
+                        findColumnInfo(column).filter &&
+                        findColumnInfo(column).filter.type === filterType.text
+                      "
+                    >
+                      <mat-form-field appearance="standard">
+                        <input
+                          matInput
+                          [placeholder]="
+                            findColumnInfo(column).title
+                              ? findColumnInfo(column).title
+                              : ''
+                          "
+                          [ngModel]="
+                            column &&
+                            findFilterInfo(column) &&
+                            findFilterInfo(column).value
+                              ? findFilterInfo(column).value
+                              : ''
+                          "
+                          (ngModelChange)="
+                            onFilter({
+                              field: column,
+                              type: filterType.text,
+                              value: $event
+                            })
+                          "
+                        />
+                      </mat-form-field>
+                    </ng-container>
+                  </div>
+                </mat-menu>
               </div>
             </div>
           </th>
@@ -62,11 +189,7 @@
                   ? 'width: ' + columnsData[column].width + 'px'
                   : undefined
               "
-              [innerHTML]="
-                columnsData[column].modificator
-                  ? columnsData[column].modificator(row[column])
-                  : row[column] || '-'
-              "
+              [innerHTML]="row[column] || '-'"
             ></div>
           </td>
         </tr>

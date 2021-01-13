@@ -11,8 +11,12 @@
 <br />
 <br />
 <app-table
+  [columnsData]="tableColumns"
   [data]="tableData"
-  [columnsData]="tableHeaders"
-  [sorting]="sorting"
-  (sort)="onSort($event)"
+  [displayedColumns]="displayedColumns"
+  [sorting]="tableSorting"
+  [filtration]="tableFiltration"
+  (display)="onTableDisplay($event)"
+  (sort)="onTableSort($event)"
+  (filter)="onTableFilter($event)"
 ></app-table>

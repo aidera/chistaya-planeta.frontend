@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 
@@ -32,6 +32,7 @@ import { MenuLinkComponent } from './components/menu-link/menu-link.component';
 import { MobileHeaderComponent } from './components/mobile-header/mobile-header.component';
 import { FullscreenMenuComponent } from './components/fullscreen-menu/fullscreen-menu.component';
 import { TableComponent } from './components/table/table.component';
+import { PhonePipe } from './pipes/phone.pipe';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { TableComponent } from './components/table/table.component';
     MobileHeaderComponent,
     FullscreenMenuComponent,
     TableComponent,
+    PhonePipe,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +71,7 @@ import { TableComponent } from './components/table/table.component';
     InlineSVGModule.forRoot(),
     NgxMaskModule.forRoot(),
     NgrxModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
