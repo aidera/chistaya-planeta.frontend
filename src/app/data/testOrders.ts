@@ -25,7 +25,7 @@ export const testOrdersResponse = {
         amount: 7,
       },
       customer: {
-        organizationLegalName: "ООО 'Рога и копыта'",
+        organizationLegalName: 'ООО "Рога и копыта"',
         organizationActualName: 'Рога и копыта',
         contactName: 'Вася',
         contactPhone: '+79999990999',
@@ -73,7 +73,7 @@ export const testOrdersResponse = {
         amount: 7,
       },
       customer: {
-        organizationLegalName: "ООО 'Рога и копыта'",
+        organizationLegalName: 'ООО "Рога и копыта"',
         organizationActualName: 'Рога и копыта',
         contactName: 'Вася',
         contactPhone: '+79999990999',
@@ -120,7 +120,7 @@ export const testOrdersResponse = {
         amount: 7,
       },
       customer: {
-        organizationLegalName: "ООО 'Рога и копыта'",
+        organizationLegalName: 'ООО "Рога и копыта"',
         organizationActualName: 'Рога и копыта',
         contactName: 'Вася',
         contactPhone: '+79999990999',
@@ -167,7 +167,7 @@ export const testOrdersResponse = {
         amount: 7,
       },
       customer: {
-        organizationLegalName: "ООО 'Рога и копыта'",
+        organizationLegalName: 'ООО "Рога и копыта"',
         organizationActualName: 'Рога и копыта',
         contactName: 'Вася',
         contactPhone: '+79999990999',
@@ -214,7 +214,7 @@ export const testOrdersResponse = {
         amount: 7,
       },
       customer: {
-        organizationLegalName: "ООО 'Рога и копыта'",
+        organizationLegalName: 'ООО "Рога и копыта"',
         organizationActualName: 'Рога и копыта',
         contactName: 'Вася',
         contactPhone: '+79999990999',

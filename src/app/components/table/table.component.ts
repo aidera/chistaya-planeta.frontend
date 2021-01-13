@@ -39,7 +39,7 @@ export class TableComponent implements OnInit {
     return this.columnsData.find((el) => el.key === field);
   }
 
-  findFilterInfo(field: string): { field: string; value: string | any[] } {
+  findFilterInfo(field: string): TableFilterOutputType {
     return this.filtration.find((el) => el.field === field);
   }
 
@@ -77,22 +77,37 @@ export class TableComponent implements OnInit {
 
   onFilter(event: TableFilterType): void {
     const field = this.filtration.find((el) => el.field === event.field);
+    const allValues = this.columnsData.find((el) => el.key === event.field)
+      .filter.values;
+    const filtrationCopy = this.filtration;
 
     switch (event.type) {
       case FilterType.text:
         if (field) {
-          field.value = event.value;
+          if (event.value === '') {
+            this.filter.emit(
+              filtrationCopy.filter((el) => el.field !== field.field)
+            );
+          } else {
+            field.value = event.value;
+            this.filter.emit(
+              filtrationCopy.map((el) =>
+                el.field === event.field ? field : el
+              )
+            );
+          }
         } else {
-          this.filtration.push({
+          filtrationCopy.push({
             field: event.field,
             value: event.value,
           });
+          this.filter.emit(filtrationCopy);
         }
         break;
 
       case FilterType.values:
         if (field) {
-          if (event.value === true) {
+          if (event.value) {
             const parameterIndex = (field.value as string[]).indexOf(
               event.parameter
             );
@@ -111,23 +126,39 @@ export class TableComponent implements OnInit {
               (field.value as string[]).splice(parameterIndex, 1);
             }
           }
+
+          if (field.value.length === allValues.length) {
+            this.filter.emit(
+              filtrationCopy.filter((el) => el.field !== field.field)
+            );
+          } else {
+            this.filter.emit(
+              filtrationCopy.map((el) =>
+                el.field === event.field ? field : el
+              )
+            );
+          }
         } else {
-          this.filtration.push({
-            field: event.field,
-            value: [event.parameter],
-          });
+          if (event.value) {
+            filtrationCopy.push({
+              field: event.field,
+              value: [event.parameter],
+            });
+
+            this.filter.emit(filtrationCopy);
+          } else {
+            const filteredAllValues = allValues.filter(
+              (el) => el.value !== event.parameter
+            );
+
+            filtrationCopy.push({
+              field: event.field,
+              value: filteredAllValues.map((el) => el.value),
+            });
+            this.filter.emit(filtrationCopy);
+          }
         }
         break;
     }
-
-    const newFilter = this.filtration.map((el) => {
-      if (el.field === event.field) {
-        return field;
-      } else {
-        return el;
-      }
-    });
-
-    this.filter.emit(newFilter);
   }
 }
