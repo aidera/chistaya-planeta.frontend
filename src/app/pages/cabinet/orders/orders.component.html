@@ -16,7 +16,10 @@
   [displayedColumns]="displayedColumns"
   [sorting]="tableSorting"
   [filtration]="tableFiltration"
+  [pagination]="tablePagination"
+  [isLoading]="tableLoading"
   (display)="onTableDisplay($event)"
   (sort)="onTableSort($event)"
   (filter)="onTableFilter($event)"
+  (paginate)="onTablePaginate($event)"
 ></app-table>

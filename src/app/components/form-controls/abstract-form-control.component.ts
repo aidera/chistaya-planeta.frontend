@@ -1,4 +1,4 @@
-import { Component, DoCheck, Input } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
@@ -6,11 +6,16 @@ import { AbstractControl, FormControl } from '@angular/forms';
 })
 export class AbstractFormControlComponent implements DoCheck {
   @Input() fieldId: string;
-  @Input() control: FormControl | AbstractControl | null = null;
   @Input() label?: string;
   @Input() errorMessages?: { [key: string]: string };
   @Input() isRequired?: boolean;
   @Input() labelHint?: string;
+  /* for Reactive Forms */
+  @Input() control?: FormControl | AbstractControl;
+  /* for Template Driven Forms */
+  @Input() value?: any;
+  @Input() disabled?: boolean;
+  @Output() valueChange = new EventEmitter<any>();
 
   currentErrorMessage: string | null = null;
 
@@ -25,5 +30,9 @@ export class AbstractFormControlComponent implements DoCheck {
     } else {
       this.currentErrorMessage = null;
     }
+  }
+
+  onValueChange(event: any): void {
+    this.valueChange.emit(event);
   }
 }

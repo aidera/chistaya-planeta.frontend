@@ -23,6 +23,7 @@ import { TableColumnType } from '../../../models/types/TableColumnType';
 import { TableSortType } from '../../../models/types/TableSortType';
 import { TableFilterOutputType } from 'src/app/models/types/TableFilterType';
 import { TableDisplayOutputType } from 'src/app/models/types/TableDisplayType';
+import { PaginationType } from '../../../models/types/PaginationType';
 
 @Component({
   selector: 'app-orders',
@@ -62,7 +63,20 @@ export class OrdersComponent implements OnInit {
       field: 'deliveryAddress',
       value: 'a',
     },
+    {
+      field: 'rawAmount',
+      value: [12],
+    },
   ];
+
+  public tableLoading = false;
+
+  public tablePagination: PaginationType = {
+    currentPage: 2,
+    totalPagesCount: 234,
+    totalItemsCount: 2334,
+    perPage: 10,
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -129,7 +143,9 @@ export class OrdersComponent implements OnInit {
       {
         key: 'rawAmount',
         title: 'Прибл. кол-во сырья',
-        // filterType: FilterType.number,
+        filter: {
+          type: FilterType.number,
+        },
       },
       {
         key: 'locality',
@@ -239,10 +255,16 @@ export class OrdersComponent implements OnInit {
       {
         key: 'desiredPickupDate',
         title: 'Желаемая дата',
+        filter: {
+          type: FilterType.date,
+        },
       },
       {
         key: 'createdAt',
         title: 'Дата создания заявки',
+        filter: {
+          type: FilterType.date,
+        },
       },
       {
         key: 'weighedRaw',
@@ -251,6 +273,9 @@ export class OrdersComponent implements OnInit {
       {
         key: 'weighedRawAMount',
         title: 'Кол-во взвешенного сырья',
+        filter: {
+          type: FilterType.number,
+        },
       },
       {
         key: 'customerComment',
@@ -268,7 +293,7 @@ export class OrdersComponent implements OnInit {
       },
     ];
 
-    this.displayedColumns = this.tableColumns.map((column) => column.key);
+    this.displayedColumns = undefined;
   }
 
   makeTableData(): void {
@@ -351,6 +376,7 @@ export class OrdersComponent implements OnInit {
 
   onTableDisplay(event: TableDisplayOutputType[]): void {
     this.displayedColumns = event;
+    console.log(event);
   }
 
   onTableSort(event: TableSortType): void {
@@ -359,5 +385,12 @@ export class OrdersComponent implements OnInit {
 
   onTableFilter(event: TableFilterOutputType[]): void {
     this.tableFiltration = event;
+    console.log(event);
+    this.tableLoading = true;
+  }
+
+  onTablePaginate(event: PaginationType): void {
+    this.tablePagination = event;
+    console.log(event);
   }
 }

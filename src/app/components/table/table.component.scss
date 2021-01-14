@@ -5,6 +5,7 @@
   border-radius: $border-radius-primary;
   overflow: hidden;
   background-color: $card-background-color;
+  position: relative;
 }
 
 .table-container {
@@ -19,9 +20,6 @@
   align-content: center;
   align-items: center;
   justify-content: space-between;
-}
-
-:host ::ng-deep .cell-header__text {
 }
 
 :host ::ng-deep .cell-header__actions {
@@ -169,8 +167,34 @@ table {
   }
 }
 
-.table-settings__menu {
+.loader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    to right,
+    lightgrey 0%,
+    lightgrey 40%,
+    white 50%,
+    lightgrey 55%,
+    lightgrey 100%
+  );
+  background-size: 200% auto;
+  background-position: 0 100%;
+  animation: table-backdrop-animation 1.5s infinite;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
 }
 
-.table-filter__menu {
+@keyframes table-backdrop-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

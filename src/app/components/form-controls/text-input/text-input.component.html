@@ -10,7 +10,20 @@
 
   <div class="input-wrapper">
     <input
+      *ngIf="control"
       [formControl]="control"
+      [id]="fieldId"
+      [type]="type"
+      autocomplete="off"
+      matInput
+      [prefix]="prefix"
+      [mask]="mask"
+    />
+
+    <input
+      *ngIf="!control"
+      [ngModel]="value"
+      (ngModelChange)="onValueChange($event)"
       [id]="fieldId"
       [type]="type"
       autocomplete="off"
@@ -37,7 +50,7 @@
     ></span>
   </div>
 
-  <mat-hint *ngIf="currentErrorMessage && control.touched">{{
+  <mat-hint *ngIf="currentErrorMessage && control && control.touched">{{
     currentErrorMessage
   }}</mat-hint>
 </mat-form-field>

@@ -8,7 +8,13 @@
               <button mat-icon-button [matMenuTriggerFor]="tableSettings">
                 <span
                   class="icon"
-                  [inlineSVG]="'../assets/icons/settings.svg'"
+                  [inlineSVG]="
+                    displayedColumns &&
+                    allDisplayedColumns &&
+                    displayedColumns.length === allDisplayedColumns.length
+                      ? '../assets/icons/settings.svg'
+                      : '../assets/icons/settings-active.svg'
+                  "
                 ></span>
               </button>
               <mat-menu #tableSettings="matMenu">
@@ -17,14 +23,39 @@
                     *ngFor="let column of columnsData"
                     class="table__checkbox-container"
                   >
-                    <mat-checkbox
-                      [ngModel]="displayedColumns.includes(column.key)"
-                      (ngModelChange)="
+                    <app-checkbox
+                      [value]="
+                        displayedColumns &&
+                        displayedColumns.includes(column.key)
+                      "
+                      [disabled]="
+                        displayedColumns &&
+                        displayedColumns.includes(column.key) &&
+                        displayedColumns.length <= 1
+                      "
+                      (valueChange)="
                         onDisplay({ field: column.key, status: $event })
                       "
-                      >{{ column.title }}</mat-checkbox
-                    >
+                      [label]="column.title"
+                    ></app-checkbox>
                   </div>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="
+                      displayedColumns &&
+                      allDisplayedColumns &&
+                      displayedColumns.length === allDisplayedColumns.length
+                    "
+                    (click)="
+                      onDisplay({
+                        status: true,
+                        all: true
+                      })
+                    "
+                  >
+                    Выбрать всё
+                  </button>
                 </div>
               </mat-menu>
             </div>
@@ -70,11 +101,12 @@
                     <span
                       class="icon"
                       [inlineSVG]="
-                        findFilterInfo(column) &&
-                        findFilterInfo(column).value &&
-                        findFilterInfo(column).value.length !==
-                          findColumnInfo(column).filter.values.length &&
-                        findFilterInfo(column).value.length > 0
+                        (findFilterInfo(column) &&
+                          findFilterInfo(column).value.length <= 0) ||
+                        (findFilterInfo(column) &&
+                          findFilterInfo(column).value &&
+                          findFilterInfo(column).value.length !==
+                            findColumnInfo(column).filter.values.length)
                           ? '../assets/icons/funnel-active.svg'
                           : '../assets/icons/funnel.svg'
                       "
@@ -91,6 +123,26 @@
                       class="icon"
                       [inlineSVG]="
                         findFilterInfo(column) && findFilterInfo(column).value
+                          ? '../assets/icons/funnel-active.svg'
+                          : '../assets/icons/funnel.svg'
+                      "
+                    ></span>
+                  </ng-container>
+
+                  <!-- Number and date filter -->
+                  <ng-container
+                    *ngIf="
+                      findColumnInfo(column).filter.type ===
+                        filterType.number ||
+                      findColumnInfo(column).filter.type === filterType.date
+                    "
+                  >
+                    <span
+                      class="icon"
+                      [inlineSVG]="
+                        findFilterInfo(column) &&
+                        findFilterInfo(column).value &&
+                        findFilterInfo(column).value.length > 0
                           ? '../assets/icons/funnel-active.svg'
                           : '../assets/icons/funnel.svg'
                       "
@@ -114,15 +166,22 @@
                         "
                         class="table__checkbox-container"
                       >
-                        <mat-checkbox
-                          [ngModel]="
-                            findFilterInfo(column)
-                              ? findFilterInfo(column).value.includes(
-                                  filterOption.value
-                                )
-                              : true
+                        <app-checkbox
+                          [value]="
+                            (findFilterInfo(column) &&
+                              findFilterInfo(column).value.includes(
+                                filterOption.value
+                              )) ||
+                            !findFilterInfo(column)
                           "
-                          (ngModelChange)="
+                          [disabled]="
+                            findFilterInfo(column) &&
+                            findFilterInfo(column).value.includes(
+                              filterOption.value
+                            ) &&
+                            findFilterInfo(column).value.length === 1
+                          "
+                          (valueChange)="
                             onFilter({
                               field: column,
                               type: filterType.values,
@@ -130,9 +189,24 @@
                               parameter: filterOption.value
                             })
                           "
-                          >{{ filterOption.text }}</mat-checkbox
-                        >
+                          [label]="filterOption.text"
+                        ></app-checkbox>
                       </div>
+
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        [disabled]="!findFilterInfo(column)"
+                        (click)="
+                          onFilter({
+                            field: column,
+                            type: filterType.values,
+                            value: true
+                          })
+                        "
+                      >
+                        Выбрать всё
+                      </button>
                     </ng-container>
 
                     <!-- Text filter -->
@@ -143,30 +217,160 @@
                         findColumnInfo(column).filter.type === filterType.text
                       "
                     >
-                      <mat-form-field appearance="standard">
-                        <input
-                          matInput
-                          [placeholder]="
-                            findColumnInfo(column).title
-                              ? findColumnInfo(column).title
-                              : ''
-                          "
-                          [ngModel]="
-                            column &&
-                            findFilterInfo(column) &&
-                            findFilterInfo(column).value
-                              ? findFilterInfo(column).value
-                              : ''
-                          "
-                          (ngModelChange)="
-                            onFilter({
-                              field: column,
-                              type: filterType.text,
-                              value: $event
-                            })
-                          "
-                        />
-                      </mat-form-field>
+                      <app-text-input
+                        label="Поиск..."
+                        [value]="
+                          column &&
+                          findFilterInfo(column) &&
+                          findFilterInfo(column).value
+                            ? findFilterInfo(column).value
+                            : ''
+                        "
+                        (valueChange)="
+                          onFilter({
+                            field: column,
+                            type: filterType.text,
+                            value: $event
+                          })
+                        "
+                      ></app-text-input>
+
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="
+                          onFilter({
+                            field: column,
+                            type: filterType.text,
+                            value: true
+                          })
+                        "
+                      >
+                        Очистить
+                      </button>
+                    </ng-container>
+
+                    <!-- Number filter -->
+                    <ng-container
+                      *ngIf="
+                        findColumnInfo(column) &&
+                        findColumnInfo(column).filter &&
+                        findColumnInfo(column).filter.type === filterType.number
+                      "
+                    >
+                      <app-text-input
+                        fieldType="number"
+                        label="от"
+                        [value]="
+                          column &&
+                          findFilterInfo(column) &&
+                          findFilterInfo(column).value
+                            ? findFilterInfo(column).value[0]
+                            : ''
+                        "
+                        (valueChange)="
+                          onFilter({
+                            field: column,
+                            type: filterType.number,
+                            value: $event,
+                            parameter: 'from'
+                          })
+                        "
+                      ></app-text-input>
+                      <app-text-input
+                        fieldType="number"
+                        label="до"
+                        [value]="
+                          column &&
+                          findFilterInfo(column) &&
+                          findFilterInfo(column).value
+                            ? findFilterInfo(column).value[1]
+                            : ''
+                        "
+                        (valueChange)="
+                          onFilter({
+                            field: column,
+                            type: filterType.number,
+                            value: $event,
+                            parameter: 'to'
+                          })
+                        "
+                      ></app-text-input>
+
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="
+                          onFilter({
+                            field: column,
+                            type: filterType.number,
+                            value: true
+                          })
+                        "
+                      >
+                        Очистить
+                      </button>
+                    </ng-container>
+
+                    <!-- Date filter -->
+                    <ng-container
+                      *ngIf="
+                        findColumnInfo(column) &&
+                        findColumnInfo(column).filter &&
+                        findColumnInfo(column).filter.type === filterType.date
+                      "
+                    >
+                      <app-date-input
+                        label="от"
+                        [value]="
+                          column &&
+                          findFilterInfo(column) &&
+                          findFilterInfo(column).value
+                            ? findFilterInfo(column).value[0]
+                            : ''
+                        "
+                        (valueChange)="
+                          onFilter({
+                            field: column,
+                            type: filterType.date,
+                            value: $event,
+                            parameter: 'from'
+                          })
+                        "
+                      ></app-date-input>
+
+                      <app-date-input
+                        label="до"
+                        [value]="
+                          column &&
+                          findFilterInfo(column) &&
+                          findFilterInfo(column).value
+                            ? findFilterInfo(column).value[1]
+                            : ''
+                        "
+                        (valueChange)="
+                          onFilter({
+                            field: column,
+                            type: filterType.date,
+                            value: $event,
+                            parameter: 'to'
+                          })
+                        "
+                      ></app-date-input>
+
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="
+                          onFilter({
+                            field: column,
+                            type: filterType.date,
+                            value: true
+                          })
+                        "
+                      >
+                        Очистить
+                      </button>
                     </ng-container>
                   </div>
                 </mat-menu>
@@ -196,4 +400,15 @@
       </tbody>
     </table>
   </div>
+
+  <mat-paginator
+    *ngIf="pagination"
+    [length]="pagination.totalItemsCount"
+    [pageSize]="pagination.perPage"
+    [pageIndex]="pagination.currentPage"
+    [hidePageSize]="true"
+    (page)="onPaginate($event)"
+  ></mat-paginator>
+
+  <div *ngIf="isLoading" class="loader-container"></div>
 </div>

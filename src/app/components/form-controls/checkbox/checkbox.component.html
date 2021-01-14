@@ -1,4 +1,25 @@
-<mat-checkbox [formControl]="control" [id]="fieldId" color="primary">
+<mat-checkbox
+  *ngIf="control"
+  [formControl]="control"
+  [id]="fieldId"
+  color="primary"
+>
+  {{ label }}
+  <app-question-hint
+    *ngIf="labelHint"
+    [description]="labelHint"
+  ></app-question-hint>
+  <span class="required-field-star" *ngIf="isRequired">*</span>
+</mat-checkbox>
+
+<mat-checkbox
+  *ngIf="!control"
+  [ngModel]="value"
+  (ngModelChange)="onValueChange($event)"
+  [disabled]="disabled"
+  [id]="fieldId"
+  color="primary"
+>
   {{ label }}
   <app-question-hint
     *ngIf="labelHint"

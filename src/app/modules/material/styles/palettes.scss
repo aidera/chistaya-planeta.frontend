@@ -1,23 +1,23 @@
 @import '~@angular/material/theming';
 
 $app-primary-palette: (
-  500: #91B62A,
-  700: #819E28,
-  900: #6C8329,
+  500: #91b62a,
+  700: #819e28,
+  900: #6c8329,
   contrast: (
     100: $light-primary-text,
     500: $light-primary-text,
     900: $light-primary-text,
-  )
+  ),
 );
 
 $app-secondary-palette: (
-  500: #91B62A,
-  700: #819E28,
-  900: #6C8329,
+  500: #91b62a,
+  700: #819e28,
+  900: #6c8329,
   contrast: (
     100: $light-primary-text,
     500: $light-primary-text,
     900: $light-primary-text,
-  )
+  ),
 );

@@ -10,6 +10,7 @@
 
   <div class="input-wrapper" (click)="picker.open(); isDatepickerOpen = true">
     <input
+      *ngIf="control"
       [formControl]="control"
       [id]="fieldId"
       [matDatepicker]="picker"
@@ -18,6 +19,19 @@
       [min]="minDate"
       [max]="maxDate"
       [value]="control.value"
+      [attr.disabled]="true"
+    />
+
+    <input
+      *ngIf="!control"
+      [ngModel]="value"
+      (ngModelChange)="onValueChange($event)"
+      [id]="fieldId"
+      [matDatepicker]="picker"
+      autocomplete="off"
+      matInput
+      [min]="minDate"
+      [max]="maxDate"
       [attr.disabled]="true"
     />
 
@@ -30,7 +44,7 @@
     <span class="icon" [inlineSVG]="'../assets/icons/calendar.svg'"></span>
   </div>
 
-  <mat-hint *ngIf="currentErrorMessage && control.touched">{{
+  <mat-hint *ngIf="currentErrorMessage && control && control.touched">{{
     currentErrorMessage
   }}</mat-hint>
 </mat-form-field>

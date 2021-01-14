@@ -9,6 +9,7 @@
   </label>
 
   <textarea
+    *ngIf="control"
     [formControl]="control"
     [id]="fieldId"
     autocomplete="off"
@@ -16,7 +17,17 @@
     rows="4"
   ></textarea>
 
-  <mat-hint *ngIf="currentErrorMessage && control.touched">{{
+  <textarea
+    *ngIf="!control"
+    [ngModel]="value"
+    (ngModelChange)="onValueChange($event)"
+    [id]="fieldId"
+    autocomplete="off"
+    matInput
+    rows="4"
+  ></textarea>
+
+  <mat-hint *ngIf="currentErrorMessage && control && control.touched">{{
     currentErrorMessage
   }}</mat-hint>
 </mat-form-field>

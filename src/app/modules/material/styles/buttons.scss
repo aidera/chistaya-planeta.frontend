@@ -78,7 +78,7 @@ a.mat-raised-button {
 }
 
 .mat-raised-button.mat-primary {
-  background: linear-gradient(90deg, #91b62a 0%, #6c8426 100%);
+  background: $color-primary linear-gradient(90deg, #91b62a 0%, #6c8426 100%);
 }
 
 .mat-raised-button.mat-primary.mat-button-disabled {

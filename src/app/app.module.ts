@@ -33,6 +33,11 @@ import { MobileHeaderComponent } from './components/mobile-header/mobile-header.
 import { FullscreenMenuComponent } from './components/fullscreen-menu/fullscreen-menu.component';
 import { TableComponent } from './components/table/table.component';
 import { PhonePipe } from './pipes/phone.pipe';
+import {
+  MatPaginatorModule,
+  MatPaginatorIntl,
+} from '@angular/material/paginator';
+import { getPaginatorIntl } from './utils/paginator.settings';
 
 @NgModule({
   declarations: [
@@ -72,8 +77,14 @@ import { PhonePipe } from './pipes/phone.pipe';
     NgxMaskModule.forRoot(),
     NgrxModule,
     FormsModule,
+    MatPaginatorModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useValue: getPaginatorIntl(),
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
