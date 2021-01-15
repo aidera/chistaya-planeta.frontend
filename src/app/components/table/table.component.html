@@ -5,7 +5,12 @@
         <tr>
           <th>
             <div class="cell-header__container" style="text-align: center">
-              <button mat-icon-button [matMenuTriggerFor]="tableSettings">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="tableSettings"
+                [matTooltip]="'Отображать колонки'"
+                [matTooltipPosition]="'above'"
+              >
                 <span
                   class="icon"
                   [inlineSVG]="
@@ -70,6 +75,8 @@
                   (click)="onSort(column)"
                   mat-icon-button
                   class="cell-header__sorting-button"
+                  [matTooltip]="'Сортировать'"
+                  [matTooltipPosition]="'above'"
                 >
                   <span
                     class="icon"
@@ -91,6 +98,8 @@
                     findColumnInfo(column) && findColumnInfo(column).filter
                   "
                   [matMenuTriggerFor]="tableFilter"
+                  [matTooltip]="'Фильтровать'"
+                  [matTooltipPosition]="'above'"
                 >
                   <!-- Multi-values filter -->
                   <ng-container
@@ -403,6 +412,7 @@
 
   <mat-paginator
     *ngIf="pagination"
+    [showFirstLastButtons]="true"
     [length]="pagination.totalItemsCount"
     [pageSize]="pagination.perPage"
     [pageIndex]="pagination.currentPage"

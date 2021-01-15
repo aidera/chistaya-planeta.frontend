@@ -23,6 +23,8 @@ export const getPaginatorIntl = () => {
   paginatorIntl.itemsPerPageLabel = 'На странице:';
   paginatorIntl.nextPageLabel = 'Следующая страница';
   paginatorIntl.previousPageLabel = 'Предыдущая страница';
+  paginatorIntl.firstPageLabel = 'Первая страница';
+  paginatorIntl.lastPageLabel = 'Последняя страница';
   paginatorIntl.getRangeLabel = label;
 
   return paginatorIntl;
