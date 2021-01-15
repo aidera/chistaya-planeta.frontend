@@ -21,6 +21,7 @@
     *ngIf="!control"
     [ngModel]="value"
     (ngModelChange)="onValueChange($event)"
+    ngDefaultControl
     [id]="fieldId"
     autocomplete="off"
     matInput

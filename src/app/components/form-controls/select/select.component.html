@@ -32,6 +32,7 @@
   <mat-select
     [ngModel]="value"
     (ngModelChange)="onValueChange($event)"
+    ngDefaultControl
     [multiple]="isMultiple"
     [id]="fieldId"
   >

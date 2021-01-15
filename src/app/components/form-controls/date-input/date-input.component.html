@@ -26,6 +26,7 @@
       *ngIf="!control"
       [ngModel]="value"
       (ngModelChange)="onValueChange($event)"
+      ngDefaultControl
       [id]="fieldId"
       [matDatepicker]="picker"
       autocomplete="off"

@@ -77,7 +77,6 @@ import { getPaginatorIntl } from './utils/paginator.settings';
     NgxMaskModule.forRoot(),
     NgrxModule,
     FormsModule,
-    MatPaginatorModule,
   ],
   providers: [
     {

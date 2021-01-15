@@ -81,10 +81,12 @@
                   <span
                     class="icon"
                     [class.desc]="
-                      sorting.field === column && sorting.type === 'desc'
+                      sorting &&
+                      sorting.field === column &&
+                      sorting.type === 'desc'
                     "
                     [inlineSVG]="
-                      sorting.field !== column
+                      sorting && sorting.field !== column
                         ? '../assets/icons/sorting.svg'
                         : '../assets/icons/sorting-active.svg'
                     "
@@ -390,7 +392,7 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let row of data; let i = index" [routerLink]="['/']">
+        <tr *ngFor="let row of data; let i = index" (click)="onItemClick(i)">
           <td style="text-align: center">
             <div class="cell__container">{{ i + 1 }}</div>
           </td>
@@ -420,5 +422,5 @@
     (page)="onPaginate($event)"
   ></mat-paginator>
 
-  <div *ngIf="isLoading" class="loader-container"></div>
+  <div *ngIf="isLoading" class="table-loader"></div>
 </div>

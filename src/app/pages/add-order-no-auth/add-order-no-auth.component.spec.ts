@@ -22,14 +22,13 @@ import { TextareaComponent } from '../../components/form-controls/textarea/texta
 import DeliveryType from '../../models/enums/DeliveryType';
 import { ILocality } from '../../models/Locality';
 import PaymentMethod from '../../models/enums/PaymentMethod';
-import { UserType } from '../../models/enums/UserType';
 import { tomorrow } from '../../utils/date.functions';
 import timeOptions from '../../data/timeOptions';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
 
-describe('OrderComponent', () => {
+describe('AddOrderNoAuthComponent', () => {
   let component: AddOrderNoAuthComponent;
   let fixture: ComponentFixture<AddOrderNoAuthComponent>;
 

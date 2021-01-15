@@ -393,4 +393,8 @@ export class OrdersComponent implements OnInit {
     this.tablePagination = event;
     console.log(event);
   }
+
+  onTableItemClick(index: number): void {
+    console.log(index);
+  }
 }

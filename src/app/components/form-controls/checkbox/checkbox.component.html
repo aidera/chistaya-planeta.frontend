@@ -16,6 +16,7 @@
   *ngIf="!control"
   [ngModel]="value"
   (ngModelChange)="onValueChange($event)"
+  ngDefaultControl
   [disabled]="disabled"
   [id]="fieldId"
   color="primary"

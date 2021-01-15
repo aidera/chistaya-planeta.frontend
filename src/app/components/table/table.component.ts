@@ -12,6 +12,7 @@ import {
   TableFilterOutputType,
 } from '../../models/types/TableFilterType';
 import { PaginationType } from '../../models/types/PaginationType';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-table',
@@ -22,7 +23,7 @@ export class TableComponent implements OnInit {
   @Input() columnsData: TableColumnType[];
   @Input() data: { [key: string]: any }[];
 
-  @Input() displayedColumns: TableDisplayOutputType[];
+  @Input() displayedColumns?: TableDisplayOutputType[];
   @Input() sorting?: TableSortType;
   @Input() filtration?: TableFilterOutputType[];
   @Input() isLoading?: boolean;
@@ -32,6 +33,7 @@ export class TableComponent implements OnInit {
   @Output() sort = new EventEmitter<TableSortType>();
   @Output() filter = new EventEmitter<TableFilterOutputType[]>();
   @Output() paginate = new EventEmitter<PaginationType>();
+  @Output() itemClick = new EventEmitter<number>();
 
   public filterType = FilterType;
   public allDisplayedColumns: TableDisplayOutputType[];
@@ -50,7 +52,9 @@ export class TableComponent implements OnInit {
   }
 
   findFilterInfo(field: string): TableFilterOutputType {
-    return this.filtration.find((el) => el.field === field);
+    return this.filtration
+      ? this.filtration.find((el) => el.field === field)
+      : undefined;
   }
 
   onDisplay(event: TableDisplayType): void {
@@ -62,13 +66,17 @@ export class TableComponent implements OnInit {
     }
 
     /* Другие действия */
-    if (!event.all) {
+    if (!event.all && event.status !== undefined && event.field !== undefined) {
       const isExist = this.displayedColumns.includes(event.field);
       if (isExist) {
         if (!event.status) {
           const index = this.displayedColumns.indexOf(event.field);
           this.displayedColumns.splice(index, 1);
-          this.display.emit(this.displayedColumns);
+          if (this.displayedColumns.length <= 0) {
+            this.display.emit(undefined);
+          } else {
+            this.display.emit(this.displayedColumns);
+          }
         }
       } else {
         if (event.status) {
@@ -88,7 +96,11 @@ export class TableComponent implements OnInit {
           const filteredFields = this.displayedColumns.filter(
             (el) => el !== event.field
           );
-          this.display.emit(filteredFields);
+          if (filteredFields.length <= 0) {
+            this.display.emit(undefined);
+          } else {
+            this.display.emit(filteredFields);
+          }
         }
       }
     }
@@ -96,14 +108,20 @@ export class TableComponent implements OnInit {
 
   onSort(field: string): void {
     let sortType: 'asc' | 'desc' = 'asc';
-    if (this.sorting.field === field && this.sorting.type === 'asc') {
+    if (
+      this.sorting &&
+      this.sorting.field === field &&
+      this.sorting.type === 'asc'
+    ) {
       sortType = 'desc';
     }
     this.sort.emit({ field, type: sortType });
   }
 
   onFilter(event: TableFilterType): void {
-    const field = this.filtration.find((el) => el.field === event.field);
+    const field = this.filtration
+      ? this.filtration.find((el) => el.field === event.field)
+      : undefined;
     const allValues = this.columnsData.find((el) => el.key === event.field)
       .filter.values;
     let filtrationCopy = this.filtration;
@@ -112,9 +130,11 @@ export class TableComponent implements OnInit {
       case FilterType.text:
         /* Очистка */
         if (event.value === true) {
-          filtrationCopy = filtrationCopy.filter(
-            (el) => el.field !== event.field
-          );
+          if (filtrationCopy) {
+            filtrationCopy = filtrationCopy.filter(
+              (el) => el.field !== event.field
+            );
+          }
         } else {
           /* Другие действия */
           if (field) {
@@ -129,10 +149,19 @@ export class TableComponent implements OnInit {
               );
             }
           } else {
-            filtrationCopy.push({
-              field: event.field,
-              value: event.value,
-            });
+            if (filtrationCopy) {
+              filtrationCopy.push({
+                field: event.field,
+                value: event.value,
+              });
+            } else {
+              filtrationCopy = [
+                {
+                  field: event.field,
+                  value: event.value,
+                },
+              ];
+            }
           }
         }
 
@@ -141,9 +170,11 @@ export class TableComponent implements OnInit {
       case FilterType.values:
         /* "Показать все" */
         if (event.parameter === undefined && event.value === true) {
-          filtrationCopy = filtrationCopy.filter(
-            (el) => el.field !== event.field
-          );
+          if (filtrationCopy) {
+            filtrationCopy = filtrationCopy.filter(
+              (el) => el.field !== event.field
+            );
+          }
         }
 
         /* "Добавить отображаемый параметр". Если parameter есть и value === true */
@@ -160,7 +191,11 @@ export class TableComponent implements OnInit {
               }
             }
 
-            if (field.value.length === allValues.length) {
+            if (
+              field &&
+              field.value &&
+              field.value.length === allValues.length
+            ) {
               filtrationCopy = filtrationCopy.filter(
                 (el) => el.field !== event.field
               );
@@ -170,10 +205,19 @@ export class TableComponent implements OnInit {
               );
             }
           } else {
-            filtrationCopy.push({
-              field: event.field,
-              value: [event.parameter],
-            });
+            if (filtrationCopy) {
+              filtrationCopy.push({
+                field: event.field,
+                value: [event.parameter],
+              });
+            } else {
+              filtrationCopy = [
+                {
+                  field: event.field,
+                  value: [event.parameter],
+                },
+              ];
+            }
           }
         }
 
@@ -185,18 +229,22 @@ export class TableComponent implements OnInit {
             );
             if (parameterIndex >= 0) {
               (field.value as string[]).splice(parameterIndex, 1);
-              filtrationCopy = filtrationCopy.map((el) =>
-                el.field === event.field ? field : el
-              );
+              if (field.value.length > 0) {
+                filtrationCopy = filtrationCopy.map((el) =>
+                  el.field === event.field ? field : el
+                );
+              } else {
+                filtrationCopy = filtrationCopy.filter(
+                  (el) => el.field !== event.field
+                );
+              }
             }
           } else {
-            const filteredAllValues = allValues.filter(
-              (el) => el.value !== event.parameter
-            );
-            filtrationCopy.push({
-              field: event.field,
-              value: filteredAllValues.map((el) => el.value),
-            });
+            if (filtrationCopy) {
+              filtrationCopy = filtrationCopy.filter(
+                (el) => el.field !== event.field
+              );
+            }
           }
         }
 
@@ -236,16 +284,36 @@ export class TableComponent implements OnInit {
               );
             }
           } else {
-            if (event.parameter === 'from') {
-              filtrationCopy.push({
-                field: event.field,
-                value: [event.value, null],
-              });
-            } else if (event.parameter === 'to') {
-              filtrationCopy.push({
-                field: event.field,
-                value: [null, event.value],
-              });
+            if (event.value !== null) {
+              if (event.parameter === 'from') {
+                if (filtrationCopy) {
+                  filtrationCopy.push({
+                    field: event.field,
+                    value: [event.value, null],
+                  });
+                } else {
+                  filtrationCopy = [
+                    {
+                      field: event.field,
+                      value: [event.value, null],
+                    },
+                  ];
+                }
+              } else if (event.parameter === 'to') {
+                if (filtrationCopy) {
+                  filtrationCopy.push({
+                    field: event.field,
+                    value: [null, event.value],
+                  });
+                } else {
+                  filtrationCopy = [
+                    {
+                      field: event.field,
+                      value: [null, event.value],
+                    },
+                  ];
+                }
+              }
             }
           }
         }
@@ -255,11 +323,17 @@ export class TableComponent implements OnInit {
       case FilterType.date:
         /* Очистка */
         if (event.value === true) {
-          filtrationCopy = filtrationCopy.filter(
-            (el) => el.field !== event.field
-          );
+          if (filtrationCopy) {
+            filtrationCopy = filtrationCopy.filter(
+              (el) => el.field !== event.field
+            );
+          }
         } else {
           /* Другие действия */
+          if (event.value === '') {
+            event.value = null;
+          }
+
           if (field) {
             if (event.parameter === 'from') {
               field.value = [event.value, field.value[1] || null];
@@ -280,16 +354,36 @@ export class TableComponent implements OnInit {
               );
             }
           } else {
-            if (event.parameter === 'from') {
-              filtrationCopy.push({
-                field: event.field,
-                value: [event.value, null],
-              });
-            } else if (event.parameter === 'to') {
-              filtrationCopy.push({
-                field: event.field,
-                value: [null, event.value],
-              });
+            if (event.value !== null) {
+              if (event.parameter === 'from') {
+                if (filtrationCopy) {
+                  filtrationCopy.push({
+                    field: event.field,
+                    value: [event.value, null],
+                  });
+                } else {
+                  filtrationCopy = [
+                    {
+                      field: event.field,
+                      value: [event.value, null],
+                    },
+                  ];
+                }
+              } else if (event.parameter === 'to') {
+                if (filtrationCopy) {
+                  filtrationCopy.push({
+                    field: event.field,
+                    value: [null, event.value],
+                  });
+                } else {
+                  filtrationCopy = [
+                    {
+                      field: event.field,
+                      value: [null, event.value],
+                    },
+                  ];
+                }
+              }
             }
           }
         }
@@ -297,15 +391,23 @@ export class TableComponent implements OnInit {
         break;
     }
 
-    this.filter.emit(filtrationCopy);
+    if (!filtrationCopy || filtrationCopy.length <= 0) {
+      this.filter.emit(undefined);
+    } else {
+      this.filter.emit(filtrationCopy);
+    }
   }
 
-  onPaginate(event: any): void {
+  onPaginate(event: PageEvent): void {
     this.paginate.emit({
       perPage: event.pageSize,
       totalItemsCount: event.length,
-      totalPagesCount: this.pagination.totalPagesCount,
+      totalPagesCount: Math.ceil(event.length / event.pageSize),
       currentPage: event.pageIndex,
     });
+  }
+
+  onItemClick(index: number): void {
+    this.itemClick.emit(index);
   }
 }
