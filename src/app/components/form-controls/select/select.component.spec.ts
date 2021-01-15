@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -23,6 +24,7 @@ describe('SelectComponent', () => {
         MatSelectModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
+        FormsModule,
         MatFormFieldModule,
       ],
     }).compileComponents();
@@ -79,5 +81,16 @@ describe('SelectComponent', () => {
     const htmlLabelElement = fixture.debugElement.query(By.css('label'))
       .nativeElement;
     expect(htmlLabelElement.innerHTML).toContain('test label');
+  });
+
+  it('should be displayed if template-driven form is using', () => {
+    fixture = TestBed.createComponent(SelectComponent);
+    component = fixture.debugElement.componentInstance;
+    component.value = 'test value';
+    component.onValueChange = () => {};
+    component.fieldId = 'test';
+    fixture.detectChanges();
+
+    expect(component).toBeTruthy();
   });
 });

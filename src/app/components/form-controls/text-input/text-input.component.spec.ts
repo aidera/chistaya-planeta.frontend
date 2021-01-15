@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -24,6 +25,7 @@ describe('TextInputComponent', () => {
       declarations: [TextInputComponent],
       imports: [
         ReactiveFormsModule,
+        FormsModule,
         MatInputModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
@@ -107,5 +109,30 @@ describe('TextInputComponent', () => {
     const htmlLabelElement = fixture.debugElement.query(By.css('label'))
       .nativeElement;
     expect(htmlLabelElement.innerHTML).toContain('test label');
+  });
+
+  it('should be displayed if template-driven form is using', () => {
+    fixture = TestBed.createComponent(TextInputComponent);
+    component = fixture.debugElement.componentInstance;
+    component.value = 'test value';
+    component.onValueChange = () => {};
+    component.fieldId = 'test';
+    fixture.detectChanges();
+
+    expect(component).toBeTruthy();
+  });
+
+  it('should be displayed with the right value if template-driven form is using', () => {
+    fixture = TestBed.createComponent(TextInputComponent);
+    component = fixture.debugElement.componentInstance;
+    component.value = 'test value';
+    component.onValueChange = () => {};
+    component.fieldId = 'test';
+    fixture.detectChanges();
+
+    const inputElement = fixture.debugElement.query(
+      By.css('.mat-input-element')
+    ).nativeElement;
+    expect(inputElement.getAttribute('ng-reflect-model')).toBe('test value');
   });
 });
