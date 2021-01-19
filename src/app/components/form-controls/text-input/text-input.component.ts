@@ -14,6 +14,7 @@ export class TextInputComponent
   @Input() fieldType?: 'text' | 'email' | 'password' | 'number' = 'text';
   @Input() mask?: string;
   @Input() prefix?: string;
+  @Input() placeholder?: string;
 
   type?: 'text' | 'email' | 'password' | 'number';
 

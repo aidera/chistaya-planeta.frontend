@@ -14,6 +14,7 @@
       [formControl]="control"
       [id]="fieldId"
       [type]="type"
+      [placeholder]="placeholder"
       autocomplete="off"
       matInput
       [prefix]="prefix"
@@ -29,6 +30,7 @@
       [type]="type"
       autocomplete="off"
       matInput
+      [placeholder]="placeholder"
       [prefix]="prefix"
       [mask]="mask"
     />
@@ -36,7 +38,7 @@
     <span
       class="icon"
       *ngIf="icon && fieldType !== 'password'"
-      [inlineSVG]="icon"
+      [inlineSVG]="'../assets/icons/' + icon"
     ></span>
 
     <span
