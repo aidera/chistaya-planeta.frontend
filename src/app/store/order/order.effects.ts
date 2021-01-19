@@ -62,7 +62,7 @@ export class OrderEffects {
           catchError((errorRes) => {
             return of(
               OrderActions.getLocalitiesFailure({
-                error: errorRes,
+                error: errorRes.error.error,
               })
             );
           })

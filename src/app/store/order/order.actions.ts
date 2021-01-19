@@ -4,14 +4,16 @@ import { IAddOrderRequest } from '../../services/api/order.service';
 import { ServerError } from '../../models/ServerResponse';
 import { ILocality } from '../../models/Locality';
 
-export const ADD_ORDER_REQUEST = '[order] Add Order Request';
-export const ADD_ORDER_SUCCESS = '[order] Add Order Success';
-export const ADD_ORDER_FAILURE = '[order] Add Order Failure';
-export const ADD_ORDER_SUCCESS_REFRESH = '[order] Add Order Success Refresh';
+export const ADD_ORDER_REQUEST = '[order] add - order - request';
+export const ADD_ORDER_SUCCESS = '[order] add - order - success';
+export const ADD_ORDER_FAILURE = '[order] add - order - failure';
 
-export const GET_LOCALITIES_REQUEST = '[order] Get Localities Request';
-export const GET_LOCALITIES_SUCCESS = '[order] Get Localities Success';
-export const GET_LOCALITIES_FAILURE = '[order] Get Localities Failure';
+export const REFRESH_ADD_ORDER_SUCCESS =
+  '[order] refresh - add order success refresh';
+
+export const GET_LOCALITIES_REQUEST = '[order] get - localities - request';
+export const GET_LOCALITIES_SUCCESS = '[order] get - localities - success';
+export const GET_LOCALITIES_FAILURE = '[order] get - localities - failure';
 
 export const addOrderRequest = createAction(
   ADD_ORDER_REQUEST,
@@ -25,7 +27,7 @@ export const addOrderFailure = createAction(
   props<{ error: ServerError }>()
 );
 
-export const addOrderSuccessRefresh = createAction(ADD_ORDER_SUCCESS_REFRESH);
+export const refreshAddOrderSuccess = createAction(REFRESH_ADD_ORDER_SUCCESS);
 
 export const getLocalitiesRequest = createAction(
   GET_LOCALITIES_REQUEST,

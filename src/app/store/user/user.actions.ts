@@ -5,10 +5,10 @@ import { IEmployee } from '../../models/Employee';
 import { UserType } from '../../models/enums/UserType';
 import IClient from '../../models/Client';
 
-export const LOGIN_REQUEST = '[user] Login Request';
-export const LOGIN_SUCCESS = '[user] Login Success';
-export const LOGIN_FAILURE = '[user] Login Failure';
-export const LOGIN_SUCCESS_REFRESHER = '[user] Login Success Refresher';
+export const LOGIN_REQUEST = '[user] login - request';
+export const LOGIN_SUCCESS = '[user] login - success';
+export const LOGIN_FAILURE = '[user] login - failure';
+export const REFRESH_LOGIN_SUCCESS = '[user] refresh - login success';
 export const LOGOUT = '[user] Logout';
 
 export const loginRequest = createAction(
@@ -33,4 +33,4 @@ export const loginFailure = createAction(
   props<{ error: ServerError }>()
 );
 
-export const loginSuccessRefresher = createAction(LOGIN_SUCCESS_REFRESHER);
+export const loginSuccessRefresher = createAction(REFRESH_LOGIN_SUCCESS);

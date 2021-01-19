@@ -3,9 +3,9 @@ import { createAction, props } from '@ngrx/store';
 import { ServerError } from '../../models/ServerResponse';
 import { ILocality } from '../../models/Locality';
 
-export const GET_LOCALITIES_REQUEST = '[locality] Get Localities Request';
-export const GET_LOCALITIES_SUCCESS = '[locality] Get Localities Success';
-export const GET_LOCALITIES_FAILURE = '[locality] Get Localities Failure';
+export const GET_LOCALITIES_REQUEST = '[locality] get - localities - request';
+export const GET_LOCALITIES_SUCCESS = '[locality] get - localities - success';
+export const GET_LOCALITIES_FAILURE = '[locality] get - localities - failure';
 
 export const getLocalitiesRequest = createAction(
   GET_LOCALITIES_REQUEST,

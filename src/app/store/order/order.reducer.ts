@@ -37,7 +37,7 @@ const _orderReducer = createReducer(
     addOrderError: payload.error,
   })),
 
-  on(OrderActions.addOrderSuccessRefresh, (state, payload) => ({
+  on(OrderActions.refreshAddOrderSuccess, (state, payload) => ({
     ...state,
     addOrderSucceed: false,
   })),
