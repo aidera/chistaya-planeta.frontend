@@ -1,0 +1,37 @@
+@import '../../styles/variables';
+
+.accordion {
+  .accordion-title {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 8px 0;
+
+    .icon {
+      width: 12px;
+      margin-right: 8px;
+      transition: $transition-1;
+      transform: rotate(180deg);
+    }
+
+    p {
+      font-weight: bold;
+      display: block;
+    }
+  }
+
+  .accordion-content {
+    transition: $transition-1;
+    overflow: hidden;
+  }
+
+  &.isOpen {
+    .accordion-title {
+      .icon {
+        transform: rotate(0);
+      }
+    }
+  }
+}

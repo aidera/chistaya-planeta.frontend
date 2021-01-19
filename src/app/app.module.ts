@@ -38,6 +38,7 @@ import {
   MatPaginatorIntl,
 } from '@angular/material/paginator';
 import { getPaginatorIntl } from './utils/paginator.settings';
+import { AccordionComponent } from './components/accordion/accordion.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { getPaginatorIntl } from './utils/paginator.settings';
     FullscreenMenuComponent,
     TableComponent,
     PhonePipe,
+    AccordionComponent,
   ],
   imports: [
     BrowserModule,
