@@ -10,9 +10,9 @@
 enum EmployeeRole {
   head,
   admin,
-  manager,
+  clientManager,
   driver,
-  weigher,
+  acceptManager,
 }
 
 export default EmployeeRole;

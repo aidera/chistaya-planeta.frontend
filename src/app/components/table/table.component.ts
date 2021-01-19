@@ -6,6 +6,7 @@ import {
   TableDisplayType,
   TableDisplayOutputType,
 } from '../../models/types/TableDisplayType';
+import { TableDataType } from '../../models/types/TableDataType';
 import { PaginationType } from '../../models/types/PaginationType';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -16,7 +17,7 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class TableComponent implements OnInit {
   @Input() columnsData: TableColumnType[];
-  @Input() data: { [key: string]: any }[];
+  @Input() data: TableDataType[];
 
   @Input() columnsCanBeDisplayed: TableDisplayOutputType[];
   @Input() displayedColumns?: TableDisplayOutputType[];
@@ -26,7 +27,7 @@ export class TableComponent implements OnInit {
 
   @Output() display = new EventEmitter<TableDisplayOutputType[]>();
   @Output() sort = new EventEmitter<TableSortType>();
-  @Output() paginate = new EventEmitter<PaginationType>();
+  @Output() paginate = new EventEmitter<number>();
   @Output() itemClick = new EventEmitter<number>();
 
   ngOnInit(): void {
@@ -49,16 +50,23 @@ export class TableComponent implements OnInit {
     if (!event.all && event.status !== undefined && event.field !== undefined) {
       const isExist = this.displayedColumns.includes(event.field);
       if (isExist) {
+        /* Скрыть */
         if (!event.status) {
           const index = this.displayedColumns.indexOf(event.field);
-          this.displayedColumns.splice(index, 1);
-          if (this.displayedColumns.length <= 0) {
+          const newDisplayedColumns = [];
+          this.displayedColumns.forEach((column, i) => {
+            if (i !== index) {
+              newDisplayedColumns.push(column);
+            }
+          });
+          if (newDisplayedColumns.length <= 0) {
             this.display.emit(undefined);
           } else {
-            this.display.emit(this.displayedColumns);
+            this.display.emit(newDisplayedColumns);
           }
         }
       } else {
+        /* Показать */
         if (event.status) {
           const newDisplayedColumns: TableDisplayOutputType[] = [];
 
@@ -98,13 +106,8 @@ export class TableComponent implements OnInit {
     this.sort.emit({ field, type: sortType });
   }
 
-  onPaginate(event: PageEvent): void {
-    this.paginate.emit({
-      perPage: event.pageSize,
-      totalItemsCount: event.length,
-      totalPagesCount: Math.ceil(event.length / event.pageSize),
-      currentPage: event.pageIndex,
-    });
+  onPaginate(page: PageEvent): void {
+    this.paginate.emit(page.pageIndex);
   }
 
   onItemClick(index: number): void {

@@ -63,40 +63,49 @@
               </mat-menu>
             </div>
           </th>
-          <th *ngFor="let column of displayedColumns">
-            <div class="cell-header__container">
-              <div class="cell-header__text">
-                {{ findColumnInfo(column) ? findColumnInfo(column).title : '' }}
+          <th *ngIf="data.length <= 0; else mainTableHeaders"></th>
+          <ng-template #mainTableHeaders>
+            <th *ngFor="let column of displayedColumns">
+              <div class="cell-header__container">
+                <div class="cell-header__text">
+                  {{
+                    findColumnInfo(column) ? findColumnInfo(column).title : ''
+                  }}
+                </div>
+                <div class="cell-header__actions">
+                  <button
+                    (click)="onSort(column)"
+                    mat-icon-button
+                    class="cell-header__sorting-button"
+                    [matTooltip]="'Сортировать'"
+                    [matTooltipPosition]="'above'"
+                  >
+                    <span
+                      class="icon"
+                      [class.desc]="
+                        sorting &&
+                        sorting.field === column &&
+                        sorting.type === 'desc'
+                      "
+                      [inlineSVG]="
+                        (sorting && sorting.field !== column) || !sorting
+                          ? '../assets/icons/sorting.svg'
+                          : '../assets/icons/sorting-active.svg'
+                      "
+                    ></span>
+                  </button>
+                </div>
               </div>
-              <div class="cell-header__actions">
-                <button
-                  (click)="onSort(column)"
-                  mat-icon-button
-                  class="cell-header__sorting-button"
-                  [matTooltip]="'Сортировать'"
-                  [matTooltipPosition]="'above'"
-                >
-                  <span
-                    class="icon"
-                    [class.desc]="
-                      sorting &&
-                      sorting.field === column &&
-                      sorting.type === 'desc'
-                    "
-                    [inlineSVG]="
-                      sorting && sorting.field !== column
-                        ? '../assets/icons/sorting.svg'
-                        : '../assets/icons/sorting-active.svg'
-                    "
-                  ></span>
-                </button>
-              </div>
-            </div>
-          </th>
+            </th>
+          </ng-template>
         </tr>
       </thead>
 
       <tbody>
+        <tr *ngIf="data.length <= 0">
+          <td></td>
+          <td>К сожалению, по вашему запросу ничего не найдено</td>
+        </tr>
         <tr *ngFor="let row of data; let i = index" (click)="onItemClick(i)">
           <td style="text-align: center">
             <div class="cell__container">{{ i + 1 }}</div>
@@ -122,7 +131,7 @@
     [showFirstLastButtons]="true"
     [length]="pagination.totalItemsCount"
     [pageSize]="pagination.perPage"
-    [pageIndex]="pagination.currentPage"
+    [pageIndex]="pagination.page - 1"
     [hidePageSize]="true"
     (page)="onPaginate($event)"
   ></mat-paginator>

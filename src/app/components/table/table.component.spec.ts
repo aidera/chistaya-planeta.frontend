@@ -19,9 +19,6 @@ const mockColumnsData: TableColumnType[] = [
   {
     key: 'name',
     title: 'Имя',
-    filter: {
-      type: FilterType.text,
-    },
   },
   {
     key: 'surname',
@@ -30,37 +27,14 @@ const mockColumnsData: TableColumnType[] = [
   {
     key: 'age',
     title: 'Возраст',
-    filter: {
-      type: FilterType.number,
-    },
   },
   {
     key: 'hobbies',
     title: 'Увлечения',
-    filter: {
-      type: FilterType.values,
-      values: [
-        {
-          value: 'hobby1',
-          text: 'танцы',
-        },
-        {
-          value: 'hobby2',
-          text: 'вышивание',
-        },
-        {
-          value: 'hobby3',
-          text: 'плаванье',
-        },
-      ],
-    },
   },
   {
     key: 'birth',
     title: 'День рождения',
-    filter: {
-      type: FilterType.date,
-    },
   },
 ];
 
@@ -145,9 +119,6 @@ describe('TableComponent', () => {
       const expectedResult = {
         key: 'name',
         title: 'Имя',
-        filter: {
-          type: FilterType.text,
-        },
       };
 
       expect(component.findColumnInfo(fieldName)).toEqual(expectedResult);
@@ -328,12 +299,7 @@ describe('TableComponent', () => {
       });
 
       expect(component.paginate.emit).toHaveBeenCalledTimes(1);
-      expect(component.paginate.emit).toHaveBeenCalledWith({
-        currentPage: 2,
-        perPage: 10,
-        totalItemsCount: 2334,
-        totalPagesCount: 234,
-      });
+      expect(component.paginate.emit).toHaveBeenCalledWith(2);
     });
   });
 
@@ -395,7 +361,7 @@ describe('TableComponent', () => {
 
     it('should display pagination if it is not undefined', () => {
       component.pagination = {
-        currentPage: 1,
+        page: 1,
         totalPagesCount: 12,
         totalItemsCount: 119,
         perPage: 10,
