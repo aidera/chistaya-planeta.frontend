@@ -21,9 +21,9 @@ import { paymentMethodStrings } from '../../../models/enums/PaymentMethod';
 import { FilterType } from 'src/app/models/enums/FilterType';
 import { TableColumnType } from '../../../models/types/TableColumnType';
 import { TableSortType } from '../../../models/types/TableSortType';
-import { TableFilterOutputType } from 'src/app/models/types/TableFilterType';
 import { TableDisplayOutputType } from 'src/app/models/types/TableDisplayType';
 import { PaginationType } from '../../../models/types/PaginationType';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-orders',
@@ -34,40 +34,24 @@ import { PaginationType } from '../../../models/types/PaginationType';
 export class OrdersComponent implements OnInit {
   public isEmployee: boolean;
 
-  // remove to ngrx
-  public totalOrdersCount = 22;
-  public totalPagesCount = 3;
-  public currentPage = 1;
-  public perPage = 10;
+  public currentForm: 'fast' | 'advanced' | 'id' = 'fast';
 
   // @ts-ignore
   public orders: IOrder[] = testOrdersResponse.orders;
   public tableColumns: TableColumnType[];
   public tableData: ITableOrderData[];
 
+  public columnsCanBeDisplayed: TableDisplayOutputType[] = [
+    'id',
+    'status',
+    'customerContactName',
+    'deliveryAddress',
+  ];
   public displayedColumns: TableDisplayOutputType[];
   public tableSorting: TableSortType = {
     field: 'status',
     type: 'asc',
   };
-  public tableFiltration: TableFilterOutputType[] = [
-    {
-      field: 'status',
-      value: [0, 1, 6],
-    },
-    {
-      field: 'customerContactName',
-      value: 'вася',
-    },
-    {
-      field: 'deliveryAddress',
-      value: 'a',
-    },
-    {
-      field: 'rawAmount',
-      value: [12],
-    },
-  ];
 
   public tableLoading = false;
 
@@ -77,6 +61,10 @@ export class OrdersComponent implements OnInit {
     totalItemsCount: 2334,
     perPage: 10,
   };
+
+  public fastSearchForm: FormGroup;
+  public advancedSearchForm: FormGroup;
+  public idSearchForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -89,12 +77,84 @@ export class OrdersComponent implements OnInit {
       this.isEmployee = this.route.parent.snapshot.data.isEmployee;
     }
 
+    this.initFastSearchForm();
+    this.initAdvancedSearchForm();
+    this.initIdSearchForm();
+
     this.makeTableColumns();
     this.makeTableData();
   }
 
+  initFastSearchForm(): void {
+    this.fastSearchForm = new FormGroup({
+      search: new FormControl(''),
+    });
+  }
+
+  initAdvancedSearchForm(): void {
+    this.fastSearchForm = new FormGroup({
+      type: new FormControl(''),
+      deliveryType: new FormControl(''),
+      deliveryCustomerCarNumber: new FormControl(''),
+      deliveryHasAssistant: new FormControl(''),
+      locality: new FormControl(''),
+      deliveryAddressFromStreet: new FormControl(''),
+      deliveryAddressFromHouse: new FormControl(''),
+      division: new FormControl(''),
+      approximateRawType: new FormControl(''),
+      approximateRawAmountUnit: new FormControl(''),
+      approximateRawAmountFrom: new FormControl(''),
+      approximateRawAmountTo: new FormControl(''),
+      customerOrganizationLegalName: new FormControl(''),
+      customerOrganizationActualName: new FormControl(''),
+      customerContactName: new FormControl(''),
+      customerContactPhone: new FormControl(''),
+      paymentMethod: new FormControl(''),
+      desiredPickupDateFrom: new FormControl(''),
+      desiredPickupDateTo: new FormControl(''),
+      customerComment: new FormControl(''),
+      status: new FormControl(''),
+      manager: new FormControl(''),
+      driver: new FormControl(''),
+      companyCar: new FormControl(''),
+      statusDateAcceptedFrom: new FormControl(''),
+      statusDateAcceptedTo: new FormControl(''),
+      statusDateInTransitFrom: new FormControl(''),
+      statusDateInTransitTo: new FormControl(''),
+      statusDatePackedFrom: new FormControl(''),
+      statusDatePackedTo: new FormControl(''),
+      statusDateDeliveredFrom: new FormControl(''),
+      statusDateDeliveredTo: new FormControl(''),
+      statusDateWeighedFrom: new FormControl(''),
+      statusDateWeighedTo: new FormControl(''),
+      statusDateCompletedFrom: new FormControl(''),
+      statusDateCompletedTo: new FormControl(''),
+      customerCancellationReason: new FormControl(''),
+      companyCancellationReason: new FormControl(''),
+      companyComment: new FormControl(''),
+      rawAmount: new FormControl(''),
+      paymentAmount: new FormControl(''),
+      createdAtFrom: new FormControl(''),
+      createdAtTo: new FormControl(''),
+      updatedAtFrom: new FormControl(''),
+      updatedAtTo: new FormControl(''),
+    });
+  }
+
+  initIdSearchForm(): void {
+    this.idSearchForm = new FormGroup({
+      id: new FormControl(''),
+      scheduledOrder: new FormControl(''),
+      client: new FormControl(''),
+    });
+  }
+
   makeTableColumns(): void {
     this.tableColumns = [
+      {
+        key: 'id',
+        title: 'Идентификатор',
+      },
       {
         key: 'status',
         title: 'Статус',
@@ -381,12 +441,6 @@ export class OrdersComponent implements OnInit {
 
   onTableSort(event: TableSortType): void {
     this.tableSorting = event;
-  }
-
-  onTableFilter(event: TableFilterOutputType[]): void {
-    this.tableFiltration = event;
-    console.log(event);
-    this.tableLoading = true;
   }
 
   onTablePaginate(event: PaginationType): void {
