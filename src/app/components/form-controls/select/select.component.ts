@@ -11,4 +11,5 @@ import { OptionType } from '../../../models/types/OptionType';
 export class SelectComponent extends AbstractFormControlComponent {
   @Input() options: OptionType[];
   @Input() isMultiple?: boolean;
+  @Input() shouldMultipleBeActiveAlLeast?: 1;
 }

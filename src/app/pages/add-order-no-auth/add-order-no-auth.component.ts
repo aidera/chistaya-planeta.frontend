@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -23,6 +23,7 @@ import { OptionType } from '../../models/types/OptionType';
 import { IDivision } from 'src/app/models/Division';
 import { ServerError } from '../../models/ServerResponse';
 import RawUnit from '../../models/enums/RawUnit';
+import { SimpleStatus } from '../../models/enums/SimpleStatus';
 
 @Component({
   selector: 'app-add-order-no-auth',
@@ -68,7 +69,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
       .subscribe((localities) => {
         this.localities = localities;
         localities.forEach((locality) => {
-          if (locality.isActive) {
+          if (locality.status === SimpleStatus.active) {
             this.selectLocalitiesOptions.push({
               value: locality._id,
               text: locality.name,

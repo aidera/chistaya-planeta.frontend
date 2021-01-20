@@ -65,16 +65,18 @@
 :host ::ng-deep .cabinet-content {
   margin-top: 32px;
 
-  .cabinet-content__fast-search-form {
+  .cabinet-content__form {
     margin-bottom: 32px;
   }
-  .cabinet-content__fast-search-form-input {
-    max-width: 400px;
-    width: 100%;
-  }
-  .cabinet-content__fast-search-form-links {
+  .cabinet-content__links {
     a {
       margin-right: 16px;
+      padding: 8px 0;
+      display: inline-block;
     }
+  }
+  .cabinet-content__form-content {
+    max-width: 400px;
+    width: 100%;
   }
 }

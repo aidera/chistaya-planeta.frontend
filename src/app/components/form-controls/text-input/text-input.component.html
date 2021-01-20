@@ -17,8 +17,9 @@
       [placeholder]="placeholder"
       autocomplete="off"
       matInput
-      [prefix]="prefix"
+      [prefix]="prefix || ''"
       [mask]="mask"
+      [dropSpecialCharacters]="maskDropSpecialCharacters"
     />
 
     <input
@@ -31,8 +32,10 @@
       autocomplete="off"
       matInput
       [placeholder]="placeholder"
-      [prefix]="prefix"
+      [prefix]="prefix || ''"
       [mask]="mask"
+      [dropSpecialCharacters]="maskDropSpecialCharacters"
+      [disabled]="disabled"
     />
 
     <span

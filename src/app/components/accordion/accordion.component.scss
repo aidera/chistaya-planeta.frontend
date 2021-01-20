@@ -7,13 +7,14 @@
     align-items: center;
     cursor: pointer;
     user-select: none;
-    padding: 8px 0;
+    padding: 16px 0;
 
     .icon {
       width: 12px;
       margin-right: 8px;
       transition: $transition-1;
-      transform: rotate(180deg);
+      transform: rotate(0);
+      fill: $text-color-primary;
     }
 
     p {
@@ -30,7 +31,7 @@
   &.isOpen {
     .accordion-title {
       .icon {
-        transform: rotate(0);
+        transform: rotate(180deg);
       }
     }
   }

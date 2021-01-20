@@ -56,7 +56,7 @@ export class OrdersComponent implements OnInit {
   public tableLoading = false;
 
   public tablePagination: PaginationType = {
-    currentPage: 2,
+    page: 2,
     totalPagesCount: 234,
     totalItemsCount: 2334,
     perPage: 10,
@@ -158,173 +158,86 @@ export class OrdersComponent implements OnInit {
       {
         key: 'status',
         title: 'Статус',
-        filter: {
-          type: FilterType.values,
-          values: Object.keys(OrderStatus)
-            .filter((value: string | number) => !isNaN(+value))
-            .map((key) => {
-              return {
-                value: Number(key),
-                text: orderStatusStrings[key],
-              };
-            }),
-        },
       },
       {
         key: 'type',
         title: 'Тип заявки',
-        filter: {
-          type: FilterType.values,
-          values: Object.keys(OrderType)
-            .filter((value: string | number) => !isNaN(+value))
-            .map((key) => {
-              return {
-                value: Number(key),
-                text: orderTypeStrings[key],
-              };
-            }),
-        },
       },
       {
         key: 'rawType',
         title: 'Тип сырья',
-        filter: {
-          type: FilterType.values,
-          values: Object.keys(RawType)
-            .filter((value: string | number) => !isNaN(+value))
-            .map((key) => {
-              return {
-                value: Number(key),
-                text: rawTypeStrings[key],
-              };
-            }),
-        },
       },
       {
         key: 'rawAmount',
         title: 'Прибл. кол-во сырья',
-        filter: {
-          type: FilterType.number,
-        },
       },
       {
         key: 'locality',
         title: 'Населённый пункт',
-        // filterType: FilterType.values,
       },
       {
         key: 'division',
         title: 'Подразделение',
-        // filterType: FilterType.values,
       },
       {
         key: 'deliveryType',
         title: 'Тип доставки',
-        filter: {
-          type: FilterType.values,
-          values: Object.keys(DeliveryType)
-            .filter((value: string | number) => !isNaN(+value))
-            .map((key) => {
-              return {
-                value: Number(key),
-                text: deliveryTypeStrings[key],
-              };
-            }),
-        },
       },
       {
         key: 'deliveryAddress',
         title: 'Адрес доставки',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'hasAssistant',
         title: 'Помощник',
-        // filterType: FilterType.values,
       },
       {
         key: 'customerCarNumber',
         title: 'Номер авто клиента',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'customerOrganizationLegalName',
         title: 'Юр. наиманование организации',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'customerOrganizationActualName',
         title: 'Факт. наиманование организации',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'customerContactName',
         title: 'Контактное имя',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'customerContactPhone',
         title: 'Контактный телефон',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'paymentMethod',
         title: 'Способ оплаты',
-        // filterType: FilterType.values,
       },
       {
         key: 'paymentMethodData',
         title: 'Информация об оплате',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'manager',
         title: 'Менеджер',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'driver',
         title: 'Водитель',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'weigher',
         title: 'Весовщик',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'desiredPickupDate',
         title: 'Желаемая дата',
-        filter: {
-          type: FilterType.date,
-        },
       },
       {
         key: 'createdAt',
         title: 'Дата создания заявки',
-        filter: {
-          type: FilterType.date,
-        },
       },
       {
         key: 'weighedRaw',
@@ -333,23 +246,14 @@ export class OrdersComponent implements OnInit {
       {
         key: 'weighedRawAMount',
         title: 'Кол-во взвешенного сырья',
-        filter: {
-          type: FilterType.number,
-        },
       },
       {
         key: 'customerComment',
         title: 'Комментарий заказчика',
-        filter: {
-          type: FilterType.text,
-        },
       },
       {
         key: 'employeeComment',
         title: 'Комментарий сотрудника',
-        filter: {
-          type: FilterType.text,
-        },
       },
     ];
 

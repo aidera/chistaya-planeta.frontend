@@ -26,4 +26,9 @@ export const menuLinksMain: MenuLink[] = [
     iconPath: 'assets/icons/offices.svg',
     link: './divisions',
   },
+  {
+    title: 'Населённые пункты',
+    iconPath: 'assets/icons/world.svg',
+    link: './localities',
+  },
 ];

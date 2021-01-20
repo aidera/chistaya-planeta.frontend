@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,12 +35,11 @@ import { MobileHeaderComponent } from './components/mobile-header/mobile-header.
 import { FullscreenMenuComponent } from './components/fullscreen-menu/fullscreen-menu.component';
 import { TableComponent } from './components/table/table.component';
 import { PhonePipe } from './pipes/phone.pipe';
-import {
-  MatPaginatorModule,
-  MatPaginatorIntl,
-} from '@angular/material/paginator';
 import { getPaginatorIntl } from './utils/paginator.settings';
 import { AccordionComponent } from './components/accordion/accordion.component';
+import { DivisionsComponent } from './pages/cabinet/divisions/divisions.component';
+import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
+import { DateTimeInputComponent } from './components/form-controls/date-time-input/date-time-input.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,9 @@ import { AccordionComponent } from './components/accordion/accordion.component';
     TableComponent,
     PhonePipe,
     AccordionComponent,
+    DivisionsComponent,
+    LocalitiesComponent,
+    DateTimeInputComponent,
   ],
   imports: [
     BrowserModule,

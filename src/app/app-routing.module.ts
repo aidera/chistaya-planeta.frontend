@@ -10,18 +10,50 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RestorePasswordComponent } from './pages/restore-password/restore-password.component';
 import { CabinetLayoutComponent } from './layouts/cabinet-layout/cabinet-layout.component';
 import { OrdersComponent } from './pages/cabinet/orders/orders.component';
+import { DivisionsComponent } from './pages/cabinet/divisions/divisions.component';
+import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
 
 const routes: Routes = [
   {
-    path: 'employee',
+    path: 'e/cabinet',
+    component: CabinetLayoutComponent,
+    data: { isEmployee: true },
+    children: [
+      {
+        path: 'orders',
+        component: OrdersComponent,
+        data: { useBacklink: false },
+      },
+      {
+        path: 'order',
+        component: OrdersComponent,
+        data: { useBacklink: true },
+      },
+      {
+        path: 'divisions',
+        component: DivisionsComponent,
+        data: { useBacklink: false },
+      },
+      {
+        path: 'localities',
+        component: LocalitiesComponent,
+        data: { useBacklink: false },
+      },
+    ],
+  },
+  {
+    path: 'e',
     component: SimpleLayoutComponent,
     data: { isEmployee: true },
-    children: [{ path: 'login', component: LoginComponent }],
+    children: [
+      { path: '', redirectTo: '/e/login', pathMatch: 'full' },
+      { path: 'login', component: LoginComponent },
+    ],
   },
   {
     path: 'cabinet',
     component: CabinetLayoutComponent,
-    data: { isEmployee: true },
+    data: { isEmployee: false },
     children: [
       {
         path: 'orders',

@@ -1,0 +1,49 @@
+<div class="cabinet-header">
+  <h1>Подразделения</h1>
+  <div class="cabinet-header__actions">
+    <button mat-raised-button color="primary">Добавить новое</button>
+  </div>
+</div>
+
+<div class="cabinet-content" [ngSwitch]="currentForm">
+  <form *ngSwitchCase="'fast'" class="cabinet-content__fast-search-form">
+    <div class="cabinet-content__fast-search-form-input">
+      <app-text-input
+        [placeholder]="'Быстрый поиск...'"
+        [icon]="'search.svg'"
+      ></app-text-input>
+    </div>
+    <div class="cabinet-content__fast-search-form-links">
+      <a>Сбросить фильтры</a>
+    </div>
+  </form>
+
+  <form
+    *ngSwitchCase="'advanced'"
+    class="cabinet-content__advanced-search-form"
+  >
+    <app-accordion title="Основная информация" [isOpenInitial]="true">
+      <app-text-input></app-text-input>
+    </app-accordion>
+  </form>
+
+  <form *ngSwitchCase="'id'" class="cabinet-content__id-search-form">
+    <app-accordion title="Основная информация" [isOpenInitial]="true">
+      <app-text-input></app-text-input>
+    </app-accordion>
+  </form>
+
+  <!--  <app-table-->
+  <!--    [columnsData]="tableColumns"-->
+  <!--    [data]="tableData"-->
+  <!--    [columnsCanBeDisplayed]="columnsCanBeDisplayed"-->
+  <!--    [displayedColumns]="displayedColumns"-->
+  <!--    [sorting]="tableSorting"-->
+  <!--    [pagination]="tablePagination"-->
+  <!--    [isLoading]="tableLoading"-->
+  <!--    (display)="onTableDisplay($event)"-->
+  <!--    (sort)="onTableSort($event)"-->
+  <!--    (paginate)="onTablePaginate($event)"-->
+  <!--    (itemClick)="onTableItemClick($event)"-->
+  <!--  ></app-table>-->
+</div>

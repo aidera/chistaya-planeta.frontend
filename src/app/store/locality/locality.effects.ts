@@ -17,25 +17,38 @@ export class LocalityEffects {
     this.actions$.pipe(
       ofType(LocalityActions.getLocalitiesRequest),
       switchMap((action) => {
-        return this.localityApi.getAll().pipe(
-          map((resData) => {
-            if (resData && resData.localities) {
-              return LocalityActions.getLocalitiesSuccess({
-                localities: resData.localities,
-              });
-            }
-            return LocalityActions.getLocalitiesFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              LocalityActions.getLocalitiesFailure({
-                error: errorRes.error.error,
-              })
-            );
+        return this.localityApi
+          .get({
+            pagination: action.pagination,
+            sorting: action.sorting,
+            filter: action.filter,
+            search: action.search,
           })
-        );
+          .pipe(
+            map((resData) => {
+              if (resData && resData.localities) {
+                return LocalityActions.getLocalitiesSuccess({
+                  localities: resData.localities,
+                  pagination: {
+                    perPage: resData.perPage,
+                    page: resData.currentPage,
+                    totalItemsCount: resData.totalItemsCount,
+                    totalPagesCount: resData.totalPagesCount,
+                  },
+                });
+              }
+              return LocalityActions.getLocalitiesFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                LocalityActions.getLocalitiesFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
       })
     )
   );

@@ -1,0 +1,94 @@
+<div class="cabinet-header">
+  <h1>Населённые пункты</h1>
+  <div class="cabinet-header__actions">
+    <button mat-raised-button color="primary">Добавить новый</button>
+  </div>
+</div>
+
+<div class="cabinet-content" [ngSwitch]="currentForm">
+  <form
+    *ngSwitchCase="'quick'"
+    class="cabinet-content__form cabinet-content__fast-search-form"
+  >
+    <div class="cabinet-content__form-content">
+      <app-text-input
+        [value]="quickSearchValue"
+        (valueChange)="quickSearchValue = $event"
+        [placeholder]="'Быстрый поиск...'"
+        [icon]="'search.svg'"
+        (keydown)="quickSearchInputChanges()"
+      ></app-text-input>
+    </div>
+    <div class="cabinet-content__links">
+      <a (click)="setCurrentForm('advanced')">Расширенный поиск</a>
+      <a (click)="resetRequest()">Сбросить фильтры</a>
+    </div>
+  </form>
+
+  <form
+    *ngSwitchCase="'advanced'"
+    class="cabinet-content__form cabinet-content__advanced-search-form"
+    [formGroup]="advancedSearchForm"
+  >
+    <div class="cabinet-content__form-content">
+      <app-accordion title="Основные фильтры" [isOpenInitial]="true">
+        <app-text-input
+          [control]="advancedSearchForm.get('name')"
+          label="Название содержит:"
+        ></app-text-input>
+        <app-select
+          [control]="advancedSearchForm.get('status')"
+          label="Статус"
+          [options]="[
+            { text: 'Активный', value: 'true' },
+            { text: 'Неактивный', value: 'false' }
+          ]"
+          [isMultiple]="true"
+          [shouldMultipleBeActiveAlLeast]="1"
+        ></app-select>
+      </app-accordion>
+      <app-accordion title="Даты" [isOpenInitial]="true">
+        <br />
+        <h3>Дата создания</h3>
+        <br />
+        <app-date-time-input
+          [control]="advancedSearchForm.get('createdAtFrom')"
+          label="от:"
+        ></app-date-time-input>
+        <app-date-time-input
+          [control]="advancedSearchForm.get('createdAtTo')"
+          label="до:"
+        ></app-date-time-input>
+        <br />
+        <h3>Дата обновления</h3>
+        <br />
+        <app-date-time-input
+          [control]="advancedSearchForm.get('updatedAtFrom')"
+          label="от:"
+        ></app-date-time-input>
+        <app-date-time-input
+          [control]="advancedSearchForm.get('updatedAtTo')"
+          label="до:"
+        ></app-date-time-input>
+      </app-accordion>
+    </div>
+    <div class="cabinet-content__links">
+      <a (click)="setCurrentForm('quick')">Быстрый поиск</a>
+      <a (click)="resetRequest()">Сбросить фильтры</a>
+    </div>
+  </form>
+
+  <app-table
+    [columnsData]="tableColumns"
+    [data]="tableData"
+    [columnsCanBeDisplayed]="columnsCanBeDisplayed"
+    [displayedColumns]="displayedColumns"
+    [sorting]="tableSorting"
+    [pagination]="tablePagination"
+    [isLoading]="isFetching"
+    (display)="onTableDisplay($event)"
+    (sort)="onTableSort($event)"
+    (paginate)="onTablePaginate($event)"
+    (itemClick)="onTableItemClick($event)"
+  ></app-table>
+</div>

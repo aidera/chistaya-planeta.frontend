@@ -1,10 +1,11 @@
 import Address from './types/Address';
+import { SimpleStatus } from './enums/SimpleStatus';
 
 export interface IDivision {
   _id: string;
   name: string;
   address: Address;
-  isActive: boolean;
+  status: SimpleStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }

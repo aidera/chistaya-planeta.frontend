@@ -15,6 +15,7 @@ export class TextInputComponent
   @Input() mask?: string;
   @Input() prefix?: string;
   @Input() placeholder?: string;
+  @Input() maskDropSpecialCharacters = true;
 
   type?: 'text' | 'email' | 'password' | 'number';
 

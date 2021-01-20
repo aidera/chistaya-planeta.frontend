@@ -10,9 +10,14 @@ export const selectLocalities = createSelector(
   (state: LocalityState) => state.localities
 );
 
-export const selectFetLocalitiesIsFetching = createSelector(
+export const selectGetLocalitiesIsFetching = createSelector(
   selectAll,
   (state: LocalityState) => state.getLocalitiesIsFetching
+);
+
+export const selectGetLocalitiesPagination = createSelector(
+  selectAll,
+  (state: LocalityState) => state.getLocalitiesPagination
 );
 
 export const selectGetLocalitiesError = createSelector(

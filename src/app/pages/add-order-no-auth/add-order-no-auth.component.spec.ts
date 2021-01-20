@@ -736,8 +736,8 @@ describe('AddOrderNoAuthComponent', () => {
     component.form.controls.deliveryAddressStreet.setValue('street');
     component.form.controls.deliveryAddressHouse.setValue('house');
     component.form.controls.desiredPickupDate.setValue(tomorrow);
-    component.form.controls.desiredPickupTime.setValue(timeOptions[0]);
-    component.form.controls.customerContactName.setValue('name');
+    component.form.controls.desiredPickupTime.setValue(timeOptions[0].value);
+    component.form.controls.customerContactName.setValue('some name');
     component.form.controls.customerContactPhone.setValue('0987654321');
     component.form.controls.paymentMethod.setValue(PaymentMethod.cash);
     fixture.detectChanges();
