@@ -18,6 +18,7 @@ import { IDivision } from '../../../models/Division';
 import { highlightSearchedValue } from '../../../utils/highlightSearchedValue';
 import { clearSearchRequestRegex } from '../../../utils/regexes';
 import { SimpleStatus } from '../../../models/enums/SimpleStatus';
+import { ConverterService } from '../../../services/converter.service';
 
 @Component({
   selector: 'app-localities',
@@ -56,7 +57,8 @@ export class LocalitiesComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<fromRoot.State>,
-    @Inject(LOCALE_ID) private locale: string
+    @Inject(LOCALE_ID) private locale: string,
+    private converter: ConverterService
   ) {}
 
   ngOnInit(): void {
@@ -136,7 +138,7 @@ export class LocalitiesComponent implements OnInit, OnDestroy {
 
     this.advancedSearchForm.valueChanges
       .pipe(debounceTime(500))
-      .subscribe((val) => {
+      .subscribe((_) => {
         this.sendGetLocalitiesRequest();
       });
   }
@@ -232,79 +234,37 @@ export class LocalitiesComponent implements OnInit, OnDestroy {
   sendGetLocalitiesRequest(): void {
     let filter;
     if (this.currentForm === 'advanced') {
-      let filterStatus = this.advancedSearchForm.get('status').value;
-      if (!filterStatus || filterStatus.length !== 1) {
-        filterStatus = undefined;
-      }
-
-      let filterCreatedAt = [];
-      if (this.advancedSearchForm.get('createdAtFrom').value) {
-        filterCreatedAt[0] = new Date(
-          this.advancedSearchForm.get('createdAtFrom').value
-        ).toISOString();
-      } else {
-        filterCreatedAt[0] = null;
-      }
-      if (this.advancedSearchForm.get('createdAtTo').value) {
-        filterCreatedAt[1] = new Date(
-          this.advancedSearchForm.get('createdAtTo').value
-        ).toISOString();
-      } else {
-        filterCreatedAt[1] = null;
-      }
-      if (
-        (filterCreatedAt[0] === null && filterCreatedAt[1] === null) ||
-        filterCreatedAt.length <= 0
-      ) {
-        filterCreatedAt = undefined;
-      }
-
-      let filterUpdatedAt = [];
-      if (this.advancedSearchForm.get('updatedAtFrom').value) {
-        filterUpdatedAt[0] = new Date(
-          this.advancedSearchForm.get('updatedAtFrom').value
-        ).toISOString();
-      } else {
-        filterUpdatedAt[0] = null;
-      }
-      if (this.advancedSearchForm.get('updatedAtTo').value) {
-        filterUpdatedAt[1] = new Date(
-          this.advancedSearchForm.get('updatedAtTo').value
-        ).toISOString();
-      } else {
-        filterUpdatedAt[1] = null;
-      }
-      if (
-        (filterUpdatedAt[0] === null && filterUpdatedAt[1] === null) ||
-        filterUpdatedAt.length <= 0
-      ) {
-        filterUpdatedAt = undefined;
-      }
-
       filter = {
         name:
           this.advancedSearchForm
             .get('name')
             .value.replace(clearSearchRequestRegex, '') || undefined,
-        status: filterStatus,
-        createdAt: filterCreatedAt,
-        updatedAt: filterUpdatedAt,
+        status: this.converter.getArrayOrUndefined(
+          this.advancedSearchForm.get('status').value,
+          1,
+          this.converter.convertArrayOfStringedBooleanToRealBoolean
+        ),
+        createdAt: this.converter.getServerFromToDateInISOStringArray(
+          this.advancedSearchForm.get('createdAtFrom').value,
+          this.advancedSearchForm.get('createdAtTo').value
+        ),
+        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+          this.advancedSearchForm.get('updatedAtFrom').value,
+          this.advancedSearchForm.get('updatedAtTo').value
+        ),
       };
     }
 
     this.store.dispatch(
       LocalitiesActions.getLocalitiesRequest({
-        pagination: {
-          page:
-            this.tablePagination && this.tablePagination.page
-              ? this.tablePagination.page
-              : 1,
-        },
-        sorting: this.tableSorting,
-        search:
-          this.quickSearchValue !== null && this.quickSearchValue !== ''
-            ? this.quickSearchValue
+        pagination:
+          this.tablePagination && this.tablePagination.page
+            ? {
+                page: this.tablePagination.page,
+              }
             : undefined,
+        sorting: this.tableSorting,
+        search: this.quickSearchValue || undefined,
         filter,
       })
     );
