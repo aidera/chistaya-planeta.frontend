@@ -80,6 +80,7 @@ export class DateTimeInputComponent
           }
         }
       } else {
+        this.timeValue = '00:00';
         if (this.control) {
           this.control.setValue(new Date(date));
         }

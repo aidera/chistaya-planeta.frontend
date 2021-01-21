@@ -209,4 +209,18 @@ describe('DateTimeInputComponent', () => {
     expect(component.control.value.getHours()).toBe(3);
     expect(component.control.value.getMinutes()).toBe(32);
   });
+  it(
+    'should set time to 00:00 if the date was picked first time ' +
+      '(or when pass empty string to time parameter in setDateTime function)',
+    () => {
+      component.control.setValue(new Date());
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      component.setDateTime(new Date(), '');
+      fixture.detectChanges();
+
+      expect(component.timeValue).toBe('00:00');
+    }
+  );
 });

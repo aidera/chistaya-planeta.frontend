@@ -37,6 +37,7 @@ a:active {
   transition: $transition-1;
   text-decoration: underline;
   cursor: pointer;
+
   &:hover {
     text-decoration: none;
   }
@@ -44,6 +45,7 @@ a:active {
 
 small {
   font-size: $font-size-small;
+
   * {
     font-size: $font-size-small;
   }
@@ -53,9 +55,11 @@ label {
   font-size: $font-size-small;
   display: block;
   margin-bottom: 4px;
+
   * {
     font-size: $font-size-small;
   }
+
   .required-field-star {
     color: $error-color;
     margin-right: 8px;
@@ -80,9 +84,6 @@ b {
 .combined-fields {
   display: flex;
   justify-content: space-between;
-  @media (max-width: $bp-sm) {
-    flex-wrap: wrap;
-  }
 
   label {
     min-height: $font-size-small;
@@ -91,13 +92,14 @@ b {
   > *:nth-child(1) {
     width: 72%;
     @media (max-width: $bp-sm) {
-      width: 100%;
+      width: 67%;
     }
   }
+
   > *:nth-child(2) {
     width: 25%;
     @media (max-width: $bp-sm) {
-      width: 100%;
+      width: 30%;
     }
   }
 }
@@ -110,6 +112,7 @@ b {
   display: block;
   position: relative;
   margin-top: -12px;
+
   &.error {
     color: $error-color !important;
   }
@@ -141,6 +144,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 input[type='number'] {
   -moz-appearance: textfield;
 }
