@@ -1,10 +1,17 @@
-import { Component, DoCheck, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
   template: '',
 })
-export class AbstractFormControlComponent implements DoCheck {
+export class AbstractFormControlComponent implements OnInit, DoCheck {
   @Input() fieldId: string;
   @Input() label?: string;
   @Input() errorMessages?: { [key: string]: string };
@@ -18,6 +25,18 @@ export class AbstractFormControlComponent implements DoCheck {
   @Output() valueChange = new EventEmitter<any>();
 
   currentErrorMessage: string | null = null;
+
+  ngOnInit(): void {
+    if (this.control && this.value !== undefined) {
+      throw new Error('Should be only control or only value definer');
+    }
+    if (this.value === undefined && this.disabled) {
+      throw new Error(
+        'Disable can be only with template driven forms (with value parameter). ' +
+          'For reactive forms use its form constructor'
+      );
+    }
+  }
 
   ngDoCheck(): void {
     if (this.errorMessages && this.control.errors) {

@@ -14,24 +14,35 @@ export class DateTimeInputComponent
   @Input() maxDate?: Date;
 
   public dateValue;
-  public timeValue;
+  public timeValue = '';
 
   ngOnInit(): void {
     let initialValue;
-    if ((this.control && this.control.value) || this.value) {
-      if (this.control && this.control.value) {
+    if (this.control || this.value !== undefined) {
+      if (this.control) {
         initialValue = new Date(this.control.value);
+        if (isFinite(initialValue)) {
+          this.dateValue = new Date(initialValue.setHours(0, 0, 0, 0));
+          let hoursString = this.control.value.getHours();
+          hoursString = '' + hoursString;
+          let minutesString = this.control.value.getMinutes();
+          minutesString =
+            minutesString < 10 ? '0' + minutesString : '' + minutesString;
+          this.timeValue = hoursString + ':' + minutesString;
+        }
       }
-      if (this.value) {
+      if (this.value !== undefined) {
         initialValue = new Date(this.value);
+        if (isFinite(initialValue)) {
+          this.dateValue = new Date(initialValue.setHours(0, 0, 0, 0));
+          let hoursString = this.value.getHours();
+          hoursString = '' + hoursString;
+          let minutesString = this.value.getMinutes();
+          minutesString =
+            minutesString < 10 ? '0' + minutesString : '' + minutesString;
+          this.timeValue = hoursString + ':' + minutesString;
+        }
       }
-      this.dateValue = new Date(initialValue.setHours(0, 0, 0, 0));
-      let hoursString = this.control.value.getHours();
-      hoursString = '' + hoursString;
-      let minutesString = this.control.value.getMinutes();
-      minutesString =
-        minutesString < 10 ? '0' + minutesString : '' + minutesString;
-      this.timeValue = hoursString + ':' + minutesString;
     }
   }
 
@@ -50,20 +61,40 @@ export class DateTimeInputComponent
       if (time) {
         const splitTime = time.split(':');
         if (
+          splitTime &&
           splitTime.length > 1 &&
           splitTime[0].length > 0 &&
-          splitTime[1].length > 1
+          splitTime[1].length > 1 &&
+          +splitTime[0] < 24 &&
+          +splitTime[0] >= 0 &&
+          +splitTime[1] < 60 &&
+          +splitTime[1] >= 0
         ) {
           this.timeValue = time;
           const fullDate = dateToSet.setHours(+splitTime[0], +splitTime[1]);
-          this.control.setValue(new Date(fullDate));
+          if (this.control) {
+            this.control.setValue(new Date(fullDate));
+          }
+          if (this.value !== undefined) {
+            this.valueChange.emit(new Date(fullDate));
+          }
         }
       } else {
-        this.control.setValue(new Date(date));
+        if (this.control) {
+          this.control.setValue(new Date(date));
+        }
+        if (this.value !== undefined) {
+          this.valueChange.emit(new Date(date));
+        }
       }
     } else {
-      this.control.setValue('');
-      this.timeValue = undefined;
+      if (this.control) {
+        this.control.setValue('');
+      }
+      if (this.value !== undefined) {
+        this.valueChange.emit('');
+      }
+      this.timeValue = '';
     }
   }
 }
