@@ -11,7 +11,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
 @Component({
   template: '',
 })
-export class AbstractFormControlComponent implements OnInit, DoCheck {
+export class FormControlComponent implements OnInit, DoCheck {
   @Input() fieldId: string;
   @Input() label?: string;
   @Input() errorMessages?: { [key: string]: string };

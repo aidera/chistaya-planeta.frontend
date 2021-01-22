@@ -11,7 +11,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './modules/material/material.module';
-import { AbstractFormControlComponent } from './components/form-controls/abstract-form-control.component';
+import { FormControlComponent } from './components/form-controls/form-control.component';
 import { TextInputComponent } from './components/form-controls/text-input/text-input.component';
 import { TextareaComponent } from './components/form-controls/textarea/textarea.component';
 import { CheckboxComponent } from './components/form-controls/checkbox/checkbox.component';
@@ -40,11 +40,12 @@ import { AccordionComponent } from './components/accordion/accordion.component';
 import { DivisionsComponent } from './pages/cabinet/divisions/divisions.component';
 import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
 import { DateTimeInputComponent } from './components/form-controls/date-time-input/date-time-input.component';
+import { TablePageComponent } from './pages/table-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AbstractFormControlComponent,
+    FormControlComponent,
     TextInputComponent,
     TextareaComponent,
     CheckboxComponent,
@@ -71,6 +72,7 @@ import { DateTimeInputComponent } from './components/form-controls/date-time-inp
     DivisionsComponent,
     LocalitiesComponent,
     DateTimeInputComponent,
+    TablePageComponent,
   ],
   imports: [
     BrowserModule,

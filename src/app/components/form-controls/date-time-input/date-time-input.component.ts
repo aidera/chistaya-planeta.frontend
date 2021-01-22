@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { AbstractFormControlComponent } from '../abstract-form-control.component';
+import { FormControlComponent } from '../form-control.component';
 
 @Component({
   selector: 'app-date-time-input',
@@ -8,7 +8,7 @@ import { AbstractFormControlComponent } from '../abstract-form-control.component
   styleUrls: ['./date-time-input.component.scss'],
 })
 export class DateTimeInputComponent
-  extends AbstractFormControlComponent
+  extends FormControlComponent
   implements OnInit {
   @Input() minDate?: Date;
   @Input() maxDate?: Date;

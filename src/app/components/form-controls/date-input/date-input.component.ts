@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 
-import { AbstractFormControlComponent } from '../abstract-form-control.component';
+import { FormControlComponent } from '../form-control.component';
 
 @Component({
   selector: 'app-date-input',
   templateUrl: './date-input.component.html',
   styleUrls: ['./date-input.component.scss'],
 })
-export class DateInputComponent extends AbstractFormControlComponent {
+export class DateInputComponent extends FormControlComponent {
   @Input() minDate?: Date;
   @Input() maxDate?: Date;
 

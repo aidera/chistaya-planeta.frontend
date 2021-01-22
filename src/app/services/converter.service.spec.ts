@@ -107,4 +107,12 @@ describe('ConverterService', () => {
       ).toEqual([firstDate.toISOString(), secondDate.toISOString()]);
     });
   });
+
+  describe('clearServerRequestString', () => {
+    it('should return string with replaced deprecated symbols', () => {
+      expect(service.clearServerRequestString('dkjfbvn/*&634jbsd')).toBe(
+        'dkjfbvn634jbsd'
+      );
+    });
+  });
 });

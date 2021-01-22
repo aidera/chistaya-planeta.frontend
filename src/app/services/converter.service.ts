@@ -70,4 +70,8 @@ export class ConverterService {
     }
     return valueToReturn;
   }
+
+  public clearServerRequestString(value: string): string {
+    return value.replace(/[`~!@#$%^&*_|+\-=?;:<>\{\}\[\]\\\/]/gi, '');
+  }
 }

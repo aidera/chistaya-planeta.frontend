@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { AbstractFormControlComponent } from '../abstract-form-control.component';
+import { FormControlComponent } from '../form-control.component';
 import { OptionType } from '../../../models/types/OptionType';
 
 @Component({
@@ -8,7 +8,7 @@ import { OptionType } from '../../../models/types/OptionType';
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
 })
-export class SelectComponent extends AbstractFormControlComponent {
+export class SelectComponent extends FormControlComponent {
   @Input() options: OptionType[];
   @Input() isMultiple?: boolean;
   @Input() shouldMultipleBeActiveAlLeast?: 1;

@@ -6,6 +6,7 @@ import { ServerPaginationRequest } from 'src/app/models/types/ServerPaginationRe
 import { PaginationType } from '../../models/types/PaginationType';
 import { ServerSortingRequest } from 'src/app/models/types/ServerSortingRequest';
 import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
+import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 
 export const GET_LOCALITIES_REQUEST = '[locality] get - localities - request';
 export const GET_LOCALITIES_SUCCESS = '[locality] get - localities - success';
@@ -13,12 +14,7 @@ export const GET_LOCALITIES_FAILURE = '[locality] get - localities - failure';
 
 export const getLocalitiesRequest = createAction(
   GET_LOCALITIES_REQUEST,
-  props<{
-    pagination?: ServerPaginationRequest;
-    sorting?: ServerSortingRequest;
-    filter?: ServerFilterRequest;
-    search?: string;
-  }>()
+  props<GetRouteParamsType>()
 );
 export const getLocalitiesSuccess = createAction(
   GET_LOCALITIES_SUCCESS,

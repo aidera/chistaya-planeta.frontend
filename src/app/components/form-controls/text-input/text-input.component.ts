@@ -1,15 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { AbstractFormControlComponent } from '../abstract-form-control.component';
+import { FormControlComponent } from '../form-control.component';
 
 @Component({
   selector: 'app-text-input',
   templateUrl: './text-input.component.html',
   styleUrls: ['./text-input.component.scss'],
 })
-export class TextInputComponent
-  extends AbstractFormControlComponent
-  implements OnInit {
+export class TextInputComponent extends FormControlComponent implements OnInit {
   @Input() icon?: string;
   @Input() fieldType?: 'text' | 'email' | 'password' | 'number' = 'text';
   @Input() mask?: string;
