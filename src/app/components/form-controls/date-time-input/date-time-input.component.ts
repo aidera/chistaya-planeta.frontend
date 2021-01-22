@@ -19,28 +19,35 @@ export class DateTimeInputComponent
   ngOnInit(): void {
     let initialValue;
     if (this.control || this.value !== undefined) {
-      if (this.control) {
-        initialValue = new Date(this.control.value);
+      const setTime = (value) => {
         if (isFinite(initialValue)) {
           this.dateValue = new Date(initialValue.setHours(0, 0, 0, 0));
-          let hoursString = this.control.value.getHours();
-          hoursString = '' + hoursString;
-          let minutesString = this.control.value.getMinutes();
+          let hoursString = value.getHours();
+          hoursString = hoursString < 10 ? '0' + hoursString : '' + hoursString;
+          let minutesString = value.getMinutes();
           minutesString =
             minutesString < 10 ? '0' + minutesString : '' + minutesString;
           this.timeValue = hoursString + ':' + minutesString;
         }
+      };
+      if (this.control) {
+        this.control.valueChanges.subscribe((next) => {
+          if (next) {
+            initialValue = new Date(this.control.value);
+            setTime(this.control.value);
+          } else {
+            this.dateValue = undefined;
+            this.timeValue = '';
+          }
+        });
       }
       if (this.value !== undefined) {
-        initialValue = new Date(this.value);
-        if (isFinite(initialValue)) {
-          this.dateValue = new Date(initialValue.setHours(0, 0, 0, 0));
-          let hoursString = this.value.getHours();
-          hoursString = '' + hoursString;
-          let minutesString = this.value.getMinutes();
-          minutesString =
-            minutesString < 10 ? '0' + minutesString : '' + minutesString;
-          this.timeValue = hoursString + ':' + minutesString;
+        if (this.value) {
+          initialValue = new Date(this.value);
+          setTime(this.value);
+        } else {
+          this.dateValue = undefined;
+          this.timeValue = '';
         }
       }
     }
@@ -82,10 +89,14 @@ export class DateTimeInputComponent
       } else {
         this.timeValue = '00:00';
         if (this.control) {
-          this.control.setValue(new Date(date));
+          const newDate = new Date(date);
+          newDate.setHours(0, 0, 0, 0);
+          this.control.setValue(newDate);
         }
         if (this.value !== undefined) {
-          this.valueChange.emit(new Date(date));
+          const newDate = new Date(date);
+          newDate.setHours(0, 0, 0, 0);
+          this.valueChange.emit(newDate);
         }
       }
     } else {

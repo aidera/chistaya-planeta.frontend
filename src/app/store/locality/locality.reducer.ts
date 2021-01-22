@@ -6,7 +6,7 @@ import { ILocality } from '../../models/Locality';
 import { PaginationType } from '../../models/types/PaginationType';
 
 export const localityInitialState = {
-  localities: [] as ILocality[],
+  localities: null as ILocality[] | null,
   getLocalitiesIsFetching: false,
   getLocalitiesError: null as ServerError | null,
   getLocalitiesPagination: null as PaginationType | null,

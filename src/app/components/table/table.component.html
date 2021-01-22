@@ -63,7 +63,9 @@
               </mat-menu>
             </div>
           </th>
-          <th *ngIf="data.length <= 0; else mainTableHeaders"></th>
+          <th
+            *ngIf="data === null || data.length <= 0; else mainTableHeaders"
+          ></th>
           <ng-template #mainTableHeaders>
             <th *ngFor="let column of displayedColumns">
               <div class="cell-header__container">
@@ -103,26 +105,34 @@
       </thead>
 
       <tbody>
-        <tr *ngIf="data.length <= 0">
+        <tr *ngIf="data === null || data.length <= 0">
           <td></td>
-          <td>К сожалению, по вашему запросу ничего не найдено</td>
-        </tr>
-        <tr *ngFor="let row of data; let i = index" (click)="onItemClick(i)">
-          <td style="text-align: center">
-            <div class="cell__container">{{ i + 1 }}</div>
-          </td>
-          <td *ngFor="let column of displayedColumns">
-            <div
-              class="cell__container"
-              [style]="
-                columnsData[column]
-                  ? 'width: ' + columnsData[column].width + 'px'
-                  : undefined
-              "
-              [innerHTML]="row[column] || '-'"
-            ></div>
+          <td>
+            {{
+              data !== null
+                ? 'К сожалению, по вашему запросу ничего не найдено'
+                : ''
+            }}
           </td>
         </tr>
+        <ng-container *ngIf="data !== null">
+          <tr *ngFor="let row of data; let i = index" (click)="onItemClick(i)">
+            <td style="text-align: center">
+              <div class="cell__container">{{ i + 1 }}</div>
+            </td>
+            <td *ngFor="let column of displayedColumns">
+              <div
+                class="cell__container"
+                [style]="
+                  columnsData[column]
+                    ? 'width: ' + columnsData[column].width + 'px'
+                    : undefined
+                "
+                [innerHTML]="row[column] || '-'"
+              ></div>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </div>

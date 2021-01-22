@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { debounceTime } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { TableColumnType } from '../models/types/TableColumnType';
 import { TableDataType } from '../models/types/TableDataType';
@@ -13,6 +14,7 @@ import * as fromRoot from '../store/root.reducer';
 import { ConverterService } from '../services/converter.service';
 import { GetRouteParamsType } from '../models/types/GetRouteParamsType';
 import { ServerFilterRequest } from '../models/types/ServerFilterRequest';
+import { dateISOStringRegex } from '../utils/regexes';
 
 @Component({
   template: '',
@@ -24,7 +26,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   /* Table settings */
   public tableColumns: TableColumnType[];
-  public tableData: TableDataType[];
+  public tableData: TableDataType[] | null = null;
   public columnsCanBeDisplayed: TableDisplayOutputType[];
   public displayedColumns: TableDisplayOutputType[];
   public tableSorting: TableSortType;
@@ -45,7 +47,9 @@ export class TablePageComponent implements OnInit, OnDestroy {
   constructor(
     protected store: Store<fromRoot.State>,
     @Inject(LOCALE_ID) protected locale: string,
-    protected converter: ConverterService
+    protected converter: ConverterService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -73,14 +77,74 @@ export class TablePageComponent implements OnInit, OnDestroy {
       );
     }
 
-    if (this.onTableRequest) {
-      this.onTableRequest({});
-    }
-
     this.initQuickSearch();
     this.initAdvancedSearchForm();
 
     this.setInitialRequestSettings();
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params.sortingField) {
+        if (
+          params.sortingType &&
+          (params.sortingType === 'asc' || params.sortingType === 'desc')
+        ) {
+          this.tableSorting = {
+            field: params.sortingField,
+            type: params.sortingType,
+          };
+        } else {
+          this.tableSorting = { field: params.sortingField, type: 'asc' };
+        }
+      }
+
+      if (params.page) {
+        const paramsPage = params.page;
+        if (this.tablePagination) {
+          this.tablePagination = {
+            ...this.tablePagination,
+            page: !isNaN(+paramsPage) ? +paramsPage : 1,
+          };
+        }
+      }
+
+      let hasFilter = false;
+
+      Object.keys(params).forEach((key) => {
+        if (key.includes('filter__')) {
+          hasFilter = true;
+          this.currentForm = 'advanced';
+
+          const fieldName = key.substr(8);
+          const fieldValue = params[key].toString();
+
+          if (
+            this.advancedSearchForm &&
+            this.advancedSearchForm.get(fieldName)
+          ) {
+            if (fieldValue.includes(';')) {
+              const split = fieldValue.split(';');
+              this.advancedSearchForm.get(fieldName).setValue(split);
+            } else if (dateISOStringRegex.test(fieldValue)) {
+              this.advancedSearchForm
+                .get(fieldName)
+                .setValue(new Date(fieldValue));
+            } else {
+              if (Array.isArray(this.advancedSearchForm.get(fieldName).value)) {
+                this.advancedSearchForm.get(fieldName).setValue([fieldValue]);
+              } else {
+                this.advancedSearchForm.get(fieldName).setValue(fieldValue);
+              }
+            }
+          }
+        }
+      });
+
+      if (hasFilter === false && params.search) {
+        this.quickSearchValue = params.search;
+      }
+
+      this.sendRequest();
+    });
   }
 
   ngOnDestroy(): void {
@@ -118,7 +182,16 @@ export class TablePageComponent implements OnInit, OnDestroy {
     this.quickSearch$ = this.quickSearchModelChanged
       .pipe(debounceTime(500))
       .subscribe(() => {
-        this.sendRequest();
+        this.router.navigate([], {
+          relativeTo: this.activatedRoute,
+          queryParams: {
+            sortingField: this.tableSorting.field,
+            sortingType: this.tableSorting.type,
+            page: this.tablePagination.page,
+            search: this.quickSearchValue,
+          },
+          queryParamsHandling: 'merge',
+        });
       });
   }
 
@@ -128,14 +201,53 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   initAdvancedSearchForm(): void {
     if (this.advancedSearchForm) {
-      this.advancedSearchForm.reset();
-    }
-    this.advancedSearchForm = this.createAdvancedSearchForm();
-    this.advancedSearchForm.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe((_) => {
-        this.sendRequest();
+      const defaultValuesForm = this.createAdvancedSearchForm();
+      Object.keys(this.advancedSearchForm.controls).forEach((key) => {
+        this.advancedSearchForm
+          .get(key)
+          .setValue(defaultValuesForm.get(key).value);
       });
+    } else {
+      this.advancedSearchForm = this.createAdvancedSearchForm();
+
+      this.advancedSearchForm.valueChanges
+        .pipe(debounceTime(500))
+        .subscribe((next) => {
+          const values = {};
+          Object.keys(this.advancedSearchForm.controls).forEach((field) => {
+            const fieldValue = this.advancedSearchForm.get(field).value;
+            if (fieldValue) {
+              const defaultValue = this.createAdvancedSearchForm().get(field)
+                .value;
+              if (JSON.stringify(defaultValue) !== JSON.stringify(fieldValue)) {
+                if (Array.isArray(fieldValue)) {
+                  values['filter__' + field] = fieldValue.join(';');
+                } else if (fieldValue.getMonth) {
+                  values['filter__' + field] = fieldValue.toISOString();
+                } else {
+                  values['filter__' + field] = fieldValue;
+                }
+              }
+            }
+          });
+
+          this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: {
+              sortingField: this.tableSorting
+                ? this.tableSorting.field
+                : undefined,
+              sortingType: this.tableSorting
+                ? this.tableSorting.type
+                : undefined,
+              page: this.tablePagination
+                ? this.tablePagination.page
+                : undefined,
+              ...values,
+            },
+          });
+        });
+    }
   }
 
   setInitialRequestSettings(): void {
@@ -156,12 +268,23 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   onTableSort(event: TableSortType): void {
     this.tableSorting = event;
-    this.sendRequest();
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        sortingField: this.tableSorting.field,
+        sortingType: this.tableSorting.type,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 
   onTablePaginate(newPage: number): void {
     this.tablePagination.page = newPage;
-    this.sendRequest();
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { page: newPage },
+      queryParamsHandling: 'merge',
+    });
   }
 
   onTableItemClick(index: number): void {
@@ -194,6 +317,5 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   resetRequest(): void {
     this.setInitialRequestSettings();
-    this.sendRequest();
   }
 }

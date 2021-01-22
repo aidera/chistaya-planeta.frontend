@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormControl, FormGroup } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { TablePageComponent } from './table-page.component';
 import { ConverterService } from '../services/converter.service';
@@ -18,6 +19,7 @@ describe('TablePageComponent', () => {
           initialState: {},
         }),
       ],
+      imports: [RouterTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TablePageComponent);
@@ -70,12 +72,6 @@ describe('TablePageComponent', () => {
     expect(() => component.ngOnInit()).toThrowError();
   });
 
-  it('should run the onTableRequest function at the ngOnInit hook if onTableRequest is defined', () => {
-    const onTableRequestSpy = spyOn(component, 'onTableRequest');
-    component.ngOnInit();
-    expect(onTableRequestSpy).toHaveBeenCalledTimes(1);
-  });
-
   it('should define advancedSearchForm at the ngOnInit hook', () => {
     component.ngOnInit();
     expect(component.advancedSearchForm).toBeDefined();
@@ -124,14 +120,6 @@ describe('TablePageComponent', () => {
     expect(component.displayedColumns).toEqual(['id']);
   });
 
-  it('should not call new onTableRequest if onTableDisplay is called', () => {
-    const onTableRequestSpy = spyOn(component, 'onTableRequest');
-    component.onTableDisplay(['id']);
-    fixture.detectChanges();
-
-    expect(onTableRequestSpy).toHaveBeenCalledTimes(0);
-  });
-
   it('should not touch columnsCanBeDisplayed if onTableDisplay is called', () => {
     const prevValue = component.columnsCanBeDisplayed;
     component.onTableDisplay(['id']);
@@ -145,14 +133,6 @@ describe('TablePageComponent', () => {
     fixture.detectChanges();
 
     expect(component.tableSorting).toEqual({ type: 'asc', field: 'name' });
-  });
-
-  it('should call new onTableRequest if onTableSort is called', () => {
-    const onTableRequestSpy = spyOn(component, 'onTableRequest');
-    component.onTableSort({ type: 'asc', field: 'name' });
-    fixture.detectChanges();
-
-    expect(onTableRequestSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should set new pagination if onTablePaginate is called', () => {
@@ -171,14 +151,6 @@ describe('TablePageComponent', () => {
       totalItemsCount: 38,
       perPage: 10,
     });
-  });
-
-  it('should call new onTableRequest if onTablePaginate is called', () => {
-    const onTableRequestSpy = spyOn(component, 'onTableRequest');
-    component.onTablePaginate(2);
-    fixture.detectChanges();
-
-    expect(onTableRequestSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should call onTableRequest if sendRequest is called', () => {

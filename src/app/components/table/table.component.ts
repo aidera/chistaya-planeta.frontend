@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 
 import { TableColumnType } from '../../models/types/TableColumnType';
 import { TableSortType } from '../../models/types/TableSortType';
@@ -8,7 +9,6 @@ import {
 } from '../../models/types/TableDisplayType';
 import { TableDataType } from '../../models/types/TableDataType';
 import { PaginationType } from '../../models/types/PaginationType';
-import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-table',
@@ -17,7 +17,7 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class TableComponent implements OnInit {
   @Input() columnsData: TableColumnType[];
-  @Input() data: TableDataType[];
+  @Input() data: TableDataType[] | null;
 
   @Input() columnsCanBeDisplayed: TableDisplayOutputType[];
   @Input() displayedColumns?: TableDisplayOutputType[];

@@ -8,7 +8,6 @@ import { DateInputComponent } from '../form-controls/date-input/date-input.compo
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { TableColumnType } from '../../models/types/TableColumnType';
-import { FilterType } from '../../models/enums/FilterType';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from '../../modules/material/material.module';

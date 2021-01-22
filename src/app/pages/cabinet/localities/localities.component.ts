@@ -102,37 +102,39 @@ export class LocalitiesComponent
     this.localities$ = this.store
       .select(LocalitiesSelectors.selectLocalities)
       .subscribe((localities) => {
-        this.tableData = localities.map((locality) => {
-          return {
-            id: this.highlightSearchedValue(
-              locality._id,
-              this.quickSearchValue
-            ),
-            status:
-              locality.status === SimpleStatus.active
-                ? '<p class="green-text">Активный</p>'
-                : '<p class="red-text">Не активный</p>',
-            name: this.highlightSearchedValue(
-              locality.name,
-              this.quickSearchValue
-            ),
-            divisions: locality.divisions
-              .map((division: IDivision, i) => {
-                return i === 0 ? division.name : ' ' + division.name;
-              })
-              .toString(),
-            createdAt: formatDate(
-              locality.createdAt,
-              'dd.MM.yyyy - hh:mm',
-              this.locale
-            ),
-            updatedAt: formatDate(
-              locality.updatedAt,
-              'dd.MM.yyyy - hh:mm',
-              this.locale
-            ),
-          };
-        });
+        if (localities) {
+          this.tableData = localities.map((locality) => {
+            return {
+              id: this.highlightSearchedValue(
+                locality._id,
+                this.quickSearchValue
+              ),
+              status:
+                locality.status === SimpleStatus.active
+                  ? '<p class="green-text">Активный</p>'
+                  : '<p class="red-text">Не активный</p>',
+              name: this.highlightSearchedValue(
+                locality.name,
+                this.quickSearchValue
+              ),
+              divisions: locality.divisions
+                .map((division: IDivision, i) => {
+                  return i === 0 ? division.name : ' ' + division.name;
+                })
+                .toString(),
+              createdAt: formatDate(
+                locality.createdAt,
+                'dd.MM.yyyy - hh:mm',
+                this.locale
+              ),
+              updatedAt: formatDate(
+                locality.updatedAt,
+                'dd.MM.yyyy - hh:mm',
+                this.locale
+              ),
+            };
+          });
+        }
       });
 
     this.isFetching$ = this.store

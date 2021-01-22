@@ -2,10 +2,7 @@ import { createAction, props } from '@ngrx/store';
 
 import { ServerError } from '../../models/ServerResponse';
 import { ILocality } from '../../models/Locality';
-import { ServerPaginationRequest } from 'src/app/models/types/ServerPaginationRequest';
 import { PaginationType } from '../../models/types/PaginationType';
-import { ServerSortingRequest } from 'src/app/models/types/ServerSortingRequest';
-import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 
 export const GET_LOCALITIES_REQUEST = '[locality] get - localities - request';
