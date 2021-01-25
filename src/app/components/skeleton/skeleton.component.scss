@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+
+.skeleton {
+  display: inline-block;
+  border-radius: $border-radius-secondary;
+  height: 1rem;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    #e7e7e7 40%,
+    #f5f5f5 50%,
+    #f5f5f5 55%,
+    #e7e7e7 60%
+  );
+  background-size: 200% 200%;
+  animation: skeleton-animation 2s linear backwards infinite;
+}
+
+@keyframes skeleton-animation {
+  from {
+    background-position: 200% 0%;
+  }
+  to {
+    background-position: 0% 0%;
+  }
+}
