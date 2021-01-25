@@ -1,4 +1,11 @@
-<div [routerLink]="[menuLink.link]" class="menu-link" routerLinkActive="active">
+<div
+  class="menu-link"
+  routerLinkActive="active"
+  [routerLink]="
+    isEmployee ? ['/e', 'cabinet', menuLink.link] : ['cabinet', menuLink.link]
+  "
+  (click)="closeFullscreenMenu()"
+>
   <div class="menu-link__gradient"></div>
   <div class="menu-link__container">
     <div class="icon" [inlineSVG]="'../../' + menuLink.iconPath"></div>

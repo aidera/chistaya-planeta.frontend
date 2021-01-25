@@ -4,6 +4,6 @@ export const menuLinksSecondary: MenuLink[] = [
   {
     title: 'Профиль',
     iconPath: 'assets/icons/settings.svg',
-    link: './profile',
+    link: 'profile',
   },
 ];

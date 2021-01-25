@@ -8,6 +8,7 @@ import * as LocalitiesSelectors from '../../../store/locality/locality.selectors
 import { IDivision } from '../../../models/Division';
 import { SimpleStatus } from '../../../models/enums/SimpleStatus';
 import { TablePageComponent } from '../../table-page.component';
+import { ILocality } from '../../../models/Locality';
 
 @Component({
   selector: 'app-localities',
@@ -18,6 +19,7 @@ export class LocalitiesComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
   private localities$: Subscription;
+  private localities: ILocality[];
 
   ngOnInit(): void {
     this.tableColumns = [
@@ -102,6 +104,7 @@ export class LocalitiesComponent
     this.localities$ = this.store
       .select(LocalitiesSelectors.selectLocalities)
       .subscribe((localities) => {
+        this.localities = localities;
         if (localities) {
           this.tableData = localities.map((locality) => {
             return {
@@ -157,6 +160,18 @@ export class LocalitiesComponent
 
     if (this.localities$) {
       this.localities$.unsubscribe();
+    }
+  }
+
+  onTableItemClick(index: number): void {
+    const currentItemId =
+      this.localities && this.localities[index] && this.localities[index]._id
+        ? this.localities[index]._id
+        : undefined;
+    if (currentItemId) {
+      this.router.navigate([`./${currentItemId}`], {
+        relativeTo: this.activatedRoute,
+      });
     }
   }
 }

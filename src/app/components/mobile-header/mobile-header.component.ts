@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as AppActions from '../../store/app/app.actions';
 import * as AppSelectors from '../../store/app/app.selectors';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-header',
@@ -45,6 +45,11 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   }
 
   goToPreviousPage(): void {
+    this.store.dispatch(
+      AppActions.setIsFullscreenMenuOpen({
+        isOpen: false,
+      })
+    );
     this.location.back();
   }
 }

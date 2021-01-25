@@ -52,4 +52,58 @@ export class LocalityEffects {
       })
     )
   );
+
+  getLocality$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalityActions.getLocalityRequest),
+      switchMap((action) => {
+        return this.localityApi.getOne(action.id).pipe(
+          map((resData) => {
+            if (resData && resData.locality) {
+              return LocalityActions.getLocalitySuccess({
+                locality: resData.locality,
+              });
+            }
+            return LocalityActions.getLocalityFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              LocalityActions.getLocalityFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  updateLocalityStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalityActions.updateLocalityStatusRequest),
+      switchMap((action) => {
+        return this.localityApi.updateStatus(action.id, action.status).pipe(
+          map((resData) => {
+            if (resData && resData.updatedLocality) {
+              return LocalityActions.updateLocalityStatusSuccess({
+                locality: resData.updatedLocality,
+              });
+            }
+            return LocalityActions.updateLocalityStatusFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              LocalityActions.updateLocalityStatusFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
 }

@@ -12,6 +12,7 @@ import { CabinetLayoutComponent } from './layouts/cabinet-layout/cabinet-layout.
 import { OrdersComponent } from './pages/cabinet/orders/orders.component';
 import { DivisionsComponent } from './pages/cabinet/divisions/divisions.component';
 import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
+import { LocalityComponent } from './pages/cabinet/locality/locality.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,11 @@ const routes: Routes = [
         path: 'localities',
         component: LocalitiesComponent,
         data: { useBacklink: false },
+      },
+      {
+        path: 'localities/:id',
+        component: LocalityComponent,
+        data: { useBacklink: true },
       },
     ],
   },

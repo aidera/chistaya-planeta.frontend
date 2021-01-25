@@ -2,7 +2,7 @@ import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { TableColumnType } from '../models/types/TableColumnType';
@@ -48,8 +48,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
     protected store: Store<fromRoot.State>,
     @Inject(LOCALE_ID) protected locale: string,
     protected converter: ConverterService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +78,6 @@ export class TablePageComponent implements OnInit, OnDestroy {
     }
 
     this.initQuickSearch();
-    this.initAdvancedSearchForm();
 
     this.setInitialRequestSettings();
 
@@ -180,14 +179,21 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   initQuickSearch(): void {
     this.quickSearch$ = this.quickSearchModelChanged
-      .pipe(debounceTime(500))
-      .subscribe(() => {
+      .pipe(
+        tap((text) => {
+          this.quickSearchValue = text;
+        }),
+        debounceTime(500)
+      )
+      .subscribe((text) => {
         this.router.navigate([], {
           relativeTo: this.activatedRoute,
           queryParams: {
-            sortingField: this.tableSorting.field,
-            sortingType: this.tableSorting.type,
-            page: this.tablePagination.page,
+            sortingField: this.tableSorting
+              ? this.tableSorting.field
+              : undefined,
+            sortingType: this.tableSorting ? this.tableSorting.type : undefined,
+            page: this.tablePagination ? this.tablePagination.page : undefined,
             search: this.quickSearchValue,
           },
           queryParamsHandling: 'merge',
@@ -287,9 +293,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onTableItemClick(index: number): void {
-    console.log(index);
-  }
+  onTableItemClick(index: number): void {}
 
   sendRequest(): void {
     let filter;

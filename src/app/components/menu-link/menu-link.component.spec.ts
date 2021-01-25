@@ -1,10 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { MenuLinkComponent } from './menu-link.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
+import { MenuLinkComponent } from './menu-link.component';
+import * as AppActions from '../../store/app/app.actions';
+
+let store: MockStore;
+let storeDispatchSpy: jasmine.Spy;
 
 describe('MenuLinkComponent', () => {
   let component: MenuLinkComponent;
@@ -18,10 +23,20 @@ describe('MenuLinkComponent', () => {
         HttpClientModule,
         InlineSVGModule.forRoot(),
       ],
+      providers: [
+        provideMockStore({
+          initialState: {
+            app: {
+              isFullscreenMenuOpen: false,
+            },
+          },
+        }),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(MenuLinkComponent);
     component = fixture.componentInstance;
     component.menuLink = {
@@ -41,9 +56,18 @@ describe('MenuLinkComponent', () => {
     const title = fixture.debugElement.query(By.css('p'));
 
     expect(mainElement).toBeTruthy();
-    expect(
-      mainElement.nativeElement.getAttribute('ng-reflect-router-link')
-    ).toBe(component.menuLink.link);
     expect(title.nativeElement.textContent).toBe('Test title');
+  });
+
+  it('should dispatch a close fullscreen menu action', () => {
+    storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
+
+    component.closeFullscreenMenu();
+    fixture.detectChanges();
+
+    expect(storeDispatchSpy).toHaveBeenCalledTimes(1);
+    expect(storeDispatchSpy).toHaveBeenCalledWith(
+      AppActions.setIsFullscreenMenuOpen({ isOpen: false })
+    );
   });
 });

@@ -41,6 +41,8 @@ import { DivisionsComponent } from './pages/cabinet/divisions/divisions.componen
 import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
 import { DateTimeInputComponent } from './components/form-controls/date-time-input/date-time-input.component';
 import { TablePageComponent } from './pages/table-page.component';
+import { LocalityComponent } from './pages/cabinet/locality/locality.component';
+import { SkeletonComponent } from './components/skeleton/skeleton.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,8 @@ import { TablePageComponent } from './pages/table-page.component';
     LocalitiesComponent,
     DateTimeInputComponent,
     TablePageComponent,
+    LocalityComponent,
+    SkeletonComponent,
   ],
   imports: [
     BrowserModule,

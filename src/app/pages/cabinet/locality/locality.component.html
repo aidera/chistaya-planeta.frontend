@@ -1,0 +1,116 @@
+<div class="cabinet-header">
+  <h1>Населённые пункты{{ locality ? ': ' + locality.name : '' }}</h1>
+  <div class="cabinet-header__actions">
+    <button
+      *ngIf="locality && locality.status === simpleStatus.inactive"
+      [disabled]="isFetching"
+      mat-raised-button
+      color="primary"
+      (click)="enableLocality()"
+    >
+      Активировать
+    </button>
+    <button
+      *ngIf="locality && locality.status === simpleStatus.active"
+      [disabled]="isFetching"
+      mat-raised-button
+      color="warn"
+      (click)="disableLocality()"
+    >
+      Деактивировать
+    </button>
+    <button
+      *ngIf="locality && locality.status === simpleStatus.inactive"
+      [disabled]="isFetching"
+      mat-button
+      color="warn"
+    >
+      Удалить
+    </button>
+  </div>
+</div>
+
+<div class="cabinet-content">
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <div class="cabinet-content__grid">
+    <mat-card class="cabinet-content__status-card">
+      <h2 [innerHTML]="localityStatusString"></h2>
+    </mat-card>
+
+    <mat-card>
+      <h2>Основная информация</h2>
+
+      <div class="cabinet-content__field">
+        <div class="cabinet-content__field-inactive">
+          <label>ID</label>
+          <p *ngIf="locality">{{ locality._id }}</p>
+          <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+        </div>
+      </div>
+
+      <div class="cabinet-content__field">
+        <div class="cabinet-content__field-inactive">
+          <label>Название</label>
+          <p *ngIf="locality">{{ locality.name }}</p>
+          <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+        </div>
+      </div>
+
+      <div class="cabinet-content__field">
+        <div class="cabinet-content__field-inactive">
+          <label>Подразделения</label>
+          <p *ngIf="locality">
+            <i
+              *ngIf="
+                !locality.divisions || locality.divisions.length <= 0;
+                else divisionsDisplay
+              "
+              >нет</i
+            >
+            <ng-template #divisionsDisplay>
+              <ul>
+                <li *ngFor="let division of locality.divisions; let i = index">
+                  <a [routerLink]="['/e', 'cabinet', division._id]">{{
+                    division.name
+                  }}</a>
+                </li>
+              </ul>
+            </ng-template>
+          </p>
+          <ng-container *ngIf="isFetching">
+            <app-skeleton></app-skeleton>
+            <br />
+            <app-skeleton></app-skeleton>
+            <br />
+            <app-skeleton></app-skeleton>
+            <br />
+          </ng-container>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card>
+      <h2>История</h2>
+
+      <div class="cabinet-content__field">
+        <div class="cabinet-content__field-inactive">
+          <label>Создано</label>
+          <p *ngIf="locality">
+            {{ locality.createdAt | date: 'dd.MM.yyyy - HH:mm' }}
+          </p>
+          <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+        </div>
+      </div>
+
+      <div class="cabinet-content__field">
+        <div class="cabinet-content__field-inactive">
+          <label>Обновлено</label>
+          <p *ngIf="locality">
+            {{ locality.updatedAt | date: 'dd.MM.yyyy - HH:mm' }}
+          </p>
+          <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

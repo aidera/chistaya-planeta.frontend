@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { SidebarComponent } from './sidebar.component';
 import { MenuLinkComponent } from '../menu-link/menu-link.component';
@@ -19,6 +20,15 @@ describe('SidebarComponent', () => {
         RouterTestingModule,
         HttpClientModule,
         InlineSVGModule.forRoot(),
+      ],
+      providers: [
+        provideMockStore({
+          initialState: {
+            app: {
+              isFullscreenMenuOpen: false,
+            },
+          },
+        }),
       ],
     }).compileComponents();
   }));

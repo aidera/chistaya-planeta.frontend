@@ -49,10 +49,15 @@
     align-content: flex-start;
   }
   .cabinet-header__actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     > * {
       margin-left: 8px;
+      margin-bottom: 4px;
     }
     @media (max-width: $bp-sm) {
+      justify-content: flex-start;
       margin-top: 16px;
       > * {
         margin-left: 0;
@@ -78,5 +83,88 @@
   .cabinet-content__form-content {
     max-width: 400px;
     width: 100%;
+  }
+
+  .cabinet-content__grid {
+    column-count: 2;
+    column-gap: 48px;
+    column-fill: initial;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    transform: translateX(0);
+
+    @media (max-width: 1250px) {
+      column-count: 1;
+    }
+    @media (max-width: $bp-lg) {
+      column-count: 2;
+      column-gap: 24px;
+    }
+    @media (max-width: $bp-md) {
+      column-count: 1;
+    }
+
+    .mat-card {
+      padding: 40px;
+      display: inline-block;
+      margin: 0 0 24px;
+      width: 100%;
+      @media (max-width: $bp-sm) {
+        padding: 20px;
+      }
+      h2 {
+        margin-bottom: 24px;
+        span {
+          font-weight: normal;
+        }
+      }
+      &.cabinet-content__status-card {
+        h2 {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .cabinet-content__field {
+    margin-bottom: 24px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    ul {
+      li {
+        display: block;
+        margin-bottom: 8px;
+        position: relative;
+        padding-left: 10px;
+        &:before {
+          content: ' ';
+          width: 5px;
+          height: 5px;
+          position: absolute;
+          left: 0;
+          top: 8px;
+          border-radius: 50%;
+          background-color: $color-primary;
+        }
+      }
+    }
+  }
+
+  .cabinet-content__field-inactive {
+    label {
+      cursor: default;
+      margin-bottom: 8px;
+    }
+  }
+
+  .cabinet-content__backlink {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 8px 0;
+    @media (max-width: $bp-lg) {
+      display: none;
+    }
   }
 }

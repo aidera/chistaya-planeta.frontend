@@ -4,31 +4,31 @@ export const menuLinksMain: MenuLink[] = [
   {
     title: 'Заявки',
     iconPath: 'assets/icons/order.svg',
-    link: './orders',
+    link: 'orders',
   },
   {
     title: 'Периодические заявки',
     iconPath: 'assets/icons/scheduled-order.svg',
-    link: './scheduled-orders',
+    link: 'scheduled-orders',
   },
   {
     title: 'Клиенты',
     iconPath: 'assets/icons/customer.svg',
-    link: './clients',
+    link: 'clients',
   },
   {
     title: 'Сотрудники',
     iconPath: 'assets/icons/tie.svg',
-    link: './employees',
+    link: 'employees',
   },
   {
     title: 'Подразделения',
     iconPath: 'assets/icons/offices.svg',
-    link: './divisions',
+    link: 'divisions',
   },
   {
     title: 'Населённые пункты',
     iconPath: 'assets/icons/world.svg',
-    link: './localities',
+    link: 'localities',
   },
 ];

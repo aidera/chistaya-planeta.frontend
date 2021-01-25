@@ -10,12 +10,14 @@
       <app-menu-link
         *ngFor="let menuLink of menuLinksMain"
         [menuLink]="menuLink"
+        [isEmployee]="isEmployee"
       ></app-menu-link>
     </div>
     <div class="sidebar__secondary-menu-links">
       <app-menu-link
         *ngFor="let menuLink of menuLinksSecondary"
         [menuLink]="menuLink"
+        [isEmployee]="isEmployee"
       ></app-menu-link>
     </div>
   </nav>
