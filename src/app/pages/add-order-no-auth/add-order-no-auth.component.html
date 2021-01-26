@@ -43,6 +43,8 @@
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>
 
+      <div class="field-spacer"></div>
+
       <div
         class="combined-fields"
         *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
@@ -102,6 +104,8 @@
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>
 
+      <div class="field-spacer"></div>
+
       <app-select
         [control]="form.get('deliveryAddressLocality')"
         fieldId="deliveryAddressLocality"
@@ -118,6 +122,8 @@
           selectDivisionsOptions.length > 1
         "
       >
+        <div class="field-spacer"></div>
+
         <app-select
           [control]="form.get('division')"
           fieldId="division"
@@ -137,54 +143,62 @@
           selectDivisionsOptions.length === 1
         "
       >
+        <div class="field-spacer"></div>
         <small>Адрес пункта приёма:</small>
         <br />
         <p>{{ selectDivisionsOptions[0].text }}</p>
         <!--        <small><a>Показать на карте</a></small>-->
-
-        <br />
-        <br />
       </div>
 
-      <div
-        class="combined-fields"
+      <ng-container
         *ngIf="
           form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
           form.get('type').value === orderTypeEnum.garbage + ''
         "
       >
-        <app-text-input
-          [control]="form.get('deliveryAddressStreet')"
-          fieldId="deliveryAddressStreet"
-          label="Улица"
-          [isRequired]="true"
-          [errorMessages]="{ required: 'Обязательное поле' }"
-        ></app-text-input>
+        <div class="field-spacer"></div>
 
-        <app-text-input
-          [control]="form.get('deliveryAddressHouse')"
-          fieldId="deliveryAddressHouse"
-          label="Дом"
-          [isRequired]="true"
-          [errorMessages]="{ required: 'Обязательное поле' }"
-        ></app-text-input>
-      </div>
+        <div class="combined-fields">
+          <app-text-input
+            [control]="form.get('deliveryAddressStreet')"
+            fieldId="deliveryAddressStreet"
+            label="Улица"
+            [isRequired]="true"
+            [errorMessages]="{ required: 'Обязательное поле' }"
+          ></app-text-input>
 
-      <app-text-input
+          <app-text-input
+            [control]="form.get('deliveryAddressHouse')"
+            fieldId="deliveryAddressHouse"
+            label="Дом"
+            [isRequired]="true"
+            [errorMessages]="{ required: 'Обязательное поле' }"
+          ></app-text-input>
+        </div>
+      </ng-container>
+
+      <ng-container
         *ngIf="
           form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
           form.get('type').value === orderTypeEnum.recyclable + ''
         "
-        [control]="form.get('deliveryCustomerCarNumber')"
-        fieldId="deliveryCustomerCarNumber"
-        label="Номер автомобиля"
-        labelHint="Чтобы определить ваш автомобиль в пункте приёма"
-        [isRequired]="true"
-        [errorMessages]="{
-          required: 'Обязательное поле',
-          minlength: 'Слишком короткий номер'
-        }"
-      ></app-text-input>
+      >
+        <div class="field-spacer"></div>
+
+        <app-text-input
+          [control]="form.get('deliveryCustomerCarNumber')"
+          fieldId="deliveryCustomerCarNumber"
+          label="Номер автомобиля"
+          labelHint="Чтобы определить ваш автомобиль в пункте приёма"
+          [isRequired]="true"
+          [errorMessages]="{
+            required: 'Обязательное поле',
+            minlength: 'Слишком короткий номер'
+          }"
+        ></app-text-input>
+      </ng-container>
+
+      <div class="field-spacer"></div>
 
       <div class="combined-fields">
         <app-date-input
@@ -231,11 +245,15 @@
         label="Юридическое наиманование организации"
       ></app-text-input>
 
+      <div class="field-spacer"></div>
+
       <app-text-input
         [control]="form.get('customerOrganizationActualName')"
         fieldId="customerOrganizationActualName"
         label="Фактическое наиманование организации"
       ></app-text-input>
+
+      <div class="field-spacer"></div>
 
       <app-text-input
         [control]="form.get('customerContactName')"
@@ -244,6 +262,8 @@
         [isRequired]="true"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-text-input>
+
+      <div class="field-spacer"></div>
 
       <app-text-input
         [control]="form.get('customerContactPhone')"
@@ -273,6 +293,8 @@
         [isRequired]="true"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>
+
+      <div class="field-spacer"></div>
 
       <app-textarea
         *ngIf="
