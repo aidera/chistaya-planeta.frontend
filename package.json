@@ -30,6 +30,7 @@
     "@ngrx/effects": "^10.1.2",
     "@ngrx/router-store": "^10.1.2",
     "@ngrx/store": "^10.1.2",
+    "ng-click-outside": "^7.0.1",
     "ng-inline-svg": "^10.1.0",
     "ngx-mask": "^11.1.4",
     "rxjs": "~6.5.5",

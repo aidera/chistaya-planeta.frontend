@@ -68,4 +68,11 @@ export class LocalityService {
       { id }
     );
   }
+
+  update(id: string, name: string): Observable<IUpdateLocalityResponse> {
+    return this.http.patch<IUpdateLocalityResponse>(
+      `${environment.serverURL}/${this.path}/${id}`,
+      { name }
+    );
+  }
 }

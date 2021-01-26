@@ -3,25 +3,25 @@
   <div class="cabinet-header__actions">
     <button
       *ngIf="locality && locality.status === simpleStatus.inactive"
-      [disabled]="isFetching"
+      [disabled]="isFetching || isUpdating"
       mat-raised-button
       color="primary"
-      (click)="enableLocality()"
+      (click)="enable()"
     >
       Активировать
     </button>
     <button
       *ngIf="locality && locality.status === simpleStatus.active"
-      [disabled]="isFetching"
+      [disabled]="isFetching || isUpdating"
       mat-raised-button
       color="warn"
-      (click)="disableLocality()"
+      (click)="disable()"
     >
       Деактивировать
     </button>
     <button
       *ngIf="locality && locality.status === simpleStatus.inactive"
-      [disabled]="isFetching"
+      [disabled]="isFetching || isUpdating"
       mat-button
       color="warn"
     >
@@ -43,23 +43,67 @@
       <div class="cabinet-content__field">
         <div class="cabinet-content__field-inactive">
           <label>ID</label>
-          <p *ngIf="locality">{{ locality._id }}</p>
+          <p *ngIf="locality && !isFetching">{{ locality._id }}</p>
           <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
         </div>
       </div>
 
       <div class="cabinet-content__field">
-        <div class="cabinet-content__field-inactive">
+        <div
+          *ngIf="activeField !== 'name'"
+          class="cabinet-content__field-inactive"
+        >
           <label>Название</label>
-          <p *ngIf="locality">{{ locality.name }}</p>
+          <p *ngIf="locality && !isFetching">{{ locality.name }}</p>
           <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          <div class="cabinet-content__field-inactive-action">
+            <button mat-icon-button (click)="activeField = 'name'">
+              <span
+                class="icon"
+                [inlineSVG]="'../../assets/icons/pencil.svg'"
+              ></span>
+            </button>
+          </div>
+        </div>
+        <div
+          *ngIf="form && activeField === 'name'"
+          (clickOutside)="removeActiveField('name', locality.name)"
+          [delayClickOutsideInit]="true"
+          class="cabinet-content__field-active"
+        >
+          <form [formGroup]="form" (ngSubmit)="update()">
+            <app-text-input
+              label="Название"
+              [control]="form.get('name')"
+              [errorMessages]="{
+                required: 'Обязательное поле',
+                sameName: 'Поле должно быть с новым названием'
+              }"
+            ></app-text-input>
+          </form>
+
+          <div class="cabinet-content__field-active-action">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="update()"
+              [disabled]="
+                isUpdating || form.get('name').value === locality.name
+              "
+            >
+              <span
+                class="icon"
+                [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+              ></span>
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="cabinet-content__field">
         <div class="cabinet-content__field-inactive">
           <label>Подразделения</label>
-          <p *ngIf="locality">
+          <p *ngIf="locality && !isFetching">
             <i
               *ngIf="
                 !locality.divisions || locality.divisions.length <= 0;
@@ -70,9 +114,10 @@
             <ng-template #divisionsDisplay>
               <ul>
                 <li *ngFor="let division of locality.divisions; let i = index">
-                  <a [routerLink]="['/e', 'cabinet', division._id]">{{
-                    division.name
-                  }}</a>
+                  <a
+                    [routerLink]="['/e', 'cabinet', 'divisions', division._id]"
+                    >{{ division.name }}</a
+                  >
                 </li>
               </ul>
             </ng-template>
@@ -95,7 +140,7 @@
       <div class="cabinet-content__field">
         <div class="cabinet-content__field-inactive">
           <label>Создано</label>
-          <p *ngIf="locality">
+          <p *ngIf="locality && !isFetching">
             {{ locality.createdAt | date: 'dd.MM.yyyy - HH:mm' }}
           </p>
           <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
@@ -105,7 +150,7 @@
       <div class="cabinet-content__field">
         <div class="cabinet-content__field-inactive">
           <label>Обновлено</label>
-          <p *ngIf="locality">
+          <p *ngIf="locality && !isFetching">
             {{ locality.updatedAt | date: 'dd.MM.yyyy - HH:mm' }}
           </p>
           <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>

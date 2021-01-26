@@ -99,3 +99,34 @@ a.mat-raised-button {
     color: $disable-color !important;
   }
 }
+
+.mat-icon-button {
+  position: relative;
+  display: inline-block;
+  .icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    fill: $icon-color;
+    margin: 0;
+    text-align: center;
+  }
+
+  &.mat-primary {
+    .icon {
+      fill: $color-primary;
+    }
+  }
+  &.mat-warn {
+    .icon {
+      fill: $error-color;
+    }
+  }
+
+  &.mat-button-disabled {
+    .icon {
+      fill: $disable-color;
+    }
+  }
+}

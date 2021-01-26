@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const modules: any[] = [
   MatButtonModule,
@@ -26,6 +27,7 @@ const modules: any[] = [
   MatNativeDateModule,
   MatMenuModule,
   MatPaginatorModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({

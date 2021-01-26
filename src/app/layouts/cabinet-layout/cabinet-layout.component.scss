@@ -109,6 +109,7 @@
       display: inline-block;
       margin: 0 0 24px;
       width: 100%;
+      backface-visibility: hidden;
       @media (max-width: $bp-sm) {
         padding: 20px;
       }
@@ -153,10 +154,30 @@
   }
 
   .cabinet-content__field-inactive {
+    position: relative;
+    padding-right: 40px;
     label {
       cursor: default;
       margin-bottom: 8px;
     }
+  }
+  .cabinet-content__field-inactive-action {
+    position: absolute;
+    top: 4px;
+    right: 0;
+  }
+
+  .cabinet-content__field-active {
+    position: relative;
+    display: flex;
+    width: 100%;
+    > * {
+      flex-grow: 1;
+    }
+  }
+  .cabinet-content__field-active-action {
+    flex-grow: 0;
+    padding-top: 22px;
   }
 
   .cabinet-content__backlink {

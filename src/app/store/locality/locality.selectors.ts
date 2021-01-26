@@ -39,3 +39,18 @@ export const selectGetLocalityError = createSelector(
   selectAll,
   (state: LocalityState) => state.getLocalityError
 );
+
+export const selectUpdateLocalityIsFetching = createSelector(
+  selectAll,
+  (state: LocalityState) => state.updateLocalityIsFetching
+);
+
+export const selectUpdateLocalityError = createSelector(
+  selectAll,
+  (state: LocalityState) => state.updateLocalityError
+);
+
+export const selectUpdateLocalitySucceed = createSelector(
+  selectAll,
+  (state: LocalityState) => state.updateLocalitySucceed
+);

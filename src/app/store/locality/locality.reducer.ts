@@ -13,13 +13,22 @@ export const localityInitialState = {
   getLocalitiesPagination: null as PaginationType | null,
 
   locality: null as ILocality | null,
+
   getLocalityIsFetching: false,
   getLocalityError: null as ServerError | null,
+
+  updateLocalityIsFetching: false,
+  updateLocalityError: null as ServerError | null,
+  updateLocalitySucceed: false as boolean,
 };
 export type LocalityState = typeof localityInitialState;
 
 const _localityReducer = createReducer(
   localityInitialState,
+
+  /* ---------------------- */
+  /* --- Get Localities --- */
+  /* ---------------------- */
 
   on(LocalityActions.getLocalitiesRequest, (state) => ({
     ...state,
@@ -39,6 +48,9 @@ const _localityReducer = createReducer(
     getLocalitiesError: payload.error,
   })),
 
+  /* -------------------- */
+  /* --- Get Locality --- */
+  /* -------------------- */
   on(LocalityActions.getLocalityRequest, (state) => ({
     ...state,
     locality: null,
@@ -57,21 +69,52 @@ const _localityReducer = createReducer(
     getLocalityError: payload.error,
   })),
 
+  /* ------------------------------ */
+  /* --- Update Locality Status --- */
+  /* ------------------------------ */
+
   on(LocalityActions.updateLocalityStatusRequest, (state) => ({
     ...state,
-    getLocalityIsFetching: true,
-    getLocalityError: null,
+    updateLocalityIsFetching: true,
+    updateLocalityError: null,
   })),
   on(LocalityActions.updateLocalityStatusSuccess, (state, payload) => ({
     ...state,
     locality: payload.locality,
-    getLocalityIsFetching: false,
-    getLocalityError: null,
+    updateLocalityIsFetching: false,
+    updateLocalityError: null,
+    updateLocalitySucceed: true,
   })),
   on(LocalityActions.updateLocalityStatusFailure, (state, payload) => ({
     ...state,
-    getLocalityIsFetching: false,
-    getLocalityError: payload.error,
+    updateLocalityIsFetching: false,
+    updateLocalityError: payload.error,
+  })),
+
+  /* ----------------------- */
+  /* --- Update Locality --- */
+  /* ----------------------- */
+
+  on(LocalityActions.updateLocalityRequest, (state) => ({
+    ...state,
+    updateLocalityIsFetching: true,
+    updateLocalityError: null,
+  })),
+  on(LocalityActions.updateLocalitySuccess, (state, payload) => ({
+    ...state,
+    locality: payload.locality,
+    updateLocalityIsFetching: false,
+    updateLocalityError: null,
+    updateLocalitySucceed: true,
+  })),
+  on(LocalityActions.updateLocalityFailure, (state, payload) => ({
+    ...state,
+    updateLocalityIsFetching: false,
+    updateLocalityError: payload.error,
+  })),
+  on(LocalityActions.refreshUpdateLocalitySucceed, (state) => ({
+    ...state,
+    updateLocalitySucceed: false,
   }))
 );
 

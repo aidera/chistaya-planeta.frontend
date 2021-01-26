@@ -1,37 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as fromRoot from '../../../store/root.reducer';
 import * as LocalitiesActions from '../../../store/locality/locality.actions';
 import * as LocalitiesSelectors from '../../../store/locality/locality.selectors';
 import { ILocality } from '../../../models/Locality';
 import { SimpleStatus } from '../../../models/enums/SimpleStatus';
+import { ItemPageComponent } from '../../item-page.component';
 
 @Component({
   selector: 'app-locality',
   templateUrl: './locality.component.html',
   styleUrls: ['./locality.component.scss'],
 })
-export class LocalityComponent implements OnInit, OnDestroy {
+export class LocalityComponent
+  extends ItemPageComponent
+  implements OnInit, OnDestroy {
   localityId: string;
   locality$: Subscription;
   locality: ILocality | null;
-  isFetching$: Subscription;
-  isFetching = false;
 
   localityStatusString = 'Статус';
-
-  simpleStatus = SimpleStatus;
-
-  constructor(
-    private store: Store<fromRoot.State>,
-    private route: ActivatedRoute,
-    private router: Router,
-    private location: Location
-  ) {}
 
   ngOnInit(): void {
     this.localityId = this.route.snapshot.paramMap.get('id') as string;
@@ -44,12 +33,18 @@ export class LocalityComponent implements OnInit, OnDestroy {
       .subscribe((locality) => {
         this.locality = locality;
 
+        this.initForm();
+
         this.localityStatusString =
           locality && locality.status === 0
             ? 'Статус: <span class="red-text">Не активно</span>'
             : locality && locality.status === 1
             ? 'Статус: <span class="green-text">Активно</span>'
             : 'Статус';
+
+        if (this.form) {
+          this.form.get('name').setValue(locality ? locality.name : '');
+        }
       });
 
     this.isFetching$ = this.store
@@ -57,22 +52,54 @@ export class LocalityComponent implements OnInit, OnDestroy {
       .subscribe((status) => {
         this.isFetching = status;
       });
+
+    this.isUpdating$ = this.store
+      .select(LocalitiesSelectors.selectUpdateLocalityIsFetching)
+      .subscribe((status) => {
+        this.isUpdating = status;
+      });
+
+    this.isUpdateSucceed$ = this.store
+      .select(LocalitiesSelectors.selectUpdateLocalitySucceed)
+      .subscribe((status) => {
+        if (status === true) {
+          this.activeField = null;
+
+          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
+            duration: 2000,
+          });
+
+          this.store.dispatch(LocalitiesActions.refreshUpdateLocalitySucceed());
+        }
+      });
+
+    this.updateError$ = this.store
+      .select(LocalitiesSelectors.selectUpdateLocalityError)
+      .subscribe((error) => {
+        if (error && error.errors && error.errors.length > 0) {
+          switch (error.errors[0].param) {
+            case 'name':
+              this.form.get('name').markAsTouched();
+              this.form.get('name').setErrors({ sameName: true });
+              break;
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
     if (this.locality$) {
       this.locality$.unsubscribe();
     }
-    if (this.isFetching$) {
-      this.isFetching$.unsubscribe();
-    }
   }
 
-  goToPreviousPage(): void {
-    this.location.back();
+  initForm(): void {
+    this.form = new FormGroup({
+      name: new FormControl('', Validators.required),
+    });
   }
 
-  enableLocality(): void {
+  enable(): void {
     this.store.dispatch(
       LocalitiesActions.updateLocalityStatusRequest({
         id: this.locality._id,
@@ -81,7 +108,7 @@ export class LocalityComponent implements OnInit, OnDestroy {
     );
   }
 
-  disableLocality(): void {
+  disable(): void {
     this.store.dispatch(
       LocalitiesActions.updateLocalityStatusRequest({
         id: this.locality._id,
@@ -89,4 +116,21 @@ export class LocalityComponent implements OnInit, OnDestroy {
       })
     );
   }
+
+  update(): void {
+    if (
+      this.activeField &&
+      !this.isUpdating &&
+      this.form.get('name').value !== this.locality.name
+    ) {
+      this.store.dispatch(
+        LocalitiesActions.updateLocalityRequest({
+          id: this.locality._id,
+          name: this.form.get('name').value,
+        })
+      );
+    }
+  }
+
+  remove(): void {}
 }

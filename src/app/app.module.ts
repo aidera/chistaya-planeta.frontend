@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +44,7 @@ import { DateTimeInputComponent } from './components/form-controls/date-time-inp
 import { TablePageComponent } from './pages/table-page.component';
 import { LocalityComponent } from './pages/cabinet/locality/locality.component';
 import { SkeletonComponent } from './components/skeleton/skeleton.component';
+import { ItemPageComponent } from './pages/item-page.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,7 @@ import { SkeletonComponent } from './components/skeleton/skeleton.component';
     TablePageComponent,
     LocalityComponent,
     SkeletonComponent,
+    ItemPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,6 +92,7 @@ import { SkeletonComponent } from './components/skeleton/skeleton.component';
     NgxMaskModule.forRoot(),
     NgrxModule,
     FormsModule,
+    ClickOutsideModule,
   ],
   providers: [
     {
