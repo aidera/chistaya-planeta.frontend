@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 @Component({
   template: '',
 })
-export class ItemAddComponent implements OnDestroy {
+export class ItemAddPageComponent implements OnDestroy {
   protected isFetching$: Subscription;
   public isFetching = false;
   protected serverError$: Subscription;

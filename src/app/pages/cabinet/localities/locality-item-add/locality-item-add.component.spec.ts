@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { LocalityAddComponent } from './locality-add.component';
+import { LocalityItemAddComponent } from './locality-item-add.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,12 +17,12 @@ import { NgxMaskModule } from 'ngx-mask';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('LocalityAddComponent', () => {
-  let component: LocalityAddComponent;
-  let fixture: ComponentFixture<LocalityAddComponent>;
+  let component: LocalityItemAddComponent;
+  let fixture: ComponentFixture<LocalityItemAddComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LocalityAddComponent, TextInputComponent],
+      declarations: [LocalityItemAddComponent, TextInputComponent],
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
@@ -45,7 +45,7 @@ describe('LocalityAddComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LocalityAddComponent);
+    fixture = TestBed.createComponent(LocalityItemAddComponent);
     component = fixture.componentInstance;
     component.form1Main = new FormGroup({
       name: new FormControl('', Validators.required),

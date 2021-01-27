@@ -2,19 +2,19 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
-import { ItemAddComponent } from './item-add.component';
+import { ItemAddPageComponent } from './item-add-page.component';
 import { MaterialModule } from '../../modules/material/material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 
 describe('ItemAddComponent', () => {
-  let component: ItemAddComponent;
-  let fixture: ComponentFixture<ItemAddComponent>;
+  let component: ItemAddPageComponent;
+  let fixture: ComponentFixture<ItemAddPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ItemAddComponent],
+      declarations: [ItemAddPageComponent],
       imports: [MaterialModule, RouterTestingModule],
       providers: [
         provideMockStore({
@@ -25,7 +25,7 @@ describe('ItemAddComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ItemAddComponent);
+    fixture = TestBed.createComponent(ItemAddPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -3,14 +3,16 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as LocalitiesActions from '../../../../store/locality/locality.actions';
 import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
-import { ItemAddComponent } from '../../item-add.component';
+import { ItemAddPageComponent } from '../../item-add-page.component';
 
 @Component({
-  selector: 'app-locality-add',
-  templateUrl: './locality-add.component.html',
-  styleUrls: ['./locality-add.component.scss'],
+  selector: 'app-locality-item-add',
+  templateUrl: './locality-item-add.component.html',
+  styleUrls: ['./locality-item-add.component.scss'],
 })
-export class LocalityAddComponent extends ItemAddComponent implements OnInit {
+export class LocalityItemAddComponent
+  extends ItemAddPageComponent
+  implements OnInit {
   public form1Main: FormGroup;
 
   ngOnInit(): void {

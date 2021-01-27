@@ -45,8 +45,8 @@ import { TablePageComponent } from './pages/cabinet/table-page.component';
 import { LocalityItemComponent } from './pages/cabinet/localities/locality-item/locality-item.component';
 import { SkeletonComponent } from './components/skeleton/skeleton.component';
 import { ItemPageComponent } from './pages/cabinet/item-page.component';
-import { LocalityAddComponent } from './pages/cabinet/localities/locality-add/locality-add.component';
-import { ItemAddComponent } from './pages/cabinet/item-add.component';
+import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-item-add/locality-item-add.component';
+import { ItemAddPageComponent } from './pages/cabinet/item-add-page.component';
 import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
@@ -83,8 +83,8 @@ import { ModalComponent } from './components/modal/modal.component';
     LocalityItemComponent,
     SkeletonComponent,
     ItemPageComponent,
-    LocalityAddComponent,
-    ItemAddComponent,
+    LocalityItemAddComponent,
+    ItemAddPageComponent,
     ModalComponent,
   ],
   imports: [

@@ -13,7 +13,7 @@ import { OrdersTableComponent } from './pages/cabinet/orders/orders-table/orders
 import { DivisionsTableComponent } from './pages/cabinet/divisions/divisions-table/divisions-table.component';
 import { LocalitiesTableComponent } from './pages/cabinet/localities/localities-table/localities-table.component';
 import { LocalityItemComponent } from './pages/cabinet/localities/locality-item/locality-item.component';
-import { LocalityAddComponent } from './pages/cabinet/localities/locality-add/locality-add.component';
+import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-item-add/locality-item-add.component';
 
 const routes: Routes = [
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
       },
       {
         path: 'localities/add',
-        component: LocalityAddComponent,
+        component: LocalityItemAddComponent,
         data: { useBacklink: true },
       },
       {
