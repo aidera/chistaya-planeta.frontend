@@ -21,6 +21,10 @@ export interface IUpdateLocalityResponse extends ServerResponse {
   updatedLocality?: ILocality;
 }
 
+export interface IAddLocalityResponse extends ServerResponse {
+  addedLocality?: ILocality;
+}
+
 export interface IGetLocalitiesResponse extends ServerResponse {
   localities?: ILocality[];
   totalItemsCount: number;
@@ -69,10 +73,26 @@ export class LocalityService {
     );
   }
 
-  update(id: string, name: string): Observable<IUpdateLocalityResponse> {
+  update(
+    id: string,
+    fields: { name: string }
+  ): Observable<IUpdateLocalityResponse> {
     return this.http.patch<IUpdateLocalityResponse>(
       `${environment.serverURL}/${this.path}/${id}`,
-      { name }
+      { ...fields }
+    );
+  }
+
+  add(fields: { name: string }): Observable<IAddLocalityResponse> {
+    return this.http.put<IAddLocalityResponse>(
+      `${environment.serverURL}/${this.path}/`,
+      { ...fields }
+    );
+  }
+
+  remove(id: string): Observable<IAddLocalityResponse> {
+    return this.http.delete<IAddLocalityResponse>(
+      `${environment.serverURL}/${this.path}/${id}`
     );
   }
 }

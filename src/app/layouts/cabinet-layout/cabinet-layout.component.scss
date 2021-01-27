@@ -86,30 +86,49 @@
   }
 
   .cabinet-content__grid {
-    column-count: 2;
-    column-gap: 48px;
-    column-fill: initial;
-    box-sizing: border-box;
-    backface-visibility: hidden;
-    transform: translateX(0);
+    width: 100%;
+    .cabinet-content__grid-item {
+      display: inline-block;
+      margin: 0 0 24px;
+      width: 48%;
+      position: relative;
+      z-index: 0;
+      &:nth-child(2n) {
+        float: right;
+      }
+      &:nth-child(2n-1) {
+        float: left;
+      }
+      @media (max-width: 1250px) {
+        width: 100%;
+      }
+      @media (max-width: $bp-lg) {
+        width: 48%;
+      }
+      @media (max-width: $bp-md) {
+        width: 100%;
+      }
+    }
 
-    @media (max-width: 1250px) {
-      column-count: 1;
+    .cabinet-content__grid-item_inactive {
+      opacity: 0.5;
+      * {
+        cursor: default;
+      }
     }
-    @media (max-width: $bp-lg) {
-      column-count: 2;
-      column-gap: 24px;
-    }
-    @media (max-width: $bp-md) {
-      column-count: 1;
+
+    .cabinet-content__grid-item-overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
 
     .mat-card {
       padding: 40px;
-      display: inline-block;
-      margin: 0 0 24px;
       width: 100%;
-      backface-visibility: hidden;
       @media (max-width: $bp-sm) {
         padding: 20px;
       }
@@ -125,6 +144,36 @@
         }
       }
     }
+  }
+
+  .cabinet-content__grid-item-actions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+    > button {
+      min-width: 200px;
+    }
+  }
+
+  .cabinet-content__grid-item-actions_hidden {
+    visibility: hidden;
+  }
+
+  .cabinet-content__actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    > button {
+      margin: 4px;
+      min-width: 200px;
+    }
+  }
+
+  .cabinet-content__error {
+    color: $error-color;
+    text-align: center;
+    margin-top: 8px;
   }
 
   .cabinet-content__field {

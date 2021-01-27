@@ -20,6 +20,10 @@ export const localityInitialState = {
   updateLocalityIsFetching: false,
   updateLocalityError: null as ServerError | null,
   updateLocalitySucceed: false as boolean,
+
+  addLocalityIsFetching: false,
+  addLocalityError: null as ServerError | null,
+  addLocalitySucceed: false as boolean,
 };
 export type LocalityState = typeof localityInitialState;
 
@@ -51,6 +55,7 @@ const _localityReducer = createReducer(
   /* -------------------- */
   /* --- Get Locality --- */
   /* -------------------- */
+
   on(LocalityActions.getLocalityRequest, (state) => ({
     ...state,
     locality: null,
@@ -115,6 +120,31 @@ const _localityReducer = createReducer(
   on(LocalityActions.refreshUpdateLocalitySucceed, (state) => ({
     ...state,
     updateLocalitySucceed: false,
+  })),
+
+  /* -------------------- */
+  /* --- Add Locality --- */
+  /* -------------------- */
+
+  on(LocalityActions.addLocalityRequest, (state) => ({
+    ...state,
+    addLocalityIsFetching: true,
+    addLocalityError: null,
+  })),
+  on(LocalityActions.addLocalitySuccess, (state) => ({
+    ...state,
+    addLocalityIsFetching: false,
+    addLocalityError: null,
+    addLocalitySucceed: true,
+  })),
+  on(LocalityActions.addLocalityFailure, (state, payload) => ({
+    ...state,
+    addLocalityIsFetching: false,
+    addLocalityError: payload.error,
+  })),
+  on(LocalityActions.refreshAddLocalitySucceed, (state) => ({
+    ...state,
+    addLocalitySucceed: false,
   }))
 );
 

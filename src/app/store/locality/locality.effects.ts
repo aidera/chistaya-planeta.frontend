@@ -111,7 +111,7 @@ export class LocalityEffects {
     this.actions$.pipe(
       ofType(LocalityActions.updateLocalityRequest),
       switchMap((action) => {
-        return this.localityApi.update(action.id, action.name).pipe(
+        return this.localityApi.update(action.id, { name: action.name }).pipe(
           map((resData) => {
             if (resData && resData.updatedLocality) {
               return LocalityActions.updateLocalitySuccess({
@@ -125,6 +125,33 @@ export class LocalityEffects {
           catchError((errorRes) => {
             return of(
               LocalityActions.updateLocalityFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  addLocality$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalityActions.addLocalityRequest),
+      switchMap((action) => {
+        return this.localityApi.add({ name: action.name }).pipe(
+          map((resData) => {
+            if (resData && resData.addedLocality) {
+              return LocalityActions.addLocalitySuccess({
+                locality: resData.addedLocality,
+              });
+            }
+            return LocalityActions.addLocalityFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              LocalityActions.addLocalityFailure({
                 error: errorRes.error.error,
               })
             );

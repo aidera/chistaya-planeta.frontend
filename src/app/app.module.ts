@@ -45,6 +45,8 @@ import { TablePageComponent } from './pages/cabinet/table-page.component';
 import { LocalityItemComponent } from './pages/cabinet/localities/locality-item/locality-item.component';
 import { SkeletonComponent } from './components/skeleton/skeleton.component';
 import { ItemPageComponent } from './pages/cabinet/item-page.component';
+import { LocalityAddComponent } from './pages/cabinet/localities/locality-add/locality-add.component';
+import { ItemAddComponent } from './pages/cabinet/item-add.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { ItemPageComponent } from './pages/cabinet/item-page.component';
     LocalityItemComponent,
     SkeletonComponent,
     ItemPageComponent,
+    LocalityAddComponent,
+    ItemAddComponent,
   ],
   imports: [
     BrowserModule,

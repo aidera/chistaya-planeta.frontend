@@ -11,8 +11,9 @@ import { RestorePasswordComponent } from './pages/restore-password/restore-passw
 import { CabinetLayoutComponent } from './layouts/cabinet-layout/cabinet-layout.component';
 import { OrdersTableComponent } from './pages/cabinet/orders/orders-table/orders-table.component';
 import { DivisionsTableComponent } from './pages/cabinet/divisions/divisions-table/divisions-table.component';
-import { LocalitiesComponent } from './pages/cabinet/test/localities/localities.component';
-import { LocalityComponent } from './pages/cabinet/test/locality/locality.component';
+import { LocalitiesTableComponent } from './pages/cabinet/localities/localities-table/localities-table.component';
+import { LocalityItemComponent } from './pages/cabinet/localities/locality-item/locality-item.component';
+import { LocalityAddComponent } from './pages/cabinet/localities/locality-add/locality-add.component';
 
 const routes: Routes = [
   {
@@ -37,12 +38,17 @@ const routes: Routes = [
       },
       {
         path: 'localities',
-        component: LocalitiesComponent,
+        component: LocalitiesTableComponent,
         data: { useBacklink: false },
       },
       {
+        path: 'localities/add',
+        component: LocalityAddComponent,
+        data: { useBacklink: true },
+      },
+      {
         path: 'localities/:id',
-        component: LocalityComponent,
+        component: LocalityItemComponent,
         data: { useBacklink: true },
       },
     ],
