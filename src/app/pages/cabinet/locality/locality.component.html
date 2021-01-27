@@ -77,7 +77,8 @@
               [control]="form.get('name')"
               [errorMessages]="{
                 required: 'Обязательное поле',
-                sameName: 'Поле должно быть с новым названием'
+                alreadyExists: 'Такое название уже существует',
+                sameName: 'Новое название должно отличаться'
               }"
             ></app-text-input>
           </form>

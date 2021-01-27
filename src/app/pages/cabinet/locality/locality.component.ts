@@ -76,12 +76,12 @@ export class LocalityComponent
     this.updateError$ = this.store
       .select(LocalitiesSelectors.selectUpdateLocalityError)
       .subscribe((error) => {
-        if (error && error.errors && error.errors.length > 0) {
-          switch (error.errors[0].param) {
-            case 'name':
-              this.form.get('name').markAsTouched();
-              this.form.get('name').setErrors({ sameName: true });
-              break;
+        if (error && error.foundedItem) {
+          this.form.get('name').markAsTouched();
+          if (error.foundedItem._id === this.locality._id) {
+            this.form.get('name').setErrors({ sameName: true });
+          } else {
+            this.form.get('name').setErrors({ alreadyExists: true });
           }
         }
       });

@@ -7,6 +7,7 @@ export interface ServerError {
     param: string;
     location: string;
   }[];
+  foundedItem?: any;
 }
 
 export default interface ServerResponse {
