@@ -10,8 +10,8 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import * as fromRoot from '../store/root.reducer';
-import { SimpleStatus } from '../models/enums/SimpleStatus';
+import * as fromRoot from '../../store/root.reducer';
+import { SimpleStatus } from '../../models/enums/SimpleStatus';
 
 @Component({
   template: '',

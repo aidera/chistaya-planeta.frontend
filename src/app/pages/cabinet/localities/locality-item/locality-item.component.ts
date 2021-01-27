@@ -2,18 +2,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as LocalitiesActions from '../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../store/locality/locality.selectors';
-import { ILocality } from '../../../models/Locality';
-import { SimpleStatus } from '../../../models/enums/SimpleStatus';
+import * as LocalitiesActions from '../../../../store/locality/locality.actions';
+import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
+import { ILocality } from '../../../../models/Locality';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
 
 @Component({
-  selector: 'app-locality',
-  templateUrl: './locality.component.html',
-  styleUrls: ['./locality.component.scss'],
+  selector: 'app-locality-item',
+  templateUrl: './locality-item.component.html',
+  styleUrls: ['./locality-item.component.scss'],
 })
-export class LocalityComponent
+export class LocalityItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
   localityId: string;

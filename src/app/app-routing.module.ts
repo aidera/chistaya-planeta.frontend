@@ -9,10 +9,10 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RestorePasswordComponent } from './pages/restore-password/restore-password.component';
 import { CabinetLayoutComponent } from './layouts/cabinet-layout/cabinet-layout.component';
-import { OrdersComponent } from './pages/cabinet/orders/orders.component';
-import { DivisionsComponent } from './pages/cabinet/divisions/divisions.component';
-import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
-import { LocalityComponent } from './pages/cabinet/locality/locality.component';
+import { OrdersTableComponent } from './pages/cabinet/orders/orders-table/orders-table.component';
+import { DivisionsTableComponent } from './pages/cabinet/divisions/divisions-table/divisions-table.component';
+import { LocalitiesComponent } from './pages/cabinet/test/localities/localities.component';
+import { LocalityComponent } from './pages/cabinet/test/locality/locality.component';
 
 const routes: Routes = [
   {
@@ -22,17 +22,17 @@ const routes: Routes = [
     children: [
       {
         path: 'orders',
-        component: OrdersComponent,
+        component: OrdersTableComponent,
         data: { useBacklink: false },
       },
       {
         path: 'order',
-        component: OrdersComponent,
+        component: OrdersTableComponent,
         data: { useBacklink: true },
       },
       {
         path: 'divisions',
-        component: DivisionsComponent,
+        component: DivisionsTableComponent,
         data: { useBacklink: false },
       },
       {
@@ -63,12 +63,12 @@ const routes: Routes = [
     children: [
       {
         path: 'orders',
-        component: OrdersComponent,
+        component: OrdersTableComponent,
         data: { useBacklink: false },
       },
       {
         path: 'order',
-        component: OrdersComponent,
+        component: OrdersTableComponent,
         data: { useBacklink: true },
       },
     ],

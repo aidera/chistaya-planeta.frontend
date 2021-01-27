@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { ItemPageComponent } from './item-page.component';
-import { MaterialModule } from '../modules/material/material.module';
+import { MaterialModule } from '../../modules/material/material.module';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 describe('ItemPageComponent', () => {

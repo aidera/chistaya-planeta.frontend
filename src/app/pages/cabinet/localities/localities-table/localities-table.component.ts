@@ -3,19 +3,19 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
-import * as LocalitiesActions from '../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../store/locality/locality.selectors';
-import { IDivision } from '../../../models/Division';
-import { SimpleStatus } from '../../../models/enums/SimpleStatus';
+import * as LocalitiesActions from '../../../../store/locality/locality.actions';
+import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
+import { IDivision } from '../../../../models/Division';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { TablePageComponent } from '../../table-page.component';
-import { ILocality } from '../../../models/Locality';
+import { ILocality } from '../../../../models/Locality';
 
 @Component({
-  selector: 'app-localities',
-  templateUrl: './localities.component.html',
-  styleUrls: ['./localities.component.scss'],
+  selector: 'app-localities-table',
+  templateUrl: './localities-table.component.html',
+  styleUrls: ['./localities-table.component.scss'],
 })
-export class LocalitiesComponent
+export class LocalitiesTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
   private localities$: Subscription;

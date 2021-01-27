@@ -5,16 +5,16 @@ import { Store } from '@ngrx/store';
 import { debounceTime, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { TableColumnType } from '../models/types/TableColumnType';
-import { TableDataType } from '../models/types/TableDataType';
-import { TableDisplayOutputType } from '../models/types/TableDisplayType';
-import { TableSortType } from '../models/types/TableSortType';
-import { PaginationType } from '../models/types/PaginationType';
-import * as fromRoot from '../store/root.reducer';
-import { ConverterService } from '../services/converter.service';
-import { GetRouteParamsType } from '../models/types/GetRouteParamsType';
-import { ServerFilterRequest } from '../models/types/ServerFilterRequest';
-import { dateISOStringRegex } from '../utils/regexes';
+import { TableColumnType } from '../../models/types/TableColumnType';
+import { TableDataType } from '../../models/types/TableDataType';
+import { TableDisplayOutputType } from '../../models/types/TableDisplayType';
+import { TableSortType } from '../../models/types/TableSortType';
+import { PaginationType } from '../../models/types/PaginationType';
+import * as fromRoot from '../../store/root.reducer';
+import { ConverterService } from '../../services/converter.service';
+import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
+import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
+import { dateISOStringRegex } from '../../utils/regexes';
 
 @Component({
   template: '',

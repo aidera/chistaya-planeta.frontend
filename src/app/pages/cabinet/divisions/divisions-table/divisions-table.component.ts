@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-divisions',
-  templateUrl: './divisions.component.html',
-  styleUrls: ['./divisions.component.scss'],
+  selector: 'app-divisions-table',
+  templateUrl: './divisions-table.component.html',
+  styleUrls: ['./divisions-table.component.scss'],
 })
-export class DivisionsComponent implements OnInit {
+export class DivisionsTableComponent implements OnInit {
   public currentForm: 'fast' | 'advanced' | 'id' = 'fast';
 
   public fastSearchForm: FormGroup;

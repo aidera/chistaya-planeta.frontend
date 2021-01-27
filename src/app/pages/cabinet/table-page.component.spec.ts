@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { TablePageComponent } from './table-page.component';
-import { ConverterService } from '../services/converter.service';
+import { ConverterService } from '../../services/converter.service';
 
 describe('TablePageComponent', () => {
   let component: TablePageComponent;

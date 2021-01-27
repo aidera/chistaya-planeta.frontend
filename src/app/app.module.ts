@@ -29,7 +29,7 @@ import { RestorePasswordComponent } from './pages/restore-password/restore-passw
 import { AuthNotifyComponent } from './components/auth-notify/auth-notify.component';
 import { NgrxModule } from './store/ngrx.module';
 import { CabinetLayoutComponent } from './layouts/cabinet-layout/cabinet-layout.component';
-import { OrdersComponent } from './pages/cabinet/orders/orders.component';
+import { OrdersTableComponent } from './pages/cabinet/orders/orders-table/orders-table.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MenuLinkComponent } from './components/menu-link/menu-link.component';
 import { MobileHeaderComponent } from './components/mobile-header/mobile-header.component';
@@ -38,13 +38,13 @@ import { TableComponent } from './components/table/table.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { getPaginatorIntl } from './utils/paginator.settings';
 import { AccordionComponent } from './components/accordion/accordion.component';
-import { DivisionsComponent } from './pages/cabinet/divisions/divisions.component';
-import { LocalitiesComponent } from './pages/cabinet/localities/localities.component';
+import { DivisionsTableComponent } from './pages/cabinet/divisions/divisions-table/divisions-table.component';
+import { LocalitiesTableComponent } from './pages/cabinet/localities/localities-table/localities-table.component';
 import { DateTimeInputComponent } from './components/form-controls/date-time-input/date-time-input.component';
-import { TablePageComponent } from './pages/table-page.component';
-import { LocalityComponent } from './pages/cabinet/locality/locality.component';
+import { TablePageComponent } from './pages/cabinet/table-page.component';
+import { LocalityItemComponent } from './pages/cabinet/localities/locality-item/locality-item.component';
 import { SkeletonComponent } from './components/skeleton/skeleton.component';
-import { ItemPageComponent } from './pages/item-page.component';
+import { ItemPageComponent } from './pages/cabinet/item-page.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +65,7 @@ import { ItemPageComponent } from './pages/item-page.component';
     RestorePasswordComponent,
     AuthNotifyComponent,
     CabinetLayoutComponent,
-    OrdersComponent,
+    OrdersTableComponent,
     SidebarComponent,
     MenuLinkComponent,
     MobileHeaderComponent,
@@ -73,11 +73,11 @@ import { ItemPageComponent } from './pages/item-page.component';
     TableComponent,
     PhonePipe,
     AccordionComponent,
-    DivisionsComponent,
-    LocalitiesComponent,
+    DivisionsTableComponent,
+    LocalitiesTableComponent,
     DateTimeInputComponent,
     TablePageComponent,
-    LocalityComponent,
+    LocalityItemComponent,
     SkeletonComponent,
     ItemPageComponent,
   ],

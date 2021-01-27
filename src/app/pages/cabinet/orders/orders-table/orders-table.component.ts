@@ -2,36 +2,38 @@ import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { formatDate } from '@angular/common';
 
-import { testOrdersResponse } from '../../../data/testOrders';
-import { ITableOrderData } from '../../../models/TableOrderData';
+import { testOrdersResponse } from '../../../../data/testOrders';
+import { ITableOrderData } from '../../../../models/TableOrderData';
 import { IOrder } from 'src/app/models/Order';
 import DeliveryType, {
   deliveryTypeStrings,
-} from '../../../models/enums/DeliveryType';
+} from '../../../../models/enums/DeliveryType';
 import OrderStatus, {
   orderStatusColors,
   orderStatusStrings,
-} from '../../../models/enums/OrderStatus';
-import { ILocality } from '../../../models/Locality';
-import OrderType, { orderTypeStrings } from '../../../models/enums/OrderType';
-import RawType, { rawTypeStrings } from '../../../models/enums/RawType';
-import { rawUnitStrings } from '../../../models/enums/RawUnit';
-import { PhonePipe } from '../../../pipes/phone.pipe';
-import { paymentMethodStrings } from '../../../models/enums/PaymentMethod';
+} from '../../../../models/enums/OrderStatus';
+import { ILocality } from '../../../../models/Locality';
+import OrderType, {
+  orderTypeStrings,
+} from '../../../../models/enums/OrderType';
+import RawType, { rawTypeStrings } from '../../../../models/enums/RawType';
+import { rawUnitStrings } from '../../../../models/enums/RawUnit';
+import { PhonePipe } from '../../../../pipes/phone.pipe';
+import { paymentMethodStrings } from '../../../../models/enums/PaymentMethod';
 import { FilterType } from 'src/app/models/enums/FilterType';
-import { TableColumnType } from '../../../models/types/TableColumnType';
-import { TableSortType } from '../../../models/types/TableSortType';
+import { TableColumnType } from '../../../../models/types/TableColumnType';
+import { TableSortType } from '../../../../models/types/TableSortType';
 import { TableDisplayOutputType } from 'src/app/models/types/TableDisplayType';
-import { PaginationType } from '../../../models/types/PaginationType';
+import { PaginationType } from '../../../../models/types/PaginationType';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss'],
+  selector: 'app-orders-table',
+  templateUrl: './orders-table.component.html',
+  styleUrls: ['./orders-table.component.scss'],
   providers: [PhonePipe],
 })
-export class OrdersComponent implements OnInit {
+export class OrdersTableComponent implements OnInit {
   public isEmployee: boolean;
 
   public currentForm: 'fast' | 'advanced' | 'id' = 'fast';
