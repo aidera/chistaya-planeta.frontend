@@ -1,0 +1,33 @@
+<div
+  *ngIf="isOpen"
+  class="modal__background"
+  (click)="action.emit('cancel')"
+  @background
+></div>
+
+<div class="modal__base" *ngIf="isOpen" @base>
+  <div class="modal__header h1">{{ title || 'Вы уверенны?' }}</div>
+  <div class="modal__content">
+    <ng-content></ng-content>
+  </div>
+  <div class="modal__actions">
+    <button
+      *ngIf="resolveButtonText"
+      mat-raised-button
+      color="primary"
+      (click)="action.emit('resolve')"
+      [disabled]="isLoading"
+    >
+      {{ resolveButtonText }}
+    </button>
+    <button
+      *ngIf="rejectButtonText"
+      mat-raised-button
+      color="warn"
+      (click)="action.emit('reject')"
+      [disabled]="isLoading"
+    >
+      {{ rejectButtonText }}
+    </button>
+  </div>
+</div>

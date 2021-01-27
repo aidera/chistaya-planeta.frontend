@@ -47,6 +47,7 @@ import { SkeletonComponent } from './components/skeleton/skeleton.component';
 import { ItemPageComponent } from './pages/cabinet/item-page.component';
 import { LocalityAddComponent } from './pages/cabinet/localities/locality-add/locality-add.component';
 import { ItemAddComponent } from './pages/cabinet/item-add.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { ItemAddComponent } from './pages/cabinet/item-add.component';
     ItemPageComponent,
     LocalityAddComponent,
     ItemAddComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
