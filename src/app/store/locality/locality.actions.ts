@@ -53,6 +53,16 @@ export const ADD_LOCALITY_FAILURE = '[locality] add - locality - failure';
 export const REFRESH_ADD_LOCALITY_SUCCESS =
   '[locality] refresh - add locality success';
 
+/* ----------------------- */
+/* --- Remove Locality --- */
+/* ----------------------- */
+
+export const REMOVE_LOCALITY_REQUEST = '[locality] remove - locality - request';
+export const REMOVE_LOCALITY_SUCCESS = '[locality] remove - locality - success';
+export const REMOVE_LOCALITY_FAILURE = '[locality] remove - locality - failure';
+export const REFRESH_REMOVE_LOCALITY_SUCCESS =
+  '[locality] refresh - remove locality success';
+
 /* ---------------------- */
 /* --- Get Localities --- */
 /* ---------------------- */
@@ -155,4 +165,27 @@ export const addLocalityFailure = createAction(
 
 export const refreshAddLocalitySucceed = createAction(
   REFRESH_ADD_LOCALITY_SUCCESS
+);
+
+/* ----------------------- */
+/* --- Remove Locality --- */
+/* ----------------------- */
+
+export const removeLocalityRequest = createAction(
+  REMOVE_LOCALITY_REQUEST,
+  props<{ id: string }>()
+);
+export const removeLocalitySuccess = createAction(
+  REMOVE_LOCALITY_SUCCESS,
+  props<{
+    locality: ILocality;
+  }>()
+);
+export const removeLocalityFailure = createAction(
+  REMOVE_LOCALITY_FAILURE,
+  props<{ error: ServerError }>()
+);
+
+export const refreshRemoveLocalitySucceed = createAction(
+  REFRESH_REMOVE_LOCALITY_SUCCESS
 );

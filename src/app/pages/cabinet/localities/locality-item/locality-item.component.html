@@ -24,6 +24,7 @@
       [disabled]="isFetching || isUpdating"
       mat-button
       color="warn"
+      (click)="isRemoveModalOpen = true"
     >
       Удалить
     </button>
@@ -173,3 +174,18 @@
     </div>
   </div>
 </div>
+
+<app-modal
+  [isLoading]="isRemoving"
+  [isOpen]="isRemoveModalOpen"
+  [resolveButtonText]="removeModalResolveButton"
+  [rejectButtonText]="removeModalRejectButton"
+  (action)="onRemoveModalAction($event)"
+>
+  Полностью удалять населённый пункт лучше только в том случае, если вы добавили
+  его случайно или по ошибке.
+  <br />
+  <br />
+  Все связанные записи не смогут восстановить населённый пункт автоматически,
+  даже если новое называние будет идентично.
+</app-modal>

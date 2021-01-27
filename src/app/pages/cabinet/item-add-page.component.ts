@@ -7,9 +7,9 @@ import {
   MatSnackBarRef,
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../store/root.reducer';
-import { Subscription } from 'rxjs';
 
 @Component({
   template: '',

@@ -7,16 +7,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import { LocalityItemAddComponent } from './locality-item-add.component';
-import { MaterialModule } from '../../../../modules/material/material.module';
-import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('LocalityAddComponent', () => {
+import { LocalityItemAddComponent } from './locality-item-add.component';
+import { MaterialModule } from '../../../../modules/material/material.module';
+import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
+
+describe('LocalityItemAddComponent', () => {
   let component: LocalityItemAddComponent;
   let fixture: ComponentFixture<LocalityItemAddComponent>;
 

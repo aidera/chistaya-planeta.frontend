@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 
 import * as fromRoot from '../../store/root.reducer';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
+import { ModalAction } from '../../components/modal/modal.component';
 
 @Component({
   template: '',
@@ -23,11 +24,19 @@ export class ItemPageComponent implements OnDestroy {
   public isUpdating = false;
   protected isUpdateSucceed$: Subscription;
   protected updateError$: Subscription;
+  protected isRemoving$: Subscription;
+  public isRemoving = false;
+  protected isRemoveSucceed$: Subscription;
+  protected removeError$: Subscription;
 
   public simpleStatus = SimpleStatus;
   public form: FormGroup;
   public activeField: string | null = null;
   protected updateSnackbar: MatSnackBarRef<TextOnlySnackBar>;
+  public isRemoveModalOpen = false;
+  public removeModalResolveButton = 'Оставить в архиве';
+  public removeModalRejectButton = 'Удалить';
+  protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -50,6 +59,15 @@ export class ItemPageComponent implements OnDestroy {
     if (this.updateError$) {
       this.updateError$.unsubscribe();
     }
+    if (this.isRemoving$) {
+      this.isRemoving$.unsubscribe();
+    }
+    if (this.isRemoveSucceed$) {
+      this.isRemoveSucceed$.unsubscribe();
+    }
+    if (this.removeError$) {
+      this.removeError$.unsubscribe();
+    }
   }
 
   setActiveField(fieldName: string): void {
@@ -68,6 +86,17 @@ export class ItemPageComponent implements OnDestroy {
 
   goToPreviousPage(): void {
     this.location.back();
+  }
+
+  onRemoveModalAction(action: ModalAction): void {
+    switch (action) {
+      case 'cancel':
+        this.isRemoveModalOpen = false;
+        break;
+      case 'resolve':
+        this.isRemoveModalOpen = false;
+        break;
+    }
   }
 
   enable(): void {

@@ -25,6 +25,10 @@ export interface IAddLocalityResponse extends ServerResponse {
   addedLocality?: ILocality;
 }
 
+export interface IRemoveLocalityResponse extends ServerResponse {
+  removedLocality?: ILocality;
+}
+
 export interface IGetLocalitiesResponse extends ServerResponse {
   localities?: ILocality[];
   totalItemsCount: number;
@@ -90,8 +94,8 @@ export class LocalityService {
     );
   }
 
-  remove(id: string): Observable<IAddLocalityResponse> {
-    return this.http.delete<IAddLocalityResponse>(
+  remove(id: string): Observable<IRemoveLocalityResponse> {
+    return this.http.delete<IRemoveLocalityResponse>(
       `${environment.serverURL}/${this.path}/${id}`
     );
   }

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { transition, trigger, style, animate } from '@angular/animations';
 
+export type ModalAction = 'cancel' | 'resolve' | 'reject';
+
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
@@ -38,5 +40,5 @@ export class ModalComponent {
   @Input() title?: string;
   @Input() isLoading?: boolean;
 
-  @Output() action = new EventEmitter<'cancel' | 'resolve' | 'reject'>();
+  @Output() action = new EventEmitter<ModalAction>();
 }

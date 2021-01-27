@@ -7,6 +7,7 @@ import * as LocalitiesSelectors from '../../../../store/locality/locality.select
 import { ILocality } from '../../../../models/Locality';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
+import { ModalAction } from '../../../../components/modal/modal.component';
 
 @Component({
   selector: 'app-locality-item',
@@ -85,6 +86,36 @@ export class LocalityItemComponent
           }
         }
       });
+
+    this.isRemoving$ = this.store
+      .select(LocalitiesSelectors.selectRemoveLocalityIsFetching)
+      .subscribe((status) => {
+        this.isRemoving = status;
+      });
+
+    this.isRemoveSucceed$ = this.store
+      .select(LocalitiesSelectors.selectRemoveLocalitySucceed)
+      .subscribe((status) => {
+        if (status === true) {
+          this.isRemoveModalOpen = false;
+
+          this.store.dispatch(LocalitiesActions.refreshRemoveLocalitySucceed());
+
+          this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
+            duration: 2000,
+          });
+
+          this.router.navigate(['../'], { relativeTo: this.route });
+        }
+      });
+
+    this.removeError$ = this.store
+      .select(LocalitiesSelectors.selectRemoveLocalityError)
+      .subscribe((error) => {
+        if (error && error.foundedItem) {
+          this.isRemoveModalOpen = false;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -133,4 +164,13 @@ export class LocalityItemComponent
   }
 
   remove(): void {}
+
+  onRemoveModalAction(action: ModalAction): void {
+    super.onRemoveModalAction(action);
+    if (action === 'reject') {
+      this.store.dispatch(
+        LocalitiesActions.removeLocalityRequest({ id: this.locality._id })
+      );
+    }
+  }
 }

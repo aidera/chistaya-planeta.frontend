@@ -160,4 +160,31 @@ export class LocalityEffects {
       })
     )
   );
+
+  removeLocality$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalityActions.removeLocalityRequest),
+      switchMap((action) => {
+        return this.localityApi.remove(action.id).pipe(
+          map((resData) => {
+            if (resData && resData.removedLocality) {
+              return LocalityActions.removeLocalitySuccess({
+                locality: resData.removedLocality,
+              });
+            }
+            return LocalityActions.removeLocalityFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              LocalityActions.removeLocalityFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
 }

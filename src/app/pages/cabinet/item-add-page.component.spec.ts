@@ -4,9 +4,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { ItemAddPageComponent } from './item-add-page.component';
 import { MaterialModule } from '../../modules/material/material.module';
-import { HttpClientModule } from '@angular/common/http';
-import { InlineSVGModule } from 'ng-inline-svg';
-import { NgxMaskModule } from 'ngx-mask';
 
 describe('ItemAddComponent', () => {
   let component: ItemAddPageComponent;

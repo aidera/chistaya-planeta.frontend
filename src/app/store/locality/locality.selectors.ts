@@ -69,3 +69,18 @@ export const selectAddLocalityError = createSelector(
   selectAll,
   (state: LocalityState) => state.addLocalityError
 );
+
+export const selectRemoveLocalityIsFetching = createSelector(
+  selectAll,
+  (state: LocalityState) => state.removeLocalityIsFetching
+);
+
+export const selectRemoveLocalitySucceed = createSelector(
+  selectAll,
+  (state: LocalityState) => state.removeLocalitySucceed
+);
+
+export const selectRemoveLocalityError = createSelector(
+  selectAll,
+  (state: LocalityState) => state.removeLocalityError
+);
