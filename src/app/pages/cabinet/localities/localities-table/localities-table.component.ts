@@ -127,12 +127,12 @@ export class LocalitiesTableComponent
                 .toString(),
               createdAt: formatDate(
                 locality.createdAt,
-                'dd.MM.yyyy - hh:mm',
+                'dd.MM.yyyy - HH:mm',
                 this.locale
               ),
               updatedAt: formatDate(
                 locality.updatedAt,
-                'dd.MM.yyyy - hh:mm',
+                'dd.MM.yyyy - HH:mm',
                 this.locale
               ),
             };
