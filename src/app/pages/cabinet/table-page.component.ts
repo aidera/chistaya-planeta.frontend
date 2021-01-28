@@ -82,6 +82,10 @@ export class TablePageComponent implements OnInit, OnDestroy {
     this.setInitialRequestSettings();
 
     this.activatedRoute.queryParams.subscribe((params) => {
+      if (params.display) {
+        this.displayedColumns = params.display.split(';');
+      }
+
       if (params.sortingField) {
         if (
           params.sortingType &&
@@ -243,6 +247,12 @@ export class TablePageComponent implements OnInit, OnDestroy {
           this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: {
+              display:
+                this.displayedColumns &&
+                JSON.stringify(this.displayedColumns) !==
+                  JSON.stringify(this.columnsCanBeDisplayed)
+                  ? this.displayedColumns.join(';')
+                  : undefined,
               sortingField: this.tableSorting
                 ? this.tableSorting.field
                 : undefined,
@@ -263,6 +273,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     this.tablePagination = { ...this.tablePagination, page: 1 };
     this.tableSorting = undefined;
     this.quickSearchValue = undefined;
+    this.displayedColumns = this.columnsCanBeDisplayed;
     this.initAdvancedSearchForm();
   }
 
@@ -273,6 +284,15 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   public onTableDisplay(event: TableDisplayOutputType[]): void {
     this.displayedColumns = event;
+
+    const isEqual =
+      JSON.stringify(event) === JSON.stringify(this.columnsCanBeDisplayed);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { display: isEqual ? undefined : event.join(';') },
+      queryParamsHandling: 'merge',
+    });
   }
 
   public onTableSort(event: TableSortType): void {
