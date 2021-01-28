@@ -1,8 +1,8 @@
 import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { debounceTime, tap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -38,10 +38,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   /* Form settings */
   public currentForm: 'quick' | 'advanced' = 'quick';
-  public quickSearchValue: string;
-  private quickSearchModelChanged: Subject<string> = new Subject<string>();
-  private quickSearch$: Subscription;
   public createAdvancedSearchForm: () => FormGroup;
+  public quickSearchForm: FormGroup;
   public advancedSearchForm: FormGroup;
 
   /* Request settings */
@@ -82,8 +80,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
       );
     }
 
-    this.initQuickSearch();
-
+    this.initQuickSearchForm();
     this.setInitialRequestSettings();
 
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -148,7 +145,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
       });
 
       if (hasFilter === false && params.search && params.search !== '') {
-        this.quickSearchValue = params.search;
+        this.quickSearchForm.get('search').setValue(params.search);
       }
 
       this.sendRequest();
@@ -161,9 +158,6 @@ export class TablePageComponent implements OnInit, OnDestroy {
     }
     if (this.pagination$) {
       this.pagination$.unsubscribe();
-    }
-    if (this.quickSearch$) {
-      this.quickSearch$.unsubscribe();
     }
   }
 
@@ -189,15 +183,14 @@ export class TablePageComponent implements OnInit, OnDestroy {
     return rawString;
   }
 
-  private initQuickSearch(): void {
-    this.quickSearch$ = this.quickSearchModelChanged
-      .pipe(
-        tap((text) => {
-          this.quickSearchValue = text;
-        }),
-        debounceTime(500)
-      )
-      .subscribe((text) => {
+  private initQuickSearchForm(): void {
+    this.quickSearchForm = new FormGroup({
+      search: new FormControl(''),
+    });
+
+    this.quickSearchForm.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe((formValues) => {
         this.router.navigate([], {
           relativeTo: this.activatedRoute,
           queryParams: {
@@ -206,15 +199,11 @@ export class TablePageComponent implements OnInit, OnDestroy {
               : undefined,
             sortingType: this.tableSorting ? this.tableSorting.type : undefined,
             page: this.tablePagination ? this.tablePagination.page : undefined,
-            search: this.quickSearchValue ? this.quickSearchValue : undefined,
+            search: formValues.search ? formValues.search : undefined,
           },
           queryParamsHandling: 'merge',
         });
       });
-  }
-
-  protected quickSearchInputChanges(): void {
-    this.quickSearchModelChanged.next(this.quickSearchValue);
   }
 
   private initAdvancedSearchForm(): void {
@@ -277,8 +266,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
   private setInitialRequestSettings(): void {
     this.tablePagination = { ...this.tablePagination, page: 1 };
     this.tableSorting = undefined;
-    this.quickSearchValue = undefined;
     this.displayedColumns = this.columnsCanBeDisplayed;
+    this.initQuickSearchForm();
     this.initAdvancedSearchForm();
   }
 
@@ -352,7 +341,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
               }
             : undefined,
         sorting: this.tableSorting,
-        search: this.quickSearchValue || undefined,
+        search: this.quickSearchForm.get('search').value || undefined,
         filter,
       });
     }

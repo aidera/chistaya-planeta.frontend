@@ -110,7 +110,7 @@ export class LocalitiesTableComponent
             return {
               id: this.highlightSearchedValue(
                 locality._id,
-                this.quickSearchValue
+                this.quickSearchForm.get('search').value
               ),
               status:
                 locality.status === SimpleStatus.active
@@ -118,7 +118,7 @@ export class LocalitiesTableComponent
                   : '<p class="red-text">Не активный</p>',
               name: this.highlightSearchedValue(
                 locality.name,
-                this.quickSearchValue
+                this.quickSearchForm.get('search').value
               ),
               divisions: locality.divisions
                 .map((division: IDivision, i) => {

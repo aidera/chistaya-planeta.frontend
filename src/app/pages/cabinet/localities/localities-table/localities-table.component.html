@@ -10,15 +10,14 @@
 <div class="cabinet-content" [ngSwitch]="currentForm">
   <form
     *ngSwitchCase="'quick'"
+    [formGroup]="quickSearchForm"
     class="cabinet-content__form cabinet-content__fast-search-form"
   >
     <div class="cabinet-content__form-content">
       <app-text-input
-        [value]="quickSearchValue"
-        (valueChange)="quickSearchValue = $event"
+        [control]="quickSearchForm.get('search')"
         [placeholder]="'Быстрый поиск...'"
         [icon]="'search.svg'"
-        (keydown)="quickSearchInputChanges()"
       ></app-text-input>
     </div>
     <div class="cabinet-content__links">

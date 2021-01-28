@@ -83,7 +83,9 @@ describe('TablePageComponent', () => {
 
     expect(component.tablePagination.page).toBe(1);
     expect(component.tableSorting).toBe(undefined);
-    expect(component.quickSearchValue).toBe(undefined);
+    expect(component.quickSearchForm.valid).toEqual(
+      component.quickSearchForm.valid
+    );
     expect(component.advancedSearchForm.valid).toEqual(
       component.advancedSearchForm.valid
     );
@@ -107,7 +109,9 @@ describe('TablePageComponent', () => {
 
     expect(component.tablePagination.page).toBe(1);
     expect(component.tableSorting).toBe(undefined);
-    expect(component.quickSearchValue).toBe(undefined);
+    expect(component.quickSearchForm.valid).toEqual(
+      component.quickSearchForm.valid
+    );
     expect(component.advancedSearchForm.valid).toEqual(
       component.advancedSearchForm.valid
     );

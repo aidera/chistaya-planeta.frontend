@@ -43,7 +43,6 @@ describe('LocalitiesTableComponent', () => {
         }),
       ],
       imports: [
-        FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
         MaterialModule,
