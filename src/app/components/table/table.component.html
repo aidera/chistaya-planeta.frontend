@@ -22,24 +22,17 @@
                 ></span>
               </button>
               <mat-menu #tableSettings="matMenu">
-                <div class="table__menu" (click)="$event.stopPropagation()">
+                <form
+                  class="table__menu"
+                  (click)="$event.stopPropagation()"
+                  [formGroup]="displayForm"
+                >
                   <div
                     *ngFor="let column of columnsData"
                     class="table__checkbox-container"
                   >
                     <app-checkbox
-                      [value]="
-                        displayedColumns &&
-                        displayedColumns.includes(column.key)
-                      "
-                      [disabled]="
-                        displayedColumns &&
-                        displayedColumns.includes(column.key) &&
-                        displayedColumns.length <= 1
-                      "
-                      (valueChange)="
-                        onDisplay({ field: column.key, status: $event })
-                      "
+                      [control]="displayForm.get(column.key)"
                       [label]="column.title"
                     ></app-checkbox>
                   </div>
@@ -50,16 +43,12 @@
                       displayedColumns &&
                       displayedColumns.length === columnsCanBeDisplayed.length
                     "
-                    (click)="
-                      onDisplay({
-                        status: true,
-                        all: true
-                      })
-                    "
+                    type="submit"
+                    (click)="displayAll()"
                   >
                     Выбрать всё
                   </button>
-                </div>
+                </form>
               </mat-menu>
             </div>
           </th>

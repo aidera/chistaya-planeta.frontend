@@ -4,17 +4,21 @@ import { Subject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { debounceTime, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
-import { TableColumnType } from '../../models/types/TableColumnType';
-import { TableDataType } from '../../models/types/TableDataType';
-import { TableDisplayOutputType } from '../../models/types/TableDisplayType';
-import { TableSortType } from '../../models/types/TableSortType';
 import { PaginationType } from '../../models/types/PaginationType';
 import * as fromRoot from '../../store/root.reducer';
 import { ConverterService } from '../../services/converter/converter.service';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
 import { dateISOStringRegex } from '../../utils/regexes';
+import {
+  TableColumnType,
+  TableDataType,
+  TableDisplayOutputType,
+  TableSortType,
+} from '../../components/table/table.component';
+import { removeURLParameter } from '../../utils/removeUrlParameter';
 
 @Component({
   template: '',
@@ -49,7 +53,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
     @Inject(LOCALE_ID) protected locale: string,
     protected converter: ConverterService,
     protected activatedRoute: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
+    protected location: Location
   ) {}
 
   ngOnInit(): void {
@@ -142,7 +147,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
         }
       });
 
-      if (hasFilter === false && params.search) {
+      if (hasFilter === false && params.search && params.search !== '') {
         this.quickSearchValue = params.search;
       }
 
@@ -201,7 +206,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
               : undefined,
             sortingType: this.tableSorting ? this.tableSorting.type : undefined,
             page: this.tablePagination ? this.tablePagination.page : undefined,
-            search: this.quickSearchValue,
+            search: this.quickSearchValue ? this.quickSearchValue : undefined,
           },
           queryParamsHandling: 'merge',
         });
@@ -225,7 +230,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
       this.advancedSearchForm.valueChanges
         .pipe(debounceTime(500))
-        .subscribe((next) => {
+        .subscribe((_) => {
           const values = {};
           Object.keys(this.advancedSearchForm.controls).forEach((field) => {
             const fieldValue = this.advancedSearchForm.get(field).value;
@@ -288,11 +293,22 @@ export class TablePageComponent implements OnInit, OnDestroy {
     const isEqual =
       JSON.stringify(event) === JSON.stringify(this.columnsCanBeDisplayed);
 
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { display: isEqual ? undefined : event.join(';') },
-      queryParamsHandling: 'merge',
-    });
+    const url = this.router.url;
+    const clearUrl = removeURLParameter(url, 'display');
+    let newUrl = clearUrl;
+
+    if (clearUrl.includes('?')) {
+      if (!isEqual) {
+        newUrl = clearUrl + '&display=' + event.join(';');
+      }
+    } else {
+      if (!isEqual) {
+        newUrl = clearUrl + '?display=' + event.join(';');
+      }
+    }
+
+    /* I used location here to not refresh request on display change */
+    this.location.go(newUrl);
   }
 
   public onTableSort(event: TableSortType): void {

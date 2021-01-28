@@ -4,13 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { LocalitiesTableComponent } from './localities-table.component';
 import { TablePageComponent } from '../../table-page.component';
 import { ConverterService } from '../../../../services/converter/converter.service';
 import { TableComponent } from '../../../../components/table/table.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
 import { DateTimeInputComponent } from '../../../../components/form-controls/date-time-input/date-time-input.component';
@@ -44,6 +44,7 @@ describe('LocalitiesTableComponent', () => {
       ],
       imports: [
         FormsModule,
+        ReactiveFormsModule,
         BrowserAnimationsModule,
         MaterialModule,
         RouterTestingModule,

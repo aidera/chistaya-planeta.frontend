@@ -1,18 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TableComponent } from './table.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxMaskModule } from 'ngx-mask';
+
+import { TableColumnType, TableComponent } from './table.component';
 import { TextInputComponent } from '../form-controls/text-input/text-input.component';
 import { CheckboxComponent } from '../form-controls/checkbox/checkbox.component';
 import { DateInputComponent } from '../form-controls/date-input/date-input.component';
-import { HttpClientModule } from '@angular/common/http';
-import { InlineSVGModule } from 'ng-inline-svg';
-import { TableColumnType } from '../../models/types/TableColumnType';
-import { FormsModule } from '@angular/forms';
-import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from '../../modules/material/material.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 
 const mockColumnsData: TableColumnType[] = [
   {
@@ -72,7 +71,7 @@ describe('TableComponent', () => {
         DateInputComponent,
       ],
       imports: [
-        FormsModule,
+        ReactiveFormsModule,
         BrowserAnimationsModule,
         MaterialModule,
         RouterTestingModule,
@@ -95,6 +94,13 @@ describe('TableComponent', () => {
     ];
     component.columnsData = mockColumnsData;
     component.data = mockData;
+    component.displayForm = new FormGroup({
+      name: new FormControl(true),
+      surname: new FormControl(true),
+      age: new FormControl(true),
+      hobbies: new FormControl(true),
+      birth: new FormControl(true),
+    });
     fixture.detectChanges();
   });
 
@@ -132,107 +138,12 @@ describe('TableComponent', () => {
     it('should return with output all columns to display', () => {
       spyOn(component.display, 'emit');
 
-      component.onDisplay({
-        all: true,
-        status: true,
-      });
+      component.displayAll();
 
       expect(component.display.emit).toHaveBeenCalledTimes(1);
       expect(component.display.emit).toHaveBeenCalledWith(
         component.columnsCanBeDisplayed
       );
-    });
-
-    it('should not add a column to display, if displayedColumns is filled', () => {
-      spyOn(component.display, 'emit');
-
-      component.onDisplay({
-        status: true,
-        field: 'name',
-      });
-
-      expect(component.display.emit).toHaveBeenCalledTimes(0);
-    });
-
-    it('should add a new column to display with the columns info oder (check 1)', () => {
-      spyOn(component.display, 'emit');
-
-      component.displayedColumns = ['surname'];
-      fixture.detectChanges();
-
-      component.onDisplay({
-        status: true,
-        field: 'name',
-      });
-
-      expect(component.display.emit).toHaveBeenCalledTimes(1);
-      expect(component.display.emit).not.toHaveBeenCalledWith([
-        'surname',
-        'name',
-      ]);
-      expect(component.display.emit).toHaveBeenCalledWith(['name', 'surname']);
-    });
-
-    it('should add a new column to display with the columns info oder (check 2)', () => {
-      spyOn(component.display, 'emit');
-
-      component.displayedColumns = ['name'];
-      fixture.detectChanges();
-
-      component.onDisplay({
-        status: true,
-        field: 'surname',
-      });
-
-      expect(component.display.emit).toHaveBeenCalledTimes(1);
-      expect(component.display.emit).not.toHaveBeenCalledWith([
-        'surname',
-        'name',
-      ]);
-      expect(component.display.emit).toHaveBeenCalledWith(['name', 'surname']);
-    });
-
-    it('should remove a column to display', () => {
-      spyOn(component.display, 'emit');
-
-      component.displayedColumns = ['surname', 'name'];
-      fixture.detectChanges();
-
-      component.onDisplay({
-        status: false,
-        field: 'surname',
-      });
-
-      expect(component.display.emit).toHaveBeenCalledTimes(1);
-      expect(component.display.emit).toHaveBeenCalledWith(['name']);
-    });
-
-    it('should return an undefined when a column is removing to display and it was just one column', () => {
-      spyOn(component.display, 'emit');
-
-      component.displayedColumns = ['surname'];
-      fixture.detectChanges();
-
-      component.onDisplay({
-        status: false,
-        field: 'surname',
-      });
-
-      expect(component.display.emit).toHaveBeenCalledTimes(1);
-      expect(component.display.emit).toHaveBeenCalledWith(undefined);
-    });
-
-    it('should not emit a display action if values were incorrect', () => {
-      spyOn(component.display, 'emit');
-
-      component.displayedColumns = ['surname'];
-      fixture.detectChanges();
-
-      component.onDisplay({
-        status: false,
-      });
-
-      expect(component.display.emit).toHaveBeenCalledTimes(0);
     });
   });
 

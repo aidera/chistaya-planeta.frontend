@@ -21,11 +21,13 @@ import { rawUnitStrings } from '../../../../models/enums/RawUnit';
 import { PhonePipe } from '../../../../pipes/phone.pipe';
 import { paymentMethodStrings } from '../../../../models/enums/PaymentMethod';
 import { FilterType } from 'src/app/models/enums/FilterType';
-import { TableColumnType } from '../../../../models/types/TableColumnType';
-import { TableSortType } from '../../../../models/types/TableSortType';
-import { TableDisplayOutputType } from 'src/app/models/types/TableDisplayType';
 import { PaginationType } from '../../../../models/types/PaginationType';
 import { FormControl, FormGroup } from '@angular/forms';
+import {
+  TableColumnType,
+  TableDisplayOutputType,
+  TableSortType,
+} from 'src/app/components/table/table.component';
 
 @Component({
   selector: 'app-orders-table',

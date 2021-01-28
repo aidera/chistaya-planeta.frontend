@@ -1,14 +1,17 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { TableColumnType } from '../../models/types/TableColumnType';
-import { TableSortType } from '../../models/types/TableSortType';
-import {
-  TableDisplayType,
-  TableDisplayOutputType,
-} from '../../models/types/TableDisplayType';
-import { TableDataType } from '../../models/types/TableDataType';
 import { PaginationType } from '../../models/types/PaginationType';
+
+export type TableColumnType = {
+  key: string;
+  title: string;
+  isSorting?: boolean;
+};
+export type TableDataType = { [key: string]: any };
+export type TableDisplayOutputType = string;
+export type TableSortType = { field: string; type: 'asc' | 'desc' };
 
 @Component({
   selector: 'app-table',
@@ -30,71 +33,72 @@ export class TableComponent implements OnInit {
   @Output() paginate = new EventEmitter<number>();
   @Output() itemClick = new EventEmitter<number>();
 
+  public displayForm: FormGroup;
+
   ngOnInit(): void {
     if (this.displayedColumns === undefined) {
       this.displayedColumns = this.columnsCanBeDisplayed;
     }
+    this.initDisplayForm();
   }
 
-  findColumnInfo(field: string): TableColumnType {
+  public findColumnInfo(field: string): TableColumnType {
     return this.columnsData.find((el) => el.key === field);
   }
 
-  onDisplay(event: TableDisplayType): void {
-    /* Показать все */
-    if (event.all === true && event.status === true) {
-      this.display.emit(this.columnsCanBeDisplayed);
-    }
+  private initDisplayForm(): void {
+    const controls: { [key: string]: FormControl } = {};
 
-    /* Другие действия */
-    if (!event.all && event.status !== undefined && event.field !== undefined) {
-      const isExist = this.displayedColumns.includes(event.field);
-      if (isExist) {
-        /* Скрыть */
-        if (!event.status) {
-          const index = this.displayedColumns.indexOf(event.field);
-          const newDisplayedColumns = [];
-          this.displayedColumns.forEach((column, i) => {
-            if (i !== index) {
-              newDisplayedColumns.push(column);
-            }
-          });
-          if (newDisplayedColumns.length <= 0) {
-            this.display.emit(undefined);
-          } else {
-            this.display.emit(newDisplayedColumns);
-          }
-        }
-      } else {
-        /* Показать */
-        if (event.status) {
-          const newDisplayedColumns: TableDisplayOutputType[] = [];
-
-          this.columnsCanBeDisplayed.forEach((column) => {
-            if (
-              this.displayedColumns.includes(column) ||
-              column === event.field
-            ) {
-              newDisplayedColumns.push(column);
-            }
-          });
-
-          this.display.emit(newDisplayedColumns);
-        } else {
-          const filteredFields = this.displayedColumns.filter(
-            (el) => el !== event.field
-          );
-          if (filteredFields.length <= 0) {
-            this.display.emit(undefined);
-          } else {
-            this.display.emit(filteredFields);
-          }
-        }
+    let trueCountInit = 0;
+    this.columnsCanBeDisplayed.forEach((field) => {
+      controls[field] = new FormControl(this.displayedColumns.includes(field));
+      if (this.displayedColumns.includes(field)) {
+        trueCountInit += 1;
       }
-    }
+    });
+
+    this.displayForm = new FormGroup(controls);
+
+    this.columnsCanBeDisplayed.forEach((field) => {
+      if (trueCountInit <= 1 && this.displayForm.get(field).value === true) {
+        this.displayForm.get(field).disable({ emitEvent: false });
+      } else {
+        this.displayForm.get(field).enable({ emitEvent: false });
+      }
+    });
+
+    this.displayForm.valueChanges.subscribe((_) => {
+      const newDisplayedColumns: TableDisplayOutputType[] = [];
+      let trueCount = 0;
+
+      Object.keys(this.displayForm.controls).forEach((key) => {
+        if (this.displayForm.get(key).value) {
+          newDisplayedColumns.push(key);
+          trueCount += 1;
+        }
+      });
+
+      Object.keys(this.displayForm.controls).forEach((key) => {
+        if (trueCount <= 1 && this.displayForm.get(key).value === true) {
+          this.displayForm.get(key).disable({ emitEvent: false });
+        } else {
+          this.displayForm.get(key).enable({ emitEvent: false });
+        }
+      });
+
+      this.display.emit(newDisplayedColumns);
+    });
   }
 
-  onSort(field: string): void {
+  public displayAll(): void {
+    const controls = {};
+    Object.keys(this.displayForm.controls).forEach((field) => {
+      controls[field] = true;
+    });
+    this.displayForm.setValue(controls);
+  }
+
+  public onSort(field: string): void {
     let sortType: 'asc' | 'desc' = 'asc';
     if (
       this.sorting &&
@@ -106,11 +110,11 @@ export class TableComponent implements OnInit {
     this.sort.emit({ field, type: sortType });
   }
 
-  onPaginate(page: PageEvent): void {
+  public onPaginate(page: PageEvent): void {
     this.paginate.emit(page.pageIndex);
   }
 
-  onItemClick(index: number): void {
+  public onItemClick(index: number): void {
     this.itemClick.emit(index);
   }
 }
