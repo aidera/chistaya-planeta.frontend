@@ -1,7 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import {
   MatSnackBar,
   MatSnackBarRef,
@@ -10,6 +9,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../store/root.reducer';
+import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 
 @Component({
   template: '',
@@ -28,8 +28,8 @@ export class ItemAddPageComponent implements OnDestroy {
     protected store: Store<fromRoot.State>,
     protected route: ActivatedRoute,
     protected router: Router,
-    protected location: Location,
-    protected snackBar: MatSnackBar
+    protected snackBar: MatSnackBar,
+    private routingState: RoutingStateService
   ) {}
   ngOnDestroy(): void {
     if (this.isFetching$) {
@@ -48,6 +48,6 @@ export class ItemAddPageComponent implements OnDestroy {
   }
 
   public goToPreviousPage(): void {
-    this.location.back();
+    this.routingState.goToPreviousPage(this.route);
   }
 }

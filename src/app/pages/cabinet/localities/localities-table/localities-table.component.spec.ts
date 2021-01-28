@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 import { LocalitiesTableComponent } from './localities-table.component';
 import { TablePageComponent } from '../../table-page.component';
-import { ConverterService } from '../../../../services/converter.service';
+import { ConverterService } from '../../../../services/converter/converter.service';
 import { TableComponent } from '../../../../components/table/table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../../../modules/material/material.module';

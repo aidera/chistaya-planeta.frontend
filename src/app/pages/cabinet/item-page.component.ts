@@ -8,11 +8,11 @@ import {
 } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 
 import * as fromRoot from '../../store/root.reducer';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { ModalAction } from '../../components/modal/modal.component';
+import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 
 @Component({
   template: '',
@@ -42,8 +42,8 @@ export class ItemPageComponent implements OnDestroy {
     protected store: Store<fromRoot.State>,
     protected route: ActivatedRoute,
     protected router: Router,
-    protected location: Location,
-    protected snackBar: MatSnackBar
+    protected snackBar: MatSnackBar,
+    private routingState: RoutingStateService
   ) {}
 
   ngOnDestroy(): void {
@@ -85,7 +85,7 @@ export class ItemPageComponent implements OnDestroy {
   }
 
   public goToPreviousPage(): void {
-    this.location.back();
+    this.routingState.goToPreviousPage(this.route);
   }
 
   public onRemoveModalAction(action: ModalAction): void {

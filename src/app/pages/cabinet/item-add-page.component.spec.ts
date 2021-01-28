@@ -4,6 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { ItemAddPageComponent } from './item-add-page.component';
 import { MaterialModule } from '../../modules/material/material.module';
+import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 
 describe('ItemAddComponent', () => {
   let component: ItemAddPageComponent;
@@ -14,6 +15,7 @@ describe('ItemAddComponent', () => {
       declarations: [ItemAddPageComponent],
       imports: [MaterialModule, RouterTestingModule],
       providers: [
+        RoutingStateService,
         provideMockStore({
           initialState: {},
         }),

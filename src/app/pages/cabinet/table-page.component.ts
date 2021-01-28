@@ -11,7 +11,7 @@ import { TableDisplayOutputType } from '../../models/types/TableDisplayType';
 import { TableSortType } from '../../models/types/TableSortType';
 import { PaginationType } from '../../models/types/PaginationType';
 import * as fromRoot from '../../store/root.reducer';
-import { ConverterService } from '../../services/converter.service';
+import { ConverterService } from '../../services/converter/converter.service';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
 import { dateISOStringRegex } from '../../utils/regexes';
