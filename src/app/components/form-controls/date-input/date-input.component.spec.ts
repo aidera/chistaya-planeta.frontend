@@ -3,7 +3,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -26,7 +25,6 @@ describe('DateInputComponent', () => {
       declarations: [DateInputComponent],
       imports: [
         ReactiveFormsModule,
-        FormsModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
         MatDatepickerModule,
@@ -91,33 +89,5 @@ describe('DateInputComponent', () => {
     const htmlLabelElement = fixture.debugElement.query(By.css('label'))
       .nativeElement;
     expect(htmlLabelElement.innerHTML).toContain('test label');
-  });
-
-  it('should be displayed if template-driven form is using', () => {
-    fixture = TestBed.createComponent(DateInputComponent);
-    component = fixture.debugElement.componentInstance;
-    component.value = new Date();
-    component.onValueChange = () => {};
-    component.fieldId = 'test';
-    fixture.detectChanges();
-
-    expect(component).toBeTruthy();
-  });
-
-  it('should be displayed with the right value if template-driven form is using', () => {
-    fixture = TestBed.createComponent(DateInputComponent);
-    component = fixture.debugElement.componentInstance;
-    const value = new Date();
-    value.setHours(0, 0, 0, 0);
-    component.value = value;
-    component.onValueChange = () => {};
-    component.fieldId = 'test';
-    fixture.detectChanges();
-
-    const inputElement = fixture.debugElement.query(
-      By.css('.mat-input-element')
-    ).nativeElement;
-    const date = new Date(inputElement.getAttribute('ng-reflect-model'));
-    expect(date.getDate()).toEqual(value.getDate());
   });
 });

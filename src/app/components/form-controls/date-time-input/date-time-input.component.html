@@ -1,16 +1,10 @@
-<div class="combined-fields">
-  <app-date-input
-    [value]="dateValue"
-    (valueChange)="onDateChange($event)"
-    [label]="label"
-  ></app-date-input>
+<div class="combined-fields" [formGroup]="form">
+  <app-date-input [control]="form.get('date')" [label]="label"></app-date-input>
 
   <app-text-input
-    [value]="timeValue"
-    (valueChange)="onTimeChange($event)"
+    [control]="form.get('time')"
     label="&nbsp;"
     [mask]="'Hh:m0'"
     [maskDropSpecialCharacters]="false"
-    [disabled]="!dateValue"
   ></app-text-input>
 </div>

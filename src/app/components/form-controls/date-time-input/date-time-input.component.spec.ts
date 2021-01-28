@@ -1,10 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -31,7 +26,6 @@ describe('DateTimeInputComponent', () => {
       ],
       imports: [
         ReactiveFormsModule,
-        FormsModule,
         HttpClientModule,
         NgxMaskModule.forRoot(),
         MatDatepickerModule,
@@ -51,7 +45,6 @@ describe('DateTimeInputComponent', () => {
       test: new FormControl(''),
     });
     component.control = form.get('test');
-    component.value = undefined;
     component.fieldId = 'test';
     fixture.detectChanges();
   });
@@ -64,8 +57,8 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    expect(component.timeValue).toBe('');
-    expect(component.dateValue).toBe(undefined);
+    expect(component.form.get('date').value).toBe('');
+    expect(component.form.get('time').value).toBe('');
   });
 
   it('should be with date and time values, if control value was not undefined or empty', () => {
@@ -73,28 +66,8 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    expect(component.timeValue).not.toBe('');
-    expect(component.dateValue).not.toBe(undefined);
-  });
-
-  it('should be with undefined date and empty time values, if primary value was  empty', () => {
-    component.control = undefined;
-    component.value = '';
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(component.timeValue).toBe('');
-    expect(component.dateValue).toBe(undefined);
-  });
-
-  it('should be with date and time values, if primary value was not undefined or empty', () => {
-    component.control = undefined;
-    component.value = new Date();
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(component.timeValue).not.toBe('');
-    expect(component.dateValue).not.toBe(undefined);
+    expect(component.form.get('date').value).not.toBe('');
+    expect(component.form.get('time').value).not.toBe('');
   });
 
   it('should be with correct time value that includes : symbol', () => {
@@ -102,7 +75,7 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    expect(component.timeValue).toContain(':');
+    expect(component.form.get('time').value).toContain(':');
   });
 
   it('should be with correct time value that length is 1 or 2 symbols for hours and 2 symbols for minutes', () => {
@@ -110,7 +83,7 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    const split = component.timeValue.split(':');
+    const split = component.form.get('time').value.split(':');
     expect(split).toBeTruthy();
     expect(split.length).toBe(2);
     expect(split[0].length).toBeGreaterThan(0);
@@ -123,7 +96,7 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    const split = component.timeValue.split(':');
+    const split = component.form.get('time').value.split(':');
     expect(split).toBeTruthy();
     expect(Number.isInteger(+split[0])).toBeTrue();
     expect(Number.isInteger(+split[1])).toBeTrue();
@@ -134,7 +107,7 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    component.setDateTime(component.dateValue, '4:32');
+    component.setDateTime(component.form.get('date').value, '4:32');
     fixture.detectChanges();
 
     expect(component.control.value.getHours()).toBe(4);
@@ -146,7 +119,7 @@ describe('DateTimeInputComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    component.setDateTime(component.dateValue, '14:32');
+    component.setDateTime(component.form.get('date').value, '14:32');
     fixture.detectChanges();
 
     expect(component.control.value.getHours()).toBe(14);
@@ -213,14 +186,13 @@ describe('DateTimeInputComponent', () => {
     'should set time to 00:00 if the date was picked first time ' +
       '(or when pass empty string to time parameter in setDateTime function)',
     () => {
-      component.control.setValue(new Date());
       component.ngOnInit();
       fixture.detectChanges();
 
       component.setDateTime(new Date(), '');
       fixture.detectChanges();
 
-      expect(component.timeValue).toBe('00:00');
+      expect(component.form.get('time').value).toBe('00:00');
     }
   );
 });

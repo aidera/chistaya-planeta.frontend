@@ -10,7 +10,6 @@
 
   <div class="input-wrapper">
     <input
-      *ngIf="control"
       [formControl]="control"
       [id]="fieldId"
       [type]="type"
@@ -20,22 +19,6 @@
       [prefix]="prefix || ''"
       [mask]="mask"
       [dropSpecialCharacters]="maskDropSpecialCharacters"
-    />
-
-    <input
-      *ngIf="!control"
-      [ngModel]="value"
-      (ngModelChange)="onValueChange($event)"
-      ngDefaultControl
-      [id]="fieldId"
-      [type]="type"
-      autocomplete="off"
-      matInput
-      [placeholder]="placeholder"
-      [prefix]="prefix || ''"
-      [mask]="mask"
-      [dropSpecialCharacters]="maskDropSpecialCharacters"
-      [disabled]="disabled"
     />
 
     <span

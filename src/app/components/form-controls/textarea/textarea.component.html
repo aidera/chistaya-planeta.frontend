@@ -9,19 +9,7 @@
   </label>
 
   <textarea
-    *ngIf="control"
     [formControl]="control"
-    [id]="fieldId"
-    autocomplete="off"
-    matInput
-    rows="4"
-  ></textarea>
-
-  <textarea
-    *ngIf="!control"
-    [ngModel]="value"
-    (ngModelChange)="onValueChange($event)"
-    ngDefaultControl
     [id]="fieldId"
     autocomplete="off"
     matInput

@@ -10,7 +10,6 @@
 
   <div class="input-wrapper" (click)="picker.open(); isDatepickerOpen = true">
     <input
-      *ngIf="control"
       [formControl]="control"
       [id]="fieldId"
       [matDatepicker]="picker"
@@ -19,20 +18,6 @@
       [min]="minDate"
       [max]="maxDate"
       [value]="control.value"
-    />
-
-    <input
-      *ngIf="!control"
-      [ngModel]="value"
-      (ngModelChange)="onValueChange($event)"
-      ngDefaultControl
-      [id]="fieldId"
-      [matDatepicker]="picker"
-      autocomplete="off"
-      matInput
-      [min]="minDate"
-      [max]="maxDate"
-      [disabled]="true"
     />
 
     <mat-datepicker
