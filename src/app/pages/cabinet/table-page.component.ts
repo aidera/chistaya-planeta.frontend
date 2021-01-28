@@ -158,7 +158,10 @@ export class TablePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  highlightSearchedValue(rawString: string, searchValue: string): string {
+  protected highlightSearchedValue(
+    rawString: string,
+    searchValue: string
+  ): string {
     if (searchValue) {
       const clearQuickSearchValue = this.converter
         .clearServerRequestString(searchValue)
@@ -177,7 +180,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     return rawString;
   }
 
-  initQuickSearch(): void {
+  private initQuickSearch(): void {
     this.quickSearch$ = this.quickSearchModelChanged
       .pipe(
         tap((text) => {
@@ -201,11 +204,11 @@ export class TablePageComponent implements OnInit, OnDestroy {
       });
   }
 
-  quickSearchInputChanges(): void {
+  protected quickSearchInputChanges(): void {
     this.quickSearchModelChanged.next(this.quickSearchValue);
   }
 
-  initAdvancedSearchForm(): void {
+  private initAdvancedSearchForm(): void {
     if (this.advancedSearchForm) {
       const defaultValuesForm = this.createAdvancedSearchForm();
       Object.keys(this.advancedSearchForm.controls).forEach((key) => {
@@ -256,23 +259,23 @@ export class TablePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  setInitialRequestSettings(): void {
+  private setInitialRequestSettings(): void {
     this.tablePagination = { ...this.tablePagination, page: 1 };
     this.tableSorting = undefined;
     this.quickSearchValue = undefined;
     this.initAdvancedSearchForm();
   }
 
-  setCurrentForm(value: 'quick' | 'advanced'): void {
+  public setCurrentForm(value: 'quick' | 'advanced'): void {
     this.setInitialRequestSettings();
     this.currentForm = value;
   }
 
-  onTableDisplay(event: TableDisplayOutputType[]): void {
+  public onTableDisplay(event: TableDisplayOutputType[]): void {
     this.displayedColumns = event;
   }
 
-  onTableSort(event: TableSortType): void {
+  public onTableSort(event: TableSortType): void {
     this.tableSorting = event;
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
@@ -284,7 +287,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onTablePaginate(newPage: number): void {
+  public onTablePaginate(newPage: number): void {
     this.tablePagination.page = newPage;
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
@@ -293,9 +296,9 @@ export class TablePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onTableItemClick(index: number): void {}
+  public onTableItemClick(index: number): void {}
 
-  sendRequest(): void {
+  public sendRequest(): void {
     let filter;
     if (this.currentForm === 'advanced' && this.advancedSearchForm) {
       filter =
@@ -319,7 +322,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetRequest(): void {
+  public resetRequest(): void {
     this.setInitialRequestSettings();
   }
 }

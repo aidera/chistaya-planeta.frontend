@@ -17,9 +17,9 @@ import { ModalAction } from '../../../../components/modal/modal.component';
 export class LocalityItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
-  localityId: string;
-  locality$: Subscription;
-  locality: ILocality | null;
+  private localityId: string;
+  private locality$: Subscription;
+  public locality: ILocality | null;
 
   localityStatusString = 'Статус';
 
@@ -124,13 +124,13 @@ export class LocalityItemComponent
     }
   }
 
-  initForm(): void {
+  private initForm(): void {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
     });
   }
 
-  enable(): void {
+  public enable(): void {
     this.store.dispatch(
       LocalitiesActions.updateLocalityStatusRequest({
         id: this.locality._id,
@@ -139,7 +139,7 @@ export class LocalityItemComponent
     );
   }
 
-  disable(): void {
+  public disable(): void {
     this.store.dispatch(
       LocalitiesActions.updateLocalityStatusRequest({
         id: this.locality._id,
@@ -148,7 +148,7 @@ export class LocalityItemComponent
     );
   }
 
-  update(): void {
+  public update(): void {
     if (
       this.activeField &&
       !this.isUpdating &&
@@ -163,9 +163,7 @@ export class LocalityItemComponent
     }
   }
 
-  remove(): void {}
-
-  onRemoveModalAction(action: ModalAction): void {
+  public onRemoveModalAction(action: ModalAction): void {
     super.onRemoveModalAction(action);
     if (action === 'reject') {
       this.store.dispatch(

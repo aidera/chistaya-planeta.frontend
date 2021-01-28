@@ -163,7 +163,7 @@ export class LocalitiesTableComponent
     }
   }
 
-  onTableItemClick(index: number): void {
+  public onTableItemClick(index: number): void {
     const currentItemId =
       this.localities && this.localities[index] && this.localities[index]._id
         ? this.localities[index]._id

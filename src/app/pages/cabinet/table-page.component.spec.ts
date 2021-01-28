@@ -77,8 +77,8 @@ describe('TablePageComponent', () => {
     expect(component.advancedSearchForm).toBeDefined();
   });
 
-  it('should update vars correctly if setInitialonTableRequestSettings is called', () => {
-    component.setInitialRequestSettings();
+  it('should update vars correctly if setInitialRequestSettings is called', () => {
+    component.ngOnInit();
     fixture.detectChanges();
 
     expect(component.tablePagination.page).toBe(1);

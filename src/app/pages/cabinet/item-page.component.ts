@@ -70,11 +70,11 @@ export class ItemPageComponent implements OnDestroy {
     }
   }
 
-  setActiveField(fieldName: string): void {
+  public setActiveField(fieldName: string): void {
     this.activeField = fieldName;
   }
 
-  removeActiveField(fieldName: string, controlValue): void {
+  public removeActiveField(fieldName: string, controlValue): void {
     if (this.activeField === fieldName) {
       this.activeField = null;
 
@@ -84,11 +84,11 @@ export class ItemPageComponent implements OnDestroy {
     }
   }
 
-  goToPreviousPage(): void {
+  public goToPreviousPage(): void {
     this.location.back();
   }
 
-  onRemoveModalAction(action: ModalAction): void {
+  public onRemoveModalAction(action: ModalAction): void {
     switch (action) {
       case 'cancel':
         this.isRemoveModalOpen = false;
@@ -99,19 +99,19 @@ export class ItemPageComponent implements OnDestroy {
     }
   }
 
-  enable(): void {
+  public enable(): void {
     console.log('enable');
   }
 
-  disable(): void {
+  public disable(): void {
     console.log('disable');
   }
 
-  update(): void {
+  public update(): void {
     console.log('update');
   }
 
-  remove(): void {
+  public remove(): void {
     console.log('remove');
   }
 }
