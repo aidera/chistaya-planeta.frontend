@@ -19,6 +19,7 @@ import {
   TableSortType,
 } from '../../components/table/table.component';
 import { removeURLParameter } from '../../utils/removeUrlParameter';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 @Component({
   template: '',
@@ -44,7 +45,10 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   /* Request settings */
   public createServerRequestFilter?: () => ServerFilterRequest | undefined;
-  public onTableRequest: (request: GetRouteParamsType) => any;
+  public onTableRequest: (
+    request: GetRouteParamsType,
+    withLoading: boolean
+  ) => any;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -52,7 +56,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
     protected converter: ConverterService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected location: Location
+    protected location: Location,
+    protected socket: SocketIoService
   ) {}
 
   ngOnInit(): void {
@@ -148,7 +153,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
         this.quickSearchForm.get('search').setValue(params.search);
       }
 
-      this.sendRequest();
+      this.sendRequest(true);
     });
   }
 
@@ -313,17 +318,17 @@ export class TablePageComponent implements OnInit, OnDestroy {
   }
 
   public onTablePaginate(newPage: number): void {
-    this.tablePagination.page = newPage;
+    this.tablePagination = { ...this.tablePagination, page: newPage };
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
-      queryParams: { page: newPage },
+      queryParams: { page: this.tablePagination.page },
       queryParamsHandling: 'merge',
     });
   }
 
   public onTableItemClick(index: number): void {}
 
-  public sendRequest(): void {
+  public sendRequest(withLoading: boolean): void {
     let filter;
     if (this.currentForm === 'advanced' && this.advancedSearchForm) {
       filter =
@@ -333,17 +338,20 @@ export class TablePageComponent implements OnInit, OnDestroy {
     }
 
     if (this.onTableRequest) {
-      this.onTableRequest({
-        pagination:
-          this.tablePagination && this.tablePagination.page
-            ? {
-                page: this.tablePagination.page,
-              }
-            : undefined,
-        sorting: this.tableSorting,
-        search: this.quickSearchForm.get('search').value || undefined,
-        filter,
-      });
+      this.onTableRequest(
+        {
+          pagination:
+            this.tablePagination && this.tablePagination.page
+              ? {
+                  page: this.tablePagination.page,
+                }
+              : undefined,
+          sorting: this.tableSorting,
+          search: this.quickSearchForm.get('search').value || undefined,
+          filter,
+        },
+        withLoading
+      );
     }
   }
 

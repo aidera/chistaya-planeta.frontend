@@ -111,7 +111,7 @@ export class TableComponent implements OnInit {
   }
 
   public onPaginate(page: PageEvent): void {
-    this.paginate.emit(page.pageIndex);
+    this.paginate.emit(page.pageIndex + 1);
   }
 
   public onItemClick(index: number): void {

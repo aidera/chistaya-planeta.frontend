@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { TablePageComponent } from './table-page.component';
 import { ConverterService } from '../../services/converter/converter.service';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 describe('TablePageComponent', () => {
   let component: TablePageComponent;
@@ -14,6 +15,7 @@ describe('TablePageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [TablePageComponent],
       providers: [
+        SocketIoService,
         { provide: ConverterService },
         provideMockStore({
           initialState: {},
@@ -159,7 +161,7 @@ describe('TablePageComponent', () => {
 
   it('should call onTableRequest if sendRequest is called', () => {
     const onTableRequestSpy = spyOn(component, 'onTableRequest');
-    component.sendRequest();
+    component.sendRequest(true);
     fixture.detectChanges();
 
     expect(onTableRequestSpy).toHaveBeenCalledTimes(1);
@@ -179,15 +181,18 @@ describe('TablePageComponent', () => {
       };
     };
     component.currentForm = 'advanced';
-    component.sendRequest();
+    component.sendRequest(true);
     fixture.detectChanges();
 
     expect(onTableRequestSpy).toHaveBeenCalledTimes(1);
-    expect(onTableRequestSpy).toHaveBeenCalledWith({
-      pagination: { page: 3 },
-      filter: { name: 'leo' },
-      search: undefined,
-      sorting: undefined,
-    });
+    expect(onTableRequestSpy).toHaveBeenCalledWith(
+      {
+        pagination: { page: 3 },
+        filter: { name: 'leo' },
+        search: undefined,
+        sorting: undefined,
+      },
+      true
+    );
   });
 });

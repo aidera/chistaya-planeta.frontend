@@ -6,6 +6,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ItemPageComponent } from './item-page.component';
 import { MaterialModule } from '../../modules/material/material.module';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 describe('ItemPageComponent', () => {
   let component: ItemPageComponent;
@@ -17,6 +18,7 @@ describe('ItemPageComponent', () => {
       imports: [MaterialModule, RouterTestingModule],
       providers: [
         RoutingStateService,
+        SocketIoService,
         provideMockStore({
           initialState: {},
         }),

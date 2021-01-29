@@ -209,7 +209,7 @@ describe('TableComponent', () => {
       });
 
       expect(component.paginate.emit).toHaveBeenCalledTimes(1);
-      expect(component.paginate.emit).toHaveBeenCalledWith(2);
+      expect(component.paginate.emit).toHaveBeenCalledWith(3);
     });
   });
 

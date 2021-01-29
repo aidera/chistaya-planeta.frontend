@@ -22,6 +22,10 @@ export class LocalitiesTableComponent
   private localities: ILocality[];
 
   ngOnInit(): void {
+    /* ---------------------- */
+    /* --- Table settings --- */
+    /* ---------------------- */
+
     this.tableColumns = [
       {
         key: 'id',
@@ -63,6 +67,10 @@ export class LocalitiesTableComponent
       return column.key;
     });
 
+    /* ---------------------- */
+    /* --- Forms settings --- */
+    /* ---------------------- */
+
     this.createAdvancedSearchForm = () => {
       return new FormGroup({
         id: new FormControl(''),
@@ -74,6 +82,10 @@ export class LocalitiesTableComponent
         updatedAtTo: new FormControl(''),
       });
     };
+
+    /* ----------------------- */
+    /* --- Request actions --- */
+    /* ----------------------- */
 
     this.createServerRequestFilter = () => {
       return {
@@ -97,9 +109,33 @@ export class LocalitiesTableComponent
       };
     };
 
-    this.onTableRequest = (request) => {
-      this.store.dispatch(LocalitiesActions.getLocalitiesRequest(request));
+    this.onTableRequest = (request, withLoading) => {
+      this.store.dispatch(
+        LocalitiesActions.getLocalitiesRequest({ params: request, withLoading })
+      );
     };
+
+    if (this.socket.get()) {
+      this.socket.get().on('localities', (data) => {
+        if (data.action === 'add' || data.action === 'delete') {
+          this.sendRequest(false);
+        }
+        if (data.action === 'update' && data.id) {
+          if (this.localities && this.localities.length > 0) {
+            const isExist = this.localities.find((locality) => {
+              return locality._id === data.id;
+            });
+            if (isExist) {
+              this.sendRequest(false);
+            }
+          }
+        }
+      });
+    }
+
+    /* ------------------------ */
+    /* --- NgRx connections --- */
+    /* ------------------------ */
 
     this.localities$ = this.store
       .select(LocalitiesSelectors.selectLocalities)
@@ -155,6 +191,10 @@ export class LocalitiesTableComponent
       .subscribe((pagination) => {
         this.tablePagination = pagination;
       });
+
+    /* --------------------------- */
+    /* --- Parent class ngInit --- */
+    /* --------------------------- */
 
     super.ngOnInit();
   }

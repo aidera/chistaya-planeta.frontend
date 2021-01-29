@@ -13,6 +13,7 @@ import * as fromRoot from '../../store/root.reducer';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { ModalAction } from '../../components/modal/modal.component';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 @Component({
   template: '',
@@ -43,7 +44,8 @@ export class ItemPageComponent implements OnDestroy {
     protected route: ActivatedRoute,
     protected router: Router,
     protected snackBar: MatSnackBar,
-    private routingState: RoutingStateService
+    private routingState: RoutingStateService,
+    protected socket: SocketIoService
   ) {}
 
   ngOnDestroy(): void {

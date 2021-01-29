@@ -69,7 +69,7 @@ export const REFRESH_REMOVE_LOCALITY_SUCCESS =
 
 export const getLocalitiesRequest = createAction(
   GET_LOCALITIES_REQUEST,
-  props<GetRouteParamsType>()
+  props<{ params: GetRouteParamsType; withLoading: boolean }>()
 );
 export const getLocalitiesSuccess = createAction(
   GET_LOCALITIES_SUCCESS,

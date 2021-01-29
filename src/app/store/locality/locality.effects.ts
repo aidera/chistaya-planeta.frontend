@@ -19,10 +19,10 @@ export class LocalityEffects {
       switchMap((action) => {
         return this.localityApi
           .get({
-            pagination: action.pagination,
-            sorting: action.sorting,
-            filter: action.filter,
-            search: action.search,
+            pagination: action.params.pagination,
+            sorting: action.params.sorting,
+            filter: action.params.filter,
+            search: action.params.search,
           })
           .pipe(
             map((resData) => {

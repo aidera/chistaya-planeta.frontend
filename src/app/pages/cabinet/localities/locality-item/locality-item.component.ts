@@ -25,9 +25,20 @@ export class LocalityItemComponent
 
   ngOnInit(): void {
     this.localityId = this.route.snapshot.paramMap.get('id') as string;
-    this.store.dispatch(
-      LocalitiesActions.getLocalityRequest({ id: this.localityId })
-    );
+    this.getItemRequest();
+
+    if (this.socket.get()) {
+      this.socket.get().on('localities', (data) => {
+        if (data.action === 'add' || data.action === 'delete') {
+          this.getItemRequest();
+        }
+        if (data.action === 'update' && data.id) {
+          if (this.locality && this.locality._id === data.id) {
+            this.getItemRequest();
+          }
+        }
+      });
+    }
 
     this.locality$ = this.store
       .select(LocalitiesSelectors.selectLocality)
@@ -128,6 +139,12 @@ export class LocalityItemComponent
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
     });
+  }
+
+  public getItemRequest(): void {
+    this.store.dispatch(
+      LocalitiesActions.getLocalityRequest({ id: this.localityId })
+    );
   }
 
   public enable(): void {
