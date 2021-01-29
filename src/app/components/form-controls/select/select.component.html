@@ -9,7 +9,15 @@
   </label>
 
   <mat-select [formControl]="control" [multiple]="isMultiple" [id]="fieldId">
-    <mat-option *ngFor="let option of options" [value]="option.value">
+    <mat-option
+      *ngFor="let option of options"
+      [value]="option.value"
+      [disabled]="
+        shouldMultipleBeActiveAlLeast &&
+        control.value.length <= shouldMultipleBeActiveAlLeast &&
+        control.value.includes(option.value)
+      "
+    >
       {{ option.text }}
     </mat-option>
   </mat-select>
