@@ -16,32 +16,82 @@ export class DateTimeInputComponent
 
   public form: FormGroup;
 
-  ngOnInit(): void {
-    this.formInit();
-
-    if (this.control) {
-      if (this.control.value) {
-        const controlDate = new Date(this.control.value);
-
-        if (!isNaN(controlDate.getDate())) {
-          let hoursString = this.control.value.getHours();
-          hoursString = hoursString < 10 ? '0' + hoursString : '' + hoursString;
-          let minutesString = this.control.value.getMinutes();
-          minutesString =
-            minutesString < 10 ? '0' + minutesString : '' + minutesString;
-          this.form.setValue({
-            date: new Date(controlDate.setHours(0, 0, 0, 0)),
-            time: hoursString + ':' + minutesString,
-          });
-        }
-      }
+  static getTimeFromString(timeString): { hours: number; minutes: number } {
+    const splitTime = timeString.split(':');
+    if (
+      splitTime &&
+      splitTime.length > 1 &&
+      splitTime[0].length > 0 &&
+      splitTime[1].length > 1 &&
+      +splitTime[0] < 24 &&
+      +splitTime[0] >= 0 &&
+      +splitTime[1] < 60 &&
+      +splitTime[1] >= 0
+    ) {
+      return {
+        hours: +splitTime[0],
+        minutes: +splitTime[1],
+      };
+    } else {
+      return {
+        hours: 0,
+        minutes: 0,
+      };
     }
   }
 
-  private formInit(): void {
+  static getTimelessDate(dateTime): Date | string {
+    const newDate = new Date(dateTime);
+    if (!isNaN(newDate.getDate())) {
+      newDate.setHours(0, 0, 0, 0);
+      return newDate;
+    } else {
+      return '';
+    }
+  }
+
+  static getTimeString(dateTime): string {
+    const newDate = new Date(dateTime);
+    if (!isNaN(newDate.getDate())) {
+      let hoursString = dateTime.getHours();
+      hoursString = hoursString < 10 ? '0' + hoursString : '' + hoursString;
+      let minutesString = dateTime.getMinutes();
+      minutesString =
+        minutesString < 10 ? '0' + minutesString : '' + minutesString;
+
+      return hoursString + ':' + minutesString;
+    } else {
+      return '';
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.control && this.control.value) {
+      const date = DateTimeInputComponent.getTimelessDate(this.control.value);
+      const time = DateTimeInputComponent.getTimeString(this.control.value);
+      this.formInit({ date, time });
+    } else {
+      this.formInit({ date: '', time: '' });
+    }
+
+    this.control.valueChanges.subscribe((newMainControlValue) => {
+      if (
+        !newMainControlValue &&
+        this.form.get('date').value !== '' &&
+        this.form.get('time').value !== ''
+      ) {
+        this.form.setValue({
+          date: '',
+          time: '',
+        });
+      }
+    });
+  }
+
+  private formInit(initFormData: { date: Date | string; time: string }): void {
     this.form = new FormGroup({
-      date: new FormControl(''),
-      time: new FormControl(''),
+      date: new FormControl(initFormData.date),
+      time: new FormControl(initFormData.time),
     });
 
     this.form.get('date').valueChanges.subscribe((fieldValue) => {
@@ -56,34 +106,43 @@ export class DateTimeInputComponent
     });
   }
 
-  setDateTime(date: Date, time: string): void {
-    const dateToSet = new Date(date);
-    if (date) {
-      if (time) {
-        const splitTime = time.split(':');
-        if (
-          splitTime &&
-          splitTime.length > 1 &&
-          splitTime[0].length > 0 &&
-          splitTime[1].length > 1 &&
-          +splitTime[0] < 24 &&
-          +splitTime[0] >= 0 &&
-          +splitTime[1] < 60 &&
-          +splitTime[1] >= 0
-        ) {
-          const fullDate = dateToSet.setHours(+splitTime[0], +splitTime[1]);
+  private setDateTime(date: Date, time: string): void {
+    const mainControlTimelessDate = DateTimeInputComponent.getTimelessDate(
+      this.control.value
+    );
+    const mainControlTimeString = DateTimeInputComponent.getTimeString(
+      this.control.value
+    );
 
-          this.control.setValue(new Date(fullDate));
+    if (date !== mainControlTimelessDate || time !== mainControlTimeString) {
+      const dateToSet = new Date(date);
+      if (date) {
+        if (time) {
+          const extractedTime = DateTimeInputComponent.getTimeFromString(time);
+          const fullDate = dateToSet.setHours(
+            extractedTime.hours,
+            extractedTime.minutes
+          );
+
+          if (this.control.value !== new Date(fullDate)) {
+            this.control.setValue(new Date(fullDate));
+          }
+        } else {
+          const newDate = new Date(date);
+          newDate.setHours(0, 0, 0, 0);
+
+          if (this.form.get('time').value !== '00:00') {
+            this.form.get('time').setValue('00:00');
+          }
+          if (this.control.value !== new Date(newDate)) {
+            this.control.setValue(new Date(newDate));
+          }
         }
-      } else {
-        const newDate = new Date(date);
-        newDate.setHours(0, 0, 0, 0);
-
-        this.form.get('time').setValue('00:00');
-        this.control.setValue(new Date(newDate));
       }
     } else {
-      this.control.setValue('');
+      if (this.control.value !== '') {
+        this.control.setValue('');
+      }
     }
   }
 }

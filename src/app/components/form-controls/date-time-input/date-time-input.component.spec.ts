@@ -102,94 +102,29 @@ describe('DateTimeInputComponent', () => {
     expect(Number.isInteger(+split[1])).toBeTrue();
   });
 
-  it('should set new time if input time is valid (check 1)', () => {
-    component.control.setValue(new Date());
+  it('should set new time if input time is valid', () => {
+    const date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    component.control.setValue(date);
     component.ngOnInit();
     fixture.detectChanges();
 
-    component.setDateTime(component.form.get('date').value, '4:32');
-    fixture.detectChanges();
-
-    expect(component.control.value.getHours()).toBe(4);
-    expect(component.control.value.getMinutes()).toBe(32);
+    expect(component.control.value.getHours()).toBe(hours);
+    expect(component.control.value.getMinutes()).toBe(minutes);
   });
 
-  it('should set new time if input time is valid (check 2)', () => {
-    component.control.setValue(new Date());
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    component.setDateTime(component.form.get('date').value, '14:32');
-    fixture.detectChanges();
-
-    expect(component.control.value.getHours()).toBe(14);
-    expect(component.control.value.getMinutes()).toBe(32);
-  });
-
-  it('should not set new time if input time is not valid (check 1)', () => {
-    component.control.setValue(new Date());
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '3:32');
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '43:11');
-    fixture.detectChanges();
-
-    expect(component.control.value.getHours()).toBe(3);
-    expect(component.control.value.getMinutes()).toBe(32);
-  });
-  it('should not set new time if input time is not valid (check 2)', () => {
-    component.control.setValue(new Date());
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '3:32');
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), ':11');
-    fixture.detectChanges();
-
-    expect(component.control.value.getHours()).toBe(3);
-    expect(component.control.value.getMinutes()).toBe(32);
-  });
-  it('should not set new time if input time is not valid (check 3)', () => {
-    component.control.setValue(new Date());
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '3:32');
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '1:1');
-    fixture.detectChanges();
-
-    expect(component.control.value.getHours()).toBe(3);
-    expect(component.control.value.getMinutes()).toBe(32);
-  });
-  it('should not set new time if input time is not valid (check 4)', () => {
-    component.control.setValue(new Date());
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '3:32');
-    fixture.detectChanges();
-
-    component.setDateTime(new Date(), '1:77');
-    fixture.detectChanges();
-
-    expect(component.control.value.getHours()).toBe(3);
-    expect(component.control.value.getMinutes()).toBe(32);
-  });
   it(
     'should set time to 00:00 if the date was picked first time ' +
       '(or when pass empty string to time parameter in setDateTime function)',
     () => {
-      component.ngOnInit();
-      fixture.detectChanges();
+      const date = new Date();
+      const newDate = new Date(date.setHours(0, 0, 0, 0));
 
-      component.setDateTime(new Date(), '');
+      component.control.setValue(newDate);
+
+      component.ngOnInit();
       fixture.detectChanges();
 
       expect(component.form.get('time').value).toBe('00:00');
