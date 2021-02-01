@@ -1,16 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-question-hint',
   templateUrl: './question-hint.component.html',
-  styleUrls: ['./question-hint.component.scss']
+  styleUrls: ['./question-hint.component.scss'],
 })
-export class QuestionHintComponent implements OnInit {
+export class QuestionHintComponent {
   @Input() description: string;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

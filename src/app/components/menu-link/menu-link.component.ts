@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MenuLink } from '../../models/types/MenuLink';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as AppSelectors from '../../store/app/app.selectors';
 import * as AppActions from '../../store/app/app.actions';
+import { MenuLink } from '../../models/types/MenuLink';
 
 @Component({
   selector: 'app-menu-link',

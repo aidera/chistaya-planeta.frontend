@@ -201,10 +201,7 @@ export class LocalitiesTableComponent
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-
-    if (this.localities$) {
-      this.localities$.unsubscribe();
-    }
+    this.localities$?.unsubscribe?.();
   }
 
   public onTableItemClick(index: number): void {

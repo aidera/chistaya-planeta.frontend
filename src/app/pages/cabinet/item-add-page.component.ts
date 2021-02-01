@@ -31,16 +31,11 @@ export class ItemAddPageComponent implements OnDestroy {
     protected snackBar: MatSnackBar,
     private routingState: RoutingStateService
   ) {}
+
   ngOnDestroy(): void {
-    if (this.isFetching$) {
-      this.isFetching$.unsubscribe();
-    }
-    if (this.serverError$) {
-      this.serverError$.unsubscribe();
-    }
-    if (this.addingSucceed$) {
-      this.addingSucceed$.unsubscribe();
-    }
+    this.isFetching$?.unsubscribe?.();
+    this.serverError$?.unsubscribe?.();
+    this.addingSucceed$?.unsubscribe?.();
   }
 
   protected setActiveForm(formNumber: number): void {

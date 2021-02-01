@@ -100,11 +100,7 @@ export class TableComponent implements OnInit {
 
   public onSort(field: string): void {
     let sortType: 'asc' | 'desc' = 'asc';
-    if (
-      this.sorting &&
-      this.sorting.field === field &&
-      this.sorting.type === 'asc'
-    ) {
+    if (this.sorting?.field === field && this.sorting?.type === 'asc') {
       sortType = 'desc';
     }
     this.sort.emit({ field, type: sortType });

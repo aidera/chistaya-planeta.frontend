@@ -31,9 +31,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.isFullscreenMenuOpen$) {
-      this.isFullscreenMenuOpen$.unsubscribe();
-    }
+    this.isFullscreenMenuOpen$?.unsubscribe?.();
   }
 
   toggleFullscreenMenu(): void {

@@ -100,18 +100,10 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.localities$) {
-      this.localities$.unsubscribe();
-    }
-    if (this.isFetching$) {
-      this.isFetching$.unsubscribe();
-    }
-    if (this.serverError$) {
-      this.serverError$.unsubscribe();
-    }
-    if (this.isAddOrderSucceed$) {
-      this.isAddOrderSucceed$.unsubscribe();
-    }
+    this.localities$?.unsubscribe?.();
+    this.isFetching$?.unsubscribe?.();
+    this.serverError$?.unsubscribe?.();
+    this.isAddOrderSucceed$?.unsubscribe?.();
   }
 
   private formInit(): void {

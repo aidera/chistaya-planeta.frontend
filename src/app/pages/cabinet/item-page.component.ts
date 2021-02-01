@@ -49,27 +49,13 @@ export class ItemPageComponent implements OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    if (this.isFetching$) {
-      this.isFetching$.unsubscribe();
-    }
-    if (this.isUpdating$) {
-      this.isUpdating$.unsubscribe();
-    }
-    if (this.isUpdateSucceed$) {
-      this.isUpdateSucceed$.unsubscribe();
-    }
-    if (this.updateError$) {
-      this.updateError$.unsubscribe();
-    }
-    if (this.isRemoving$) {
-      this.isRemoving$.unsubscribe();
-    }
-    if (this.isRemoveSucceed$) {
-      this.isRemoveSucceed$.unsubscribe();
-    }
-    if (this.removeError$) {
-      this.removeError$.unsubscribe();
-    }
+    this.isFetching$?.unsubscribe?.();
+    this.isUpdating$?.unsubscribe?.();
+    this.isUpdateSucceed$?.unsubscribe?.();
+    this.updateError$?.unsubscribe?.();
+    this.isRemoving$?.unsubscribe?.();
+    this.isRemoveSucceed$?.unsubscribe?.();
+    this.removeError$?.unsubscribe?.();
   }
 
   public setActiveField(fieldName: string): void {
@@ -80,9 +66,7 @@ export class ItemPageComponent implements OnDestroy {
     if (this.activeField === fieldName) {
       this.activeField = null;
 
-      if (this.form) {
-        this.form.get(fieldName).setValue(controlValue);
-      }
+      this.form?.get(fieldName).setValue(controlValue);
     }
   }
 

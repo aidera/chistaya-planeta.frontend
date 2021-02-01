@@ -82,15 +82,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.isLoginSucceed$) {
-      this.isLoginSucceed$.unsubscribe();
-    }
-    if (this.serverError$) {
-      this.serverError$.unsubscribe();
-    }
-    if (this.isLoginSucceed$) {
-      this.isLoginSucceed$.unsubscribe();
-    }
+    this.isLoginSucceed$?.unsubscribe?.();
+    this.serverError$?.unsubscribe?.();
+    this.isLoginSucceed$?.unsubscribe?.();
   }
 
   private formInit(): void {

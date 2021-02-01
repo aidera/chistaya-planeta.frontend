@@ -158,12 +158,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.isFetching$) {
-      this.isFetching$.unsubscribe();
-    }
-    if (this.pagination$) {
-      this.pagination$.unsubscribe();
-    }
+    this.isFetching$?.unsubscribe?.();
+    this.pagination$?.unsubscribe?.();
   }
 
   protected highlightSearchedValue(

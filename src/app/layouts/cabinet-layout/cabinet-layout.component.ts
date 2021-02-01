@@ -19,19 +19,17 @@ export class CabinetLayoutComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.route.snapshot) {
       this.isEmployee = this.route.snapshot.data.isEmployee;
-      if (this.route.snapshot.firstChild) {
-        this.useBacklink = this.route.snapshot.firstChild.data.useBacklink;
-      }
+      this.useBacklink = this.route.snapshot.firstChild?.data.useBacklink;
     }
 
     this.routerEvents$ = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((next) => {
+      .subscribe((_) => {
         this.useBacklink = this.route.snapshot.firstChild.data.useBacklink;
       });
   }
 
   ngOnDestroy(): void {
-    this.routerEvents$.unsubscribe();
+    this.routerEvents$?.unsubscribe?.();
   }
 }

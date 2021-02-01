@@ -27,18 +27,16 @@ export class LocalityItemComponent
     this.localityId = this.route.snapshot.paramMap.get('id') as string;
     this.getItemRequest();
 
-    if (this.socket.get()) {
-      this.socket.get().on('localities', (data) => {
-        if (data.action === 'add' || data.action === 'delete') {
+    this.socket.get()?.on('localities', (data) => {
+      if (data.action === 'add' || data.action === 'delete') {
+        this.getItemRequest();
+      }
+      if (data.action === 'update' && data.id) {
+        if (this.locality && this.locality._id === data.id) {
           this.getItemRequest();
         }
-        if (data.action === 'update' && data.id) {
-          if (this.locality && this.locality._id === data.id) {
-            this.getItemRequest();
-          }
-        }
-      });
-    }
+      }
+    });
 
     this.locality$ = this.store
       .select(LocalitiesSelectors.selectLocality)
@@ -130,9 +128,7 @@ export class LocalityItemComponent
   }
 
   ngOnDestroy(): void {
-    if (this.locality$) {
-      this.locality$.unsubscribe();
-    }
+    this.locality$?.unsubscribe?.();
   }
 
   private initForm(): void {
