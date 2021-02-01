@@ -186,6 +186,21 @@ export class LocalitiesTableComponent
         this.isFetching = status;
       });
 
+    this.getItemsError$ = this.store
+      .select(LocalitiesSelectors.selectGetLocalitiesError)
+      .subscribe((error) => {
+        if (error) {
+          this.getItemsSnackbar = this.snackBar.open(
+            'Ошибка при запросе населённых пунктов. Пожалуйста, обратитесь в отдел разработки',
+            'Скрыть',
+            {
+              duration: 2000,
+              panelClass: 'error',
+            }
+          );
+        }
+      });
+
     this.pagination$ = this.store
       .select(LocalitiesSelectors.selectGetLocalitiesPagination)
       .subscribe((pagination) => {

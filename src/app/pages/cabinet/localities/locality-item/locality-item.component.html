@@ -33,7 +33,13 @@
 
 <div class="cabinet-content">
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
-  <div class="cabinet-content__grid">
+  <div
+    *ngIf="getItemError || updateError || removeError"
+    class="cabinet-content__top-error"
+  >
+    {{ getItemError || updateError || removeError }}
+  </div>
+  <div *ngIf="locality" class="cabinet-content__grid">
     <div class="cabinet-content__grid-item">
       <mat-card class="cabinet-content__status-card">
         <h2 [innerHTML]="localityStatusString"></h2>
@@ -58,16 +64,18 @@
             class="cabinet-content__field-inactive"
           >
             <label>Название</label>
-            <p *ngIf="locality && !isFetching">{{ locality.name }}</p>
+            <ng-container *ngIf="locality && !isFetching">
+              <p>{{ locality.name }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'name'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
             <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-            <div class="cabinet-content__field-inactive-action">
-              <button mat-icon-button (click)="activeField = 'name'">
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/pencil.svg'"
-                ></span>
-              </button>
-            </div>
           </div>
           <div
             *ngIf="form && activeField === 'name'"

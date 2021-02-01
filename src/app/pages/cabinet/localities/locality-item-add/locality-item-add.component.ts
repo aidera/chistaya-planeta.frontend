@@ -43,10 +43,15 @@ export class LocalityItemAddComponent
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.form1Main.get('name').setErrors({ alreadyExists: true });
-        } else if (error) {
-          this.serverError = 'Ошибка сервера';
         } else {
-          this.serverError = undefined;
+          this.addSnackbar = this.snackBar.open(
+            'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
+            'Скрыть',
+            {
+              duration: 2000,
+              panelClass: 'error',
+            }
+          );
         }
       });
   }

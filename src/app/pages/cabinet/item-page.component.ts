@@ -25,10 +25,14 @@ export class ItemPageComponent implements OnDestroy {
   public isUpdating = false;
   protected isUpdateSucceed$: Subscription;
   protected updateError$: Subscription;
+  public updateError: string | null;
   protected isRemoving$: Subscription;
   public isRemoving = false;
   protected isRemoveSucceed$: Subscription;
   protected removeError$: Subscription;
+  public removeError: string | null;
+  protected getItemError$: Subscription;
+  public getItemError: string | null;
 
   public simpleStatus = SimpleStatus;
   public form: FormGroup;
@@ -56,6 +60,7 @@ export class ItemPageComponent implements OnDestroy {
     this.isRemoving$?.unsubscribe?.();
     this.isRemoveSucceed$?.unsubscribe?.();
     this.removeError$?.unsubscribe?.();
+    this.getItemError$?.unsubscribe?.();
   }
 
   public setActiveField(fieldName: string): void {

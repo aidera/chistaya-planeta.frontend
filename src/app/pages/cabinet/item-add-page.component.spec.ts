@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ItemAddPageComponent } from './item-add-page.component';
-import { MaterialModule } from '../../modules/material/material.module';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 
 describe('ItemAddComponent', () => {
@@ -13,7 +13,7 @@ describe('ItemAddComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ItemAddPageComponent],
-      imports: [MaterialModule, RouterTestingModule],
+      imports: [MatSnackBarModule, RouterTestingModule],
       providers: [
         RoutingStateService,
         provideMockStore({

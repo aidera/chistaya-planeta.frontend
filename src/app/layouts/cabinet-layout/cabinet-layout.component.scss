@@ -174,7 +174,12 @@
     }
   }
 
-  .cabinet-content__error {
+  .cabinet-content__top-error {
+    color: $error-color;
+    margin-bottom: 16px;
+  }
+
+  .cabinet-content__bottom-error {
     color: $error-color;
     text-align: center;
     margin-top: 8px;

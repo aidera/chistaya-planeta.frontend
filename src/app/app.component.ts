@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
         'Скрыть',
         {
           duration: 20000,
+          panelClass: 'error',
         }
       );
     });

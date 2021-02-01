@@ -15,4 +15,8 @@
       padding: 8px 4px;
     }
   }
+
+  &.error {
+    background-color: $error-color;
+  }
 }

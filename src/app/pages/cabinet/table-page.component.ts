@@ -5,6 +5,11 @@ import { Store } from '@ngrx/store';
 import { debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import {
+  MatSnackBar,
+  MatSnackBarRef,
+  TextOnlySnackBar,
+} from '@angular/material/snack-bar';
 
 import { PaginationType } from '../../models/types/PaginationType';
 import * as fromRoot from '../../store/root.reducer';
@@ -27,6 +32,8 @@ import { SocketIoService } from '../../services/socket-io/socket-io.service';
 export class TablePageComponent implements OnInit, OnDestroy {
   protected isFetching$: Subscription;
   public isFetching: boolean;
+  protected getItemsError$: Subscription;
+  public getItemsError: string | null;
   protected pagination$: Subscription;
 
   /* Table settings */
@@ -49,6 +56,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     request: GetRouteParamsType,
     withLoading: boolean
   ) => any;
+  protected getItemsSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -57,7 +65,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected location: Location,
-    protected socket: SocketIoService
+    protected socket: SocketIoService,
+    protected snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -159,6 +168,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.isFetching$?.unsubscribe?.();
+    this.getItemsError$?.unsubscribe?.();
     this.pagination$?.unsubscribe?.();
   }
 

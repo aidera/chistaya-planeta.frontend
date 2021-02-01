@@ -8,6 +8,7 @@ import { ILocality } from '../../../../models/Locality';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
 import { ModalAction } from '../../../../components/modal/modal.component';
+import { responseCodes } from '../../../../data/responseCodes';
 
 @Component({
   selector: 'app-locality-item',
@@ -57,6 +58,17 @@ export class LocalityItemComponent
         }
       });
 
+    this.getItemError$ = this.store
+      .select(LocalitiesSelectors.selectGetLocalityError)
+      .subscribe((error) => {
+        if (error?.code) {
+          this.getItemError =
+            error.code === responseCodes.notFound ? 'Не найдено' : error.code;
+        } else {
+          this.getItemError = null;
+        }
+      });
+
     this.isFetching$ = this.store
       .select(LocalitiesSelectors.selectGetLocalityIsFetching)
       .subscribe((status) => {
@@ -93,6 +105,15 @@ export class LocalityItemComponent
           } else {
             this.form.get('name').setErrors({ alreadyExists: true });
           }
+        } else if (error) {
+          this.updateSnackbar = this.snackBar.open(
+            'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
+            'Скрыть',
+            {
+              duration: 2000,
+              panelClass: 'error',
+            }
+          );
         }
       });
 
@@ -123,6 +144,15 @@ export class LocalityItemComponent
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
+        } else if (error) {
+          this.removeSnackbar = this.snackBar.open(
+            'Ошибка при удалении. Пожалуйста, обратитесь в отдел разработки',
+            'Скрыть',
+            {
+              duration: 2000,
+              panelClass: 'error',
+            }
+          );
         }
       });
   }

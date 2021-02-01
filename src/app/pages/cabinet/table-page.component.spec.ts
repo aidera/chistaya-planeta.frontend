@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormControl, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { TablePageComponent } from './table-page.component';
 import { ConverterService } from '../../services/converter/converter.service';
@@ -21,7 +22,7 @@ describe('TablePageComponent', () => {
           initialState: {},
         }),
       ],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, MatSnackBarModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TablePageComponent);

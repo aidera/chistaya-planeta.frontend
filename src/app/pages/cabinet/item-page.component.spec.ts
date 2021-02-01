@@ -2,9 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ItemPageComponent } from './item-page.component';
-import { MaterialModule } from '../../modules/material/material.module';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
@@ -15,7 +15,7 @@ describe('ItemPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ItemPageComponent],
-      imports: [MaterialModule, RouterTestingModule],
+      imports: [MatSnackBarModule, RouterTestingModule],
       providers: [
         RoutingStateService,
         SocketIoService,

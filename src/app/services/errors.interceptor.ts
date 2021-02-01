@@ -28,6 +28,7 @@ export class ErrorsInterceptor implements HttpInterceptor {
         'Скрыть',
         {
           duration: 20000,
+          panelClass: 'error',
         }
       );
     } else {
