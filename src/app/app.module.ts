@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -48,6 +48,7 @@ import { ItemPageComponent } from './pages/cabinet/item-page.component';
 import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-item-add/locality-item-add.component';
 import { ItemAddPageComponent } from './pages/cabinet/item-add-page.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { ErrorsInterceptor } from './services/errors.interceptor';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { ModalComponent } from './components/modal/modal.component';
       provide: MatPaginatorIntl,
       useValue: getPaginatorIntl(),
     },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
