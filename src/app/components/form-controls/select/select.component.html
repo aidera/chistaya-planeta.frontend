@@ -8,7 +8,11 @@
     ></app-question-hint>
   </label>
 
-  <mat-select [formControl]="control" [multiple]="isMultiple" [id]="fieldId">
+  <mat-select
+    [formControl]="control"
+    [multiple]="isMultiple"
+    [id]="fieldId || ''"
+  >
     <mat-option
       *ngFor="let option of options"
       [value]="option.value"

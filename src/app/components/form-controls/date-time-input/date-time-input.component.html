@@ -1,4 +1,4 @@
-<div class="combined-fields" [formGroup]="form">
+<div class="combined-fields" [formGroup]="form" [id]="fieldId || ''">
   <app-date-input [control]="form.get('date')" [label]="label"></app-date-input>
 
   <app-text-input

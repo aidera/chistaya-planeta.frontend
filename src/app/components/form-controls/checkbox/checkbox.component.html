@@ -1,4 +1,4 @@
-<mat-checkbox [formControl]="control" [id]="fieldId" color="primary">
+<mat-checkbox [formControl]="control" [id]="fieldId || ''" color="primary">
   {{ label }}
   <app-question-hint
     *ngIf="labelHint"
