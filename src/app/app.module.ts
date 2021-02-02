@@ -49,6 +49,8 @@ import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-it
 import { ItemAddPageComponent } from './pages/cabinet/item-add-page.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { ErrorsInterceptor } from './services/errors.interceptor';
+import { DivisionItemComponent } from './pages/cabinet/divisions/division-item/division-item.component';
+import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-item-add/division-item-add.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,8 @@ import { ErrorsInterceptor } from './services/errors.interceptor';
     LocalityItemAddComponent,
     ItemAddPageComponent,
     ModalComponent,
+    DivisionItemComponent,
+    DivisionItemAddComponent,
   ],
   imports: [
     BrowserModule,

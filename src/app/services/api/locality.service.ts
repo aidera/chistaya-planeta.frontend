@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import ServerResponse from '../../models/ServerResponse';
-import { ILocality } from '../../models/Locality';
+import { ILocality, ILocalityLessInfo } from '../../models/Locality';
 import { environment } from '../../../environments/environment';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ApiService } from './api.service';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
 
 export interface IGetAllLocalitiesResponse extends ServerResponse {
-  localities?: ILocality[];
+  localities?: ILocalityLessInfo[];
 }
 
 export interface IGetOneLocalityResponse extends ServerResponse {

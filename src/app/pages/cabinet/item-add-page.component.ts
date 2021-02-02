@@ -40,6 +40,14 @@ export class ItemAddPageComponent implements OnDestroy {
 
   protected setActiveForm(formNumber: number): void {
     this.activeForm = formNumber;
+    const formToScroll = document.querySelector(`#form${formNumber}`);
+    if (formToScroll) {
+      const formOffset = formToScroll.getBoundingClientRect().top;
+      window.scrollTo({
+        top: formOffset + window.pageYOffset - 24,
+        behavior: 'smooth',
+      });
+    }
   }
 
   public goToPreviousPage(): void {

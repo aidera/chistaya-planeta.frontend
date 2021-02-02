@@ -14,6 +14,8 @@ import { DivisionsTableComponent } from './pages/cabinet/divisions/divisions-tab
 import { LocalitiesTableComponent } from './pages/cabinet/localities/localities-table/localities-table.component';
 import { LocalityItemComponent } from './pages/cabinet/localities/locality-item/locality-item.component';
 import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-item-add/locality-item-add.component';
+import { DivisionItemComponent } from './pages/cabinet/divisions/division-item/division-item.component';
+import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-item-add/division-item-add.component';
 
 const routes: Routes = [
   {
@@ -32,11 +34,6 @@ const routes: Routes = [
         data: { useBacklink: true },
       },
       {
-        path: 'divisions',
-        component: DivisionsTableComponent,
-        data: { useBacklink: false },
-      },
-      {
         path: 'localities',
         component: LocalitiesTableComponent,
         data: { useBacklink: false },
@@ -49,6 +46,21 @@ const routes: Routes = [
       {
         path: 'localities/:id',
         component: LocalityItemComponent,
+        data: { useBacklink: true },
+      },
+      {
+        path: 'divisions',
+        component: DivisionsTableComponent,
+        data: { useBacklink: false },
+      },
+      {
+        path: 'divisions/add',
+        component: DivisionItemAddComponent,
+        data: { useBacklink: true },
+      },
+      {
+        path: 'divisions/:id',
+        component: DivisionItemComponent,
         data: { useBacklink: true },
       },
     ],

@@ -115,23 +115,21 @@ export class LocalitiesTableComponent
       );
     };
 
-    if (this.socket.get()) {
-      this.socket.get().on('localities', (data) => {
-        if (data.action === 'add' || data.action === 'delete') {
-          this.sendRequest(false);
-        }
-        if (data.action === 'update' && data.id) {
-          if (this.localities && this.localities.length > 0) {
-            const isExist = this.localities.find((locality) => {
-              return locality._id === data.id;
-            });
-            if (isExist) {
-              this.sendRequest(false);
-            }
+    this.socket.get()?.on('localities', (data) => {
+      if (data.action === 'add' || data.action === 'delete') {
+        this.sendRequest(false);
+      }
+      if (data.action === 'update' && data.id) {
+        if (this.localities && this.localities.length > 0) {
+          const isExist = this.localities.find((locality) => {
+            return locality._id === data.id;
+          });
+          if (isExist) {
+            this.sendRequest(false);
           }
         }
-      });
-    }
+      }
+    });
 
     /* ------------------------ */
     /* --- NgRx connections --- */

@@ -9,3 +9,9 @@ export interface ILocality {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ILocalityLessInfo {
+  _id: string;
+  name: string;
+  divisions: string[];
+}

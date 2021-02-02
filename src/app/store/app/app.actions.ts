@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 
 import { ServerError } from '../../models/ServerResponse';
-import { ILocality } from '../../models/Locality';
-import { IDivision } from '../../models/Division';
-import { IEmployee } from '../../models/Employee';
+import { ILocalityLessInfo } from '../../models/Locality';
+import { IDivisionLessInfo } from '../../models/Division';
+import { ILessInfoItem } from '../../models/LessInfoItem';
 
 export const SET_IS_FULLSCREEN_MENU_OPEN =
   '[app] set - is fullscreen menu open';
@@ -62,7 +62,7 @@ export const getLocalitiesToSelectRequest = createAction(
 export const getLocalitiesToSelectSuccess = createAction(
   GET_LOCALITIES_TO_SELECT_SUCCESS,
   props<{
-    localities: ILocality[];
+    localities: ILocalityLessInfo[];
   }>()
 );
 export const getLocalitiesToSelectFailure = createAction(
@@ -80,7 +80,7 @@ export const getDivisionsToSelectRequest = createAction(
 export const getDivisionsToSelectSuccess = createAction(
   GET_DIVISIONS_TO_SELECT_SUCCESS,
   props<{
-    divisions: IDivision[];
+    divisions: IDivisionLessInfo[];
   }>()
 );
 export const getDivisionsToSelectFailure = createAction(
@@ -98,7 +98,7 @@ export const getManagersToSelectRequest = createAction(
 export const getManagersToSelectSuccess = createAction(
   GET_MANAGERS_TO_SELECT_SUCCESS,
   props<{
-    managers: IEmployee[];
+    managers: ILessInfoItem[];
   }>()
 );
 export const getManagersToSelectFailure = createAction(
@@ -116,7 +116,7 @@ export const getDriversToSelectRequest = createAction(
 export const getDriversToSelectSuccess = createAction(
   GET_DRIVERS_TO_SELECT_SUCCESS,
   props<{
-    drivers: IEmployee[];
+    drivers: ILessInfoItem[];
   }>()
 );
 export const getDriversToSelectFailure = createAction(
@@ -134,7 +134,7 @@ export const getEmployeesToSelectRequest = createAction(
 export const getEmployeesToSelectSuccess = createAction(
   GET_EMPLOYEES_TO_SELECT_SUCCESS,
   props<{
-    employees: IEmployee[];
+    employees: ILessInfoItem[];
   }>()
 );
 export const getEmployeesToSelectFailure = createAction(

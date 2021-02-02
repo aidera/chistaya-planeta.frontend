@@ -4,6 +4,7 @@ import * as fromApp from './app/app.reducer';
 import * as fromUser from './user/user.reducer';
 import * as fromOrder from './order/order.reducer';
 import * as fromLocality from './locality/locality.reducer';
+import * as fromDivision from './division/division.reducer';
 import { LOGOUT } from './user/user.actions';
 
 export interface State {
@@ -11,6 +12,7 @@ export interface State {
   user: fromUser.UserState;
   order: fromOrder.OrderState;
   locality: fromLocality.LocalityState;
+  division: fromDivision.DivisionState;
 }
 
 export const rootReducer: ActionReducerMap<State> = {
@@ -18,6 +20,7 @@ export const rootReducer: ActionReducerMap<State> = {
   user: fromUser.userReducer,
   order: fromOrder.orderReducer,
   locality: fromLocality.localityReducer,
+  division: fromDivision.divisionReducer,
 };
 
 export function clearState(reducer): any {

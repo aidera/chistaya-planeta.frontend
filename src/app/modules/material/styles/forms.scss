@@ -2,7 +2,6 @@
 
 .mat-form-field {
   width: 100%;
-  //padding-bottom: 16px;
 
   .icon {
     cursor: pointer;
@@ -206,8 +205,11 @@ textarea.mat-input-element {
 }
 
 .mat-option.mat-active:not(:hover) {
-  background: white !important;
+  background: rgba(0, 0, 0, 0.08) !important;
 }
 .mat-option.mat-active:hover {
   background: rgba(0, 0, 0, 0.04) !important;
+}
+.mat-option-multiple.mat-active:not(:hover) {
+  background: white !important;
 }

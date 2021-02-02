@@ -56,6 +56,12 @@ describe('AddOrderNoAuthComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
+            app: {
+              localitiesOptionsToSelect: [
+                { value: '1', text: 'City 1' },
+                { value: '2', text: 'City 2' },
+              ],
+            },
             order: {
               addOrderLocalities: [] as ILocality[],
             },
@@ -75,18 +81,6 @@ describe('AddOrderNoAuthComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should request localities from the store at the initialization', () => {
-    storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(storeDispatchSpy).toHaveBeenCalledTimes(1);
-    expect(storeDispatchSpy).toHaveBeenCalledWith(
-      OrderActions.getLocalitiesRequest({})
-    );
   });
 
   it('should see only the type field at the beginning', () => {

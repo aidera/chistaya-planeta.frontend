@@ -6,7 +6,8 @@
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
   <div class="cabinet-content__grid">
     <form
-      [formGroup]="form1Main"
+      id="form1"
+      [formGroup]="form1"
       (ngSubmit)="sendForm1Main()"
       class="cabinet-content__grid-item"
       [class.cabinet-content__grid-item_inactive]="activeForm !== 1"
@@ -20,22 +21,13 @@
 
         <app-text-input
           label="Название"
-          [control]="form1Main.get('name')"
+          [control]="form1.get('name')"
           [errorMessages]="{
             required: 'Обязательное поле',
             alreadyExists: 'Такое название уже существует'
           }"
         ></app-text-input>
       </mat-card>
-      <!--      <div class="cabinet-content__grid-item-actions">-->
-      <!--        <button-->
-      <!--          mat-raised-button-->
-      <!--          color="primary"-->
-      <!--          type="submit"-->
-      <!--          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"-->
-      <!--        >Далее-->
-      <!--        </button>-->
-      <!--      </div>-->
     </form>
     <div class="clearfix"></div>
   </div>

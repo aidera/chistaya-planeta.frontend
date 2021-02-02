@@ -1,10 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
 import * as AppActions from './app.actions';
-import { ILocality } from '../../models/Locality';
+import { ILocalityLessInfo } from '../../models/Locality';
 import { ServerError } from '../../models/ServerResponse';
-import { IDivision } from '../../models/Division';
-import { IEmployee } from '../../models/Employee';
+import { IDivisionLessInfo } from '../../models/Division';
+import { ILessInfoItem } from '../../models/LessInfoItem';
+import { OptionType } from '../../models/types/OptionType';
 
 export const appInitialState = {
   /* ---------------------------- */
@@ -15,35 +16,40 @@ export const appInitialState = {
   /* ---------------------------------- */
   /* ------ Localities to select ------ */
   /* ---------------------------------- */
-  localitiesToSelect: [] as ILocality[],
+  localitiesToSelect: [] as ILocalityLessInfo[],
+  localitiesOptionsToSelect: [] as OptionType[],
   localitiesToSelectIsFetching: false,
   localitiesToSelectError: null as ServerError | null,
 
   /* --------------------------------- */
   /* ------ Divisions to select ------ */
   /* --------------------------------- */
-  divisionsToSelect: [] as IDivision[],
+  divisionsToSelect: [] as IDivisionLessInfo[],
+  divisionsOptionsToSelect: [] as OptionType[],
   divisionsToSelectIsFetching: false,
   divisionsToSelectError: null as ServerError | null,
 
   /* -------------------------------- */
   /* ------ Managers to select ------ */
   /* -------------------------------- */
-  managersToSelect: [] as IEmployee[],
+  managersToSelect: [] as ILessInfoItem[],
+  managersOptionsToSelect: [] as OptionType[],
   managersToSelectIsFetching: false,
   managersToSelectError: null as ServerError | null,
 
   /* ------------------------------- */
   /* ------ Drivers to select ------ */
   /* ------------------------------- */
-  driversToSelect: [] as IEmployee[],
+  driversToSelect: [] as ILessInfoItem[],
+  driversOptionsToSelect: [] as OptionType[],
   driversToSelectIsFetching: false,
   driversToSelectError: null as ServerError | null,
 
   /* --------------------------------- */
   /* ------ Employees to select ------ */
   /* --------------------------------- */
-  employeesToSelect: [] as IEmployee[],
+  employeesToSelect: [] as ILessInfoItem[],
+  employeesOptionsToSelect: [] as OptionType[],
   employeesToSelectIsFetching: false,
   employeesToSelectError: null as ServerError | null,
 };
@@ -73,6 +79,12 @@ const _appReducer = createReducer(
   on(AppActions.getLocalitiesToSelectSuccess, (state, payload) => ({
     ...state,
     localitiesToSelect: payload.localities,
+    localitiesOptionsToSelect: payload.localities.map((locality) => {
+      return {
+        value: locality._id,
+        text: locality.name,
+      };
+    }),
     localitiesToSelectIsFetching: false,
     localitiesToSelectError: null,
   })),
@@ -94,6 +106,12 @@ const _appReducer = createReducer(
   on(AppActions.getDivisionsToSelectSuccess, (state, payload) => ({
     ...state,
     divisionsToSelect: payload.divisions,
+    divisionsOptionsToSelect: payload.divisions.map((division) => {
+      return {
+        value: division._id,
+        text: division.name,
+      };
+    }),
     divisionsToSelectIsFetching: false,
     divisionsToSelectError: null,
   })),
@@ -115,6 +133,12 @@ const _appReducer = createReducer(
   on(AppActions.getManagersToSelectSuccess, (state, payload) => ({
     ...state,
     managersToSelect: payload.managers,
+    managersOptionsToSelect: payload.managers.map((manager) => {
+      return {
+        value: manager.id,
+        text: manager.name,
+      };
+    }),
     managersToSelectIsFetching: false,
     managersToSelectError: null,
   })),
@@ -136,6 +160,12 @@ const _appReducer = createReducer(
   on(AppActions.getDriversToSelectSuccess, (state, payload) => ({
     ...state,
     driversToSelect: payload.drivers,
+    driversOptionsToSelect: payload.drivers.map((driver) => {
+      return {
+        value: driver.id,
+        text: driver.name,
+      };
+    }),
     driversToSelectIsFetching: false,
     driversToSelectError: null,
   })),
@@ -157,6 +187,12 @@ const _appReducer = createReducer(
   on(AppActions.getEmployeesToSelectSuccess, (state, payload) => ({
     ...state,
     employeesToSelect: payload.employees,
+    employeesOptionsToSelect: payload.employees.map((employee) => {
+      return {
+        value: employee.id,
+        text: employee.name,
+      };
+    }),
     employeesToSelectIsFetching: false,
     employeesToSelectError: null,
   })),

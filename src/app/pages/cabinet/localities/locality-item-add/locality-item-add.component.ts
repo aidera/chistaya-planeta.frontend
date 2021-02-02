@@ -13,7 +13,7 @@ import { ItemAddPageComponent } from '../../item-add-page.component';
 export class LocalityItemAddComponent
   extends ItemAddPageComponent
   implements OnInit {
-  public form1Main: FormGroup;
+  public form1: FormGroup;
 
   ngOnInit(): void {
     this.initForm();
@@ -41,38 +41,40 @@ export class LocalityItemAddComponent
     this.serverError$ = this.store
       .select(LocalitiesSelectors.selectAddLocalityError)
       .subscribe((error) => {
-        if (error && error.foundedItem) {
-          this.form1Main.get('name').setErrors({ alreadyExists: true });
-        } else {
-          this.addSnackbar = this.snackBar.open(
-            'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
-            'Скрыть',
-            {
-              duration: 2000,
-              panelClass: 'error',
-            }
-          );
+        if (error) {
+          if (error.foundedItem) {
+            this.form1.get('name').setErrors({ alreadyExists: true });
+          } else {
+            this.addSnackbar = this.snackBar.open(
+              'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
+              'Скрыть',
+              {
+                duration: 2000,
+                panelClass: 'error',
+              }
+            );
+          }
         }
       });
   }
 
   private initForm(): void {
-    this.form1Main = new FormGroup({
+    this.form1 = new FormGroup({
       name: new FormControl('', Validators.required),
     });
   }
 
   public sendForm1Main(): void {
-    Object.keys(this.form1Main.controls).forEach((field) => {
-      const control = this.form1Main.get(field);
+    Object.keys(this.form1.controls).forEach((field) => {
+      const control = this.form1.get(field);
       control.markAsTouched({ onlySelf: true });
       control.updateValueAndValidity();
     });
 
-    if (this.form1Main && this.form1Main.get('name').value !== '') {
+    if (this.form1 && this.form1.get('name').value !== '') {
       this.store.dispatch(
         LocalitiesActions.addLocalityRequest({
-          name: this.form1Main.get('name').value,
+          name: this.form1.get('name').value,
         })
       );
     }

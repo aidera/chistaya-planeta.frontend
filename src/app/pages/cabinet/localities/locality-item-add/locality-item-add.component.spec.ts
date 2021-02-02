@@ -47,7 +47,7 @@ describe('LocalityItemAddComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LocalityItemAddComponent);
     component = fixture.componentInstance;
-    component.form1Main = new FormGroup({
+    component.form1 = new FormGroup({
       name: new FormControl('', Validators.required),
     });
     fixture.detectChanges();

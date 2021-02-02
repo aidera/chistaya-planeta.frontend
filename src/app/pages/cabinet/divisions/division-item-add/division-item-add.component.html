@@ -1,0 +1,100 @@
+<div class="cabinet-header">
+  <h1>Добавить подразделение</h1>
+</div>
+
+<div class="cabinet-content">
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <div class="cabinet-content__grid">
+    <form
+      id="form1"
+      [formGroup]="form1"
+      (ngSubmit)="sendForm1Main()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 1"
+    >
+      <div
+        class="cabinet-content__grid-item-overlay"
+        *ngIf="activeForm < 1"
+      ></div>
+      <mat-card>
+        <h2>Основная информация</h2>
+
+        <app-text-input
+          label="Название"
+          [control]="form1.get('name')"
+          [errorMessages]="{
+            required: 'Обязательное поле',
+            alreadyExists: 'Такое название уже существует'
+          }"
+        ></app-text-input>
+      </mat-card>
+      <div class="cabinet-content__grid-item-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
+          (click)="sendForm1Main()"
+        >
+          Далее
+        </button>
+      </div>
+    </form>
+
+    <form
+      id="form2"
+      [formGroup]="form2"
+      (ngSubmit)="sendForm1Main()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 2"
+    >
+      <div
+        class="cabinet-content__grid-item-overlay"
+        *ngIf="activeForm < 2"
+      ></div>
+      <mat-card>
+        <h2>Адрес</h2>
+
+        <app-select
+          label="Населённый пункт"
+          [control]="form2.get('localityId')"
+          [options]="localitiesOptions"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
+        ></app-select>
+
+        <app-text-input
+          label="Улица"
+          [control]="form2.get('street')"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
+        ></app-text-input>
+
+        <app-text-input
+          label="Дом"
+          [control]="form2.get('house')"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
+        ></app-text-input>
+      </mat-card>
+    </form>
+    <div class="clearfix"></div>
+  </div>
+  <div class="cabinet-content__actions">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="sendForm2Address()"
+      *ngIf="activeForm === 2"
+      [disabled]="isFetching"
+    >
+      Добавить
+    </button>
+  </div>
+  <div *ngIf="serverError" class="cabinet-content__bottom-error">
+    {{ serverError }}
+  </div>
+</div>

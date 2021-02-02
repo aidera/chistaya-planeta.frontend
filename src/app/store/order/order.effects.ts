@@ -43,31 +43,4 @@ export class OrderEffects {
       })
     )
   );
-
-  getLocalities$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OrderActions.getLocalitiesRequest),
-      switchMap((action) => {
-        return this.localityApi.getAll().pipe(
-          map((resData) => {
-            if (resData && resData.localities) {
-              return OrderActions.getLocalitiesSuccess({
-                localities: resData.localities,
-              });
-            }
-            return OrderActions.getLocalitiesFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              OrderActions.getLocalitiesFailure({
-                error: errorRes.error.error,
-              })
-            );
-          })
-        );
-      })
-    )
-  );
 }

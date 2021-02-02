@@ -9,3 +9,9 @@ export interface IDivision {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface IDivisionLessInfo {
+  _id: string;
+  name: string;
+  address: Address;
+}

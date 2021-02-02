@@ -17,7 +17,7 @@ export class AppEffects {
 
   getLocalitiesToSelect$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getLocalitiesToSelectSuccess),
+      ofType(AppActions.getLocalitiesToSelectRequest),
       switchMap((action) => {
         return this.localityApi.getAll().pipe(
           map((resData) => {

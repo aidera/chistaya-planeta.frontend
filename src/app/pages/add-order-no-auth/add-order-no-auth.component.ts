@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../store/root.reducer';
+import * as AppActions from '../../store/app/app.actions';
+import * as AppSelectors from '../../store/app/app.selectors';
 import * as OrderActions from '../../store/order/order.actions';
 import * as OrderSelectors from '../../store/order/order.selectors';
 import orderTypeOptions from '../../data/orderTypeOptions';
@@ -18,12 +20,10 @@ import { tomorrow } from '../../utils/date.functions';
 import DeliveryType from '../../models/enums/DeliveryType';
 import PaymentMethod from '../../models/enums/PaymentMethod';
 import OrderType from '../../models/enums/OrderType';
-import { ILocality } from '../../models/Locality';
 import { OptionType } from '../../models/types/OptionType';
-import { IDivision } from 'src/app/models/Division';
 import { ServerError } from '../../models/ServerResponse';
 import RawUnit from '../../models/enums/RawUnit';
-import { SimpleStatus } from '../../models/enums/SimpleStatus';
+import { IDivision, IDivisionLessInfo } from '../../models/Division';
 
 @Component({
   selector: 'app-add-order-no-auth',
@@ -31,8 +31,10 @@ import { SimpleStatus } from '../../models/enums/SimpleStatus';
   styleUrls: ['./add-order-no-auth.component.scss'],
 })
 export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
-  private localities$: Subscription;
-  private localities: ILocality[];
+  private localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[];
+  private divisions$: Subscription;
+  public divisions: IDivisionLessInfo[];
 
   private isAddOrderSucceed$: Subscription;
   private isFetching$: Subscription;
@@ -62,20 +64,18 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formInit();
-    this.store.dispatch(OrderActions.getLocalitiesRequest({}));
+    this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
 
-    this.localities$ = this.store
-      .select(OrderSelectors.selectAddOrderLocalities)
+    this.localitiesOptions$ = this.store
+      .select(AppSelectors.selectLocalitiesOptionsToSelect)
       .subscribe((localities) => {
-        this.localities = localities;
-        localities.forEach((locality) => {
-          if (locality.status === SimpleStatus.active) {
-            this.selectLocalitiesOptions.push({
-              value: locality._id,
-              text: locality.name,
-            });
-          }
-        });
+        this.localitiesOptions = localities;
+      });
+
+    this.divisions$ = this.store
+      .select(AppSelectors.selectDivisionsToSelect)
+      .subscribe((divisions) => {
+        this.divisions = divisions;
       });
 
     this.isAddOrderSucceed$ = this.store
@@ -100,7 +100,8 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.localities$?.unsubscribe?.();
+    this.localitiesOptions$?.unsubscribe?.();
+    this.divisions$?.unsubscribe?.();
     this.isFetching$?.unsubscribe?.();
     this.serverError$?.unsubscribe?.();
     this.isAddOrderSucceed$?.unsubscribe?.();
@@ -208,15 +209,17 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
       this.form.get('deliveryType').value === DeliveryType.pickup + ''
     ) {
       if (value) {
-        const currentLocality = this.localities.find((locality) => {
-          return locality._id === value;
+        const currentLocality = this.localitiesOptions.find((locality) => {
+          return locality.value === value;
         });
         if (currentLocality) {
-          currentLocality.divisions.forEach((division: IDivision) => {
-            this.selectDivisionsOptions.push({
-              value: division._id,
-              text: `${division.name} (${division.address.street}, ${division.address.house})`,
-            });
+          this.divisions.forEach((division: IDivision) => {
+            if (division.address.locality === currentLocality.value) {
+              this.selectDivisionsOptions.push({
+                value: division._id,
+                text: `${division.name} (${division.address.street}, ${division.address.house})`,
+              });
+            }
           });
         }
       }

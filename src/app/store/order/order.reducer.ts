@@ -2,16 +2,11 @@ import { Action, createReducer, on } from '@ngrx/store';
 
 import * as OrderActions from './order.actions';
 import { ServerError } from '../../models/ServerResponse';
-import { ILocality } from '../../models/Locality';
 
 export const orderInitialState = {
   addOrderIsFetching: false,
   addOrderSucceed: false,
   addOrderError: null as ServerError | null,
-
-  addOrderLocalities: [] as ILocality[],
-  addOrderLocalitiesIsFetching: false,
-  addOrderLocalitiesError: null as ServerError | null,
 };
 export type OrderState = typeof orderInitialState;
 
@@ -40,23 +35,6 @@ const _orderReducer = createReducer(
   on(OrderActions.refreshAddOrderSuccess, (state, payload) => ({
     ...state,
     addOrderSucceed: false,
-  })),
-
-  on(OrderActions.getLocalitiesRequest, (state) => ({
-    ...state,
-    addOrderLocalitiesIsFetching: true,
-    addOrderLocalitiesError: null,
-  })),
-  on(OrderActions.getLocalitiesSuccess, (state, payload) => ({
-    ...state,
-    addOrderLocalities: payload.localities,
-    addOrderLocalitiesIsFetching: false,
-    addOrderLocalitiesError: null,
-  })),
-  on(OrderActions.getLocalitiesFailure, (state, payload) => ({
-    ...state,
-    addOrderLocalitiesIsFetching: false,
-    addOrderLocalitiesError: payload.error,
   }))
 );
 
