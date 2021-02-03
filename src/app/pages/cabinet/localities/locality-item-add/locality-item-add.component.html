@@ -19,24 +19,28 @@
       <mat-card>
         <h2>Основная информация</h2>
 
-        <app-text-input
-          label="Название"
-          [control]="form1.get('name')"
-          [errorMessages]="{
-            required: 'Обязательное поле',
-            alreadyExists: 'Такое название уже существует'
-          }"
-        ></app-text-input>
+        <div class="cabinet-content__grid-item-form-content">
+          <app-text-input
+            label="Название"
+            [control]="form1.get('name')"
+            [errorMessages]="{
+              required: 'Обязательное поле',
+              alreadyExists: 'Такое название уже существует'
+            }"
+          ></app-text-input>
+        </div>
       </mat-card>
     </form>
     <div class="clearfix"></div>
   </div>
-  <div class="cabinet-content__actions">
+  <div
+    class="cabinet-content__actions"
+    [class.cabinet-content__action_inactive]="activeForm < 1"
+  >
     <button
       mat-raised-button
       color="primary"
       (click)="sendForm1Main()"
-      *ngIf="activeForm === 1"
       [disabled]="isFetching"
     >
       Добавить

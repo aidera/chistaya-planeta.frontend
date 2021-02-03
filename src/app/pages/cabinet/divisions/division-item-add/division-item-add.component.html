@@ -19,14 +19,16 @@
       <mat-card>
         <h2>Основная информация</h2>
 
-        <app-text-input
-          label="Название"
-          [control]="form1.get('name')"
-          [errorMessages]="{
-            required: 'Обязательное поле',
-            alreadyExists: 'Такое название уже существует'
-          }"
-        ></app-text-input>
+        <div class="cabinet-content__grid-item-form-content">
+          <app-text-input
+            label="Название"
+            [control]="form1.get('name')"
+            [errorMessages]="{
+              required: 'Обязательное поле',
+              alreadyExists: 'Такое название уже существует'
+            }"
+          ></app-text-input>
+        </div>
       </mat-card>
       <div class="cabinet-content__grid-item-actions">
         <button
@@ -48,47 +50,52 @@
       class="cabinet-content__grid-item"
       [class.cabinet-content__grid-item_inactive]="activeForm < 2"
     >
-      <div
-        class="cabinet-content__grid-item-overlay"
-        *ngIf="activeForm < 2"
-      ></div>
+      <div class="cabinet-content__grid-item-overlay"></div>
       <mat-card>
         <h2>Адрес</h2>
 
-        <app-select
-          label="Населённый пункт"
-          [control]="form2.get('localityId')"
-          [options]="localitiesOptions"
-          [errorMessages]="{
-            required: 'Обязательное поле'
-          }"
-        ></app-select>
+        <div class="cabinet-content__grid-item-form-content">
+          <app-select
+            label="Населённый пункт"
+            [control]="form2.get('localityId')"
+            [options]="localitiesOptions"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
 
-        <app-text-input
-          label="Улица"
-          [control]="form2.get('street')"
-          [errorMessages]="{
-            required: 'Обязательное поле'
-          }"
-        ></app-text-input>
+          <br /><br />
 
-        <app-text-input
-          label="Дом"
-          [control]="form2.get('house')"
-          [errorMessages]="{
-            required: 'Обязательное поле'
-          }"
-        ></app-text-input>
+          <app-text-input
+            label="Улица"
+            [control]="form2.get('street')"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-text-input>
+
+          <br /><br />
+
+          <app-text-input
+            label="Дом"
+            [control]="form2.get('house')"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-text-input>
+        </div>
       </mat-card>
     </form>
     <div class="clearfix"></div>
   </div>
-  <div class="cabinet-content__actions">
+  <div
+    class="cabinet-content__actions"
+    [class.cabinet-content__action_inactive]="activeForm < 2"
+  >
     <button
       mat-raised-button
       color="primary"
       (click)="sendForm2Address()"
-      *ngIf="activeForm === 2"
       [disabled]="isFetching"
     >
       Добавить
