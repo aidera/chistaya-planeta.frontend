@@ -2,7 +2,6 @@ import { createAction, props } from '@ngrx/store';
 
 import { IAddOrderRequest } from '../../services/api/order.service';
 import { ServerError } from '../../models/ServerResponse';
-import { ILocality } from '../../models/Locality';
 
 export const ADD_ORDER_REQUEST = '[order] add - order - request';
 export const ADD_ORDER_SUCCESS = '[order] add - order - success';

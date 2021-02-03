@@ -45,9 +45,9 @@ export class LocalityService {
 
   constructor(private http: HttpClient, private api: ApiService) {}
 
-  getAll(): Observable<IGetAllLocalitiesResponse> {
+  getAllLessInfo(): Observable<IGetAllLocalitiesResponse> {
     return this.http.get<IGetAllLocalitiesResponse>(
-      `${environment.serverURL}/${this.path}/all`
+      `${environment.serverURL}/${this.path}/all-less-info`
     );
   }
 

@@ -18,8 +18,8 @@ export class AppEffects {
   getLocalitiesToSelect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AppActions.getLocalitiesToSelectRequest),
-      switchMap((action) => {
-        return this.localityApi.getAll().pipe(
+      switchMap((_) => {
+        return this.localityApi.getAllLessInfo().pipe(
           map((resData) => {
             if (resData && resData.localities) {
               return AppActions.getLocalitiesToSelectSuccess({
@@ -45,8 +45,8 @@ export class AppEffects {
   getDivisionsToSelect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AppActions.getDivisionsToSelectRequest),
-      switchMap((action) => {
-        return this.divisionApi.getAll().pipe(
+      switchMap((_) => {
+        return this.divisionApi.getAllLessInfo().pipe(
           map((resData) => {
             if (resData && resData.divisions) {
               return AppActions.getDivisionsToSelectSuccess({

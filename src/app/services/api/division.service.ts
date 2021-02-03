@@ -45,9 +45,9 @@ export class DivisionService {
 
   constructor(private http: HttpClient, private api: ApiService) {}
 
-  getAll(): Observable<IGetAllDivisionsResponse> {
+  getAllLessInfo(): Observable<IGetAllDivisionsResponse> {
     return this.http.get<IGetAllDivisionsResponse>(
-      `${environment.serverURL}/${this.path}/all`
+      `${environment.serverURL}/${this.path}/all-less-info`
     );
   }
 
