@@ -132,6 +132,9 @@
                   'localities',
                   division.address?.locality?._id
                 ]"
+                [class.red-text]="
+                  division.address?.locality?.status === simpleStatus.inactive
+                "
                 >{{ division.address?.locality?.name }}</a
               >
               <div class="cabinet-content__field-inactive-action">

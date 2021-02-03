@@ -113,15 +113,17 @@ export class DivisionItemAddComponent
       .get('name')
       .valueChanges.pipe(debounceTime(500))
       .subscribe((value) => {
-        this.divisionApi
-          .checkName(this.form1.get('name').value)
-          .pipe(take(1))
-          .subscribe((response) => {
-            if (response?.responseCode === responseCodes.found) {
-              this.form1.get('name').markAsTouched();
-              this.form1.get('name').setErrors({ alreadyExists: true });
-            }
-          });
+        if (value !== '') {
+          this.divisionApi
+            .checkName(this.form1.get('name').value)
+            .pipe(take(1))
+            .subscribe((response) => {
+              if (response?.responseCode === responseCodes.found) {
+                this.form1.get('name').markAsTouched();
+                this.form1.get('name').setErrors({ alreadyExists: true });
+              }
+            });
+        }
       });
 
     this.form2 = new FormGroup({

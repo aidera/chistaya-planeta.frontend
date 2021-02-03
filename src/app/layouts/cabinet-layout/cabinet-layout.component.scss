@@ -253,6 +253,15 @@
           border-radius: 50%;
           background-color: $color-primary;
         }
+
+        &.red-text {
+          &:before {
+            background-color: $error-color;
+          }
+          a {
+            color: $error-color;
+          }
+        }
       }
     }
   }

@@ -128,16 +128,11 @@
                 <ul>
                   <li
                     *ngFor="let division of locality.divisions; let i = index"
+                    [class.red-text]="division.status === simpleStatus.inactive"
                   >
-                    <a
-                      [routerLink]="[
-                        '/e',
-                        'cabinet',
-                        'divisions',
-                        division._id
-                      ]"
-                      >{{ division.name }}</a
-                    >
+                    <a [routerLink]="['../../', 'divisions', division._id]">{{
+                      division.name
+                    }}</a>
                   </li>
                 </ul>
               </ng-template>

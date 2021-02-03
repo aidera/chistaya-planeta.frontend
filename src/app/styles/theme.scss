@@ -127,22 +127,34 @@ b {
   font-size: inherit;
 }
 
-.yellow-text {
+.yellow-text,
+a.yellow-text,
+a.yellow-text-text:visited,
+a.yellow-text:active {
   color: $yellow-color;
   font-size: inherit;
 }
 
-.red-text {
+.red-text,
+a.red-text,
+a.red-text:visited,
+a.red-text:active {
   color: $red-color;
   font-size: inherit;
 }
 
-.green-text {
+.green-text,
+a.green-text,
+a.green-text:visited,
+a.green-text:active {
   color: $green-color;
   font-size: inherit;
 }
 
-.blue-text {
+.blue-text,
+a.blue-text,
+a.blue-text:visited,
+a.blue-text:active {
   color: $blue-color;
   font-size: inherit;
 }
