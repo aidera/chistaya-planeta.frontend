@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as fromRoot from '../../store/root.reducer';
-import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { ModalAction } from '../../components/modal/modal.component';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
@@ -34,7 +33,6 @@ export class ItemPageComponent implements OnDestroy {
   protected getItemError$: Subscription;
   public getItemError: string | null;
 
-  public simpleStatus = SimpleStatus;
   public form: FormGroup;
   public activeField: string | null = null;
   protected updateSnackbar: MatSnackBarRef<TextOnlySnackBar>;

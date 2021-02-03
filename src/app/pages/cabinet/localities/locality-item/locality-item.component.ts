@@ -22,6 +22,8 @@ export class LocalityItemComponent
   private locality$: Subscription;
   public locality: ILocality | null;
 
+  public simpleStatus = SimpleStatus;
+
   localityStatusString = 'Статус';
 
   ngOnInit(): void {

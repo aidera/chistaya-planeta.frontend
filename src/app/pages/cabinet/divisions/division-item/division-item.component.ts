@@ -28,7 +28,9 @@ export class DivisionItemComponent
   private localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[];
 
-  divisionStatusString = 'Статус';
+  public simpleStatus = SimpleStatus;
+
+  public divisionStatusString = 'Статус';
 
   ngOnInit(): void {
     this.divisionId = this.route.snapshot.paramMap.get('id') as string;
