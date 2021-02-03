@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as fromRoot from '../../store/root.reducer';
-import { ModalAction } from '../../components/modal/modal.component';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
@@ -25,21 +24,10 @@ export class ItemPageComponent implements OnDestroy {
   protected isUpdateSucceed$: Subscription;
   protected updateError$: Subscription;
   public updateError: string | null;
-  protected isRemoving$: Subscription;
-  public isRemoving = false;
-  protected isRemoveSucceed$: Subscription;
-  protected removeError$: Subscription;
-  public removeError: string | null;
-  protected getItemError$: Subscription;
-  public getItemError: string | null;
 
   public form: FormGroup;
   public activeField: string | null = null;
   protected updateSnackbar: MatSnackBarRef<TextOnlySnackBar>;
-  public isRemoveModalOpen = false;
-  public removeModalResolveButton = 'Оставить в архиве';
-  public removeModalRejectButton = 'Удалить';
-  protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -55,10 +43,6 @@ export class ItemPageComponent implements OnDestroy {
     this.isUpdating$?.unsubscribe?.();
     this.isUpdateSucceed$?.unsubscribe?.();
     this.updateError$?.unsubscribe?.();
-    this.isRemoving$?.unsubscribe?.();
-    this.isRemoveSucceed$?.unsubscribe?.();
-    this.removeError$?.unsubscribe?.();
-    this.getItemError$?.unsubscribe?.();
   }
 
   public setActiveField(fieldName: string): void {
@@ -75,32 +59,5 @@ export class ItemPageComponent implements OnDestroy {
 
   public goToPreviousPage(): void {
     this.routingState.goToPreviousPage(this.route);
-  }
-
-  public onRemoveModalAction(action: ModalAction): void {
-    switch (action) {
-      case 'cancel':
-        this.isRemoveModalOpen = false;
-        break;
-      case 'resolve':
-        this.isRemoveModalOpen = false;
-        break;
-    }
-  }
-
-  public enable(): void {
-    console.log('enable');
-  }
-
-  public disable(): void {
-    console.log('disable');
-  }
-
-  public update(): void {
-    console.log('update');
-  }
-
-  public remove(): void {
-    console.log('remove');
   }
 }

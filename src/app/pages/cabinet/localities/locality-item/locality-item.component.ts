@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 
 import * as LocalitiesActions from '../../../../store/locality/locality.actions';
 import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
@@ -21,6 +22,17 @@ export class LocalityItemComponent
   private localityId: string;
   private locality$: Subscription;
   public locality: ILocality | null;
+  private getLocalityError$: Subscription;
+  public getLocalityError: string | null;
+  protected isRemoving$: Subscription;
+  public isRemoving = false;
+  protected isRemoveSucceed$: Subscription;
+  protected removeError$: Subscription;
+  public removeError: string | null;
+
+  public isRemoveModalOpen = false;
+  protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
+  public isDeactivateModalOpen = false;
 
   public simpleStatus = SimpleStatus;
 
@@ -60,14 +72,14 @@ export class LocalityItemComponent
         }
       });
 
-    this.getItemError$ = this.store
+    this.getLocalityError$ = this.store
       .select(LocalitiesSelectors.selectGetLocalityError)
       .subscribe((error) => {
         if (error?.code) {
-          this.getItemError =
+          this.getLocalityError =
             error.code === responseCodes.notFound ? 'Не найдено' : error.code;
         } else {
-          this.getItemError = null;
+          this.getLocalityError = null;
         }
       });
 
@@ -161,6 +173,10 @@ export class LocalityItemComponent
 
   ngOnDestroy(): void {
     this.locality$?.unsubscribe?.();
+    this.getLocalityError$?.unsubscribe?.();
+    this.isRemoving$?.unsubscribe?.();
+    this.isRemoveSucceed$?.unsubscribe?.();
+    this.removeError$?.unsubscribe?.();
   }
 
   private initForm(): void {
@@ -209,11 +225,25 @@ export class LocalityItemComponent
   }
 
   public onRemoveModalAction(action: ModalAction): void {
-    super.onRemoveModalAction(action);
+    switch (action) {
+      case 'cancel':
+        this.isRemoveModalOpen = false;
+        break;
+      case 'resolve':
+        this.isRemoveModalOpen = false;
+        break;
+    }
     if (action === 'reject') {
       this.store.dispatch(
         LocalitiesActions.removeLocalityRequest({ id: this.locality._id })
       );
+    }
+  }
+
+  public onDeactivateModalAction(action: ModalAction): void {
+    this.isDeactivateModalOpen = false;
+    if (action === 'reject') {
+      this.disable();
     }
   }
 }

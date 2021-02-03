@@ -15,7 +15,7 @@
       [disabled]="isFetching || isUpdating"
       mat-raised-button
       color="warn"
-      (click)="disable()"
+      (click)="isDeactivateModalOpen = true"
     >
       Деактивировать
     </button>
@@ -181,8 +181,8 @@
 <app-modal
   [isLoading]="isRemoving"
   [isOpen]="isRemoveModalOpen"
-  [resolveButtonText]="removeModalResolveButton"
-  [rejectButtonText]="removeModalRejectButton"
+  [resolveButtonText]="'Оставить в архиве'"
+  [rejectButtonText]="'Удалить'"
   (action)="onRemoveModalAction($event)"
 >
   Полностью удалять населённый пункт лучше только в том случае, если вы добавили
@@ -194,4 +194,13 @@
   <br />
   <br />
   Связанные подразделения будут удалены.
+</app-modal>
+
+<app-modal
+  [isLoading]="isFetching"
+  [isOpen]="isDeactivateModalOpen"
+  [rejectButtonText]="'Деактивировать'"
+  (action)="onDeactivateModalAction($event)"
+>
+  Связанные подразделения тоже будут деактивированы.
 </app-modal>

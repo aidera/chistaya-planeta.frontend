@@ -329,8 +329,8 @@
 <app-modal
   [isLoading]="isRemoving"
   [isOpen]="isRemoveModalOpen"
-  [resolveButtonText]="removeModalResolveButton"
-  [rejectButtonText]="removeModalRejectButton"
+  [resolveButtonText]="'Оставить в архиве'"
+  [rejectButtonText]="'Удалить'"
   (action)="onRemoveModalAction($event)"
 >
   Полностью удалять подразделение лучше только в том случае, если вы добавили

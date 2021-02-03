@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 
 import * as AppActions from '../../../../store/app/app.actions';
 import * as AppSelectors from '../../../../store/app/app.selectors';
@@ -25,8 +26,18 @@ export class DivisionItemComponent
   private divisionId: string;
   private division$: Subscription;
   public division: IDivision | null;
+  private getDivisionError$: Subscription;
+  public getDivisionError: string | null;
   private localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[];
+  protected isRemoving$: Subscription;
+  public isRemoving = false;
+  protected isRemoveSucceed$: Subscription;
+  protected removeError$: Subscription;
+  public removeError: string | null;
+
+  public isRemoveModalOpen = false;
+  protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   public simpleStatus = SimpleStatus;
 
@@ -34,15 +45,15 @@ export class DivisionItemComponent
 
   ngOnInit(): void {
     this.divisionId = this.route.snapshot.paramMap.get('id') as string;
-    this.getItemRequest();
+    this.getDivisionsRequest();
 
     this.socket.get()?.on('divisions', (data) => {
       if (data.action === 'add' || data.action === 'delete') {
-        this.getItemRequest();
+        this.getDivisionsRequest();
       }
       if (data.action === 'update' && data.id) {
         if (this.division && this.division._id === data.id) {
-          this.getItemRequest();
+          this.getDivisionsRequest();
         }
       }
     });
@@ -71,14 +82,14 @@ export class DivisionItemComponent
         }
       });
 
-    this.getItemError$ = this.store
+    this.getDivisionError$ = this.store
       .select(DivisionSelectors.selectGetDivisionError)
       .subscribe((error) => {
         if (error?.code) {
-          this.getItemError =
+          this.getDivisionError =
             error.code === responseCodes.notFound ? 'Не найдено' : error.code;
         } else {
-          this.getItemError = null;
+          this.getDivisionError = null;
         }
       });
 
@@ -184,7 +195,11 @@ export class DivisionItemComponent
 
   ngOnDestroy(): void {
     this.division$?.unsubscribe?.();
+    this.getDivisionError$?.unsubscribe?.();
     this.localitiesOptions$?.unsubscribe?.();
+    this.isRemoving$?.unsubscribe?.();
+    this.isRemoveSucceed$?.unsubscribe?.();
+    this.removeError$?.unsubscribe?.();
   }
 
   private initForm(): void {
@@ -196,7 +211,7 @@ export class DivisionItemComponent
     });
   }
 
-  public getItemRequest(): void {
+  public getDivisionsRequest(): void {
     this.store.dispatch(
       DivisionActions.getDivisionRequest({ id: this.divisionId })
     );
@@ -235,7 +250,14 @@ export class DivisionItemComponent
   }
 
   public onRemoveModalAction(action: ModalAction): void {
-    super.onRemoveModalAction(action);
+    switch (action) {
+      case 'cancel':
+        this.isRemoveModalOpen = false;
+        break;
+      case 'resolve':
+        this.isRemoveModalOpen = false;
+        break;
+    }
     if (action === 'reject') {
       this.store.dispatch(
         DivisionActions.removeDivisionRequest({ id: this.division._id })
