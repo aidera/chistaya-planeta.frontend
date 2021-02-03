@@ -8,7 +8,7 @@
     <form
       id="form1"
       [formGroup]="form1"
-      (ngSubmit)="sendForm1Main()"
+      (ngSubmit)="sendForm1()"
       class="cabinet-content__grid-item"
       [class.cabinet-content__grid-item_inactive]="activeForm < 1"
     >
@@ -36,7 +36,6 @@
           color="primary"
           type="submit"
           [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
-          (click)="sendForm1Main()"
         >
           Далее
         </button>
@@ -46,7 +45,7 @@
     <form
       id="form2"
       [formGroup]="form2"
-      (ngSubmit)="sendForm1Main()"
+      (ngSubmit)="sendForm2()"
       class="cabinet-content__grid-item"
       [class.cabinet-content__grid-item_inactive]="activeForm < 2"
     >
@@ -94,9 +93,10 @@
   >
     <button
       mat-raised-button
+      type="submit"
       color="primary"
-      (click)="sendForm2Address()"
       [disabled]="isFetching"
+      (click)="sendForm2()"
     >
       Добавить
     </button>

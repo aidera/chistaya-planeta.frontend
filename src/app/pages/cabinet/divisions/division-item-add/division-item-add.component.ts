@@ -1,13 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
+import * as fromRoot from '../../../../store/root.reducer';
+import * as AppSelectors from '../../../../store/app/app.selectors';
+import * as AppActions from '../../../../store/app/app.actions';
 import * as DivisionSelectors from '../../../../store/division/division.selectors';
 import * as DivisionActions from '../../../../store/division/division.actions';
 import { ItemAddPageComponent } from '../../item-add-page.component';
-import { Subscription } from 'rxjs';
 import { OptionType } from '../../../../models/types/OptionType';
-import * as AppSelectors from '../../../../store/app/app.selectors';
-import * as AppActions from '../../../../store/app/app.actions';
+import { RoutingStateService } from '../../../../services/routing-state/routing-state.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { DivisionService } from '../../../../services/api/division.service';
+import { responseCodes } from '../../../../data/responseCodes';
 
 @Component({
   selector: 'app-division-item-add',
@@ -22,6 +31,18 @@ export class DivisionItemAddComponent
 
   public form1: FormGroup;
   public form2: FormGroup;
+
+  constructor(
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected snackBar: MatSnackBar,
+    protected routingState: RoutingStateService,
+    protected socket: SocketIoService,
+    private divisionApi: DivisionService
+  ) {
+    super(store, route, router, snackBar, routingState, socket);
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -88,6 +109,21 @@ export class DivisionItemAddComponent
       name: new FormControl('', Validators.required),
     });
 
+    this.form1
+      .get('name')
+      .valueChanges.pipe(debounceTime(500))
+      .subscribe((value) => {
+        this.divisionApi
+          .checkName(this.form1.get('name').value)
+          .pipe(take(1))
+          .subscribe((response) => {
+            if (response?.responseCode === responseCodes.found) {
+              this.form1.get('name').markAsTouched();
+              this.form1.get('name').setErrors({ alreadyExists: true });
+            }
+          });
+      });
+
     this.form2 = new FormGroup({
       localityId: new FormControl('', Validators.required),
       street: new FormControl('', Validators.required),
@@ -95,19 +131,29 @@ export class DivisionItemAddComponent
     });
   }
 
-  public sendForm1Main(): void {
+  public sendForm1(): void {
     Object.keys(this.form1.controls).forEach((field) => {
       const control = this.form1.get(field);
       control.markAsTouched({ onlySelf: true });
       control.updateValueAndValidity();
     });
 
-    if (this.form1?.get('name').value !== '') {
-      this.setActiveForm(2);
+    if (this.form1?.valid) {
+      this.divisionApi
+        .checkName(this.form1.get('name').value)
+        .pipe(take(1))
+        .subscribe((response) => {
+          if (response?.responseCode === responseCodes.notFound) {
+            this.setActiveForm(2);
+          }
+          if (response?.responseCode === responseCodes.found) {
+            this.form1.get('name').setErrors({ alreadyExists: true });
+          }
+        });
     }
   }
 
-  public sendForm2Address(): void {
+  public sendForm2(): void {
     Object.keys(this.form2.controls).forEach((field) => {
       const control = this.form2.get(field);
       control.markAsTouched({ onlySelf: true });

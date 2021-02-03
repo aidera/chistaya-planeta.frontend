@@ -30,7 +30,7 @@ export class ItemAddPageComponent implements OnDestroy {
     protected route: ActivatedRoute,
     protected router: Router,
     protected snackBar: MatSnackBar,
-    private routingState: RoutingStateService,
+    protected routingState: RoutingStateService,
     protected socket: SocketIoService
   ) {}
 

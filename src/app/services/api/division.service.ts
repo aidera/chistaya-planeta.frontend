@@ -17,6 +17,11 @@ export interface IGetOneDivisionResponse extends ServerResponse {
   division?: IDivision;
 }
 
+export interface ICheckDivisionNameResponse extends ServerResponse {
+  id?: string;
+  responseCode?: string;
+}
+
 export interface IUpdateDivisionResponse extends ServerResponse {
   updatedDivision?: IDivision;
 }
@@ -62,6 +67,12 @@ export class DivisionService {
   getOne(id: string): Observable<IGetOneDivisionResponse> {
     return this.http.get<IGetOneDivisionResponse>(
       `${environment.serverURL}/${this.path}/${id}`
+    );
+  }
+
+  checkName(name: string): Observable<ICheckDivisionNameResponse> {
+    return this.http.get<ICheckDivisionNameResponse>(
+      `${environment.serverURL}/${this.path}/check-name/${name}`
     );
   }
 

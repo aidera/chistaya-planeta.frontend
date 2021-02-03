@@ -11,6 +11,7 @@ export const responseCodes = {
   shouldBeABoolean: 'SHOULD_BE_A_BOOLEAN',
   shouldBeAnArray: 'SHOULD_BE_AN_ARRAY',
   shouldBeADateInMilliseconds: 'SHOULD_BE_A_DATE_IN_MILLISECONDS',
+  shouldBeAnIsoString: 'SHOULD_BE_AN_ISO_STRING',
   isRequired: 'IS_REQUIRED',
   notFound: 'NOT_FOUND',
   invalidEmail: 'INVALID_EMAIL',
@@ -26,4 +27,6 @@ export const responseCodes = {
   tooEarlyDateTime: 'TOO_EARLY_DATE_TIME',
   alreadyExists: 'ALREADY_EXISTS',
   notExist: 'NOT_EXIST',
+  shouldBeDifferent: 'SHOULD_BE_DIFFERENT',
+  found: 'FOUND',
 };
