@@ -34,10 +34,10 @@
 <div class="cabinet-content">
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
   <div
-    *ngIf="getItemError || updateError || removeError"
+    *ngIf="getLocalityError || updateError || removeError"
     class="cabinet-content__top-error"
   >
-    {{ getItemError || updateError || removeError }}
+    {{ getLocalityError || updateError || removeError }}
   </div>
   <div *ngIf="locality" class="cabinet-content__grid">
     <div class="cabinet-content__grid-item">
@@ -137,6 +137,19 @@
                 </ul>
               </ng-template>
             </p>
+            <div class="cabinet-content__field-inactive-action">
+              <button
+                mat-icon-button
+                [routerLink]="['../../', 'divisions', 'add']"
+                [queryParams]="{ localityId: locality._id }"
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/plus.svg'"
+                ></span>
+              </button>
+            </div>
+
             <ng-container *ngIf="isFetching">
               <app-skeleton></app-skeleton>
               <br />

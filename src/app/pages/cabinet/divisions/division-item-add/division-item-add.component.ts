@@ -32,6 +32,9 @@ export class DivisionItemAddComponent
   public form1: FormGroup;
   public form2: FormGroup;
 
+  public isQueryLocalityId = false;
+  public queryLocalityId: string;
+
   constructor(
     protected store: Store<fromRoot.State>,
     protected route: ActivatedRoute,
@@ -46,6 +49,14 @@ export class DivisionItemAddComponent
 
   ngOnInit(): void {
     this.initForm();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params.localityId) {
+        this.form2.get('localityId').setValue(params.localityId);
+        this.isQueryLocalityId = true;
+        this.queryLocalityId = params.localityId;
+      }
+    });
 
     this.isFetching$ = this.store
       .select(DivisionSelectors.selectAddDivisionIsFetching)
@@ -131,6 +142,15 @@ export class DivisionItemAddComponent
       street: new FormControl('', Validators.required),
       house: new FormControl('', Validators.required),
     });
+
+    this.form2
+      .get('localityId')
+      .valueChanges.pipe(debounceTime(500))
+      .subscribe((value) => {
+        if (value !== this.queryLocalityId) {
+          this.isQueryLocalityId = false;
+        }
+      });
   }
 
   public sendForm1(): void {

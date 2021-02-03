@@ -55,7 +55,11 @@
 
         <div class="cabinet-content__grid-item-form-content">
           <app-select
-            label="Населённый пункт"
+            [label]="
+              isQueryLocalityId
+                ? 'Населённый пункт (добавлено автоматически)'
+                : 'Населённый пункт'
+            "
             [control]="form2.get('localityId')"
             [options]="localitiesOptions"
             [errorMessages]="{

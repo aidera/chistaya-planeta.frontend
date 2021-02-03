@@ -34,10 +34,10 @@
 <div class="cabinet-content">
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
   <div
-    *ngIf="getItemError || updateError || removeError"
+    *ngIf="getDivisionError || updateError || removeError"
     class="cabinet-content__top-error"
   >
-    {{ getItemError || updateError || removeError }}
+    {{ getDivisionError || updateError || removeError }}
   </div>
   <div *ngIf="division" class="cabinet-content__grid">
     <div class="cabinet-content__grid-item">
