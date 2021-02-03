@@ -24,6 +24,7 @@ import { ILocality } from '../../models/Locality';
 import PaymentMethod from '../../models/enums/PaymentMethod';
 import { tomorrow } from '../../utils/date.functions';
 import timeOptions from '../../data/timeOptions';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
@@ -54,6 +55,7 @@ describe('AddOrderNoAuthComponent', () => {
         HttpClientModule,
       ],
       providers: [
+        SocketIoService,
         provideMockStore({
           initialState: {
             app: {

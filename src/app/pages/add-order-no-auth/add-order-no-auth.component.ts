@@ -24,6 +24,7 @@ import { OptionType } from '../../models/types/OptionType';
 import { ServerError } from '../../models/ServerResponse';
 import RawUnit from '../../models/enums/RawUnit';
 import { IDivision, IDivisionLessInfo } from '../../models/Division';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 @Component({
   selector: 'app-add-order-no-auth',
@@ -60,23 +61,38 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
 
   public desiredPickupDateMinDate = tomorrow;
 
-  constructor(private router: Router, private store: Store<fromRoot.State>) {}
+  constructor(
+    private router: Router,
+    private store: Store<fromRoot.State>,
+    protected socket: SocketIoService
+  ) {}
 
   ngOnInit(): void {
     this.formInit();
-    this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
 
     this.localitiesOptions$ = this.store
       .select(AppSelectors.selectLocalitiesOptionsToSelect)
       .subscribe((localities) => {
         this.localitiesOptions = localities;
+        if (localities === null) {
+          this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+        }
       });
+    this.socket.get()?.on('localities', (_) => {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    });
 
     this.divisions$ = this.store
       .select(AppSelectors.selectDivisionsToSelect)
       .subscribe((divisions) => {
         this.divisions = divisions;
+        if (divisions === null) {
+          this.store.dispatch(AppActions.getDivisionsToSelectRequest());
+        }
       });
+    this.socket.get()?.on('divisions', (_) => {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    });
 
     this.isAddOrderSucceed$ = this.store
       .select(OrderSelectors.selectAddOrderSucceed)

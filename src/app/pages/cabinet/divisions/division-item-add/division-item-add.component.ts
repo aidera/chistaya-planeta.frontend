@@ -7,6 +7,7 @@ import { ItemAddPageComponent } from '../../item-add-page.component';
 import { Subscription } from 'rxjs';
 import { OptionType } from '../../../../models/types/OptionType';
 import * as AppSelectors from '../../../../store/app/app.selectors';
+import * as AppActions from '../../../../store/app/app.actions';
 
 @Component({
   selector: 'app-division-item-add',
@@ -68,7 +69,13 @@ export class DivisionItemAddComponent
       .select(AppSelectors.selectLocalitiesOptionsToSelect)
       .subscribe((localities) => {
         this.localitiesOptions = localities;
+        if (localities === null) {
+          this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+        }
       });
+    this.socket.get()?.on('localities', (_) => {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    });
   }
 
   ngOnDestroy(): void {

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import * as AppActions from '../../../../store/app/app.actions';
 import * as AppSelectors from '../../../../store/app/app.selectors';
 import * as DivisionActions from '../../../../store/division/division.actions';
 import * as DivisionSelectors from '../../../../store/division/division.selectors';
@@ -170,7 +171,13 @@ export class DivisionItemComponent
       .select(AppSelectors.selectLocalitiesOptionsToSelect)
       .subscribe((localities) => {
         this.localitiesOptions = localities;
+        if (localities === null) {
+          this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+        }
       });
+    this.socket.get()?.on('localities', (_) => {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    });
   }
 
   ngOnDestroy(): void {

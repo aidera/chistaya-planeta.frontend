@@ -16,40 +16,40 @@ export const appInitialState = {
   /* ---------------------------------- */
   /* ------ Localities to select ------ */
   /* ---------------------------------- */
-  localitiesToSelect: [] as ILocalityLessInfo[],
-  localitiesOptionsToSelect: [] as OptionType[],
+  localitiesToSelect: null as ILocalityLessInfo[] | null,
+  localitiesOptionsToSelect: null as OptionType[] | null,
   localitiesToSelectIsFetching: false,
   localitiesToSelectError: null as ServerError | null,
 
   /* --------------------------------- */
   /* ------ Divisions to select ------ */
   /* --------------------------------- */
-  divisionsToSelect: [] as IDivisionLessInfo[],
-  divisionsOptionsToSelect: [] as OptionType[],
+  divisionsToSelect: null as IDivisionLessInfo[] | null,
+  divisionsOptionsToSelect: null as OptionType[] | null,
   divisionsToSelectIsFetching: false,
   divisionsToSelectError: null as ServerError | null,
 
   /* -------------------------------- */
   /* ------ Managers to select ------ */
   /* -------------------------------- */
-  managersToSelect: [] as ILessInfoItem[],
-  managersOptionsToSelect: [] as OptionType[],
+  managersToSelect: null as ILessInfoItem[] | null,
+  managersOptionsToSelect: null as OptionType[] | null,
   managersToSelectIsFetching: false,
   managersToSelectError: null as ServerError | null,
 
   /* ------------------------------- */
   /* ------ Drivers to select ------ */
   /* ------------------------------- */
-  driversToSelect: [] as ILessInfoItem[],
-  driversOptionsToSelect: [] as OptionType[],
+  driversToSelect: null as ILessInfoItem[] | null,
+  driversOptionsToSelect: null as OptionType[] | null,
   driversToSelectIsFetching: false,
   driversToSelectError: null as ServerError | null,
 
   /* --------------------------------- */
   /* ------ Employees to select ------ */
   /* --------------------------------- */
-  employeesToSelect: [] as ILessInfoItem[],
-  employeesOptionsToSelect: [] as OptionType[],
+  employeesToSelect: null as ILessInfoItem[] | null,
+  employeesOptionsToSelect: null as OptionType[] | null,
   employeesToSelectIsFetching: false,
   employeesToSelectError: null as ServerError | null,
 };

@@ -9,8 +9,9 @@ import * as DivisionActions from '../../../../store/division/division.actions';
 import * as DivisionSelectors from '../../../../store/division/division.selectors';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { IDivision } from '../../../../models/Division';
-import { ILocality, ILocalityLessInfo } from '../../../../models/Locality';
+import { ILocality } from '../../../../models/Locality';
 import { OptionType } from '../../../../models/types/OptionType';
+import * as AppActions from '../../../../store/app/app.actions';
 
 @Component({
   selector: 'app-divisions-table',
@@ -254,7 +255,13 @@ export class DivisionsTableComponent
       .select(AppSelectors.selectLocalitiesOptionsToSelect)
       .subscribe((localities) => {
         this.localitiesOptions = localities;
+        if (localities === null) {
+          this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+        }
       });
+    this.socket.get()?.on('localities', (_) => {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    });
 
     /* --------------------------- */
     /* --- Parent class ngInit --- */

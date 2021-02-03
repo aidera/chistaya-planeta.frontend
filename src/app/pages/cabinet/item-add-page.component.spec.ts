@@ -5,6 +5,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ItemAddPageComponent } from './item-add-page.component';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
+import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 describe('ItemAddComponent', () => {
   let component: ItemAddPageComponent;
@@ -15,6 +16,7 @@ describe('ItemAddComponent', () => {
       declarations: [ItemAddPageComponent],
       imports: [MatSnackBarModule, RouterTestingModule],
       providers: [
+        SocketIoService,
         RoutingStateService,
         provideMockStore({
           initialState: {},
