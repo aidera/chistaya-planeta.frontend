@@ -24,6 +24,9 @@
     >
       {{ option.text }}
     </mat-option>
+    <mat-option *ngIf="!options || options.length <= 0" [disabled]="true"
+      ><i>Нет вариантов</i></mat-option
+    >
   </mat-select>
 
   <mat-hint *ngIf="currentErrorMessage && control && control.touched">{{
