@@ -145,6 +145,88 @@ describe('TableComponent', () => {
         component.columnsCanBeDisplayed
       );
     });
+
+    it('should return display settings without name option', () => {
+      spyOn(component.display, 'emit');
+
+      component.displayForm.get('name').setValue(false);
+      fixture.detectChanges();
+
+      expect(component.display.emit).toHaveBeenCalledTimes(1);
+      expect(component.display.emit).toHaveBeenCalledWith(
+        component.columnsCanBeDisplayed.filter((column) => column !== 'name')
+      );
+    });
+
+    it('should return display settings without name and surname options', () => {
+      spyOn(component.display, 'emit');
+
+      component.displayForm.get('name').setValue(false);
+      component.displayForm.get('surname').setValue(false);
+      fixture.detectChanges();
+
+      expect(component.display.emit).toHaveBeenCalledTimes(2);
+      expect(component.display.emit).toHaveBeenCalledWith(
+        component.columnsCanBeDisplayed.filter(
+          (column) => column !== 'name' && column !== 'surname'
+        )
+      );
+    });
+
+    it('should emit only birth parameter', () => {
+      spyOn(component.display, 'emit');
+
+      component.displayForm.get('name').setValue(false);
+      component.displayForm.get('surname').setValue(false);
+      component.displayForm.get('age').setValue(false);
+      component.displayForm.get('hobbies').setValue(false);
+      fixture.detectChanges();
+
+      expect(component.display.emit).toHaveBeenCalledTimes(4);
+      expect(component.display.emit).toHaveBeenCalledWith(['birth']);
+    });
+
+    it('should not be disabled if there is no selected params', () => {
+      component.displayForm.get('name').setValue(false);
+      component.displayForm.get('surname').setValue(false);
+      component.displayForm.get('age').setValue(false);
+      component.displayForm.get('hobbies').setValue(false);
+      component.displayForm.get('birth').setValue(false);
+      fixture.detectChanges();
+
+      expect(component.displayForm.get('name').disabled).toBe(false);
+      expect(component.displayForm.get('surname').disabled).toBe(false);
+      expect(component.displayForm.get('age').disabled).toBe(false);
+      expect(component.displayForm.get('hobbies').disabled).toBe(false);
+      expect(component.displayForm.get('birth').disabled).toBe(false);
+    });
+
+    it('should be disabled true parameter if only one parameter is true', () => {
+      component.displayForm.get('name').setValue(false);
+      component.displayForm.get('surname').setValue(false);
+      component.displayForm.get('age').setValue(false);
+      component.displayForm.get('hobbies').setValue(false);
+      fixture.detectChanges();
+
+      expect(component.displayForm.get('name').disabled).toBe(false);
+      expect(component.displayForm.get('surname').disabled).toBe(false);
+      expect(component.displayForm.get('age').disabled).toBe(false);
+      expect(component.displayForm.get('hobbies').disabled).toBe(false);
+      expect(component.displayForm.get('birth').disabled).toBe(true);
+    });
+
+    it('should not be disabled if more then one parameter is true', () => {
+      component.displayForm.get('name').setValue(false);
+      component.displayForm.get('surname').setValue(false);
+      component.displayForm.get('age').setValue(false);
+      fixture.detectChanges();
+
+      expect(component.displayForm.get('name').disabled).toBe(false);
+      expect(component.displayForm.get('surname').disabled).toBe(false);
+      expect(component.displayForm.get('age').disabled).toBe(false);
+      expect(component.displayForm.get('hobbies').disabled).toBe(false);
+      expect(component.displayForm.get('birth').disabled).toBe(false);
+    });
   });
 
   /* --------------------- */
@@ -290,22 +372,66 @@ describe('TableComponent', () => {
     it('should display loading if it is not undefined and not false', () => {
       component.isLoading = true;
       fixture.detectChanges();
-      const paginator = fixture.debugElement.query(By.css('.table-loader'))
+      const loader = fixture.debugElement.query(By.css('.table-loader'))
         .nativeElement;
-      expect(paginator).toBeTruthy();
+      expect(loader).toBeTruthy();
     });
 
     it('should not display loading if it is undefined', () => {
       fixture.detectChanges();
-      const paginator = fixture.debugElement.query(By.css('.table-loader'));
-      expect(paginator).toBeFalsy();
+      const loader = fixture.debugElement.query(By.css('.table-loader'));
+      expect(loader).toBeFalsy();
     });
 
     it('should not display loading if it is false', () => {
       component.isLoading = false;
       fixture.detectChanges();
-      const paginator = fixture.debugElement.query(By.css('.table-loader'));
-      expect(paginator).toBeFalsy();
+      const loader = fixture.debugElement.query(By.css('.table-loader'));
+      expect(loader).toBeFalsy();
+    });
+
+    it('should display no data error message if data is empty array', () => {
+      component.data = [];
+      fixture.detectChanges();
+
+      const tbody = fixture.debugElement.query(By.css('tbody')).nativeElement;
+      const trs = tbody.querySelectorAll('tr');
+      expect(trs.length).toBe(1);
+      expect(trs[0].textContent).toContain(
+        'К сожалению, по вашему запросу ничего не найдено'
+      );
+    });
+
+    it('should not display no data error message if data is null', () => {
+      component.data = null;
+      fixture.detectChanges();
+
+      const tbody = fixture.debugElement.query(By.css('tbody')).nativeElement;
+      const trs = tbody.querySelectorAll('tr');
+      expect(trs.length).toBe(1);
+      expect(trs[0].textContent).not.toContain(
+        'К сожалению, по вашему запросу ничего не найдено'
+      );
+    });
+
+    it('should not display correct number of rows and columns', () => {
+      const tbody = fixture.debugElement.query(By.css('tbody')).nativeElement;
+      const trs = tbody.querySelectorAll('tr');
+      expect(trs.length).toBe(3);
+
+      const tdsInTr = trs[0].querySelectorAll('td');
+      expect(tdsInTr.length).toBe(6);
+    });
+
+    it('should display correct data in td', () => {
+      const tbody = fixture.debugElement.query(By.css('tbody')).nativeElement;
+      const trs = tbody.querySelectorAll('tr');
+      const tdsInTr = trs[0].querySelectorAll('td');
+      expect(tdsInTr[0].textContent).toBe('1');
+      expect(tdsInTr[1].textContent).toBe('Jack');
+      expect(tdsInTr[2].textContent).toBe('Hopkins');
+      expect(tdsInTr[3].textContent).toBe('16');
+      expect(tdsInTr[4].textContent).toBe('hobby3');
     });
   });
 });

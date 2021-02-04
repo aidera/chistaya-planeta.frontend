@@ -65,7 +65,7 @@
                 </div>
                 <div class="cell-header__actions">
                   <button
-                    *ngIf="findColumnInfo(column).isSorting === true"
+                    *ngIf="findColumnInfo(column)?.isSorting === true"
                     (click)="onSort(column)"
                     mat-icon-button
                     class="cell-header__sorting-button"
