@@ -51,6 +51,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ErrorsInterceptor } from './services/errors.interceptor';
 import { DivisionItemComponent } from './pages/cabinet/divisions/division-item/division-item.component';
 import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-item-add/division-item-add.component';
+import { ErrorMessageComponent } from './components/form-controls/error-message/error-message.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-ite
     ModalComponent,
     DivisionItemComponent,
     DivisionItemAddComponent,
+    ErrorMessageComponent,
   ],
   imports: [
     BrowserModule,

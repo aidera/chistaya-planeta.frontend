@@ -69,6 +69,10 @@
   &.ng-touched.ng-invalid {
     .mat-hint {
       color: $error-color;
+      a {
+        font-size: inherit;
+        color: $error-color;
+      }
     }
 
     .icon {

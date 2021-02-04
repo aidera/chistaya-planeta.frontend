@@ -24,10 +24,20 @@
             label="Название"
             [control]="form1.get('name')"
             [errorMessages]="{
-              required: 'Обязательное поле',
-              alreadyExists: 'Такое название уже существует'
+              required: 'Обязательное поле'
             }"
-          ></app-text-input>
+          >
+            <ng-container
+              error
+              *ngIf="form1.get('name')?.errors?.alreadyExists"
+            >
+              Такое
+              <a [routerLink]="['../../', 'divisions', alreadyExistId]"
+                >подразделение</a
+              >
+              уже существует.
+            </ng-container>
+          </app-text-input>
         </div>
       </mat-card>
       <div class="cabinet-content__grid-item-actions">

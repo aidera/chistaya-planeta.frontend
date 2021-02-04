@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { TextInputComponent } from './text-input.component';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 describe('TextInputComponent', () => {
   let component: TextInputComponent;
@@ -21,7 +22,7 @@ describe('TextInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TextInputComponent],
+      declarations: [TextInputComponent, ErrorMessageComponent],
       imports: [
         ReactiveFormsModule,
         MatInputModule,

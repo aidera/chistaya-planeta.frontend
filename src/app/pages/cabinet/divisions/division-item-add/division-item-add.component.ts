@@ -35,6 +35,8 @@ export class DivisionItemAddComponent
   public isQueryLocalityId = false;
   public queryLocalityId: string;
 
+  public alreadyExistId: string;
+
   constructor(
     protected store: Store<fromRoot.State>,
     protected route: ActivatedRoute,
@@ -132,6 +134,7 @@ export class DivisionItemAddComponent
               if (response?.responseCode === responseCodes.found) {
                 this.form1.get('name').markAsTouched();
                 this.form1.get('name').setErrors({ alreadyExists: true });
+                this.alreadyExistId = response.id;
               }
             });
         }
@@ -170,6 +173,7 @@ export class DivisionItemAddComponent
           }
           if (response?.responseCode === responseCodes.found) {
             this.form1.get('name').setErrors({ alreadyExists: true });
+            this.alreadyExistId = response.id;
           }
         });
     }

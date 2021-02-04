@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DateTimeInputComponent } from './date-time-input.component';
 import { DateInputComponent } from '../date-input/date-input.component';
 import { TextInputComponent } from '../text-input/text-input.component';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 describe('DateTimeInputComponent', () => {
   let component: DateTimeInputComponent;
@@ -23,6 +24,7 @@ describe('DateTimeInputComponent', () => {
         DateTimeInputComponent,
         DateInputComponent,
         TextInputComponent,
+        ErrorMessageComponent,
       ],
       imports: [
         ReactiveFormsModule,

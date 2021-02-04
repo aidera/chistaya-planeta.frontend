@@ -39,7 +39,10 @@
     ></span>
   </div>
 
-  <mat-hint *ngIf="currentErrorMessage && control && control.touched">{{
-    currentErrorMessage
-  }}</mat-hint>
+  <app-error-message
+    *ngIf="control && control.touched"
+    [errorMessage]="currentErrorMessage"
+  >
+    <ng-content select="[error]"></ng-content>
+  </app-error-message>
 </mat-form-field>

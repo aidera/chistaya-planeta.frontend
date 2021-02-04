@@ -8,9 +8,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { SelectComponent } from './select.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 describe('SelectComponent', () => {
   let component: SelectComponent;
@@ -18,7 +19,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SelectComponent],
+      declarations: [SelectComponent, ErrorMessageComponent],
       imports: [
         MatSelectModule,
         BrowserAnimationsModule,

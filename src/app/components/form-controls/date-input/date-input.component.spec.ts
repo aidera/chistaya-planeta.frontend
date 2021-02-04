@@ -15,6 +15,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 
 import { DateInputComponent } from './date-input.component';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 describe('DateInputComponent', () => {
   let component: DateInputComponent;
@@ -22,7 +23,7 @@ describe('DateInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DateInputComponent],
+      declarations: [DateInputComponent, ErrorMessageComponent],
       imports: [
         ReactiveFormsModule,
         MatFormFieldModule,

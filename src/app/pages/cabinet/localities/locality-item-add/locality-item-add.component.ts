@@ -15,6 +15,8 @@ export class LocalityItemAddComponent
   implements OnInit {
   public form1: FormGroup;
 
+  public alreadyExistId: string;
+
   ngOnInit(): void {
     this.initForm();
 
@@ -44,6 +46,7 @@ export class LocalityItemAddComponent
         if (error) {
           if (error.foundedItem) {
             this.form1.get('name').setErrors({ alreadyExists: true });
+            this.alreadyExistId = error.foundedItem._id;
           } else {
             this.addSnackbar = this.snackBar.open(
               'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
