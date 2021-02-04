@@ -29,7 +29,7 @@ import { ErrorMessageComponent } from '../../components/form-controls/error-mess
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
 
-fdescribe('AddOrderNoAuthComponent', () => {
+describe('AddOrderNoAuthComponent', () => {
   let component: AddOrderNoAuthComponent;
   let fixture: ComponentFixture<AddOrderNoAuthComponent>;
 
