@@ -14,7 +14,6 @@ import { DateInputComponent } from '../../components/form-controls/date-input/da
 import { SelectComponent } from '../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../components/form-controls/checkbox/checkbox.component';
 import { AuthNotifyComponent } from '../../components/auth-notify/auth-notify.component';
-import * as OrderActions from '../../store/order/order.actions';
 import OrderType from '../../models/enums/OrderType';
 import { QuestionHintComponent } from '../../components/question-hint/question-hint.component';
 import { MaterialModule } from '../../modules/material/material.module';
@@ -25,11 +24,12 @@ import PaymentMethod from '../../models/enums/PaymentMethod';
 import { tomorrow } from '../../utils/date.functions';
 import timeOptions from '../../data/timeOptions';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
+import { ErrorMessageComponent } from '../../components/form-controls/error-message/error-message.component';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
 
-describe('AddOrderNoAuthComponent', () => {
+fdescribe('AddOrderNoAuthComponent', () => {
   let component: AddOrderNoAuthComponent;
   let fixture: ComponentFixture<AddOrderNoAuthComponent>;
 
@@ -44,6 +44,7 @@ describe('AddOrderNoAuthComponent', () => {
         CheckboxComponent,
         AuthNotifyComponent,
         QuestionHintComponent,
+        ErrorMessageComponent,
       ],
       imports: [
         RouterTestingModule,

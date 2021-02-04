@@ -229,7 +229,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
           return locality.value === value;
         });
         if (currentLocality) {
-          this.divisions.forEach((division: IDivision) => {
+          this.divisions?.forEach((division: IDivision) => {
             if (division.address.locality === currentLocality.value) {
               this.selectDivisionsOptions.push({
                 value: division._id,
@@ -263,7 +263,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   }
 
   public submit(): void {
-    Object.keys(this.form.controls).forEach((field) => {
+    Object.keys(this.form?.controls).forEach((field) => {
       const control = this.form.get(field);
       control.markAsTouched({ onlySelf: true });
       control.updateValueAndValidity();
@@ -302,7 +302,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     } else {
       let hasOneElementToScroll = false;
 
-      Object.keys(this.form.controls).forEach((field) => {
+      Object.keys(this.form?.controls).forEach((field) => {
         const control = this.form.get(field);
         if (control.errors && !hasOneElementToScroll) {
           hasOneElementToScroll = true;
