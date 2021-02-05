@@ -16,6 +16,7 @@ import { TextInputComponent } from '../../../../components/form-controls/text-in
 import { DateTimeInputComponent } from '../../../../components/form-controls/date-time-input/date-time-input.component';
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
+import { ErrorMessageComponent } from '../../../../components/form-controls/error-message/error-message.component';
 
 describe('DivisionsTableComponent', () => {
   let component: DivisionsTableComponent;
@@ -31,6 +32,7 @@ describe('DivisionsTableComponent', () => {
         DateTimeInputComponent,
         SelectComponent,
         CheckboxComponent,
+        ErrorMessageComponent,
       ],
       providers: [
         { provide: ConverterService },

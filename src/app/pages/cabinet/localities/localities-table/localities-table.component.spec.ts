@@ -61,7 +61,9 @@ describe('LocalitiesTableComponent', () => {
   });
 
   it('should create', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+    fixture.ngZone.run(() => {
+      component.ngOnInit();
+      expect(component).toBeTruthy();
+    });
   });
 });

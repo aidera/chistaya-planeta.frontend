@@ -17,7 +17,7 @@ import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-it
 import { DivisionItemComponent } from './pages/cabinet/divisions/division-item/division-item.component';
 import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-item-add/division-item-add.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'e/cabinet',
     component: CabinetLayoutComponent,

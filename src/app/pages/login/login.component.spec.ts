@@ -18,6 +18,7 @@ import { TextInputComponent } from '../../components/form-controls/text-input/te
 import * as UserActions from '../../store/user/user.actions';
 import { UserType } from '../../models/enums/UserType';
 import { MaterialModule } from '../../modules/material/material.module';
+import { ErrorMessageComponent } from '../../components/form-controls/error-message/error-message.component';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
@@ -28,7 +29,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponent, TextInputComponent],
+      declarations: [LoginComponent, TextInputComponent, ErrorMessageComponent],
       imports: [
         BrowserAnimationsModule,
         MaterialModule,
