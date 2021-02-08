@@ -3,6 +3,7 @@ import { OrderEffects } from './order/order.effects';
 import { LocalityEffects } from './locality/locality.effects';
 import { UserEffects } from './user/user.effects';
 import { DivisionEffects } from './division/division.effects';
+import { CarEffects } from './car/car.effects';
 
 export const rootEffects = [
   AppEffects,
@@ -10,4 +11,5 @@ export const rootEffects = [
   OrderEffects,
   LocalityEffects,
   DivisionEffects,
+  CarEffects,
 ];

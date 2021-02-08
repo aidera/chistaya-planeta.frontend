@@ -5,6 +5,7 @@ import * as fromUser from './user/user.reducer';
 import * as fromOrder from './order/order.reducer';
 import * as fromLocality from './locality/locality.reducer';
 import * as fromDivision from './division/division.reducer';
+import * as fromCar from './car/car.reducer';
 import { LOGOUT } from './user/user.actions';
 
 export interface State {
@@ -13,6 +14,7 @@ export interface State {
   order: fromOrder.OrderState;
   locality: fromLocality.LocalityState;
   division: fromDivision.DivisionState;
+  car: fromCar.CarState;
 }
 
 export const rootReducer: ActionReducerMap<State> = {
@@ -21,6 +23,7 @@ export const rootReducer: ActionReducerMap<State> = {
   order: fromOrder.orderReducer,
   locality: fromLocality.localityReducer,
   division: fromDivision.divisionReducer,
+  car: fromCar.carReducer,
 };
 
 export function clearState(reducer): any {
