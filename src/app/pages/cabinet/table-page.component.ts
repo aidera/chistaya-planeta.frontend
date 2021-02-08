@@ -184,11 +184,15 @@ export class TablePageComponent implements OnInit, OnDestroy {
       const indexFrom = clearObjectValue.indexOf(clearQuickSearchValue);
       if (indexFrom >= 0) {
         const split = clearObjectValue.split(clearQuickSearchValue);
+        const firstPart = rawString.substr(0, indexFrom);
         const objectValuePart = rawString.substr(
           indexFrom,
           clearQuickSearchValue.length
         );
-        return split[0] + '<strong>' + objectValuePart + '</strong>' + split[1];
+        const lastPart = rawString.substr(indexFrom + objectValuePart.length);
+        return (
+          firstPart + '<strong>' + objectValuePart + '</strong>' + lastPart
+        );
       }
     }
     return rawString;

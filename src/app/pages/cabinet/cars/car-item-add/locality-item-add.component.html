@@ -1,0 +1,62 @@
+<div class="cabinet-header">
+  <h1>Добавить населённый пункт</h1>
+</div>
+
+<div class="cabinet-content">
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <div class="cabinet-content__grid">
+    <form
+      id="form1"
+      [formGroup]="form1"
+      (ngSubmit)="sendForm1Main()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm !== 1"
+    >
+      <div
+        class="cabinet-content__grid-item-overlay"
+        *ngIf="activeForm !== 1"
+      ></div>
+      <mat-card>
+        <h2>Основная информация</h2>
+
+        <div class="cabinet-content__grid-item-form-content">
+          <app-text-input
+            label="Название"
+            [control]="form1.get('name')"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          >
+            <ng-container
+              error
+              *ngIf="form1.get('name')?.errors?.alreadyExists"
+            >
+              Такой
+              <a [routerLink]="['../../', 'localities', alreadyExistId]"
+                >населённый пункт</a
+              >
+              уже существует.
+            </ng-container>
+          </app-text-input>
+        </div>
+      </mat-card>
+    </form>
+    <div class="clearfix"></div>
+  </div>
+  <div
+    class="cabinet-content__actions"
+    [class.cabinet-content__action_inactive]="activeForm < 1"
+  >
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="sendForm1Main()"
+      [disabled]="isFetching"
+    >
+      Добавить
+    </button>
+  </div>
+  <div *ngIf="serverError" class="cabinet-content__bottom-error">
+    {{ serverError }}
+  </div>
+</div>

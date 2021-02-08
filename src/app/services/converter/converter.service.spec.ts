@@ -28,6 +28,18 @@ describe('ConverterService', () => {
     });
   });
 
+  describe('getNumberFromString', () => {
+    it('should return correct number', () => {
+      expect(service.getNumberFromString('56')).toBe(56);
+    });
+    it('should return zero', () => {
+      expect(service.getNumberFromString('0')).toBe(0);
+    });
+    it('should return undefined if the value is not stringed number', () => {
+      expect(service.getNumberFromString('some-other-value')).toBe(undefined);
+    });
+  });
+
   describe('getArrayOrUndefined', () => {
     it('should return the same array if it was correct array', () => {
       expect(service.getArrayOrUndefined(['value1'])).toEqual(['value1']);
@@ -83,6 +95,29 @@ describe('ConverterService', () => {
     });
   });
 
+  describe('convertArrayOfAnyToString', () => {
+    it('should return array with stringed values', () => {
+      expect(
+        service.convertArrayOfAnyToString([
+          1,
+          23,
+          true,
+          'test',
+          null,
+          undefined,
+        ])
+      ).toEqual(['1', '23', 'true', 'test', 'null', 'undefined']);
+    });
+  });
+
+  describe('convertArrayOfStringsToNullOrString', () => {
+    it('should return array with stringed values', () => {
+      expect(
+        service.convertArrayOfStringsToNullOrString(['1', '2', '', '10'])
+      ).toEqual(['1', '2', null, '10']);
+    });
+  });
+
   describe('getServerFromToDateInISOStringArray', () => {
     it('should return array with stringed date from and null date to', () => {
       const firstDate = new Date();
@@ -105,6 +140,50 @@ describe('ConverterService', () => {
       expect(
         service.getServerFromToDateInISOStringArray(firstDate, secondDate)
       ).toEqual([firstDate.toISOString(), secondDate.toISOString()]);
+    });
+  });
+
+  describe('getArrayOfEnumValues', () => {
+    enum testEnum {
+      one,
+      two,
+      three,
+    }
+
+    it('should return array of enum keys', () => {
+      expect(service.getArrayOfEnumValues(testEnum)).toEqual([
+        'one',
+        'two',
+        'three',
+      ]);
+    });
+  });
+
+  describe('getArrayOfEnumKeys', () => {
+    enum testEnum {
+      one,
+      two,
+      three,
+    }
+
+    it('should return array of enum keys', () => {
+      expect(service.getArrayOfEnumKeys(testEnum)).toEqual([0, 1, 2]);
+    });
+  });
+
+  describe('getArrayOfStringedEnumKeys', () => {
+    enum testEnum {
+      one,
+      two,
+      three,
+    }
+
+    it('should return array of enum keys', () => {
+      expect(service.getArrayOfStringedEnumKeys(testEnum)).toEqual([
+        '0',
+        '1',
+        '2',
+      ]);
     });
   });
 

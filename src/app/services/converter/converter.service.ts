@@ -16,6 +16,15 @@ export class ConverterService {
     return undefined;
   }
 
+  public getNumberFromString(value: string): number | undefined {
+    const newNumber = Number(value);
+
+    if (!isNaN(newNumber)) {
+      return newNumber;
+    }
+    return undefined;
+  }
+
   public getArrayOrUndefined<T>(
     value: any,
     arrayLength?: number,
@@ -47,6 +56,14 @@ export class ConverterService {
     return array.map((el) => el > 0);
   }
 
+  public convertArrayOfAnyToString(array: any[]): string[] {
+    return array.map((el) => el + '');
+  }
+
+  public convertArrayOfStringsToNullOrString(array: any[]): (string | null)[] {
+    return array.map((el) => (el === '' ? null : el + ''));
+  }
+
   public getServerFromToDateInISOStringArray(
     dateFrom?: Date,
     dateTo?: Date
@@ -69,6 +86,25 @@ export class ConverterService {
       valueToReturn = undefined;
     }
     return valueToReturn;
+  }
+
+  public getArrayOfEnumValues(enumObject): any[] {
+    const allValues = Object.values(enumObject);
+    const half = Math.ceil(allValues.length / 2);
+
+    return allValues.splice(0, half);
+  }
+
+  public getArrayOfEnumKeys(enumObject): any[] {
+    const allValues = Object.values(enumObject);
+    const half = Math.ceil(allValues.length / 2);
+
+    return allValues.splice(-half);
+  }
+
+  public getArrayOfStringedEnumKeys(enumObject): string[] {
+    const values = this.getArrayOfEnumKeys(enumObject);
+    return values.map((value) => String(value));
   }
 
   public clearServerRequestString(value: string): string {

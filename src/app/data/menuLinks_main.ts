@@ -22,6 +22,11 @@ export const menuLinksMain: MenuLink[] = [
     link: 'employees',
   },
   {
+    title: 'Автомобили',
+    iconPath: 'assets/icons/truck.svg',
+    link: 'cars',
+  },
+  {
     title: 'Подразделения',
     iconPath: 'assets/icons/offices.svg',
     link: 'divisions',
