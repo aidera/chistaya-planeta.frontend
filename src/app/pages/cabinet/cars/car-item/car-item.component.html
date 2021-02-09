@@ -207,56 +207,6 @@
 
         <div class="cabinet-content__field">
           <div
-            *ngIf="activeField !== 'weight'"
-            class="cabinet-content__field-inactive"
-          >
-            <label>Вес, т</label>
-            <ng-container *ngIf="car && !isFetching">
-              <p>{{ car.weight }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'weight'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
-          <div
-            *ngIf="form && activeField === 'weight'"
-            (clickOutside)="removeActiveField('weight', car.weight)"
-            [delayClickOutsideInit]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Вес, т"
-                [control]="form.get('weight')"
-              ></app-text-input>
-            </form>
-
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating || form.get('weight').value === car.weight
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cabinet-content__field">
-          <div
             *ngIf="activeField !== 'isCorporate'"
             class="cabinet-content__field-inactive"
           >
@@ -307,6 +257,57 @@
                 [disabled]="
                   isUpdating ||
                   form.get('isCorporate').value === car.isCorporate + ''
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'weight'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Вес, т</label>
+            <ng-container *ngIf="car && !isFetching">
+              <p>{{ car.weight }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'weight'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+          <div
+            *ngIf="form && activeField === 'weight'"
+            (clickOutside)="removeActiveField('weight', car.weight)"
+            [delayClickOutsideInit]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-text-input
+                label="Вес, т"
+                [control]="form.get('weight')"
+                [fieldType]="'number'"
+              ></app-text-input>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('weight').value === car.weight
                 "
               >
                 <span
