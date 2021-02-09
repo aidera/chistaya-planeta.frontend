@@ -64,15 +64,19 @@ export class CarItemComponent
       this.carStatusString =
         car && car.status === CarStatus.unavailable
           ? 'Статус: <span class="red-text">' +
-            carStatusOptions[CarStatus.unavailable].text +
+            carStatusOptions.find(
+              (el) => el.value === CarStatus.unavailable + ''
+            ).text +
             '</span>'
           : car && car.status === CarStatus.temporaryUnavailable
           ? 'Статус: <span class="yellow-text">' +
-            carStatusOptions[CarStatus.temporaryUnavailable].text +
+            carStatusOptions.find(
+              (el) => el.value === CarStatus.temporaryUnavailable + ''
+            ).text +
             '</span>'
           : car && car.status === CarStatus.active
           ? 'Статус: <span class="green-text">' +
-            carStatusOptions[CarStatus.active].text +
+            carStatusOptions.find((el) => el.value === CarStatus.active + '') +
             '</span>'
           : ' Статус';
 

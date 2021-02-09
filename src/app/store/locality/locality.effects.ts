@@ -80,56 +80,31 @@ export class LocalityEffects {
     )
   );
 
-  updateLocalityStatus$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(LocalityActions.updateLocalityStatusRequest),
-      switchMap((action) => {
-        return this.localityApi.updateStatus(action.id, action.status).pipe(
-          map((resData) => {
-            if (resData && resData.updatedLocality) {
-              return LocalityActions.updateLocalityStatusSuccess({
-                locality: resData.updatedLocality,
-              });
-            }
-            return LocalityActions.updateLocalityStatusFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              LocalityActions.updateLocalityStatusFailure({
-                error: errorRes.error.error,
-              })
-            );
-          })
-        );
-      })
-    )
-  );
-
   updateLocality$ = createEffect(() =>
     this.actions$.pipe(
       ofType(LocalityActions.updateLocalityRequest),
       switchMap((action) => {
-        return this.localityApi.update(action.id, { name: action.name }).pipe(
-          map((resData) => {
-            if (resData && resData.updatedLocality) {
-              return LocalityActions.updateLocalitySuccess({
-                locality: resData.updatedLocality,
+        return this.localityApi
+          .update(action.id, { name: action.name, status: action.status })
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedLocality) {
+                return LocalityActions.updateLocalitySuccess({
+                  locality: resData.updatedLocality,
+                });
+              }
+              return LocalityActions.updateLocalityFailure({
+                error: resData.error,
               });
-            }
-            return LocalityActions.updateLocalityFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              LocalityActions.updateLocalityFailure({
-                error: errorRes.error.error,
-              })
-            );
-          })
-        );
+            }),
+            catchError((errorRes) => {
+              return of(
+                LocalityActions.updateLocalityFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
       })
     )
   );

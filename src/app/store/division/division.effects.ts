@@ -80,39 +80,13 @@ export class DivisionEffects {
     )
   );
 
-  updateDivisionStatus$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(DivisionActions.updateDivisionStatusRequest),
-      switchMap((action) => {
-        return this.divisionApi.updateStatus(action.id, action.status).pipe(
-          map((resData) => {
-            if (resData && resData.updatedDivision) {
-              return DivisionActions.updateDivisionStatusSuccess({
-                division: resData.updatedDivision,
-              });
-            }
-            return DivisionActions.updateDivisionStatusFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              DivisionActions.updateDivisionStatusFailure({
-                error: errorRes.error.error,
-              })
-            );
-          })
-        );
-      })
-    )
-  );
-
   updateDivision$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DivisionActions.updateDivisionRequest),
       switchMap((action) => {
         return this.divisionApi
           .update(action.id, {
+            status: action.status,
             name: action.name,
             localityId: action.localityId,
             street: action.street,

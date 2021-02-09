@@ -10,6 +10,7 @@ import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
 import { ModalAction } from '../../../../components/modal/modal.component';
 import { responseCodes } from '../../../../data/responseCodes';
+import simpleStatusOptions from '../../../../data/simpleStatusOptions';
 
 @Component({
   selector: 'app-locality-item',
@@ -35,6 +36,7 @@ export class LocalityItemComponent
   public isDeactivateModalOpen = false;
 
   public simpleStatus = SimpleStatus;
+  public simpleStatusOptions = simpleStatusOptions;
 
   localityStatusString = 'Статус';
 
@@ -61,15 +63,32 @@ export class LocalityItemComponent
         this.initForm();
 
         this.localityStatusString =
-          locality && locality.status === 0
-            ? 'Статус: <span class="red-text">Не активно</span>'
-            : locality && locality.status === 1
-            ? 'Статус: <span class="green-text">Активно</span>'
+          locality?.status === SimpleStatus.inactive
+            ? 'Статус: <span class="red-text">' +
+              simpleStatusOptions.find(
+                (el) => el.value === SimpleStatus.inactive + ''
+              ).text +
+              '</span>'
+            : locality?.status === SimpleStatus.active
+            ? 'Статус: <span class="green-text">' +
+              simpleStatusOptions.find(
+                (el) => el.value === SimpleStatus.active + ''
+              ).text +
+              '</span>'
             : 'Статус';
 
         if (this.form) {
+          this.form
+            .get('status')
+            .setValue(locality ? String(locality.status) : '');
           this.form.get('name').setValue(locality ? locality.name : '');
         }
+
+        this.form.get('status').valueChanges.subscribe((value) => {
+          if (value === SimpleStatus.inactive + '') {
+            this.isDeactivateModalOpen = true;
+          }
+        });
       });
 
     this.getLocalityError$ = this.store
@@ -181,6 +200,7 @@ export class LocalityItemComponent
 
   private initForm(): void {
     this.form = new FormGroup({
+      status: new FormControl('', Validators.required),
       name: new FormControl('', Validators.required),
     });
   }
@@ -191,34 +211,13 @@ export class LocalityItemComponent
     );
   }
 
-  public enable(): void {
-    this.store.dispatch(
-      LocalitiesActions.updateLocalityStatusRequest({
-        id: this.locality._id,
-        status: SimpleStatus.active,
-      })
-    );
-  }
-
-  public disable(): void {
-    this.store.dispatch(
-      LocalitiesActions.updateLocalityStatusRequest({
-        id: this.locality._id,
-        status: SimpleStatus.inactive,
-      })
-    );
-  }
-
   public update(): void {
-    if (
-      this.activeField &&
-      !this.isUpdating &&
-      this.form.get('name').value !== this.locality.name
-    ) {
+    if (this.activeField && !this.isUpdating && this.form.valid) {
       this.store.dispatch(
         LocalitiesActions.updateLocalityRequest({
           id: this.locality._id,
           name: this.form.get('name').value,
+          status: +this.form.get('status').value,
         })
       );
     }
@@ -243,7 +242,14 @@ export class LocalityItemComponent
   public onDeactivateModalAction(action: ModalAction): void {
     this.isDeactivateModalOpen = false;
     if (action === 'reject') {
-      this.disable();
+      this.store.dispatch(
+        LocalitiesActions.updateLocalityRequest({
+          id: this.locality._id,
+          status: SimpleStatus.inactive,
+        })
+      );
+    } else {
+      this.form.get('status').setValue(SimpleStatus.active + '');
     }
   }
 }

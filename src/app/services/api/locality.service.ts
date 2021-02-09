@@ -65,21 +65,9 @@ export class LocalityService {
     );
   }
 
-  updateStatus(
-    id: string,
-    status: SimpleStatus
-  ): Observable<IUpdateLocalityResponse> {
-    return this.http.patch<IUpdateLocalityResponse>(
-      `${environment.serverURL}/${this.path}/${
-        status === SimpleStatus.active ? 'enable' : 'disable'
-      }`,
-      { id }
-    );
-  }
-
   update(
     id: string,
-    fields: { name: string }
+    fields: { name?: string; status?: SimpleStatus }
   ): Observable<IUpdateLocalityResponse> {
     return this.http.patch<IUpdateLocalityResponse>(
       `${environment.serverURL}/${this.path}/${id}`,

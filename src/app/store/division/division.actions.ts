@@ -22,17 +22,6 @@ export const GET_DIVISION_REQUEST = '[division] get - division - request';
 export const GET_DIVISION_SUCCESS = '[division] get - division - success';
 export const GET_DIVISION_FAILURE = '[division] get - division - failure';
 
-/* ------------------------------ */
-/* --- Update Division Status --- */
-/* ------------------------------ */
-
-export const UPDATE_DIVISION_STATUS_REQUEST =
-  '[division] update - update division status - request';
-export const UPDATE_DIVISION_STATUS_SUCCESS =
-  '[division] update - update division status - success';
-export const UPDATE_DIVISION_STATUS_FAILURE =
-  '[division] update - update division status - failure';
-
 /* ----------------------- */
 /* --- Update Division --- */
 /* ----------------------- */
@@ -102,25 +91,6 @@ export const getDivisionFailure = createAction(
   props<{ error: ServerError }>()
 );
 
-/* ------------------------------ */
-/* --- Update Division Status --- */
-/* ------------------------------ */
-
-export const updateDivisionStatusRequest = createAction(
-  UPDATE_DIVISION_STATUS_REQUEST,
-  props<{ id: string; status: SimpleStatus }>()
-);
-export const updateDivisionStatusSuccess = createAction(
-  UPDATE_DIVISION_STATUS_SUCCESS,
-  props<{
-    division: IDivision;
-  }>()
-);
-export const updateDivisionStatusFailure = createAction(
-  UPDATE_DIVISION_STATUS_FAILURE,
-  props<{ error: ServerError }>()
-);
-
 /* ----------------------- */
 /* --- Update Division --- */
 /* ----------------------- */
@@ -129,10 +99,11 @@ export const updateDivisionRequest = createAction(
   UPDATE_DIVISION_REQUEST,
   props<{
     id: string;
-    name: string;
-    localityId: string;
-    street: string;
-    house: string;
+    status?: SimpleStatus;
+    name?: string;
+    localityId?: string;
+    street?: string;
+    house?: string;
   }>()
 );
 export const updateDivisionSuccess = createAction(

@@ -78,28 +78,6 @@ const _divisionReducer = createReducer(
     getDivisionError: payload.error,
   })),
 
-  /* ------------------------------ */
-  /* --- Update Division Status --- */
-  /* ------------------------------ */
-
-  on(DivisionActions.updateDivisionStatusRequest, (state) => ({
-    ...state,
-    updateDivisionIsFetching: true,
-    updateDivisionError: null,
-  })),
-  on(DivisionActions.updateDivisionStatusSuccess, (state, payload) => ({
-    ...state,
-    division: payload.division,
-    updateDivisionIsFetching: false,
-    updateDivisionError: null,
-    updateDivisionSucceed: true,
-  })),
-  on(DivisionActions.updateDivisionStatusFailure, (state, payload) => ({
-    ...state,
-    updateDivisionIsFetching: false,
-    updateDivisionError: payload.error,
-  })),
-
   /* ----------------------- */
   /* --- Update Division --- */
   /* ----------------------- */

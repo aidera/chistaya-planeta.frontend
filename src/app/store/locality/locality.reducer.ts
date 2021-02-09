@@ -78,28 +78,6 @@ const _localityReducer = createReducer(
     getLocalityError: payload.error,
   })),
 
-  /* ------------------------------ */
-  /* --- Update Locality Status --- */
-  /* ------------------------------ */
-
-  on(LocalityActions.updateLocalityStatusRequest, (state) => ({
-    ...state,
-    updateLocalityIsFetching: true,
-    updateLocalityError: null,
-  })),
-  on(LocalityActions.updateLocalityStatusSuccess, (state, payload) => ({
-    ...state,
-    locality: payload.locality,
-    updateLocalityIsFetching: false,
-    updateLocalityError: null,
-    updateLocalitySucceed: true,
-  })),
-  on(LocalityActions.updateLocalityStatusFailure, (state, payload) => ({
-    ...state,
-    updateLocalityIsFetching: false,
-    updateLocalityError: payload.error,
-  })),
-
   /* ----------------------- */
   /* --- Update Locality --- */
   /* ----------------------- */

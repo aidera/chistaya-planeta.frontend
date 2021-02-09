@@ -14,6 +14,7 @@ import { ModalAction } from '../../../../components/modal/modal.component';
 import { IDivision } from '../../../../models/Division';
 import { OptionType } from '../../../../models/types/OptionType';
 import { ILocality } from '../../../../models/Locality';
+import simpleStatusOptions from '../../../../data/simpleStatusOptions';
 
 @Component({
   selector: 'app-division-item',
@@ -40,6 +41,7 @@ export class DivisionItemComponent
   protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   public simpleStatus = SimpleStatus;
+  public simpleStatusOptions = simpleStatusOptions;
 
   public divisionStatusString = 'Статус';
 
@@ -66,13 +68,24 @@ export class DivisionItemComponent
         this.initForm();
 
         this.divisionStatusString =
-          division && division.status === 0
-            ? 'Статус: <span class="red-text">Не активно</span>'
-            : division && division.status === 1
-            ? 'Статус: <span class="green-text">Активно</span>'
+          division?.status === SimpleStatus.inactive
+            ? 'Статус: <span class="red-text">' +
+              simpleStatusOptions.find(
+                (el) => el.value === SimpleStatus.inactive + ''
+              ).text +
+              '</span>'
+            : division?.status === SimpleStatus.active
+            ? 'Статус: <span class="green-text">' +
+              simpleStatusOptions.find(
+                (el) => el.value === SimpleStatus.active + ''
+              ).text +
+              '</span>'
             : 'Статус';
 
         if (this.form) {
+          this.form
+            .get('status')
+            .setValue(division ? String(division.status) : '');
           this.form.get('name').setValue(division?.name || '');
           this.form
             .get('localityId')
@@ -204,6 +217,7 @@ export class DivisionItemComponent
 
   private initForm(): void {
     this.form = new FormGroup({
+      status: new FormControl('', Validators.required),
       name: new FormControl('', Validators.required),
       localityId: new FormControl('', Validators.required),
       street: new FormControl('', Validators.required),
@@ -217,29 +231,12 @@ export class DivisionItemComponent
     );
   }
 
-  public enable(): void {
-    this.store.dispatch(
-      DivisionActions.updateDivisionStatusRequest({
-        id: this.division._id,
-        status: SimpleStatus.active,
-      })
-    );
-  }
-
-  public disable(): void {
-    this.store.dispatch(
-      DivisionActions.updateDivisionStatusRequest({
-        id: this.division._id,
-        status: SimpleStatus.inactive,
-      })
-    );
-  }
-
   public update(): void {
     if (this.activeField && !this.isUpdating && this.form.valid) {
       this.store.dispatch(
         DivisionActions.updateDivisionRequest({
           id: this.division._id,
+          status: +this.form.get('status').value,
           name: this.form.get('name').value,
           localityId: this.form.get('localityId').value,
           street: this.form.get('street').value,

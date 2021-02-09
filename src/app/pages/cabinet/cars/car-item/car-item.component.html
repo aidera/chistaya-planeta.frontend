@@ -52,7 +52,7 @@
           >
             <form [formGroup]="form" (ngSubmit)="update()">
               <app-select
-                label="Принадлежность"
+                label="Статус"
                 [options]="carStatusOptions"
                 [control]="form.get('status')"
                 [errorMessages]="{

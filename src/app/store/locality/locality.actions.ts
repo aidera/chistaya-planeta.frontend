@@ -22,17 +22,6 @@ export const GET_LOCALITY_REQUEST = '[locality] get - locality - request';
 export const GET_LOCALITY_SUCCESS = '[locality] get - locality - success';
 export const GET_LOCALITY_FAILURE = '[locality] get - locality - failure';
 
-/* ------------------------------ */
-/* --- Update Locality Status --- */
-/* ------------------------------ */
-
-export const UPDATE_LOCALITY_STATUS_REQUEST =
-  '[locality] update - update locality status - request';
-export const UPDATE_LOCALITY_STATUS_SUCCESS =
-  '[locality] update - update locality status - success';
-export const UPDATE_LOCALITY_STATUS_FAILURE =
-  '[locality] update - update locality status - failure';
-
 /* ----------------------- */
 /* --- Update Locality --- */
 /* ----------------------- */
@@ -102,32 +91,13 @@ export const getLocalityFailure = createAction(
   props<{ error: ServerError }>()
 );
 
-/* ------------------------------ */
-/* --- Update Locality Status --- */
-/* ------------------------------ */
-
-export const updateLocalityStatusRequest = createAction(
-  UPDATE_LOCALITY_STATUS_REQUEST,
-  props<{ id: string; status: SimpleStatus }>()
-);
-export const updateLocalityStatusSuccess = createAction(
-  UPDATE_LOCALITY_STATUS_SUCCESS,
-  props<{
-    locality: ILocality;
-  }>()
-);
-export const updateLocalityStatusFailure = createAction(
-  UPDATE_LOCALITY_STATUS_FAILURE,
-  props<{ error: ServerError }>()
-);
-
 /* ----------------------- */
 /* --- Update Locality --- */
 /* ----------------------- */
 
 export const updateLocalityRequest = createAction(
   UPDATE_LOCALITY_REQUEST,
-  props<{ id: string; name: string }>()
+  props<{ id: string; name?: string; status?: SimpleStatus }>()
 );
 export const updateLocalitySuccess = createAction(
   UPDATE_LOCALITY_SUCCESS,

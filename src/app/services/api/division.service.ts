@@ -76,23 +76,16 @@ export class DivisionService {
     );
   }
 
-  updateStatus(
-    id: string,
-    status: SimpleStatus
-  ): Observable<IUpdateDivisionResponse> {
-    return this.http.patch<IUpdateDivisionResponse>(
-      `${environment.serverURL}/${this.path}/${
-        status === SimpleStatus.active ? 'enable' : 'disable'
-      }`,
-      { id }
-    );
-  }
-
   update(
     id: string,
-    fields: { name: string; localityId: string; street: string; house: string }
+    fields: {
+      status?: SimpleStatus;
+      name?: string;
+      localityId?: string;
+      street?: string;
+      house?: string;
+    }
   ): Observable<IUpdateDivisionResponse> {
-    console.log('from api');
     return this.http.patch<IUpdateDivisionResponse>(
       `${environment.serverURL}/${this.path}/${id}`,
       { ...fields }
