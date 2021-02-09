@@ -17,6 +17,7 @@ import { LocalityItemAddComponent } from './pages/cabinet/localities/locality-it
 import { DivisionItemComponent } from './pages/cabinet/divisions/division-item/division-item.component';
 import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-item-add/division-item-add.component';
 import { CarsTableComponent } from './pages/cabinet/cars/cars-table/cars-table.component';
+import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.component';
 
 export const routes: Routes = [
   {
@@ -68,6 +69,11 @@ export const routes: Routes = [
         path: 'cars',
         component: CarsTableComponent,
         data: { useBacklink: false },
+      },
+      {
+        path: 'cars/:id',
+        component: CarItemComponent,
+        data: { useBacklink: true },
       },
     ],
   },

@@ -3,27 +3,29 @@ import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 
-import * as LocalitiesActions from '../../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
-import { ILocality } from '../../../../models/Locality';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import * as CarSelectors from '../../../../store/car/car.selectors';
+import * as CarActions from '../../../../store/car/car.actions';
 import { ItemPageComponent } from '../../item-page.component';
 import { ModalAction } from '../../../../components/modal/modal.component';
 import { responseCodes } from '../../../../data/responseCodes';
+import { ICar } from '../../../../models/Car';
+import CarStatus from '../../../../models/enums/CarStatus';
+import carTypeOptions from '../../../../data/carTypeOptions';
+import carStatusOptions from '../../../../data/carStatusOptions';
 
 @Component({
-  selector: 'app-locality-item',
-  templateUrl: './locality-item.component.html',
-  styleUrls: ['./locality-item.component.scss'],
+  selector: 'app-car-item',
+  templateUrl: './car-item.component.html',
+  styleUrls: ['./car-item.component.scss'],
 })
-export class LocalityItemComponent
+export class CarItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
-  private localityId: string;
-  private locality$: Subscription;
-  public locality: ILocality | null;
-  private getLocalityError$: Subscription;
-  public getLocalityError: string | null;
+  private carId: string;
+  private car$: Subscription;
+  public car: ICar | null;
+  private getCarError$: Subscription;
+  public getCarError: string | null;
   protected isRemoving$: Subscription;
   public isRemoving = false;
   protected isRemoveSucceed$: Subscription;
@@ -32,71 +34,85 @@ export class LocalityItemComponent
 
   public isRemoveModalOpen = false;
   protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
-  public isDeactivateModalOpen = false;
 
-  public simpleStatus = SimpleStatus;
+  public carStatus = CarStatus;
+  public carTypeOptions = carTypeOptions;
+  public carStatusOptions = carStatusOptions;
 
-  localityStatusString = 'Статус';
+  carStatusString = 'Статус';
 
   ngOnInit(): void {
-    this.localityId = this.route.snapshot.paramMap.get('id') as string;
+    this.carId = this.route.snapshot.paramMap.get('id') as string;
     this.getItemRequest();
 
-    this.socket.get()?.on('localities', (data) => {
+    this.socket.get()?.on('cars', (data) => {
       if (data.action === 'add' || data.action === 'delete') {
         this.getItemRequest();
       }
       if (data.action === 'update' && data.id) {
-        if (this.locality && this.locality._id === data.id) {
+        if (this.car && this.car._id === data.id) {
           this.getItemRequest();
         }
       }
     });
 
-    this.locality$ = this.store
-      .select(LocalitiesSelectors.selectLocality)
-      .subscribe((locality) => {
-        this.locality = locality;
+    this.car$ = this.store.select(CarSelectors.selectCar).subscribe((car) => {
+      this.car = car;
 
-        this.initForm();
+      this.initForm();
 
-        this.localityStatusString =
-          locality && locality.status === 0
-            ? 'Статус: <span class="red-text">Не активно</span>'
-            : locality && locality.status === 1
-            ? 'Статус: <span class="green-text">Активно</span>'
-            : 'Статус';
+      this.carStatusString =
+        car && car.status === CarStatus.unavailable
+          ? 'Статус: <span class="red-text">' +
+            carStatusOptions[CarStatus.unavailable].text +
+            '</span>'
+          : car && car.status === CarStatus.temporaryUnavailable
+          ? 'Статус: <span class="yellow-text">' +
+            carStatusOptions[CarStatus.temporaryUnavailable].text +
+            '</span>'
+          : car && car.status === CarStatus.active
+          ? 'Статус: <span class="green-text">' +
+            carStatusOptions[CarStatus.active].text +
+            '</span>'
+          : ' Статус';
 
-        if (this.form) {
-          this.form.get('name').setValue(locality ? locality.name : '');
-        }
-      });
+      if (this.form) {
+        this.form.setValue({
+          status: String(car?.status) || '',
+          type: String(car?.type) || '',
+          licensePlate: car?.licensePlate || '',
+          weight: car?.weight || '',
+          isCorporate: car?.isCorporate ? '1' : '0',
+          drivers: car?.drivers || '',
+        });
+      }
+    });
 
-    this.getLocalityError$ = this.store
-      .select(LocalitiesSelectors.selectGetLocalityError)
+    this.getCarError$ = this.store
+      .select(CarSelectors.selectGetCarError)
       .subscribe((error) => {
         if (error?.code) {
-          this.getLocalityError =
+          this.getCarError =
             error.code === responseCodes.notFound ? 'Не найдено' : error.code;
         } else {
-          this.getLocalityError = null;
+          this.getCarError = null;
         }
       });
 
     this.isFetching$ = this.store
-      .select(LocalitiesSelectors.selectGetLocalityIsFetching)
+      .select(CarSelectors.selectGetCarIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.isUpdating$ = this.store
-      .select(LocalitiesSelectors.selectUpdateLocalityIsFetching)
+      .select(CarSelectors.selectUpdateCarIsFetching)
       .subscribe((status) => {
         this.isUpdating = status;
       });
 
     this.isUpdateSucceed$ = this.store
-      .select(LocalitiesSelectors.selectUpdateLocalitySucceed)
+      .select(CarSelectors.selectUpdateCarSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.activeField = null;
@@ -105,16 +121,16 @@ export class LocalityItemComponent
             duration: 2000,
           });
 
-          this.store.dispatch(LocalitiesActions.refreshUpdateLocalitySucceed());
+          this.store.dispatch(CarActions.refreshUpdateCarSucceed());
         }
       });
 
     this.updateError$ = this.store
-      .select(LocalitiesSelectors.selectUpdateLocalityError)
+      .select(CarSelectors.selectUpdateCarError)
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.form.get('name').markAsTouched();
-          if (error.foundedItem._id === this.locality._id) {
+          if (error.foundedItem._id === this.car._id) {
             this.form.get('name').setErrors({ sameName: true });
           } else {
             this.form.get('name').setErrors({ alreadyExists: true });
@@ -132,18 +148,18 @@ export class LocalityItemComponent
       });
 
     this.isRemoving$ = this.store
-      .select(LocalitiesSelectors.selectRemoveLocalityIsFetching)
+      .select(CarSelectors.selectRemoveCarIsFetching)
       .subscribe((status) => {
         this.isRemoving = status;
       });
 
     this.isRemoveSucceed$ = this.store
-      .select(LocalitiesSelectors.selectRemoveLocalitySucceed)
+      .select(CarSelectors.selectRemoveCarSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.isRemoveModalOpen = false;
 
-          this.store.dispatch(LocalitiesActions.refreshRemoveLocalitySucceed());
+          this.store.dispatch(CarActions.refreshRemoveCarSucceed());
 
           this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
@@ -154,7 +170,7 @@ export class LocalityItemComponent
       });
 
     this.removeError$ = this.store
-      .select(LocalitiesSelectors.selectRemoveLocalityError)
+      .select(CarSelectors.selectRemoveCarError)
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
@@ -172,8 +188,8 @@ export class LocalityItemComponent
   }
 
   ngOnDestroy(): void {
-    this.locality$?.unsubscribe?.();
-    this.getLocalityError$?.unsubscribe?.();
+    this.car$?.unsubscribe?.();
+    this.getCarError$?.unsubscribe?.();
     this.isRemoving$?.unsubscribe?.();
     this.isRemoveSucceed$?.unsubscribe?.();
     this.removeError$?.unsubscribe?.();
@@ -181,44 +197,30 @@ export class LocalityItemComponent
 
   private initForm(): void {
     this.form = new FormGroup({
-      name: new FormControl('', Validators.required),
+      status: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      licensePlate: new FormControl('', Validators.required),
+      weight: new FormControl(''),
+      isCorporate: new FormControl('', Validators.required),
+      drivers: new FormControl(''),
     });
   }
 
   public getItemRequest(): void {
-    this.store.dispatch(
-      LocalitiesActions.getLocalityRequest({ id: this.localityId })
-    );
-  }
-
-  public enable(): void {
-    this.store.dispatch(
-      LocalitiesActions.updateLocalityStatusRequest({
-        id: this.locality._id,
-        status: SimpleStatus.active,
-      })
-    );
-  }
-
-  public disable(): void {
-    this.store.dispatch(
-      LocalitiesActions.updateLocalityStatusRequest({
-        id: this.locality._id,
-        status: SimpleStatus.inactive,
-      })
-    );
+    this.store.dispatch(CarActions.getCarRequest({ id: this.carId }));
   }
 
   public update(): void {
-    if (
-      this.activeField &&
-      !this.isUpdating &&
-      this.form.get('name').value !== this.locality.name
-    ) {
+    if (this.activeField && !this.isUpdating && this.form.valid) {
       this.store.dispatch(
-        LocalitiesActions.updateLocalityRequest({
-          id: this.locality._id,
-          name: this.form.get('name').value,
+        CarActions.updateCarRequest({
+          id: this.car._id,
+          weight: +this.form.get('weight').value,
+          licensePlate: this.form.get('licensePlate').value,
+          isCorporate: this.form.get('isCorporate').value === '1',
+          drivers: this.form.get('drivers').value || [],
+          status: +this.form.get('status').value,
+          carType: +this.form.get('type').value,
         })
       );
     }
@@ -234,16 +236,7 @@ export class LocalityItemComponent
         break;
     }
     if (action === 'reject') {
-      this.store.dispatch(
-        LocalitiesActions.removeLocalityRequest({ id: this.locality._id })
-      );
-    }
-  }
-
-  public onDeactivateModalAction(action: ModalAction): void {
-    this.isDeactivateModalOpen = false;
-    if (action === 'reject') {
-      this.disable();
+      this.store.dispatch(CarActions.removeCarRequest({ id: this.car._id }));
     }
   }
 }

@@ -4,18 +4,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 
-import { LocalityItemComponent } from './locality-item.component';
+import { CarItemComponent } from './car-item.component';
 import { SkeletonComponent } from '../../../../components/skeleton/skeleton.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { ModalComponent } from '../../../../components/modal/modal.component';
 
-describe('LocalityItemComponent', () => {
-  let component: LocalityItemComponent;
-  let fixture: ComponentFixture<LocalityItemComponent>;
+describe('CarItemComponent', () => {
+  let component: CarItemComponent;
+  let fixture: ComponentFixture<CarItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LocalityItemComponent, SkeletonComponent, ModalComponent],
+      declarations: [CarItemComponent, SkeletonComponent, ModalComponent],
       imports: [
         RouterTestingModule,
         MaterialModule,
@@ -25,8 +25,8 @@ describe('LocalityItemComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            locality: {
-              locality: null,
+            car: {
+              car: null,
             },
           },
         }),
@@ -35,7 +35,7 @@ describe('LocalityItemComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LocalityItemComponent);
+    fixture = TestBed.createComponent(CarItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

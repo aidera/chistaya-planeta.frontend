@@ -54,6 +54,7 @@ import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-ite
 import { ErrorMessageComponent } from './components/form-controls/error-message/error-message.component';
 import { CarsTableComponent } from './pages/cabinet/cars/cars-table/cars-table.component';
 import { NumberFromToInputComponent } from './components/form-controls/number-from-to-input/number-from-to-input.component';
+import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { NumberFromToInputComponent } from './components/form-controls/number-fr
     ErrorMessageComponent,
     CarsTableComponent,
     NumberFromToInputComponent,
+    CarItemComponent,
   ],
   imports: [
     BrowserModule,
