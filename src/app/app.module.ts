@@ -55,6 +55,7 @@ import { ErrorMessageComponent } from './components/form-controls/error-message/
 import { CarsTableComponent } from './pages/cabinet/cars/cars-table/cars-table.component';
 import { NumberFromToInputComponent } from './components/form-controls/number-from-to-input/number-from-to-input.component';
 import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.component';
+import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-add.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.compone
     CarsTableComponent,
     NumberFromToInputComponent,
     CarItemComponent,
+    CarItemAddComponent,
   ],
   imports: [
     BrowserModule,

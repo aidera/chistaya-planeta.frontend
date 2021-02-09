@@ -1,51 +1,58 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as LocalitiesActions from '../../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
+import * as CarActions from '../../../../store/car/car.actions';
+import * as CarSelectors from '../../../../store/car/car.selectors';
 import { ItemAddPageComponent } from '../../item-add-page.component';
+import CarStatus from '../../../../models/enums/CarStatus';
+import carTypeOptions from '../../../../data/carTypeOptions';
+import carStatusOptions from '../../../../data/carStatusOptions';
 
 @Component({
-  selector: 'app-locality-item-add',
-  templateUrl: './locality-item-add.component.html',
-  styleUrls: ['./locality-item-add.component.scss'],
+  selector: 'app-car-item-add',
+  templateUrl: './car-item-add.component.html',
+  styleUrls: ['./car-item-add.component.scss'],
 })
-export class LocalityItemAddComponent
+export class CarItemAddComponent
   extends ItemAddPageComponent
   implements OnInit {
   public form1: FormGroup;
 
   public alreadyExistId: string;
 
+  public carStatus = CarStatus;
+  public carTypeOptions = carTypeOptions;
+  public carStatusOptions = carStatusOptions;
+
   ngOnInit(): void {
     this.initForm();
 
     this.isFetching$ = this.store
-      .select(LocalitiesSelectors.selectAddLocalityIsFetching)
+      .select(CarSelectors.selectAddCarIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.addingSucceed$ = this.store
-      .select(LocalitiesSelectors.selectAddLocalitySucceed)
+      .select(CarSelectors.selectAddCarSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
-          this.store.dispatch(LocalitiesActions.refreshAddLocalitySucceed());
+          this.store.dispatch(CarActions.refreshAddCarSucceed());
 
           this.router.navigate(['../'], { relativeTo: this.route });
         }
       });
 
     this.serverError$ = this.store
-      .select(LocalitiesSelectors.selectAddLocalityError)
+      .select(CarSelectors.selectAddCarError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
-            this.form1.get('name').setErrors({ alreadyExists: true });
+            this.form1.get('licensePlate').setErrors({ alreadyExists: true });
             this.alreadyExistId = error.foundedItem._id;
           } else {
             this.addSnackbar = this.snackBar.open(
@@ -63,7 +70,11 @@ export class LocalityItemAddComponent
 
   private initForm(): void {
     this.form1 = new FormGroup({
-      name: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      licensePlate: new FormControl('', Validators.required),
+      weight: new FormControl(''),
+      isCorporate: new FormControl('', Validators.required),
+      drivers: new FormControl(''),
     });
   }
 
@@ -74,10 +85,14 @@ export class LocalityItemAddComponent
       control.updateValueAndValidity();
     });
 
-    if (this.form1 && this.form1.get('name').value !== '') {
+    if (this.form1 && this.form1.valid) {
       this.store.dispatch(
-        LocalitiesActions.addLocalityRequest({
-          name: this.form1.get('name').value,
+        CarActions.addCarRequest({
+          carType: +this.form1.get('type').value,
+          drivers: this.form1.get('drivers').value || [],
+          isCorporate: this.form1.get('isCorporate').value === '1',
+          licensePlate: this.form1.get('licensePlate').value,
+          weight: +this.form1.get('weight').value,
         })
       );
     }

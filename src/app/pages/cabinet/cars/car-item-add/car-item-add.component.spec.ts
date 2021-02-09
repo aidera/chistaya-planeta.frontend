@@ -12,17 +12,17 @@ import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { LocalityItemAddComponent } from './locality-item-add.component';
+import { CarItemAddComponent } from './car-item-add.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
 
-describe('LocalityItemAddComponent', () => {
-  let component: LocalityItemAddComponent;
-  let fixture: ComponentFixture<LocalityItemAddComponent>;
+describe('CarItemAddComponent', () => {
+  let component: CarItemAddComponent;
+  let fixture: ComponentFixture<CarItemAddComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LocalityItemAddComponent, TextInputComponent],
+      declarations: [CarItemAddComponent, TextInputComponent],
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
@@ -35,8 +35,8 @@ describe('LocalityItemAddComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            locality: {
-              locality: null,
+            car: {
+              car: null,
             },
           },
         }),
@@ -45,7 +45,7 @@ describe('LocalityItemAddComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LocalityItemAddComponent);
+    fixture = TestBed.createComponent(CarItemAddComponent);
     component = fixture.componentInstance;
     component.form1 = new FormGroup({
       name: new FormControl('', Validators.required),

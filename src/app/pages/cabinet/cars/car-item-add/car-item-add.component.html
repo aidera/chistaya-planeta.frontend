@@ -1,5 +1,5 @@
 <div class="cabinet-header">
-  <h1>Добавить населённый пункт</h1>
+  <h1>Добавить автомобиль</h1>
 </div>
 
 <div class="cabinet-content">
@@ -21,23 +21,57 @@
 
         <div class="cabinet-content__grid-item-form-content">
           <app-text-input
-            label="Название"
-            [control]="form1.get('name')"
+            label="Номер"
+            [control]="form1.get('licensePlate')"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
           >
             <ng-container
               error
-              *ngIf="form1.get('name')?.errors?.alreadyExists"
+              *ngIf="form1.get('licensePlate')?.errors?.alreadyExists"
             >
               Такой
-              <a [routerLink]="['../../', 'localities', alreadyExistId]"
-                >населённый пункт</a
-              >
+              <a [routerLink]="['../', alreadyExistId]">автомобиль</a>
               уже существует.
             </ng-container>
           </app-text-input>
+
+          <br /><br />
+
+          <app-select
+            [label]="'Тип'"
+            [control]="form1.get('type')"
+            [options]="carTypeOptions"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+
+          <br /><br />
+
+          <app-select
+            [label]="'Принадлежность'"
+            [control]="form1.get('isCorporate')"
+            [options]="[
+              { text: 'Корпоративный', value: '1' },
+              { text: 'Частный', value: '0' }
+            ]"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+
+          <br /><br />
+
+          <app-text-input
+            label="Вес, т"
+            [control]="form1.get('weight')"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+            [fieldType]="'number'"
+          ></app-text-input>
         </div>
       </mat-card>
     </form>
