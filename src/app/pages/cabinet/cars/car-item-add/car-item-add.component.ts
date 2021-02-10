@@ -43,6 +43,11 @@ export class CarItemAddComponent
   public carStatus = CarStatus;
   public carTypeOptions = carTypeOptions;
 
+  public isQueryLocalityId: boolean;
+  private queryLocalityId: string;
+  public isQueryDivisionId: boolean;
+  private queryDivisionId: string;
+
   constructor(
     protected store: Store<fromRoot.State>,
     protected route: ActivatedRoute,
@@ -56,6 +61,18 @@ export class CarItemAddComponent
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (params.locality && params.divisions) {
+        this.isQueryLocalityId = true;
+        this.queryLocalityId = params.locality;
+        this.isQueryDivisionId = true;
+        this.queryDivisionId = params.divisions;
+      } else if (params.locality) {
+        this.isQueryLocalityId = true;
+        this.queryLocalityId = params.locality;
+      }
+    });
+
     this.initForm();
 
     this.isFetching$ = this.store
@@ -117,6 +134,16 @@ export class CarItemAddComponent
       .subscribe((divisions) => {
         this.divisions = divisions;
         this.divisionsOptions = [];
+        if (this.isQueryLocalityId) {
+          this.divisions?.forEach((el) => {
+            if (this.queryLocalityId === el.address.locality) {
+              this.divisionsOptions.push({
+                value: el._id,
+                text: el.name,
+              });
+            }
+          });
+        }
       });
 
     if (this.divisions === null) {
@@ -144,13 +171,21 @@ export class CarItemAddComponent
     });
 
     this.form2 = new FormGroup({
-      locality: new FormControl('', Validators.required),
-      divisions: new FormControl('', Validators.required),
+      locality: new FormControl(
+        this.queryLocalityId || '',
+        Validators.required
+      ),
+      divisions: new FormControl(
+        [this.queryDivisionId] || [],
+        Validators.required
+      ),
     });
 
     this.form2?.get('locality').valueChanges.subscribe((value) => {
+      this.isQueryLocalityId = false;
+      this.isQueryDivisionId = false;
       this.divisionsOptions = [];
-      this.divisions.forEach((el) => {
+      this.divisions?.forEach((el) => {
         if (el.address.locality === value) {
           this.divisionsOptions.push({
             value: el._id,
@@ -158,11 +193,16 @@ export class CarItemAddComponent
           });
         }
       });
+
       if (this.divisionsOptions.length === 1) {
         this.form2.get('divisions').setValue([this.divisionsOptions[0].value]);
       } else {
         this.form2.get('divisions').setValue([]);
       }
+    });
+
+    this.form2?.get('divisions').valueChanges.subscribe((value) => {
+      this.isQueryDivisionId = false;
     });
   }
 

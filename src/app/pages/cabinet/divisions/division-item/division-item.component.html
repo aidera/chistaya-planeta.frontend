@@ -198,7 +198,10 @@
               <button
                 mat-icon-button
                 [routerLink]="['../../', 'cars', 'add']"
-                [queryParams]="{ divisions: division._id }"
+                [queryParams]="{
+                  divisions: division._id,
+                  locality: division.address.locality._id
+                }"
               >
                 <span
                   class="icon"

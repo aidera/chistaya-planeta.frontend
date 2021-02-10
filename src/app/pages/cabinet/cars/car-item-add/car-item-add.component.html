@@ -90,11 +90,15 @@
       [class.cabinet-content__grid-item_inactive]="activeForm < 2"
     >
       <mat-card>
-        <h2>Месторасположение</h2>
+        <h2>Местоположение</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-select
-            [label]="'Населённый пункт'"
+            [label]="
+              isQueryLocalityId
+                ? 'Населённый пункт (добавлено автоматически)'
+                : 'Населённый пункт'
+            "
             [control]="form2.get('locality')"
             [options]="localitiesOptions"
             [errorMessages]="{
@@ -106,7 +110,11 @@
 
           <app-select
             *ngIf="form2.get('locality').value && divisionsOptions.length > 1"
-            [label]="'Подразделения'"
+            [label]="
+              isQueryDivisionId
+                ? 'Подразделения (добавлено автоматически)'
+                : 'Подразделения'
+            "
             [control]="form2.get('divisions')"
             [isMultiple]="true"
             [options]="divisionsOptions"
@@ -118,7 +126,11 @@
             *ngIf="!form2.get('locality').value || divisionsOptions.length <= 1"
             class="cabinet-content__field-inactive"
           >
-            <label>Подразделения</label>
+            <label>{{
+              isQueryDivisionId
+                ? 'Подразделения (добавлено автоматически)'
+                : 'Подразделения'
+            }}</label>
             <p
               *ngIf="
                 form2.get('locality').value && divisionsOptions.length === 1
