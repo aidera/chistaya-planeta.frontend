@@ -72,14 +72,12 @@
           label="Населённые пункты:"
           [options]="localitiesOptions"
           [isMultiple]="true"
-          [shouldMultipleBeActiveAlLeast]="1"
         ></app-select>
         <app-select
           [control]="advancedSearchForm.get('divisions')"
           label="Подразделения:"
           [options]="divisionsOptions"
           [isMultiple]="true"
-          [shouldMultipleBeActiveAlLeast]="1"
         ></app-select>
       </app-accordion>
       <app-accordion title="Даты" [isOpenInitial]="false">

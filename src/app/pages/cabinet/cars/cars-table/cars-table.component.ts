@@ -122,14 +122,8 @@ export class CarsTableComponent
         type: new FormControl(
           this.converter.getArrayOfStringedEnumKeys(CarType)
         ),
-        localities: new FormControl(
-          this.localitiesOptions
-            ? this.localitiesOptions.map((el) => el.value)
-            : []
-        ),
-        divisions: new FormControl(
-          this.divisions ? this.divisions.map((el) => el._id) : []
-        ),
+        localities: new FormControl([]),
+        divisions: new FormControl([]),
         weight: new FormControl(''),
         isCorporate: new FormControl(['true', 'false']),
         drivers: new FormControl(''),
@@ -331,13 +325,6 @@ export class CarsTableComponent
       .select(AppSelectors.selectLocalitiesOptionsToSelect)
       .subscribe((localitiesOptions) => {
         this.localitiesOptions = localitiesOptions;
-        if (localitiesOptions !== null) {
-          this.advancedSearchForm
-            ?.get('localities')
-            .setValue(this.localitiesOptions.map((el) => el.value));
-        } else {
-          this.advancedSearchForm?.get('localities').setValue([]);
-        }
       });
 
     if (this.localitiesOptions === null) {
@@ -352,19 +339,20 @@ export class CarsTableComponent
       .select(AppSelectors.selectDivisionsToSelect)
       .subscribe((divisions) => {
         this.divisions = divisions;
-        this.divisionsOptions =
-          divisions !== null
-            ? divisions.map((el) => {
-                return { text: el.name, value: el._id };
-              })
-            : [];
-        if (divisions !== null) {
-          this.advancedSearchForm
-            ?.get('divisions')
-            .setValue(this.divisionsOptions.map((el) => el.value));
-        } else {
-          this.advancedSearchForm?.get('divisions').setValue([]);
-        }
+        this.divisionsOptions = [];
+        this.divisions?.forEach((el) => {
+          if (this.advancedSearchForm?.get('localities').value?.length > 0) {
+            if (
+              this.advancedSearchForm
+                ?.get('localities')
+                .value.includes(el.address.locality)
+            ) {
+              this.divisionsOptions.push({ text: el.name, value: el._id });
+            }
+          } else {
+            this.divisionsOptions.push({ text: el.name, value: el._id });
+          }
+        });
       });
 
     if (this.divisions === null) {
@@ -380,20 +368,25 @@ export class CarsTableComponent
       .valueChanges.subscribe((value) => {
         this.divisionsOptions = [];
         this.divisions?.forEach((el) => {
-          if (value.includes(el.address.locality)) {
-            this.divisionsOptions.push({
-              value: el._id,
-              text: el.name,
-            });
+          if (value?.length > 0) {
+            if (value.includes(el.address.locality)) {
+              this.divisionsOptions.push({ text: el.name, value: el._id });
+            }
+          } else {
+            this.divisionsOptions.push({ text: el.name, value: el._id });
           }
         });
-        this.advancedSearchForm
-          .get('divisions')
-          .setValue(
-            this.divisionsOptions !== null
-              ? this.divisionsOptions.map((el) => el.value)
-              : []
+
+        const newDivisionsArray = [];
+        this.advancedSearchForm.get('divisions').value.forEach((el) => {
+          const hasThisOption = this.divisionsOptions.find(
+            (option) => option.value === el
           );
+          if (hasThisOption) {
+            newDivisionsArray.push(el);
+          }
+        });
+        this.advancedSearchForm.get('divisions').setValue(newDivisionsArray);
       });
   }
 

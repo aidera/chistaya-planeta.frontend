@@ -116,6 +116,28 @@ export class TablePageComponent implements OnInit, OnDestroy {
         }
       }
 
+      if (params.page) {
+        const paramsPage = params.page;
+        if (this.tablePagination) {
+          this.tablePagination = {
+            ...this.tablePagination,
+            page: !isNaN(+paramsPage) ? +paramsPage : 1,
+          };
+        }
+      } else {
+        this.router.navigate([], {
+          relativeTo: this.activatedRoute,
+          queryParams: {
+            sortingField: params.sortingField || undefined,
+            sortingType: params.sortingType || undefined,
+            page: 1,
+            search: params.search || undefined,
+          },
+          queryParamsHandling: 'merge',
+        });
+        return;
+      }
+
       let hasFilter = false;
 
       Object.keys(params).forEach((key) => {
@@ -150,30 +172,6 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
       if (hasFilter === false && params.search && params.search !== '') {
         this.quickSearchForm.get('search').setValue(params.search);
-      }
-
-      if (params.page) {
-        const paramsPage = params.page;
-        if (this.tablePagination) {
-          this.tablePagination = {
-            ...this.tablePagination,
-            page: !isNaN(+paramsPage) ? +paramsPage : 1,
-          };
-        }
-      } else {
-        this.router.navigate([], {
-          relativeTo: this.activatedRoute,
-          queryParams: {
-            sortingField: this.tableSorting
-              ? this.tableSorting.field
-              : undefined,
-            sortingType: this.tableSorting ? this.tableSorting.type : undefined,
-            page: 1,
-            search: params.search || undefined,
-          },
-          queryParamsHandling: 'merge',
-        });
-        return;
       }
 
       this.sendRequest(true);
