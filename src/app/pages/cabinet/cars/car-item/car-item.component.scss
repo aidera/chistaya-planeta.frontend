@@ -1,0 +1,7 @@
+.cabinet-content__grid {
+  .cabinet-content__grid-item {
+    &:nth-child(4) {
+      float: left;
+    }
+  }
+}

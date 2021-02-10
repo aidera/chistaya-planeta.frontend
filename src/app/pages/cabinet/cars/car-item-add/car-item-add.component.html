@@ -8,14 +8,10 @@
     <form
       id="form1"
       [formGroup]="form1"
-      (ngSubmit)="sendForm1Main()"
+      (ngSubmit)="sendForm1()"
       class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm !== 1"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 1"
     >
-      <div
-        class="cabinet-content__grid-item-overlay"
-        *ngIf="activeForm !== 1"
-      ></div>
       <mat-card>
         <h2>Основная информация</h2>
 
@@ -74,17 +70,85 @@
           ></app-text-input>
         </div>
       </mat-card>
+      <div class="cabinet-content__grid-item-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
+        >
+          Далее
+        </button>
+      </div>
+    </form>
+
+    <form
+      id="form2"
+      [formGroup]="form2"
+      (ngSubmit)="sendForm2()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 2"
+    >
+      <mat-card>
+        <h2>Месторасположение</h2>
+
+        <div class="cabinet-content__grid-item-form-content">
+          <app-select
+            [label]="'Населённый пункт'"
+            [control]="form2.get('locality')"
+            [options]="localitiesOptions"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+
+          <br /><br />
+
+          <app-select
+            *ngIf="form2.get('locality').value && divisionsOptions.length > 1"
+            [label]="'Подразделения'"
+            [control]="form2.get('divisions')"
+            [isMultiple]="true"
+            [options]="divisionsOptions"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+          <div
+            *ngIf="!form2.get('locality').value || divisionsOptions.length <= 1"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Подразделения</label>
+            <p
+              *ngIf="
+                form2.get('locality').value && divisionsOptions.length === 1
+              "
+            >
+              {{ divisionsOptions[0].text }}
+            </p>
+            <i
+              *ngIf="form2.get('locality').value && divisionsOptions.length < 1"
+              class="red-text"
+            >
+              Нет подразделений в этом населунном пункте
+            </i>
+            <i *ngIf="!form2.get('locality').value">
+              Выберите населённый пункт
+            </i>
+          </div>
+        </div>
+      </mat-card>
     </form>
     <div class="clearfix"></div>
   </div>
   <div
     class="cabinet-content__actions"
-    [class.cabinet-content__action_inactive]="activeForm < 1"
+    [class.cabinet-content__action_inactive]="activeForm < 2"
   >
     <button
       mat-raised-button
       color="primary"
-      (click)="sendForm1Main()"
+      (click)="sendForm2()"
       [disabled]="isFetching"
     >
       Добавить

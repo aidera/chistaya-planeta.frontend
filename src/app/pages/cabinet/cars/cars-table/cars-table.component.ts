@@ -3,6 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
+import * as AppSelectors from '../../../../store/app/app.selectors';
+import * as AppActions from '../../../../store/app/app.actions';
 import * as CarActions from '../../../../store/car/car.actions';
 import * as CarSelectors from '../../../../store/car/car.selectors';
 import { TablePageComponent } from '../../table-page.component';
@@ -12,6 +14,9 @@ import CarType from '../../../../models/enums/CarType';
 import { IEmployee } from '../../../../models/Employee';
 import carTypeOptions from '../../../../data/carTypeOptions';
 import carStatusOptions from '../../../../data/carStatusOptions';
+import { ILocality } from '../../../../models/Locality';
+import { IDivision, IDivisionLessInfo } from '../../../../models/Division';
+import { OptionType } from '../../../../models/types/OptionType';
 
 @Component({
   selector: 'app-cars-table',
@@ -23,6 +28,11 @@ export class CarsTableComponent
   implements OnInit, OnDestroy {
   private cars$: Subscription;
   private cars: ICar[];
+  private localities$: Subscription;
+  public localitiesOptions: OptionType[];
+  private divisions$: Subscription;
+  public divisions: IDivisionLessInfo[];
+  public divisionsOptions: OptionType[];
 
   public carTypeOptions = carTypeOptions;
   public carStatusOptions = carStatusOptions;
@@ -44,14 +54,24 @@ export class CarsTableComponent
         isSorting: true,
       },
       {
+        key: 'licensePlate',
+        title: 'Номер',
+        isSorting: true,
+      },
+      {
         key: 'type',
         title: 'Тип',
         isSorting: true,
       },
       {
-        key: 'licensePlate',
-        title: 'Номер',
+        key: 'locality',
+        title: 'Населённый пункт',
         isSorting: true,
+      },
+      {
+        key: 'divisions',
+        title: 'Подразделения',
+        isSorting: false,
       },
       {
         key: 'weight',
@@ -98,10 +118,18 @@ export class CarsTableComponent
         status: new FormControl(
           this.converter.getArrayOfStringedEnumKeys(CarStatus)
         ),
+        licensePlate: new FormControl(''),
         type: new FormControl(
           this.converter.getArrayOfStringedEnumKeys(CarType)
         ),
-        licensePlate: new FormControl(''),
+        localities: new FormControl(
+          this.localitiesOptions
+            ? this.localitiesOptions.map((el) => el.value)
+            : []
+        ),
+        divisions: new FormControl(
+          this.divisions ? this.divisions.map((el) => el._id) : []
+        ),
         weight: new FormControl(''),
         isCorporate: new FormControl(['true', 'false']),
         drivers: new FormControl(''),
@@ -118,11 +146,6 @@ export class CarsTableComponent
 
     this.createServerRequestFilter = () => {
       return {
-        type: this.converter.getArrayOrUndefined<string>(
-          this.advancedSearchForm.get('type').value,
-          undefined,
-          this.converter.convertArrayOfAnyToString
-        ),
         status: this.converter.getArrayOrUndefined<string>(
           this.advancedSearchForm.get('status').value,
           undefined,
@@ -132,6 +155,25 @@ export class CarsTableComponent
           this.converter.clearServerRequestString(
             this.advancedSearchForm.get('licensePlate').value
           ) || undefined,
+        type: this.converter.getArrayOrUndefined<string>(
+          this.advancedSearchForm.get('type').value,
+          undefined,
+          this.converter.convertArrayOfAnyToString
+        ),
+        localities:
+          this.advancedSearchForm.get('localities').value.length <= 0 ||
+          this.advancedSearchForm.get('localities').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('localities').value
+              ),
+        divisions:
+          this.advancedSearchForm.get('divisions').value.length <= 0 ||
+          this.advancedSearchForm.get('divisions').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('divisions').value
+              ),
         weight: this.converter.getArrayOrUndefined<number | null>(
           this.advancedSearchForm.get('weight').value,
           2,
@@ -143,8 +185,7 @@ export class CarsTableComponent
           this.converter.convertArrayOfStringedBooleanToRealBoolean
         ),
         drivers: this.converter.getArrayOrUndefined<string>(
-          this.advancedSearchForm.get('drivers').value,
-          1
+          this.advancedSearchForm.get('drivers').value
         ),
         createdAt: this.converter.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
@@ -204,6 +245,12 @@ export class CarsTableComponent
                   : car.status === CarStatus.unavailable
                   ? '<p class="red-text">Не активный</p>'
                   : '-',
+              licensePlate: this.highlightSearchedValue(
+                car.licensePlate,
+                this.quickSearchForm
+                  ? this.quickSearchForm.get('search').value
+                  : ''
+              ),
               type:
                 car.type === CarType.small
                   ? 'Легковой'
@@ -212,12 +259,12 @@ export class CarsTableComponent
                   : car.type === CarType.tipper
                   ? 'Самосвал'
                   : car.type,
-              licensePlate: this.highlightSearchedValue(
-                car.licensePlate,
-                this.quickSearchForm
-                  ? this.quickSearchForm.get('search').value
-                  : ''
-              ),
+              locality: (car.locality as ILocality)?.name,
+              divisions: car.divisions
+                .map((division: IDivision, i) => {
+                  return i === 0 ? division.name : ' ' + division.name;
+                })
+                .toString(),
               weight: this.highlightSearchedValue(
                 String(car.weight),
                 this.quickSearchForm
@@ -279,11 +326,82 @@ export class CarsTableComponent
     /* --------------------------- */
 
     super.ngOnInit();
+
+    this.localities$ = this.store
+      .select(AppSelectors.selectLocalitiesOptionsToSelect)
+      .subscribe((localitiesOptions) => {
+        this.localitiesOptions = localitiesOptions;
+        if (localitiesOptions !== null) {
+          this.advancedSearchForm
+            ?.get('localities')
+            .setValue(this.localitiesOptions.map((el) => el.value));
+        } else {
+          this.advancedSearchForm?.get('localities').setValue([]);
+        }
+      });
+
+    if (this.localitiesOptions === null) {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    }
+
+    this.socket.get()?.on('localities', (_) => {
+      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+    });
+
+    this.divisions$ = this.store
+      .select(AppSelectors.selectDivisionsToSelect)
+      .subscribe((divisions) => {
+        this.divisions = divisions;
+        this.divisionsOptions =
+          divisions !== null
+            ? divisions.map((el) => {
+                return { text: el.name, value: el._id };
+              })
+            : [];
+        if (divisions !== null) {
+          this.advancedSearchForm
+            ?.get('divisions')
+            .setValue(this.divisionsOptions.map((el) => el.value));
+        } else {
+          this.advancedSearchForm?.get('divisions').setValue([]);
+        }
+      });
+
+    if (this.divisions === null) {
+      this.store.dispatch(AppActions.getDivisionsToSelectRequest());
+    }
+
+    this.socket.get()?.on('divisions', (_) => {
+      this.store.dispatch(AppActions.getDivisionsToSelectRequest());
+    });
+
+    this.advancedSearchForm
+      ?.get('localities')
+      .valueChanges.subscribe((value) => {
+        this.divisionsOptions = [];
+        this.divisions?.forEach((el) => {
+          if (value.includes(el.address.locality)) {
+            this.divisionsOptions.push({
+              value: el._id,
+              text: el.name,
+            });
+          }
+        });
+        this.advancedSearchForm
+          .get('divisions')
+          .setValue(
+            this.divisionsOptions !== null
+              ? this.divisionsOptions.map((el) => el.value)
+              : []
+          );
+      });
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
     this.cars$?.unsubscribe?.();
+    this.localities$?.unsubscribe?.();
+    this.divisions$?.unsubscribe?.();
   }
 
   public onTableItemClick(index: number): void {

@@ -51,10 +51,6 @@
           [control]="advancedSearchForm.get('licensePlate')"
           label="Номерной знак содержит:"
         ></app-text-input>
-        <!--        <app-text-input-->
-        <!--          [control]="advancedSearchForm.get('weight')"-->
-        <!--          label="Вес:"-->
-        <!--        ></app-text-input>-->
         <app-number-from-to-input
           [control]="advancedSearchForm.get('weight')"
           label="Вес:"
@@ -66,6 +62,22 @@
             { text: 'Корпоративный', value: 'true' },
             { text: 'Частный', value: 'false' }
           ]"
+          [isMultiple]="true"
+          [shouldMultipleBeActiveAlLeast]="1"
+        ></app-select>
+      </app-accordion>
+      <app-accordion title="Местоположение" [isOpenInitial]="false">
+        <app-select
+          [control]="advancedSearchForm.get('localities')"
+          label="Населённые пункты:"
+          [options]="localitiesOptions"
+          [isMultiple]="true"
+          [shouldMultipleBeActiveAlLeast]="1"
+        ></app-select>
+        <app-select
+          [control]="advancedSearchForm.get('divisions')"
+          label="Подразделения:"
+          [options]="divisionsOptions"
           [isMultiple]="true"
           [shouldMultipleBeActiveAlLeast]="1"
         ></app-select>

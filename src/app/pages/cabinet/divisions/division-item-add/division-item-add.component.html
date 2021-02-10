@@ -59,7 +59,10 @@
       class="cabinet-content__grid-item"
       [class.cabinet-content__grid-item_inactive]="activeForm < 2"
     >
-      <div class="cabinet-content__grid-item-overlay"></div>
+      <div
+        class="cabinet-content__grid-item-overlay"
+        *ngIf="activeForm !== 1"
+      ></div>
       <mat-card>
         <h2>Адрес</h2>
 

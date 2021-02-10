@@ -89,6 +89,8 @@ export class CarEffects {
             type: action.carType,
             licensePlate: action.licensePlate,
             weight: action.weight,
+            localityId: action.localityId,
+            divisionIds: action.divisionIds,
           })
           .pipe(
             map((resData) => {
@@ -124,6 +126,8 @@ export class CarEffects {
             type: action.carType,
             licensePlate: action.licensePlate,
             weight: action.weight,
+            localityId: action.localityId,
+            divisionIds: action.divisionIds,
           })
           .pipe(
             map((resData) => {

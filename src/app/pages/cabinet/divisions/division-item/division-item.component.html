@@ -21,7 +21,10 @@
   >
     {{ getDivisionError || updateError || removeError }}
   </div>
-  <div *ngIf="division" class="cabinet-content__grid">
+  <div
+    *ngIf="!getDivisionError && !updateError && !removeError"
+    class="cabinet-content__grid"
+  >
     <div class="cabinet-content__grid-item">
       <mat-card class="cabinet-content__status-card">
         <div class="cabinet-content__field">

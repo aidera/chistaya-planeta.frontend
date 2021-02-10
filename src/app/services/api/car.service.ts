@@ -19,6 +19,11 @@ export interface IGetOneCarResponse extends ServerResponse {
   car?: ICar;
 }
 
+export interface ICheckLicensePlateResponse extends ServerResponse {
+  id?: string;
+  responseCode?: string;
+}
+
 export interface IUpdateCarResponse extends ServerResponse {
   updatedCar?: ICar;
 }
@@ -61,27 +66,17 @@ export class CarService {
     );
   }
 
-  getOne(id: string): Observable<IGetOneCarResponse> {
-    return this.http.get<IGetOneCarResponse>(
-      `${environment.serverURL}/${this.path}/${id}`
+  checkLicensePlate(
+    licensePlate: string
+  ): Observable<ICheckLicensePlateResponse> {
+    return this.http.get<ICheckLicensePlateResponse>(
+      `${environment.serverURL}/${this.path}/check-license-plate/${licensePlate}`
     );
   }
 
-  updateStatus(id: string, status: CarStatus): Observable<IUpdateCarResponse> {
-    let pathAppendix = '';
-    switch (status) {
-      case CarStatus.active:
-        pathAppendix = 'enable';
-        break;
-      case CarStatus.temporaryUnavailable:
-        pathAppendix = 'temporary-disable';
-        break;
-      default:
-        pathAppendix = 'disable';
-    }
-    return this.http.patch<IUpdateCarResponse>(
-      `${environment.serverURL}/${this.path}/${pathAppendix}`,
-      { id }
+  getOne(id: string): Observable<IGetOneCarResponse> {
+    return this.http.get<IGetOneCarResponse>(
+      `${environment.serverURL}/${this.path}/${id}`
     );
   }
 
@@ -94,6 +89,8 @@ export class CarService {
       weight?: number;
       isCorporate?: boolean;
       drivers?: IEmployee[];
+      localityId?: string;
+      divisionIds?: string[];
     }
   ): Observable<IUpdateCarResponse> {
     return this.http.patch<IUpdateCarResponse>(
@@ -108,6 +105,8 @@ export class CarService {
     weight: number;
     isCorporate?: boolean;
     drivers?: IEmployee[];
+    localityId: string;
+    divisionIds: string[];
   }): Observable<IAddCarResponse> {
     return this.http.put<IAddCarResponse>(
       `${environment.serverURL}/${this.path}/`,

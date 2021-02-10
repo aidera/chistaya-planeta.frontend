@@ -21,7 +21,10 @@
   >
     {{ getLocalityError || updateError || removeError }}
   </div>
-  <div *ngIf="locality" class="cabinet-content__grid">
+  <div
+    *ngIf="!getLocalityError && !updateError && !removeError"
+    class="cabinet-content__grid"
+  >
     <div class="cabinet-content__grid-item">
       <mat-card class="cabinet-content__status-card">
         <div class="cabinet-content__field">
@@ -173,7 +176,10 @@
                 </ul>
               </ng-template>
             </p>
-            <div class="cabinet-content__field-inactive-action">
+            <div
+              *ngIf="locality"
+              class="cabinet-content__field-inactive-action"
+            >
               <button
                 mat-icon-button
                 [routerLink]="['../../', 'divisions', 'add']"

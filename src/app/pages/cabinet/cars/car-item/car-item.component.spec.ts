@@ -28,6 +28,12 @@ describe('CarItemComponent', () => {
             car: {
               car: null,
             },
+            app: {
+              localitiesOptionsToSelect: null,
+              divisionsOptionsToSelect: null,
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+            },
           },
         }),
       ],
