@@ -15,6 +15,7 @@ import { IDivision } from '../../../../models/Division';
 import { OptionType } from '../../../../models/types/OptionType';
 import { ILocality } from '../../../../models/Locality';
 import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import CarStatus from '../../../../models/enums/CarStatus';
 
 @Component({
   selector: 'app-division-item',
@@ -41,6 +42,7 @@ export class DivisionItemComponent
   protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   public simpleStatus = SimpleStatus;
+  public carStatus = CarStatus;
   public simpleStatusOptions = simpleStatusOptions;
 
   public divisionStatusString = 'Статус';

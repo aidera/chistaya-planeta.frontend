@@ -229,7 +229,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
           return locality.value === value;
         });
         if (currentLocality) {
-          this.divisions?.forEach((division: IDivision) => {
+          this.divisions?.forEach((division: IDivisionLessInfo) => {
             if (division.address.locality === currentLocality.value) {
               this.selectDivisionsOptions.push({
                 value: division._id,

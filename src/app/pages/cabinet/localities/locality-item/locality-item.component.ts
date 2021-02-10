@@ -11,6 +11,7 @@ import { ItemPageComponent } from '../../item-page.component';
 import { ModalAction } from '../../../../components/modal/modal.component';
 import { responseCodes } from '../../../../data/responseCodes';
 import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import CarStatus from '../../../../models/enums/CarStatus';
 
 @Component({
   selector: 'app-locality-item',
@@ -36,6 +37,7 @@ export class LocalityItemComponent
   public isDeactivateModalOpen = false;
 
   public simpleStatus = SimpleStatus;
+  public carStatus = CarStatus;
   public simpleStatusOptions = simpleStatusOptions;
 
   localityStatusString = 'Статус';

@@ -12,6 +12,7 @@ import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
 import { OptionType } from '../../../../models/types/OptionType';
 import * as AppActions from '../../../../store/app/app.actions';
+import { ICar } from '../../../../models/Car';
 
 @Component({
   selector: 'app-divisions-table',
@@ -61,6 +62,11 @@ export class DivisionsTableComponent
         key: 'house',
         title: 'Дом',
         isSorting: true,
+      },
+      {
+        key: 'cars',
+        title: 'Автомобили',
+        isSorting: false,
       },
       {
         key: 'createdAt',
@@ -209,6 +215,11 @@ export class DivisionsTableComponent
                     ? this.quickSearchForm.get('search').value
                     : ''
                 ) || '-',
+              cars: division.cars
+                .map((car: ICar, i) => {
+                  return i === 0 ? car.licensePlate : ' ' + car.licensePlate;
+                })
+                .toString(),
               createdAt: formatDate(
                 division.createdAt,
                 'dd.MM.yyyy - HH:mm',

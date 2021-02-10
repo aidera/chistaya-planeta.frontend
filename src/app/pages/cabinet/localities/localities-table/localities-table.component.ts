@@ -9,6 +9,7 @@ import { IDivision } from '../../../../models/Division';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { TablePageComponent } from '../../table-page.component';
 import { ILocality } from '../../../../models/Locality';
+import { ICar } from 'src/app/models/Car';
 
 @Component({
   selector: 'app-localities-table',
@@ -45,6 +46,11 @@ export class LocalitiesTableComponent
       {
         key: 'divisions',
         title: 'Подразделения',
+        isSorting: false,
+      },
+      {
+        key: 'cars',
+        title: 'Автомобили',
         isSorting: false,
       },
       {
@@ -161,6 +167,11 @@ export class LocalitiesTableComponent
               divisions: locality.divisions
                 .map((division: IDivision, i) => {
                   return i === 0 ? division.name : ' ' + division.name;
+                })
+                .toString(),
+              cars: locality.cars
+                .map((car: ICar, i) => {
+                  return i === 0 ? car.licensePlate : ' ' + car.licensePlate;
                 })
                 .toString(),
               createdAt: formatDate(

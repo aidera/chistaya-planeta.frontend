@@ -265,6 +265,15 @@
             color: $error-color;
           }
         }
+
+        &.yellow-text {
+          &:before {
+            background-color: $yellow-color;
+          }
+          a {
+            color: $yellow-color;
+          }
+        }
       }
     }
   }

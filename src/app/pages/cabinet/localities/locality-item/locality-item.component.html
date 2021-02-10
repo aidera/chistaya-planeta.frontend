@@ -165,15 +165,27 @@
               >
               <ng-template #divisionsDisplay>
                 <ul>
-                  <li
+                  <ng-container
                     *ngFor="let division of locality.divisions; let i = index"
-                    [class.red-text]="division.status === simpleStatus.inactive"
                   >
-                    <a [routerLink]="['../../', 'divisions', division._id]">{{
-                      division.name
-                    }}</a>
-                  </li>
+                    <li
+                      *ngIf="i <= 2"
+                      [class.red-text]="
+                        division.status === simpleStatus.inactive
+                      "
+                    >
+                      <a [routerLink]="['../../', 'divisions', division._id]">{{
+                        division.name
+                      }}</a>
+                    </li>
+                  </ng-container>
                 </ul>
+                <a
+                  *ngIf="locality?.divisions?.length > 3"
+                  [routerLink]="['../../', 'divisions']"
+                  [queryParams]="{ filter__locality: locality._id, page: 1 }"
+                  >... и еще {{ locality.divisions.length - 3 }}</a
+                >
               </ng-template>
             </p>
             <div
@@ -184,6 +196,72 @@
                 mat-icon-button
                 [routerLink]="['../../', 'divisions', 'add']"
                 [queryParams]="{ localityId: locality._id }"
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/plus.svg'"
+                ></span>
+              </button>
+            </div>
+
+            <ng-container *ngIf="isFetching">
+              <app-skeleton></app-skeleton>
+              <br />
+              <app-skeleton></app-skeleton>
+              <br />
+              <app-skeleton></app-skeleton>
+              <br />
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div class="cabinet-content__field-inactive">
+            <label>Автомобили</label>
+            <p *ngIf="locality && !isFetching">
+              <i
+                *ngIf="
+                  !locality.cars || locality.cars.length <= 0;
+                  else carsDisplay
+                "
+                >нет</i
+              >
+              <ng-template #carsDisplay>
+                <ul>
+                  <ng-container
+                    *ngFor="let car of locality.cars; let i = index"
+                  >
+                    <li
+                      *ngIf="i <= 2"
+                      [class.red-text]="car.status === carStatus.unavailable"
+                      [class.yellow-text]="
+                        car.status === carStatus.temporaryUnavailable
+                      "
+                      [class.green-text]="car.status === carStatus.active"
+                    >
+                      <a [routerLink]="['../../', 'cars', car._id]">{{
+                        car.licensePlate
+                      }}</a>
+                    </li>
+                  </ng-container>
+                </ul>
+                <a
+                  *ngIf="locality?.cars?.length > 3"
+                  [routerLink]="['../../', 'cars']"
+                  [queryParams]="{ filter__localities: locality._id, page: 1 }"
+                  >... и еще {{ locality.cars.length - 3 }}</a
+                >
+              </ng-template>
+            </p>
+
+            <div
+              *ngIf="locality"
+              class="cabinet-content__field-inactive-action"
+            >
+              <button
+                mat-icon-button
+                [routerLink]="['../../', 'cars', 'add']"
+                [queryParams]="{ locality: locality._id }"
               >
                 <span
                   class="icon"
