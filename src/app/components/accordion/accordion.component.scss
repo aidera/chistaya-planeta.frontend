@@ -26,9 +26,13 @@
   .accordion-content {
     transition: $transition-1;
     overflow: hidden;
+    max-height: 0;
   }
 
   &.isOpen {
+    .accordion-content {
+      max-height: 1000px;
+    }
     .accordion-title {
       .icon {
         transform: rotate(180deg);
