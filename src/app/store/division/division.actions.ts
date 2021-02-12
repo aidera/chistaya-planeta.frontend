@@ -101,7 +101,7 @@ export const updateDivisionRequest = createAction(
     id: string;
     status?: SimpleStatus;
     name?: string;
-    localityId?: string;
+    locality?: string;
     street?: string;
     house?: string;
   }>()
@@ -127,7 +127,7 @@ export const refreshUpdateDivisionSucceed = createAction(
 
 export const addDivisionRequest = createAction(
   ADD_DIVISION_REQUEST,
-  props<{ name: string; localityId: string; street: string; house: string }>()
+  props<{ name: string; locality: string; street: string; house: string }>()
 );
 export const addDivisionSuccess = createAction(
   ADD_DIVISION_SUCCESS,

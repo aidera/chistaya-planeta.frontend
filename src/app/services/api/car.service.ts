@@ -89,8 +89,8 @@ export class CarService {
       weight?: number;
       isCorporate?: boolean;
       drivers?: IEmployee[];
-      localityId?: string;
-      divisionIds?: string[];
+      locality?: string;
+      divisions?: string[];
     }
   ): Observable<IUpdateCarResponse> {
     return this.http.patch<IUpdateCarResponse>(
@@ -105,8 +105,8 @@ export class CarService {
     weight: number;
     isCorporate?: boolean;
     drivers?: IEmployee[];
-    localityId: string;
-    divisionIds: string[];
+    locality: string;
+    divisions: string[];
   }): Observable<IAddCarResponse> {
     return this.http.put<IAddCarResponse>(
       `${environment.serverURL}/${this.path}/`,

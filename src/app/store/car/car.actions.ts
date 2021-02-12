@@ -104,8 +104,8 @@ export const updateCarRequest = createAction(
     weight?: number;
     isCorporate?: boolean;
     drivers?: IEmployee[];
-    localityId?: string;
-    divisionIds?: string[];
+    locality?: string;
+    divisions?: string[];
   }>()
 );
 export const updateCarSuccess = createAction(
@@ -133,8 +133,8 @@ export const addCarRequest = createAction(
     weight: number;
     isCorporate?: boolean;
     drivers?: IEmployee[];
-    localityId: string;
-    divisionIds: string[];
+    locality: string;
+    divisions: string[];
   }>()
 );
 export const addCarSuccess = createAction(

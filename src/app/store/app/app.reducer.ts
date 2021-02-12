@@ -4,8 +4,8 @@ import * as AppActions from './app.actions';
 import { ILocalityLessInfo } from '../../models/Locality';
 import { ServerError } from '../../models/ServerResponse';
 import { IDivisionLessInfo } from '../../models/Division';
-import { ILessInfoItem } from '../../models/LessInfoItem';
 import { OptionType } from '../../models/types/OptionType';
+import { IEmployeeLessInfo } from '../../models/Employee';
 
 export const appInitialState = {
   /* ---------------------------- */
@@ -32,7 +32,7 @@ export const appInitialState = {
   /* -------------------------------- */
   /* ------ Managers to select ------ */
   /* -------------------------------- */
-  managersToSelect: null as ILessInfoItem[] | null,
+  managersToSelect: null as IEmployeeLessInfo[] | null,
   managersOptionsToSelect: null as OptionType[] | null,
   managersToSelectIsFetching: false,
   managersToSelectError: null as ServerError | null,
@@ -40,7 +40,7 @@ export const appInitialState = {
   /* ------------------------------- */
   /* ------ Drivers to select ------ */
   /* ------------------------------- */
-  driversToSelect: null as ILessInfoItem[] | null,
+  driversToSelect: null as IEmployeeLessInfo[] | null,
   driversOptionsToSelect: null as OptionType[] | null,
   driversToSelectIsFetching: false,
   driversToSelectError: null as ServerError | null,
@@ -48,7 +48,7 @@ export const appInitialState = {
   /* --------------------------------- */
   /* ------ Employees to select ------ */
   /* --------------------------------- */
-  employeesToSelect: null as ILessInfoItem[] | null,
+  employeesToSelect: null as IEmployeeLessInfo[] | null,
   employeesOptionsToSelect: null as OptionType[] | null,
   employeesToSelectIsFetching: false,
   employeesToSelectError: null as ServerError | null,
@@ -135,7 +135,7 @@ const _appReducer = createReducer(
     managersToSelect: payload.managers,
     managersOptionsToSelect: payload.managers.map((manager) => {
       return {
-        value: manager.id,
+        value: manager._id,
         text: manager.name,
       };
     }),
@@ -162,7 +162,7 @@ const _appReducer = createReducer(
     driversToSelect: payload.drivers,
     driversOptionsToSelect: payload.drivers.map((driver) => {
       return {
-        value: driver.id,
+        value: driver._id,
         text: driver.name,
       };
     }),
@@ -189,7 +189,7 @@ const _appReducer = createReducer(
     employeesToSelect: payload.employees,
     employeesOptionsToSelect: payload.employees.map((employee) => {
       return {
-        value: employee.id,
+        value: employee._id,
         text: employee.name,
       };
     }),

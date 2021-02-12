@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CarItemAddComponent } from './car-item-add.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
+import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 
 describe('CarItemAddComponent', () => {
   let component: CarItemAddComponent;
@@ -22,7 +23,7 @@ describe('CarItemAddComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CarItemAddComponent, TextInputComponent],
+      declarations: [CarItemAddComponent, TextInputComponent, SelectComponent],
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,

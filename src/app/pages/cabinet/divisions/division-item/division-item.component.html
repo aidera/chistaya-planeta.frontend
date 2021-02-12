@@ -192,7 +192,7 @@
             </p>
 
             <div
-              *ngIf="division"
+              *ngIf="division?.status === simpleStatus.active"
               class="cabinet-content__field-inactive-action"
             >
               <button
@@ -200,7 +200,7 @@
                 [routerLink]="['../../', 'cars', 'add']"
                 [queryParams]="{
                   divisions: division._id,
-                  locality: division.address.locality._id
+                  locality: division.locality?._id
                 }"
               >
                 <span
@@ -229,24 +229,20 @@
 
         <div class="cabinet-content__field">
           <div
-            *ngIf="activeField !== 'localityId'"
+            *ngIf="activeField !== 'locality'"
             class="cabinet-content__field-inactive"
           >
             <label>Населённый пункт</label>
             <ng-container *ngIf="division && !isFetching">
               <a
-                [routerLink]="[
-                  '../../',
-                  'localities',
-                  division.address?.locality?._id
-                ]"
+                [routerLink]="['../../', 'localities', division?.locality?._id]"
                 [class.red-text]="
-                  division.address?.locality?.status === simpleStatus.inactive
+                  division.locality?.status === simpleStatus.inactive
                 "
-                >{{ division.address?.locality?.name }}</a
+                >{{ division.locality?.name }}</a
               >
               <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'localityId'">
+                <button mat-icon-button (click)="activeField = 'locality'">
                   <span
                     class="icon"
                     [inlineSVG]="'../../assets/icons/pencil.svg'"
@@ -257,9 +253,9 @@
             <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
           </div>
           <div
-            *ngIf="form && activeField === 'localityId'"
+            *ngIf="form && activeField === 'locality'"
             (clickOutside)="
-              removeActiveField('localityId', division.address.locality._id)
+              removeActiveField('locality', division.locality._id)
             "
             [delayClickOutsideInit]="true"
             [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
@@ -269,7 +265,7 @@
             <form [formGroup]="form" (ngSubmit)="update()">
               <app-select
                 label="Населённый пункт"
-                [control]="form.get('localityId')"
+                [control]="form.get('locality')"
                 [options]="localitiesOptions"
               ></app-select>
             </form>
@@ -281,8 +277,7 @@
                 (click)="update()"
                 [disabled]="
                   isUpdating ||
-                  form.get('localityId').value ===
-                    division.address.locality?._id
+                  form.get('locality').value === division.locality?._id
                 "
               >
                 <span
@@ -301,7 +296,7 @@
           >
             <label>Улица</label>
             <ng-container *ngIf="division && !isFetching">
-              <p>{{ division.address?.street }}</p>
+              <p>{{ division?.street }}</p>
               <div class="cabinet-content__field-inactive-action">
                 <button mat-icon-button (click)="activeField = 'street'">
                   <span
@@ -315,9 +310,7 @@
           </div>
           <div
             *ngIf="form && activeField === 'street'"
-            (clickOutside)="
-              removeActiveField('street', division.address.street)
-            "
+            (clickOutside)="removeActiveField('street', division.street)"
             [delayClickOutsideInit]="true"
             class="cabinet-content__field-active"
           >
@@ -337,8 +330,7 @@
                 color="primary"
                 (click)="update()"
                 [disabled]="
-                  isUpdating ||
-                  form.get('street').value === division.address.street
+                  isUpdating || form.get('street').value === division.street
                 "
               >
                 <span
@@ -357,7 +349,7 @@
           >
             <label>Дом</label>
             <ng-container *ngIf="division && !isFetching">
-              <p>{{ division.address?.house }}</p>
+              <p>{{ division?.house }}</p>
               <div class="cabinet-content__field-inactive-action">
                 <button mat-icon-button (click)="activeField = 'house'">
                   <span
@@ -371,7 +363,7 @@
           </div>
           <div
             *ngIf="form && activeField === 'house'"
-            (clickOutside)="removeActiveField('house', division.address.house)"
+            (clickOutside)="removeActiveField('house', division.house)"
             [delayClickOutsideInit]="true"
             class="cabinet-content__field-active"
           >
@@ -391,8 +383,7 @@
                 color="primary"
                 (click)="update()"
                 [disabled]="
-                  isUpdating ||
-                  form.get('house').value === division.address.house
+                  isUpdating || form.get('house').value === division.house
                 "
               >
                 <span

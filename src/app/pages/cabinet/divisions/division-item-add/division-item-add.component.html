@@ -69,11 +69,11 @@
         <div class="cabinet-content__grid-item-form-content">
           <app-select
             [label]="
-              isQueryLocalityId
+              isQueryLocality
                 ? 'Населённый пункт (добавлено автоматически)'
                 : 'Населённый пункт'
             "
-            [control]="form2.get('localityId')"
+            [control]="form2.get('locality')"
             [options]="localitiesOptions"
             [errorMessages]="{
               required: 'Обязательное поле'

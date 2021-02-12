@@ -189,13 +189,13 @@
               </ng-template>
             </p>
             <div
-              *ngIf="locality"
+              *ngIf="locality?.status === simpleStatus.active"
               class="cabinet-content__field-inactive-action"
             >
               <button
                 mat-icon-button
                 [routerLink]="['../../', 'divisions', 'add']"
-                [queryParams]="{ localityId: locality._id }"
+                [queryParams]="{ locality: locality._id }"
               >
                 <span
                   class="icon"
@@ -255,7 +255,7 @@
             </p>
 
             <div
-              *ngIf="locality"
+              *ngIf="locality?.status === simpleStatus.active"
               class="cabinet-content__field-inactive-action"
             >
               <button
@@ -324,9 +324,6 @@
   <br />
   Все связанные записи не смогут восстановить населённый пункт автоматически,
   даже если новое называние будет идентично.
-  <br />
-  <br />
-  Связанные подразделения будут удалены.
 </app-modal>
 
 <app-modal

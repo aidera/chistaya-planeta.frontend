@@ -90,10 +90,10 @@ export class DivisionItemComponent
             .setValue(division ? String(division.status) : '');
           this.form.get('name').setValue(division?.name || '');
           this.form
-            .get('localityId')
-            .setValue((division?.address?.locality as ILocality)?._id || '');
-          this.form.get('street').setValue(division?.address?.street || '');
-          this.form.get('house').setValue(division?.address?.house || '');
+            .get('locality')
+            .setValue((division?.locality as ILocality)?._id || '');
+          this.form.get('street').setValue(division?.street || '');
+          this.form.get('house').setValue(division?.house || '');
         }
       });
 
@@ -221,7 +221,7 @@ export class DivisionItemComponent
     this.form = new FormGroup({
       status: new FormControl('', Validators.required),
       name: new FormControl('', Validators.required),
-      localityId: new FormControl('', Validators.required),
+      locality: new FormControl('', Validators.required),
       street: new FormControl('', Validators.required),
       house: new FormControl('', Validators.required),
     });
@@ -234,15 +234,34 @@ export class DivisionItemComponent
   }
 
   public update(): void {
-    if (this.activeField && !this.isUpdating && this.form.valid) {
+    if (
+      this.activeField &&
+      !this.isUpdating &&
+      this.form.get(this.activeField).valid
+    ) {
       this.store.dispatch(
         DivisionActions.updateDivisionRequest({
           id: this.division._id,
-          status: +this.form.get('status').value,
-          name: this.form.get('name').value,
-          localityId: this.form.get('localityId').value,
-          street: this.form.get('street').value,
-          house: this.form.get('house').value,
+          status:
+            this.activeField === 'status'
+              ? +this.form.get('status').value
+              : undefined,
+          name:
+            this.activeField === 'name'
+              ? this.form.get('name').value
+              : undefined,
+          locality:
+            this.activeField === 'locality'
+              ? this.form.get('locality').value
+              : undefined,
+          street:
+            this.activeField === 'street'
+              ? this.form.get('street').value
+              : undefined,
+          house:
+            this.activeField === 'house'
+              ? this.form.get('house').value
+              : undefined,
         })
       );
     }

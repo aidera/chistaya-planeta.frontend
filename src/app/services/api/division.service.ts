@@ -81,7 +81,7 @@ export class DivisionService {
     fields: {
       status?: SimpleStatus;
       name?: string;
-      localityId?: string;
+      locality?: string;
       street?: string;
       house?: string;
     }
@@ -94,7 +94,7 @@ export class DivisionService {
 
   add(fields: {
     name: string;
-    localityId: string;
+    locality: string;
     street: string;
     house: string;
   }): Observable<IAddDivisionResponse> {

@@ -341,22 +341,4 @@ export class OrdersTableComponent implements OnInit {
       return tableOrder;
     });
   }
-
-  onTableDisplay(event: TableDisplayOutputType[]): void {
-    this.displayedColumns = event;
-    console.log(event);
-  }
-
-  onTableSort(event: TableSortType): void {
-    this.tableSorting = event;
-  }
-
-  onTablePaginate(event: PaginationType): void {
-    this.tablePagination = event;
-    console.log(event);
-  }
-
-  onTableItemClick(index: number): void {
-    console.log(index);
-  }
 }

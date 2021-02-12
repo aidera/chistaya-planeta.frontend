@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { ServerError } from '../../models/ServerResponse';
 import { ILocalityLessInfo } from '../../models/Locality';
 import { IDivisionLessInfo } from '../../models/Division';
-import { ILessInfoItem } from '../../models/LessInfoItem';
+import { IEmployeeLessInfo } from '../../models/Employee';
 
 export const SET_IS_FULLSCREEN_MENU_OPEN =
   '[app] set - is fullscreen menu open';
@@ -98,7 +98,7 @@ export const getManagersToSelectRequest = createAction(
 export const getManagersToSelectSuccess = createAction(
   GET_MANAGERS_TO_SELECT_SUCCESS,
   props<{
-    managers: ILessInfoItem[];
+    managers: IEmployeeLessInfo[];
   }>()
 );
 export const getManagersToSelectFailure = createAction(
@@ -116,7 +116,7 @@ export const getDriversToSelectRequest = createAction(
 export const getDriversToSelectSuccess = createAction(
   GET_DRIVERS_TO_SELECT_SUCCESS,
   props<{
-    drivers: ILessInfoItem[];
+    drivers: IEmployeeLessInfo[];
   }>()
 );
 export const getDriversToSelectFailure = createAction(
@@ -134,7 +134,7 @@ export const getEmployeesToSelectRequest = createAction(
 export const getEmployeesToSelectSuccess = createAction(
   GET_EMPLOYEES_TO_SELECT_SUCCESS,
   props<{
-    employees: ILessInfoItem[];
+    employees: IEmployeeLessInfo[];
   }>()
 );
 export const getEmployeesToSelectFailure = createAction(

@@ -32,8 +32,8 @@ export class DivisionItemAddComponent
   public form1: FormGroup;
   public form2: FormGroup;
 
-  public isQueryLocalityId = false;
-  public queryLocalityId: string;
+  public isQueryLocality = false;
+  public queryLocality: string;
 
   public alreadyExistId: string;
 
@@ -53,10 +53,10 @@ export class DivisionItemAddComponent
     this.initForm();
 
     this.route.queryParams.subscribe((params) => {
-      if (params.localityId) {
-        this.form2.get('localityId').setValue(params.localityId);
-        this.isQueryLocalityId = true;
-        this.queryLocalityId = params.localityId;
+      if (params.locality) {
+        this.form2.get('locality').setValue(params.locality);
+        this.isQueryLocality = true;
+        this.queryLocality = params.locality;
       }
     });
 
@@ -141,17 +141,17 @@ export class DivisionItemAddComponent
       });
 
     this.form2 = new FormGroup({
-      localityId: new FormControl('', Validators.required),
+      locality: new FormControl('', Validators.required),
       street: new FormControl('', Validators.required),
       house: new FormControl('', Validators.required),
     });
 
     this.form2
-      .get('localityId')
+      .get('locality')
       .valueChanges.pipe(debounceTime(500))
       .subscribe((value) => {
-        if (value !== this.queryLocalityId) {
-          this.isQueryLocalityId = false;
+        if (value !== this.queryLocality) {
+          this.isQueryLocality = false;
         }
       });
   }
@@ -190,7 +190,7 @@ export class DivisionItemAddComponent
       this.store.dispatch(
         DivisionActions.addDivisionRequest({
           name: this.form1.get('name').value,
-          localityId: this.form2.get('localityId').value,
+          locality: this.form2.get('locality').value,
           street: this.form2.get('street').value,
           house: this.form2.get('house').value,
         })

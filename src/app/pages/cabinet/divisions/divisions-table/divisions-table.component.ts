@@ -196,21 +196,21 @@ export class DivisionsTableComponent
               ),
               locality:
                 this.highlightSearchedValue(
-                  (division.address?.locality as ILocality)?.name,
+                  (division.locality as ILocality)?.name,
                   this.quickSearchForm
                     ? this.quickSearchForm.get('search').value
                     : ''
                 ) || '-',
               street:
                 this.highlightSearchedValue(
-                  division.address?.street,
+                  division.street,
                   this.quickSearchForm
                     ? this.quickSearchForm.get('search').value
                     : ''
                 ) || '-',
               house:
                 this.highlightSearchedValue(
-                  division.address?.house,
+                  division.house,
                   this.quickSearchForm
                     ? this.quickSearchForm.get('search').value
                     : ''

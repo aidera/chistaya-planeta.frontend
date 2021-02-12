@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as CarAction from './car.actions';
+import * as CarActions from './car.actions';
 import { CarService } from '../../services/api/car.service';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class CarEffects {
 
   getCars$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CarAction.getCarsRequest),
+      ofType(CarActions.getCarsRequest),
       switchMap((action) => {
         return this.carApi
           .get({
@@ -24,7 +24,7 @@ export class CarEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.cars) {
-                return CarAction.getCarsSuccess({
+                return CarActions.getCarsSuccess({
                   cars: resData.cars,
                   pagination: {
                     perPage: resData.perPage,
@@ -34,13 +34,13 @@ export class CarEffects {
                   },
                 });
               }
-              return CarAction.getCarsFailure({
+              return CarActions.getCarsFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                CarAction.getCarsFailure({
+                CarActions.getCarsFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -52,22 +52,22 @@ export class CarEffects {
 
   getCar$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CarAction.getCarRequest),
+      ofType(CarActions.getCarRequest),
       switchMap((action) => {
         return this.carApi.getOne(action.id).pipe(
           map((resData) => {
             if (resData && resData.car) {
-              return CarAction.getCarSuccess({
+              return CarActions.getCarSuccess({
                 car: resData.car,
               });
             }
-            return CarAction.getCarFailure({
+            return CarActions.getCarFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              CarAction.getCarFailure({
+              CarActions.getCarFailure({
                 error: errorRes.error.error,
               })
             );
@@ -79,7 +79,7 @@ export class CarEffects {
 
   updateCar$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CarAction.updateCarRequest),
+      ofType(CarActions.updateCarRequest),
       switchMap((action) => {
         return this.carApi
           .update(action.id, {
@@ -89,23 +89,23 @@ export class CarEffects {
             type: action.carType,
             licensePlate: action.licensePlate,
             weight: action.weight,
-            localityId: action.localityId,
-            divisionIds: action.divisionIds,
+            locality: action.locality,
+            divisions: action.divisions,
           })
           .pipe(
             map((resData) => {
               if (resData && resData.updatedCar) {
-                return CarAction.updateCarSuccess({
+                return CarActions.updateCarSuccess({
                   car: resData.updatedCar,
                 });
               }
-              return CarAction.updateCarFailure({
+              return CarActions.updateCarFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                CarAction.updateCarFailure({
+                CarActions.updateCarFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -117,7 +117,7 @@ export class CarEffects {
 
   addCar$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CarAction.addCarRequest),
+      ofType(CarActions.addCarRequest),
       switchMap((action) => {
         return this.carApi
           .add({
@@ -126,23 +126,23 @@ export class CarEffects {
             type: action.carType,
             licensePlate: action.licensePlate,
             weight: action.weight,
-            localityId: action.localityId,
-            divisionIds: action.divisionIds,
+            locality: action.locality,
+            divisions: action.divisions,
           })
           .pipe(
             map((resData) => {
               if (resData && resData.addedCar) {
-                return CarAction.addCarSuccess({
+                return CarActions.addCarSuccess({
                   car: resData.addedCar,
                 });
               }
-              return CarAction.addCarFailure({
+              return CarActions.addCarFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                CarAction.addCarFailure({
+                CarActions.addCarFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -154,22 +154,22 @@ export class CarEffects {
 
   removeCar$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CarAction.removeCarRequest),
+      ofType(CarActions.removeCarRequest),
       switchMap((action) => {
         return this.carApi.remove(action.id).pipe(
           map((resData) => {
             if (resData && resData.removedCar) {
-              return CarAction.removeCarSuccess({
+              return CarActions.removeCarSuccess({
                 car: resData.removedCar,
               });
             }
-            return CarAction.removeCarFailure({
+            return CarActions.removeCarFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              CarAction.removeCarFailure({
+              CarActions.removeCarFailure({
                 error: errorRes.error.error,
               })
             );

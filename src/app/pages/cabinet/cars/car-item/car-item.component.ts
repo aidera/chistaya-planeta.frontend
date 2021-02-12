@@ -119,7 +119,7 @@ export class CarItemComponent
         this.formModal?.get('locality').valueChanges.subscribe((value) => {
           this.divisionsOptions = [];
           this.divisions?.forEach((el) => {
-            if (value.includes(el.address.locality)) {
+            if (value.includes(el.locality)) {
               this.divisionsOptions.push({
                 value: el._id,
                 text: el.name,
@@ -140,7 +140,7 @@ export class CarItemComponent
           this.divisionsOptions = [];
 
           this.divisions.forEach((el) => {
-            if (el.address.locality === (this.car.locality as ILocality)?._id) {
+            if (el.locality === (this.car.locality as ILocality)?._id) {
               this.divisionsOptions.push({
                 value: el._id,
                 text: el.name,
@@ -274,7 +274,7 @@ export class CarItemComponent
           this.divisionsOptions = [];
 
           this.divisions.forEach((el) => {
-            if (el.address.locality === (this.car.locality as ILocality)?._id) {
+            if (el.locality === (this.car.locality as ILocality)?._id) {
               this.divisionsOptions.push({
                 value: el._id,
                 text: el.name,
@@ -326,16 +326,38 @@ export class CarItemComponent
   }
 
   public update(): void {
-    if (this.activeField && !this.isUpdating && this.form.valid) {
+    if (
+      this.activeField &&
+      !this.isUpdating &&
+      this.form.get(this.activeField).valid
+    ) {
       this.store.dispatch(
         CarActions.updateCarRequest({
           id: this.car._id,
-          weight: +this.form.get('weight').value,
-          licensePlate: this.form.get('licensePlate').value,
-          isCorporate: this.form.get('isCorporate').value === '1',
-          drivers: this.form.get('drivers').value || [],
-          status: +this.form.get('status').value,
-          carType: +this.form.get('type').value,
+          weight:
+            this.activeField === 'weight'
+              ? +this.form.get('weight').value
+              : undefined,
+          licensePlate:
+            this.activeField === 'licensePlate'
+              ? this.form.get('licensePlate').value
+              : undefined,
+          isCorporate:
+            this.activeField === 'isCorporate'
+              ? this.form.get('isCorporate').value === '1'
+              : undefined,
+          drivers:
+            this.activeField === 'drivers'
+              ? this.form.get('drivers').value || []
+              : undefined,
+          status:
+            this.activeField === 'status'
+              ? +this.form.get('status').value
+              : undefined,
+          carType:
+            this.activeField === 'type'
+              ? +this.form.get('type').value
+              : undefined,
         })
       );
     }
@@ -374,8 +396,8 @@ export class CarItemComponent
         this.store.dispatch(
           CarActions.updateCarRequest({
             id: this.car._id,
-            localityId: this.formModal.get('locality').value,
-            divisionIds: this.formModal.get('divisions').value,
+            locality: this.formModal.get('locality').value,
+            divisions: this.formModal.get('divisions').value,
           })
         );
       }

@@ -3,21 +3,21 @@ import { of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as DivisionActions from './division.actions';
-import { DivisionService } from '../../services/api/division.service';
+import * as EmployeeActions from './employee.actions';
+import { EmployeeService } from '../../services/api/employee.service';
 
 @Injectable()
-export class DivisionEffects {
+export class EmployeeEffects {
   constructor(
     private actions$: Actions,
-    private divisionApi: DivisionService
+    private employeeApi: EmployeeService
   ) {}
 
-  getDivisions$ = createEffect(() =>
+  getEmployees$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.getDivisionsRequest),
+      ofType(EmployeeActions.getEmployeesRequest),
       switchMap((action) => {
-        return this.divisionApi
+        return this.employeeApi
           .get({
             pagination: action.params.pagination,
             sorting: action.params.sorting,
@@ -26,9 +26,9 @@ export class DivisionEffects {
           })
           .pipe(
             map((resData) => {
-              if (resData && resData.divisions) {
-                return DivisionActions.getDivisionsSuccess({
-                  divisions: resData.divisions,
+              if (resData && resData.employees) {
+                return EmployeeActions.getEmployeesSuccess({
+                  employees: resData.employees,
                   pagination: {
                     perPage: resData.perPage,
                     page: resData.currentPage,
@@ -37,13 +37,13 @@ export class DivisionEffects {
                   },
                 });
               }
-              return DivisionActions.getDivisionsFailure({
+              return EmployeeActions.getEmployeesFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                DivisionActions.getDivisionsFailure({
+                EmployeeActions.getEmployeesFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -53,24 +53,24 @@ export class DivisionEffects {
     )
   );
 
-  getDivision$ = createEffect(() =>
+  getEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.getDivisionRequest),
+      ofType(EmployeeActions.getEmployeeRequest),
       switchMap((action) => {
-        return this.divisionApi.getOne(action.id).pipe(
+        return this.employeeApi.getOne(action.id).pipe(
           map((resData) => {
-            if (resData && resData.division) {
-              return DivisionActions.getDivisionSuccess({
-                division: resData.division,
+            if (resData && resData.employee) {
+              return EmployeeActions.getEmployeeSuccess({
+                employee: resData.employee,
               });
             }
-            return DivisionActions.getDivisionFailure({
+            return EmployeeActions.getEmployeeFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              DivisionActions.getDivisionFailure({
+              EmployeeActions.getEmployeeFailure({
                 error: errorRes.error.error,
               })
             );
@@ -80,32 +80,37 @@ export class DivisionEffects {
     )
   );
 
-  updateDivision$ = createEffect(() =>
+  updateEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.updateDivisionRequest),
+      ofType(EmployeeActions.updateEmployeeRequest),
       switchMap((action) => {
-        return this.divisionApi
+        return this.employeeApi
           .update(action.id, {
             status: action.status,
-            name: action.name,
+            email: action.email,
+            division: action.division,
             locality: action.locality,
-            street: action.street,
-            house: action.house,
+            cars: action.cars,
+            name: action.name,
+            phone: action.phone,
+            patronymic: action.patronymic,
+            role: action.role,
+            surname: action.surname,
           })
           .pipe(
             map((resData) => {
-              if (resData && resData.updatedDivision) {
-                return DivisionActions.updateDivisionSuccess({
-                  division: resData.updatedDivision,
+              if (resData && resData.updatedEmployee) {
+                return EmployeeActions.updateEmployeeSuccess({
+                  employee: resData.updatedEmployee,
                 });
               }
-              return DivisionActions.updateDivisionFailure({
+              return EmployeeActions.updateEmployeeFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                DivisionActions.updateDivisionFailure({
+                EmployeeActions.updateEmployeeFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -115,31 +120,36 @@ export class DivisionEffects {
     )
   );
 
-  addDivision$ = createEffect(() =>
+  addEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.addDivisionRequest),
+      ofType(EmployeeActions.addEmployeeRequest),
       switchMap((action) => {
-        return this.divisionApi
+        return this.employeeApi
           .add({
+            surname: action.surname,
+            role: action.role,
+            patronymic: action.patronymic,
+            phone: action.phone,
             name: action.name,
+            cars: action.cars,
             locality: action.locality,
-            street: action.street,
-            house: action.house,
+            division: action.division,
+            email: action.email,
           })
           .pipe(
             map((resData) => {
-              if (resData && resData.addedDivision) {
-                return DivisionActions.addDivisionSuccess({
-                  division: resData.addedDivision,
+              if (resData && resData.addedEmployee) {
+                return EmployeeActions.addEmployeeSuccess({
+                  employee: resData.addedEmployee,
                 });
               }
-              return DivisionActions.addDivisionFailure({
+              return EmployeeActions.addEmployeeFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                DivisionActions.addDivisionFailure({
+                EmployeeActions.addEmployeeFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -149,24 +159,24 @@ export class DivisionEffects {
     )
   );
 
-  removeDivision$ = createEffect(() =>
+  removeEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.removeDivisionRequest),
+      ofType(EmployeeActions.removeEmployeeRequest),
       switchMap((action) => {
-        return this.divisionApi.remove(action.id).pipe(
+        return this.employeeApi.remove(action.id).pipe(
           map((resData) => {
-            if (resData && resData.removedDivision) {
-              return DivisionActions.removeDivisionSuccess({
-                division: resData.removedDivision,
+            if (resData && resData.removedEmployee) {
+              return EmployeeActions.removeEmployeeSuccess({
+                employee: resData.removedEmployee,
               });
             }
-            return DivisionActions.removeDivisionFailure({
+            return EmployeeActions.removeEmployeeFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              DivisionActions.removeDivisionFailure({
+              EmployeeActions.removeEmployeeFailure({
                 error: errorRes.error.error,
               })
             );

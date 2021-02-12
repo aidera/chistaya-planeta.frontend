@@ -214,12 +214,22 @@ export class LocalityItemComponent
   }
 
   public update(): void {
-    if (this.activeField && !this.isUpdating && this.form.valid) {
+    if (
+      this.activeField &&
+      !this.isUpdating &&
+      this.form.get(this.activeField).valid
+    ) {
       this.store.dispatch(
         LocalitiesActions.updateLocalityRequest({
           id: this.locality._id,
-          name: this.form.get('name').value,
-          status: +this.form.get('status').value,
+          name:
+            this.activeField === 'status'
+              ? this.form.get('name').value
+              : undefined,
+          status:
+            this.activeField === 'status'
+              ? +this.form.get('status').value
+              : undefined,
         })
       );
     }

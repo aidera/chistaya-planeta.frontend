@@ -230,10 +230,10 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
         });
         if (currentLocality) {
           this.divisions?.forEach((division: IDivisionLessInfo) => {
-            if (division.address.locality === currentLocality.value) {
+            if (division.locality === currentLocality.value) {
               this.selectDivisionsOptions.push({
                 value: division._id,
-                text: `${division.name} (${division.address.street}, ${division.address.house})`,
+                text: `${division.name} (${division.street}, ${division.house})`,
               });
             }
           });

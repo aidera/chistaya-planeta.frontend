@@ -136,7 +136,7 @@ export class CarItemAddComponent
         this.divisionsOptions = [];
         if (this.isQueryLocalityId) {
           this.divisions?.forEach((el) => {
-            if (this.queryLocalityId === el.address.locality) {
+            if (this.queryLocalityId === el.locality) {
               this.divisionsOptions.push({
                 value: el._id,
                 text: el.name,
@@ -186,7 +186,7 @@ export class CarItemAddComponent
       this.isQueryDivisionId = false;
       this.divisionsOptions = [];
       this.divisions?.forEach((el) => {
-        if (el.address.locality === value) {
+        if (el.locality === value) {
           this.divisionsOptions.push({
             value: el._id,
             text: el.name,
@@ -244,8 +244,8 @@ export class CarItemAddComponent
           isCorporate: this.form1.get('isCorporate').value === '1',
           licensePlate: this.form1.get('licensePlate').value,
           weight: +this.form1.get('weight').value,
-          localityId: this.form2.get('locality').value,
-          divisionIds: this.form2.get('divisions').value,
+          locality: this.form2.get('locality').value,
+          divisions: this.form2.get('divisions').value,
         })
       );
     }

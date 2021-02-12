@@ -345,7 +345,7 @@ export class CarsTableComponent
             if (
               this.advancedSearchForm
                 ?.get('localities')
-                .value.includes(el.address.locality)
+                .value.includes(el.locality)
             ) {
               this.divisionsOptions.push({ text: el.name, value: el._id });
             }
@@ -369,7 +369,7 @@ export class CarsTableComponent
         this.divisionsOptions = [];
         this.divisions?.forEach((el) => {
           if (value?.length > 0) {
-            if (value.includes(el.address.locality)) {
+            if (value.includes(el.locality)) {
               this.divisionsOptions.push({ text: el.name, value: el._id });
             }
           } else {

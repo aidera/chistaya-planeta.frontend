@@ -4,6 +4,7 @@ import { LocalityEffects } from './locality/locality.effects';
 import { UserEffects } from './user/user.effects';
 import { DivisionEffects } from './division/division.effects';
 import { CarEffects } from './car/car.effects';
+import { EmployeeEffects } from './employee/employee.effects';
 
 export const rootEffects = [
   AppEffects,
@@ -12,4 +13,5 @@ export const rootEffects = [
   LocalityEffects,
   DivisionEffects,
   CarEffects,
+  EmployeeEffects,
 ];
