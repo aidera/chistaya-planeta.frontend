@@ -5,82 +5,82 @@ import { EmployeeState } from './employee.reducer';
 
 export const selectAll = (state: State) => state.employee;
 
-export const selectCars = createSelector(
+export const selectEmployees = createSelector(
   selectAll,
   (state: EmployeeState) => state.employees
 );
 
-export const selectGetCarsIsFetching = createSelector(
+export const selectGetEmployeesIsFetching = createSelector(
   selectAll,
   (state: EmployeeState) => state.getEmployeesIsFetching
 );
 
-export const selectGetCarsPagination = createSelector(
+export const selectGetEmployeesPagination = createSelector(
   selectAll,
   (state: EmployeeState) => state.getEmployeesPagination
 );
 
-export const selectGetCarsError = createSelector(
+export const selectGetEmployeesError = createSelector(
   selectAll,
   (state: EmployeeState) => state.getEmployeesError
 );
 
-export const selectCar = createSelector(
+export const selectEmployee = createSelector(
   selectAll,
   (state: EmployeeState) => state.employee
 );
 
-export const selectGetCarIsFetching = createSelector(
+export const selectGetEmployeeIsFetching = createSelector(
   selectAll,
   (state: EmployeeState) => state.getEmployeeIsFetching
 );
 
-export const selectGetCarError = createSelector(
+export const selectGetEmployeeError = createSelector(
   selectAll,
   (state: EmployeeState) => state.getEmployeeError
 );
 
-export const selectUpdateCarIsFetching = createSelector(
+export const selectUpdateEmployeeIsFetching = createSelector(
   selectAll,
   (state: EmployeeState) => state.updateEmployeeIsFetching
 );
 
-export const selectUpdateCarError = createSelector(
+export const selectUpdateEmployeeError = createSelector(
   selectAll,
   (state: EmployeeState) => state.updateEmployeeError
 );
 
-export const selectUpdateCarSucceed = createSelector(
+export const selectUpdateEmployeeSucceed = createSelector(
   selectAll,
   (state: EmployeeState) => state.updateEmployeeSucceed
 );
 
-export const selectAddCarIsFetching = createSelector(
+export const selectAddEmployeeIsFetching = createSelector(
   selectAll,
   (state: EmployeeState) => state.addEmployeeIsFetching
 );
 
-export const selectAddCarSucceed = createSelector(
+export const selectAddEmployeeSucceed = createSelector(
   selectAll,
   (state: EmployeeState) => state.addEmployeeSucceed
 );
 
-export const selectAddCarError = createSelector(
+export const selectAddEmployeeError = createSelector(
   selectAll,
   (state: EmployeeState) => state.addEmployeeError
 );
 
-export const selectRemoveCarIsFetching = createSelector(
+export const selectRemoveEmployeeIsFetching = createSelector(
   selectAll,
   (state: EmployeeState) => state.removeEmployeeIsFetching
 );
 
-export const selectRemoveCarSucceed = createSelector(
+export const selectRemoveEmployeeSucceed = createSelector(
   selectAll,
   (state: EmployeeState) => state.removeEmployeeSucceed
 );
 
-export const selectRemoveCarError = createSelector(
+export const selectRemoveEmployeeError = createSelector(
   selectAll,
   (state: EmployeeState) => state.removeEmployeeError
 );

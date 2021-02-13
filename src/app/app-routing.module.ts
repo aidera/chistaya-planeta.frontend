@@ -19,6 +19,7 @@ import { DivisionItemAddComponent } from './pages/cabinet/divisions/division-ite
 import { CarsTableComponent } from './pages/cabinet/cars/cars-table/cars-table.component';
 import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.component';
 import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-add.component';
+import { EmployeesTableComponent } from './pages/cabinet/employees/employees-table/employees-table.component';
 
 export const routes: Routes = [
   {
@@ -80,6 +81,11 @@ export const routes: Routes = [
         path: 'cars/:id',
         component: CarItemComponent,
         data: { useBacklink: true },
+      },
+      {
+        path: 'employees',
+        component: EmployeesTableComponent,
+        data: { useBacklink: false },
       },
     ],
   },

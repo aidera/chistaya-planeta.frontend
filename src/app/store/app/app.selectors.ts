@@ -57,6 +57,27 @@ export const selectDivisionsToSelectError = createSelector(
 );
 
 /* -------------------------------- */
+/* ------ Cars to select ------ */
+/* -------------------------------- */
+
+export const selectCarsToSelect = createSelector(
+  selectAll,
+  (state: AppState) => state.carsToSelect
+);
+export const selectCarsOptionsToSelect = createSelector(
+  selectAll,
+  (state: AppState) => state.carsOptionsToSelect
+);
+export const selectCarsToSelectIsFetching = createSelector(
+  selectAll,
+  (state: AppState) => state.carsToSelectIsFetching
+);
+export const selectCarsToSelectError = createSelector(
+  selectAll,
+  (state: AppState) => state.carsToSelectError
+);
+
+/* -------------------------------- */
 /* ------ Managers to select ------ */
 /* -------------------------------- */
 

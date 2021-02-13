@@ -4,6 +4,7 @@ import { ServerError } from '../../models/ServerResponse';
 import { ILocalityLessInfo } from '../../models/Locality';
 import { IDivisionLessInfo } from '../../models/Division';
 import { IEmployeeLessInfo } from '../../models/Employee';
+import { ICarLessInfo } from '../../models/Car';
 
 export const SET_IS_FULLSCREEN_MENU_OPEN =
   '[app] set - is fullscreen menu open';
@@ -21,6 +22,13 @@ export const GET_DIVISIONS_TO_SELECT_SUCCESS =
   '[app] get - divisions to select - success';
 export const GET_DIVISIONS_TO_SELECT_FAILURE =
   '[app] get - divisions to select - failure';
+
+export const GET_CARS_TO_SELECT_REQUEST =
+  '[app] get - cars to select - request';
+export const GET_CARS_TO_SELECT_SUCCESS =
+  '[app] get - cars to select - success';
+export const GET_CARS_TO_SELECT_FAILURE =
+  '[app] get - cars to select - failure';
 
 export const GET_MANAGERS_TO_SELECT_REQUEST =
   '[app] get - managers to select - request';
@@ -85,6 +93,22 @@ export const getDivisionsToSelectSuccess = createAction(
 );
 export const getDivisionsToSelectFailure = createAction(
   GET_DIVISIONS_TO_SELECT_FAILURE,
+  props<{ error: ServerError }>()
+);
+
+/* ---------------------------- */
+/* ------ Cars to select ------ */
+/* ---------------------------- */
+
+export const getCarsToSelectRequest = createAction(GET_CARS_TO_SELECT_REQUEST);
+export const getCarsToSelectSuccess = createAction(
+  GET_CARS_TO_SELECT_SUCCESS,
+  props<{
+    cars: ICarLessInfo[];
+  }>()
+);
+export const getCarsToSelectFailure = createAction(
+  GET_CARS_TO_SELECT_FAILURE,
   props<{ error: ServerError }>()
 );
 

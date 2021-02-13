@@ -6,6 +6,7 @@
 
 enum EmployeeStatus {
   active,
+  vacation,
   fired,
 }
 

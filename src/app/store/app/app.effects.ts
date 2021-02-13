@@ -6,13 +6,15 @@ import { of } from 'rxjs';
 import * as AppActions from '../app/app.actions';
 import { DivisionService } from '../../services/api/division.service';
 import { LocalityService } from '../../services/api/locality.service';
+import { CarService } from '../../services/api/car.service';
 
 @Injectable()
 export class AppEffects {
   constructor(
     private actions$: Actions,
     private localityApi: LocalityService,
-    private divisionApi: DivisionService
+    private divisionApi: DivisionService,
+    private carApi: CarService
   ) {}
 
   getLocalitiesToSelect$ = createEffect(() =>
@@ -60,6 +62,33 @@ export class AppEffects {
           catchError((errorRes) => {
             return of(
               AppActions.getDivisionsToSelectFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  getCarsToSelect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getCarsToSelectRequest),
+      switchMap((_) => {
+        return this.carApi.getAllLessInfo().pipe(
+          map((resData) => {
+            if (resData && resData.cars) {
+              return AppActions.getCarsToSelectSuccess({
+                cars: resData.cars,
+              });
+            }
+            return AppActions.getCarsToSelectFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              AppActions.getCarsToSelectFailure({
                 error: errorRes.error.error,
               })
             );

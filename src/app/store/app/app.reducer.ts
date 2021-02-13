@@ -6,6 +6,7 @@ import { ServerError } from '../../models/ServerResponse';
 import { IDivisionLessInfo } from '../../models/Division';
 import { OptionType } from '../../models/types/OptionType';
 import { IEmployeeLessInfo } from '../../models/Employee';
+import { ICarLessInfo } from '../../models/Car';
 
 export const appInitialState = {
   /* ---------------------------- */
@@ -28,6 +29,14 @@ export const appInitialState = {
   divisionsOptionsToSelect: null as OptionType[] | null,
   divisionsToSelectIsFetching: false,
   divisionsToSelectError: null as ServerError | null,
+
+  /* ---------------------------- */
+  /* ------ Cars to select ------ */
+  /* ---------------------------- */
+  carsToSelect: null as ICarLessInfo[] | null,
+  carsOptionsToSelect: null as OptionType[] | null,
+  carsToSelectIsFetching: false,
+  carsToSelectError: null as ServerError | null,
 
   /* -------------------------------- */
   /* ------ Managers to select ------ */
@@ -119,6 +128,33 @@ const _appReducer = createReducer(
     ...state,
     divisionsToSelectIsFetching: false,
     divisionsToSelectError: payload.error,
+  })),
+
+  /* ---------------------------- */
+  /* ------ Cars to select ------ */
+  /* ---------------------------- */
+
+  on(AppActions.getCarsToSelectSuccess, (state) => ({
+    ...state,
+    carsToSelectIsFetching: true,
+    carsToSelectError: null,
+  })),
+  on(AppActions.getCarsToSelectSuccess, (state, payload) => ({
+    ...state,
+    carsToSelect: payload.cars,
+    carsOptionsToSelect: payload.cars.map((manager) => {
+      return {
+        value: manager._id,
+        text: manager.licensePlate,
+      };
+    }),
+    carsToSelectIsFetching: false,
+    carsToSelectError: null,
+  })),
+  on(AppActions.getCarsToSelectFailure, (state, payload) => ({
+    ...state,
+    carsToSelectIsFetching: false,
+    carsToSelectError: payload.error,
   })),
 
   /* -------------------------------- */

@@ -28,6 +28,7 @@ export class CarsTableComponent
   implements OnInit, OnDestroy {
   private cars$: Subscription;
   private cars: ICar[];
+
   private localities$: Subscription;
   public localitiesOptions: OptionType[];
   private divisions$: Subscription;
