@@ -14,9 +14,9 @@ export interface IEmployee {
   phone: string;
   email: string;
   password?: string;
-  locality: ILocality;
-  division: IDivision;
-  cars: ICar[];
+  locality: ILocality | string;
+  division: IDivision | string;
+  cars: (ICar | string)[];
   dismissalReason?: string;
   createdAt: Date;
   updatedAt: Date;

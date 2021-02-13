@@ -11,9 +11,9 @@ export interface ICar {
   type: CarType;
   weight: number;
   isCorporate: boolean;
-  drivers: IEmployee[];
-  locality: ILocality;
-  divisions: IDivision[];
+  drivers: (IEmployee | string)[];
+  locality: ILocality | string;
+  divisions: (IDivision | string)[];
   createdAt: Date;
   updatedAt: Date;
 }
