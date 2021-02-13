@@ -21,6 +21,7 @@ import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.compone
 import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-add.component';
 import { EmployeesTableComponent } from './pages/cabinet/employees/employees-table/employees-table.component';
 import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-item-add/employee-item-add.component';
+import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/employee-item.component';
 
 export const routes: Routes = [
   {
@@ -91,6 +92,11 @@ export const routes: Routes = [
       {
         path: 'employees/add',
         component: EmployeeItemAddComponent,
+        data: { useBacklink: true },
+      },
+      {
+        path: 'employees/:id',
+        component: EmployeeItemComponent,
         data: { useBacklink: true },
       },
     ],

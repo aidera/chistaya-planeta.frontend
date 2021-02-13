@@ -1,0 +1,718 @@
+<div class="cabinet-header">
+  <h1>
+    Сотрудник{{
+      employee
+        ? ': ' +
+          employee.surname +
+          ' ' +
+          employee.name +
+          ' ' +
+          employee.patronymic
+        : ''
+    }}
+  </h1>
+  <div class="cabinet-header__actions">
+    <button
+      *ngIf="employee && employee.status === employeeStatus.fired"
+      [disabled]="isFetching || isUpdating"
+      mat-button
+      color="warn"
+      (click)="isRemoveModalOpen = true"
+    >
+      Удалить
+    </button>
+  </div>
+</div>
+
+<div class="cabinet-content">
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <div
+    *ngIf="getEmployeeError || updateError || removeError"
+    class="cabinet-content__top-error"
+  >
+    {{ getEmployeeError || updateError || removeError }}
+  </div>
+  <div
+    *ngIf="!getEmployeeError && !updateError && !removeError"
+    class="cabinet-content__grid"
+  >
+    <div class="cabinet-content__grid-item">
+      <mat-card class="cabinet-content__status-card">
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'status'"
+            class="cabinet-content__field-inactive"
+          >
+            <ng-container *ngIf="employee && !isFetching">
+              <h2 [innerHTML]="employeeStatusString"></h2>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'status'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+          <div
+            *ngIf="form && activeField === 'status'"
+            (clickOutside)="removeActiveField('status', employee.status + '')"
+            [delayClickOutsideInit]="true"
+            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Статус"
+                [options]="employeeStatusOptions"
+                [control]="form.get('status')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-select>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating ||
+                  form.get('status').value === employee.status + ''
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="cabinet-content__grid-item">
+      <mat-card>
+        <h2>Основная информация</h2>
+
+        <div class="cabinet-content__field">
+          <div class="cabinet-content__field-inactive">
+            <label>ID</label>
+            <p *ngIf="employee && !isFetching">{{ employee._id }}</p>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'role'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Роль</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p>{{ getAllEmployeeRoleText() }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'role'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'role'"
+            (clickOutside)="removeActiveField('role', employee.role + '')"
+            [delayClickOutsideInit]="true"
+            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Тип"
+                [options]="employeeRoleOptions"
+                [control]="form.get('role')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-select>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('role').value === employee.role
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'locality'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Населённый пункт</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <a
+                [routerLink]="['../../', 'localities', employee.locality._id]"
+                *ngIf="employee.locality"
+                >{{ employee.locality.name }}</a
+              >
+              <i *ngIf="!employee.locality">нет</i>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'locality'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'locality'"
+            (clickOutside)="removeActiveField('locality', employee.locality)"
+            [delayClickOutsideInit]="true"
+            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Населённый пункт"
+                [options]="localitiesOptions"
+                [control]="form.get('locality')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-select>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('locality').value === employee.locality
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'division'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Подразделение</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <a
+                *ngIf="employee.division"
+                [routerLink]="['../../', 'divisions', employee.division._id]"
+                >{{ employee.division.name }}</a
+              >
+              <i *ngIf="!employee.division">нет</i>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'division'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'division'"
+            (clickOutside)="removeActiveField('division', employee.division)"
+            [delayClickOutsideInit]="true"
+            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Подразделение"
+                [options]="divisionsOptions"
+                [control]="form.get('division')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-select>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('division').value === employee.division
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="employee?.role === employeeRole.driver"
+          class="cabinet-content__field"
+        >
+          <div
+            *ngIf="activeField !== 'cars'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Автомобили</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p *ngIf="employee && !isFetching">
+                <i
+                  *ngIf="
+                    !employee.cars || employee.cars.length <= 0;
+                    else carsDisplay
+                  "
+                  >нет</i
+                >
+                <ng-template #carsDisplay>
+                  <ul>
+                    <li
+                      *ngFor="let car of employee.cars; let i = index"
+                      [class.red-text]="car.status === carStatus.unavailable"
+                      [class.yellow-text]="
+                        car.status === carStatus.temporaryUnavailable
+                      "
+                    >
+                      <a [routerLink]="['../../', 'cars', car._id]">{{
+                        car.licensePlate
+                      }}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'cars'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'cars'"
+            (clickOutside)="removeActiveField('cars', employee.cars)"
+            [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Автомобили"
+                [options]="carsOptions"
+                [control]="form.get('cars')"
+                [isMultiple]="true"
+              ></app-select>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('cars').value === employee.cars
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="cabinet-content__grid-item">
+      <mat-card>
+        <h2>Личные данные</h2>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'name'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Имя</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p>{{ employee.name }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'name'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'name'"
+            (clickOutside)="removeActiveField('name', employee.name)"
+            [delayClickOutsideInit]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-text-input
+                label="Имя"
+                [control]="form.get('name')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-text-input>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('name').value === employee.name
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'surname'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Фамилия</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p>{{ employee.surname }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'surname'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'surname'"
+            (clickOutside)="removeActiveField('surname', employee.surname)"
+            [delayClickOutsideInit]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-text-input
+                label="Фамилия"
+                [control]="form.get('surname')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-text-input>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('surname').value === employee.surname
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'patronymic'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Отчество</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p *ngIf="employee.patronymic">{{ employee.patronymic }}</p>
+              <i *ngIf="!employee.patronymic">нет</i>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'patronymic'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'patronymic'"
+            (clickOutside)="
+              removeActiveField('patronymic', employee.patronymic)
+            "
+            [delayClickOutsideInit]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-text-input
+                label="Отчество"
+                [control]="form.get('patronymic')"
+              ></app-text-input>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating ||
+                  form.get('patronymic').value === employee.patronymic
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'email'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Email</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p>{{ employee.email }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'email'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'email'"
+            (clickOutside)="removeActiveField('email', employee.email)"
+            [delayClickOutsideInit]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-text-input
+                label="Email"
+                [control]="form.get('email')"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              >
+                <ng-container
+                  error
+                  *ngIf="form.get('email')?.errors?.alreadyExists"
+                >
+                  <a [routerLink]="['../../', 'employees', alreadyExistId]"
+                    >Сотрудник</a
+                  >
+                  с таким email уже существует.
+                </ng-container>
+              </app-text-input>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('email').value === employee.email
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div
+            *ngIf="activeField !== 'phone'"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Телефон</label>
+            <ng-container *ngIf="employee && !isFetching">
+              <p>{{ employee.phone }}</p>
+              <div class="cabinet-content__field-inactive-action">
+                <button mat-icon-button (click)="activeField = 'phone'">
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+              </div>
+            </ng-container>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+
+          <div
+            *ngIf="form && activeField === 'phone'"
+            (clickOutside)="
+              removeActiveField('phone', employee.phone.substr(2))
+            "
+            [delayClickOutsideInit]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-text-input
+                label="Телефон"
+                [control]="form.get('phone')"
+                mask="(000) 000-00-00"
+                prefix="+7 "
+                [errorMessages]="{
+                  required: 'Обязательное поле',
+                  minlength: 'Слишком короткий номер телефона'
+                }"
+              >
+                <ng-container
+                  error
+                  *ngIf="form.get('phone')?.errors?.alreadyExists"
+                >
+                  <a [routerLink]="['../', alreadyExistId]">Сотрудник</a> с
+                  таким телефоном уже существует.
+                </ng-container>
+              </app-text-input>
+            </form>
+
+            <div class="cabinet-content__field-active-action">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="update()"
+                [disabled]="
+                  isUpdating || form.get('phone').value === employee.phone
+                "
+              >
+                <span
+                  class="icon"
+                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="cabinet-content__grid-item">
+      <mat-card>
+        <h2>История</h2>
+
+        <div class="cabinet-content__field">
+          <div class="cabinet-content__field-inactive">
+            <label>Создано</label>
+            <p *ngIf="employee && !isFetching">
+              {{ employee.createdAt | date: 'dd.MM.yyyy - HH:mm' }}
+            </p>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+        </div>
+
+        <div class="cabinet-content__field">
+          <div class="cabinet-content__field-inactive">
+            <label>Обновлено</label>
+            <p *ngIf="employee && !isFetching">
+              {{ employee.updatedAt | date: 'dd.MM.yyyy - HH:mm' }}
+            </p>
+            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<app-modal
+  [isLoading]="isRemoving"
+  [isOpen]="isRemoveModalOpen"
+  [resolveButtonText]="'Оставить в архиве'"
+  [rejectButtonText]="'Удалить'"
+  (action)="onRemoveModalAction($event)"
+>
+  Полностью удалять сотрудника лучше только в том случае, если вы добавили его
+  случайно или по ошибке.
+  <br />
+  <br />
+  Все связанные записи не смогут восстановить сотрудника автоматически, даже
+  если все данные будут идентичны.
+</app-modal>
