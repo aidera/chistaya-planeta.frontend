@@ -1,0 +1,280 @@
+<div class="cabinet-header">
+  <h1>Добавить сотрудника</h1>
+</div>
+
+<div class="cabinet-content">
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <div class="cabinet-content__grid">
+    <form
+      id="form1"
+      [formGroup]="form1"
+      (ngSubmit)="sendForm1()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 1"
+    >
+      <mat-card>
+        <h2>Основная информация</h2>
+
+        <div class="cabinet-content__grid-item-form-content">
+          <app-select
+            [label]="'Роль'"
+            [control]="form1.get('role')"
+            [options]="employeeRoleOptions"
+            [isRequired]="true"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+        </div>
+      </mat-card>
+      <div class="cabinet-content__grid-item-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
+        >
+          Далее
+        </button>
+      </div>
+    </form>
+
+    <form
+      id="form2"
+      [formGroup]="form2"
+      (ngSubmit)="sendForm2()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 2"
+    >
+      <mat-card>
+        <h2>Личные данные</h2>
+
+        <div class="cabinet-content__grid-item-form-content">
+          <app-text-input
+            label="Имя"
+            [control]="form2.get('name')"
+            [isRequired]="true"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-text-input>
+
+          <br /><br />
+
+          <app-text-input
+            label="Фамилия"
+            [control]="form2.get('surname')"
+            [isRequired]="true"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-text-input>
+
+          <br /><br />
+
+          <app-text-input
+            label="Отчество"
+            [control]="form2.get('patronymic')"
+          ></app-text-input>
+
+          <br /><br />
+
+          <app-text-input
+            label="Email"
+            [isRequired]="true"
+            [control]="form2.get('email')"
+            [errorMessages]="{
+              required: 'Обязательное поле',
+              email: 'Некорректный эмейл'
+            }"
+          >
+            <ng-container
+              error
+              *ngIf="form2.get('email')?.errors?.alreadyExists"
+            >
+              <a [routerLink]="['../', alreadyExistId]">Сотрудник</a> с таким
+              email уже существует.
+            </ng-container>
+          </app-text-input>
+
+          <br /><br />
+
+          <app-text-input
+            label="Телефон"
+            [control]="form2.get('phone')"
+            mask="(000) 000-00-00"
+            prefix="+7 "
+            [isRequired]="true"
+            [errorMessages]="{
+              required: 'Обязательное поле',
+              minlength: 'Слишком короткий номер телефона'
+            }"
+          >
+            <ng-container
+              error
+              *ngIf="form2.get('phone')?.errors?.alreadyExists"
+            >
+              <a [routerLink]="['../', alreadyExistId]">Сотрудник</a> с таким
+              телефоном уже существует.
+            </ng-container>
+          </app-text-input>
+        </div>
+      </mat-card>
+      <div class="cabinet-content__grid-item-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 2"
+        >
+          Далее
+        </button>
+      </div>
+    </form>
+
+    <form
+      id="form3"
+      [formGroup]="form3"
+      (ngSubmit)="sendForm3()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 3"
+    >
+      <mat-card>
+        <h2>Местоположение</h2>
+
+        <div class="cabinet-content__grid-item-form-content">
+          <app-select
+            [label]="
+              isQueryLocalityId
+                ? 'Населённый пункт (добавлено автоматически)'
+                : 'Населённый пункт'
+            "
+            [isRequired]="true"
+            [control]="form3.get('locality')"
+            [options]="localitiesOptions"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+
+          <br /><br />
+
+          <app-select
+            *ngIf="form3.get('locality').value && divisionsOptions.length > 1"
+            [label]="
+              isQueryDivisionId
+                ? 'Подразделение (добавлено автоматически)'
+                : 'Подразделение'
+            "
+            [isRequired]="true"
+            [control]="form3.get('division')"
+            [options]="divisionsOptions"
+            [errorMessages]="{
+              required: 'Обязательное поле'
+            }"
+          ></app-select>
+          <div
+            *ngIf="!form3.get('locality').value || divisionsOptions.length <= 1"
+            class="cabinet-content__field-inactive"
+          >
+            <label>{{
+              isQueryDivisionId
+                ? 'Подразделения (добавлено автоматически)'
+                : 'Подразделения'
+            }}</label>
+            <p
+              *ngIf="
+                form3.get('locality').value && divisionsOptions.length === 1
+              "
+            >
+              {{ divisionsOptions[0].text }}
+            </p>
+            <i
+              *ngIf="form3.get('locality').value && divisionsOptions.length < 1"
+              class="red-text"
+            >
+              Нет подразделений в этом населунном пункте
+            </i>
+            <i *ngIf="!form3.get('locality').value">
+              Выберите населённый пункт
+            </i>
+          </div>
+        </div>
+      </mat-card>
+      <div class="cabinet-content__grid-item-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [class.cabinet-content__grid-item-actions_hidden]="
+            form1.get('role').value === employeeRole.driver + ''
+              ? activeForm !== 3
+              : true
+          "
+        >
+          Далее
+        </button>
+      </div>
+    </form>
+
+    <form
+      id="form4"
+      [formGroup]="form4"
+      (ngSubmit)="sendForm4()"
+      class="cabinet-content__grid-item"
+      [class.cabinet-content__grid-item_inactive]="activeForm < 4"
+      *ngIf="
+        form1.get('role').value === '' ||
+        form1.get('role').value === employeeRole.driver + ''
+      "
+    >
+      <mat-card>
+        <h2>Дополнительно</h2>
+
+        <div class="cabinet-content__grid-item-form-content">
+          <app-select
+            *ngIf="form3.get('division').value && carsOptions.length > 0"
+            [label]="'Привязанные автомобили'"
+            [control]="form4.get('cars')"
+            [isMultiple]="true"
+            [options]="carsOptions"
+          ></app-select>
+          <div
+            *ngIf="!form3.get('division').value || carsOptions.length <= 0"
+            class="cabinet-content__field-inactive"
+          >
+            <label>Привязанные автомобили</label>
+            <i
+              *ngIf="form3.get('division').value && carsOptions.length <= 0"
+              class="red-text"
+            >
+              Нет автомобилей в этом населунном пункте
+            </i>
+            <i *ngIf="!form3.get('division').value"> Выберите подразделение </i>
+          </div>
+        </div>
+      </mat-card>
+    </form>
+    <div class="clearfix"></div>
+  </div>
+  <div
+    class="cabinet-content__actions"
+    [class.cabinet-content__action_inactive]="
+      form1.get('role').value === employeeRole.driver + ''
+        ? activeForm < 4
+        : activeForm < 3
+    "
+  >
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="sendForm4()"
+      [disabled]="isFetching"
+    >
+      Добавить
+    </button>
+  </div>
+  <div *ngIf="serverError" class="cabinet-content__bottom-error">
+    {{ serverError }}
+  </div>
+</div>

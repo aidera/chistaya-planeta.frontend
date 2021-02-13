@@ -230,8 +230,8 @@ export class CarItemAddComponent
   }
 
   public sendForm2(): void {
-    Object.keys(this.form1.controls).forEach((field) => {
-      const control = this.form1.get(field);
+    Object.keys(this.form2.controls).forEach((field) => {
+      const control = this.form2.get(field);
       control.markAsTouched({ onlySelf: true });
       control.updateValueAndValidity();
     });

@@ -20,6 +20,7 @@ import { CarsTableComponent } from './pages/cabinet/cars/cars-table/cars-table.c
 import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.component';
 import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-add.component';
 import { EmployeesTableComponent } from './pages/cabinet/employees/employees-table/employees-table.component';
+import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-item-add/employee-item-add.component';
 
 export const routes: Routes = [
   {
@@ -86,6 +87,11 @@ export const routes: Routes = [
         path: 'employees',
         component: EmployeesTableComponent,
         data: { useBacklink: false },
+      },
+      {
+        path: 'employees/add',
+        component: EmployeeItemAddComponent,
+        data: { useBacklink: true },
       },
     ],
   },

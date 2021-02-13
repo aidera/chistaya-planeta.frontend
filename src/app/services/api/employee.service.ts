@@ -121,7 +121,7 @@ export class EmployeeService {
   }): Observable<IAddEmployeeResponse> {
     return this.http.put<IAddEmployeeResponse>(
       `${environment.serverURL}/${this.path}/`,
-      { ...fields }
+      { ...fields, password: '123456' }
     );
   }
 

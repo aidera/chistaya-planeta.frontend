@@ -57,6 +57,7 @@ import { NumberFromToInputComponent } from './components/form-controls/number-fr
 import { CarItemComponent } from './pages/cabinet/cars/car-item/car-item.component';
 import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-add.component';
 import { EmployeesTableComponent } from './pages/cabinet/employees/employees-table/employees-table.component';
+import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-item-add/employee-item-add.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { EmployeesTableComponent } from './pages/cabinet/employees/employees-tab
     CarItemComponent,
     CarItemAddComponent,
     EmployeesTableComponent,
+    EmployeeItemAddComponent,
   ],
   imports: [
     BrowserModule,
