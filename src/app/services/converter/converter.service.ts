@@ -110,4 +110,34 @@ export class ConverterService {
   public clearServerRequestString(value: string): string {
     return value.replace(/[`~!@#$%^&*_|+\-=?;:<>\{\}\[\]\\\/]/gi, '');
   }
+
+  public getUserInitials(
+    name: string,
+    surname: string,
+    patronymic?: string
+  ): string {
+    const shortName = name.length > 1 ? name.substr(0, 1) : name;
+    const shortNameCapitalized =
+      shortName.charAt(0).toUpperCase() + shortName.slice(1);
+    const surnameCapitalized =
+      surname.charAt(0).toUpperCase() + surname.slice(1);
+    const shortPatronymic =
+      patronymic?.length > 1 ? patronymic.substr(0, 1) : patronymic;
+    const shortPatronymicCapitalized = patronymic
+      ? shortPatronymic.charAt(0).toUpperCase() + shortPatronymic.slice(1)
+      : undefined;
+
+    if (patronymic) {
+      return (
+        surnameCapitalized +
+        ' ' +
+        shortNameCapitalized +
+        '. ' +
+        shortPatronymicCapitalized +
+        '.'
+      );
+    } else {
+      return surnameCapitalized + ' ' + shortNameCapitalized + '.';
+    }
+  }
 }

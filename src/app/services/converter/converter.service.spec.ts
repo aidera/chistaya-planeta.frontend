@@ -194,4 +194,25 @@ describe('ConverterService', () => {
       );
     });
   });
+
+  describe('getUserInitials', () => {
+    it('should return string user initials (with patronymic, capitalized)', () => {
+      expect(service.getUserInitials('Евгения', 'Михалева', 'Викторовна')).toBe(
+        'Михалева Е. В.'
+      );
+    });
+    it('should return string user initials (with patronymic, lowercase)', () => {
+      expect(service.getUserInitials('евгения', 'михалева', 'викторовна')).toBe(
+        'Михалева Е. В.'
+      );
+    });
+    it('should return string user initials (without patronymic, lowercase)', () => {
+      expect(service.getUserInitials('евгения', 'михалева')).toBe(
+        'Михалева Е.'
+      );
+    });
+    it('should return string user initials (small name)', () => {
+      expect(service.getUserInitials('е', 'михалева')).toBe('Михалева Е.');
+    });
+  });
 });
