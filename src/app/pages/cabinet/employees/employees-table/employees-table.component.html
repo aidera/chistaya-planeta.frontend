@@ -39,6 +39,7 @@
           [options]="employeeStatusOptions"
           [isMultiple]="true"
         ></app-select>
+
         <app-select
           [control]="advancedSearchForm.get('role')"
           label="Роль:"
@@ -46,73 +47,81 @@
           [isMultiple]="true"
         ></app-select>
       </app-accordion>
+
       <app-accordion title="Личные данные" [isOpenInitial]="false">
         <app-text-input
           [control]="advancedSearchForm.get('name')"
           label="Имя содержит:"
         ></app-text-input>
+
         <app-text-input
           [control]="advancedSearchForm.get('surname')"
           label="Фамилия содержит:"
         ></app-text-input>
+
         <app-text-input
           [control]="advancedSearchForm.get('patronymic')"
           label="Отчество содержит:"
         ></app-text-input>
+
         <app-text-input
           [control]="advancedSearchForm.get('email')"
           label="Email содержит:"
         ></app-text-input>
+
         <app-text-input
           [control]="advancedSearchForm.get('phone')"
           label="Телефон содержит:"
         ></app-text-input>
       </app-accordion>
-      <app-accordion title="Местоположение" [isOpenInitial]="false">
+
+      <app-accordion title="Компания" [isOpenInitial]="false">
         <app-select
           [control]="advancedSearchForm.get('localities')"
           label="Населённые пункты:"
           [options]="localitiesOptions"
           [isMultiple]="true"
         ></app-select>
+
         <app-select
           [control]="advancedSearchForm.get('divisions')"
           label="Подразделения:"
           [options]="divisionsOptions"
           [isMultiple]="true"
         ></app-select>
-      </app-accordion>
-      <app-accordion title="Дополнительно" [isOpenInitial]="false">
+
         <app-select
           [control]="advancedSearchForm.get('cars')"
-          label="Привязанные автомобили:"
+          label="Подвязанные автомобили:"
           [options]="carsOptions"
           [isMultiple]="true"
         ></app-select>
-        <app-text-input
-          [control]="advancedSearchForm.get('dismissalReason')"
-          label="Причина увольнения содержит:"
-        ></app-text-input>
       </app-accordion>
-      <app-accordion title="Даты" [isOpenInitial]="false">
+
+      <app-accordion title="История" [isOpenInitial]="false">
         <br />
         <h3>Дата создания</h3>
         <br />
+
         <app-date-time-input
           [control]="advancedSearchForm.get('createdAtFrom')"
           label="от:"
         ></app-date-time-input>
+
         <app-date-time-input
           [control]="advancedSearchForm.get('createdAtTo')"
           label="до:"
         ></app-date-time-input>
+
         <br />
         <h3>Дата обновления</h3>
         <br />
+
         <app-date-time-input
           [control]="advancedSearchForm.get('updatedAtFrom')"
           label="от:"
         ></app-date-time-input>
+
         <app-date-time-input
           [control]="advancedSearchForm.get('updatedAtTo')"
           label="до:"

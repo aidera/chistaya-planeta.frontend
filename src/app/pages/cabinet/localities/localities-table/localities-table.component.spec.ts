@@ -36,6 +36,12 @@ describe('LocalitiesTableComponent', () => {
         { provide: ConverterService },
         provideMockStore({
           initialState: {
+            app: {
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
+            },
             locality: {
               localities: [],
             },

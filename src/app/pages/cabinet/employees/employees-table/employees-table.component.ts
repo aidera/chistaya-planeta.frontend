@@ -7,15 +7,12 @@ import * as EmployeeActions from '../../../../store/employee/employee.actions';
 import * as EmployeeSelectors from '../../../../store/employee/employee.selectors';
 import { TablePageComponent } from '../../table-page.component';
 import { IEmployee } from '../../../../models/Employee';
-import { IDivision, IDivisionLessInfo } from '../../../../models/Division';
-import { ICar, ICarLessInfo } from '../../../../models/Car';
+import { IDivision } from '../../../../models/Division';
+import { ICar } from '../../../../models/Car';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import employeeRoleOptions from '../../../../data/employeeRoleOptions';
 import { ILocality } from '../../../../models/Locality';
 import employeeStatusOptions from '../../../../data/employeeStatusOptions';
-import { OptionType } from '../../../../models/types/OptionType';
-import * as AppSelectors from '../../../../store/app/app.selectors';
-import * as AppActions from '../../../../store/app/app.actions';
 
 @Component({
   selector: 'app-employees-table',
@@ -27,15 +24,6 @@ export class EmployeesTableComponent
   implements OnInit, OnDestroy {
   private employees$: Subscription;
   private employees: IEmployee[];
-
-  private localities$: Subscription;
-  public localitiesOptions: OptionType[];
-  private divisions$: Subscription;
-  public divisions: IDivisionLessInfo[];
-  public divisionsOptions: OptionType[];
-  private cars$: Subscription;
-  public cars: ICarLessInfo[];
-  public carsOptions: OptionType[];
 
   public employeeStatusOptions = employeeStatusOptions;
   public employeeRoleOptions = employeeRoleOptions;
@@ -102,11 +90,6 @@ export class EmployeesTableComponent
         isSorting: false,
       },
       {
-        key: 'dismissalReason',
-        title: 'Причина увольнения',
-        isSorting: true,
-      },
-      {
         key: 'createdAt',
         title: 'Дата создания',
         isSorting: true,
@@ -143,13 +126,20 @@ export class EmployeesTableComponent
         localities: new FormControl([]),
         divisions: new FormControl([]),
         cars: new FormControl([]),
-        dismissalReason: new FormControl(''),
         createdAtFrom: new FormControl(''),
         createdAtTo: new FormControl(''),
         updatedAtFrom: new FormControl(''),
         updatedAtTo: new FormControl(''),
       });
     };
+
+    /* ------------------------ */
+    /* --- Options settings --- */
+    /* ------------------------ */
+    this.useLocalitiesOptions = true;
+    this.useDivisionsOptions = true;
+    this.useCarsOptions = true;
+    this.useEmployeesOptions = false;
 
     /* ----------------------- */
     /* --- Request actions --- */
@@ -214,10 +204,6 @@ export class EmployeesTableComponent
             : this.converter.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('cars').value
               ),
-        dismissalReason:
-          this.converter.clearServerRequestString(
-            this.advancedSearchForm.get('dismissalReason').value
-          ) || undefined,
         createdAt: this.converter.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
@@ -261,6 +247,31 @@ export class EmployeesTableComponent
         this.employees = employees;
         if (employees) {
           this.tableData = employees.map((employee) => {
+            let statusText = '';
+            switch (employee.status) {
+              case EmployeeStatus.active:
+                statusText = `<p class="green-text">${
+                  this.employeeStatusOptions.find(
+                    (el) => el.value === EmployeeStatus.active + ''
+                  ).text
+                }</p>`;
+                break;
+              case EmployeeStatus.vacation:
+                statusText = `<p class="yellow-text">${
+                  this.employeeStatusOptions.find(
+                    (el) => el.value === EmployeeStatus.vacation + ''
+                  ).text
+                }</p>`;
+                break;
+              case EmployeeStatus.fired:
+                statusText = `<p class="red-text">${
+                  this.employeeStatusOptions.find(
+                    (el) => el.value === EmployeeStatus.fired + ''
+                  ).text
+                }</p>`;
+                break;
+            }
+
             return {
               id: this.highlightSearchedValue(
                 employee._id,
@@ -268,12 +279,7 @@ export class EmployeesTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status:
-                employee.status === EmployeeStatus.active
-                  ? '<p class="green-text">Активный</p>'
-                  : employee.status === EmployeeStatus.vacation
-                  ? '<p class="yellow-text">В отпуске</p>'
-                  : '<p class="red-text">Не активный</p>',
+              status: statusText,
               role: employeeRoleOptions.find(
                 (el) => el.value === employee.role + ''
               ).text,
@@ -314,7 +320,6 @@ export class EmployeesTableComponent
                   return i === 0 ? car.licensePlate : ' ' + car.licensePlate;
                 })
                 .toString(),
-              dismissalReason: employee.dismissalReason || '',
               createdAt: formatDate(
                 employee.createdAt,
                 'dd.MM.yyyy - HH:mm',
@@ -362,167 +367,11 @@ export class EmployeesTableComponent
     /* --------------------------- */
 
     super.ngOnInit();
-
-    this.localities$ = this.store
-      .select(AppSelectors.selectLocalitiesOptionsToSelect)
-      .subscribe((localitiesOptions) => {
-        this.localitiesOptions = localitiesOptions;
-      });
-
-    if (this.localitiesOptions === null) {
-      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
-    }
-
-    this.socket.get()?.on('localities', (_) => {
-      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
-    });
-
-    this.divisions$ = this.store
-      .select(AppSelectors.selectDivisionsToSelect)
-      .subscribe((divisions) => {
-        this.divisions = divisions;
-        this.divisionsOptions = [];
-        this.divisions?.forEach((el) => {
-          if (this.advancedSearchForm?.get('localities').value?.length > 0) {
-            if (
-              this.advancedSearchForm
-                ?.get('localities')
-                .value.includes(el.locality)
-            ) {
-              this.divisionsOptions.push({ text: el.name, value: el._id });
-            }
-          } else {
-            this.divisionsOptions.push({ text: el.name, value: el._id });
-          }
-        });
-      });
-
-    if (this.divisions === null) {
-      this.store.dispatch(AppActions.getDivisionsToSelectRequest());
-    }
-
-    this.socket.get()?.on('divisions', (_) => {
-      this.store.dispatch(AppActions.getDivisionsToSelectRequest());
-    });
-
-    this.cars$ = this.store
-      .select(AppSelectors.selectCarsToSelect)
-      .subscribe((cars) => {
-        this.cars = cars;
-        this.carsOptions = [];
-        this.cars?.forEach((el) => {
-          if (this.advancedSearchForm?.get('localities').value?.length > 0) {
-            if (this.advancedSearchForm?.get('divisions').value?.length > 0) {
-              if (
-                this.advancedSearchForm
-                  ?.get('divisions')
-                  .value.some((ai) => el.divisions.includes(ai))
-              ) {
-                this.carsOptions.push({ text: el.licensePlate, value: el._id });
-              }
-            } else {
-              if (
-                this.advancedSearchForm
-                  ?.get('localities')
-                  .value.includes(el.locality)
-              ) {
-                this.carsOptions.push({ text: el.licensePlate, value: el._id });
-              }
-            }
-          } else {
-            this.carsOptions.push({ text: el.licensePlate, value: el._id });
-          }
-        });
-      });
-
-    if (this.cars === null) {
-      this.store.dispatch(AppActions.getCarsToSelectRequest());
-    }
-
-    this.socket.get()?.on('cars', (_) => {
-      this.store.dispatch(AppActions.getCarsToSelectRequest());
-    });
-
-    this.advancedSearchForm
-      ?.get('localities')
-      .valueChanges.subscribe((value) => {
-        this.divisionsOptions = [];
-        this.divisions?.forEach((el) => {
-          if (value?.length > 0) {
-            if (value.includes(el.locality)) {
-              this.divisionsOptions.push({ text: el.name, value: el._id });
-            }
-          } else {
-            this.divisionsOptions.push({ text: el.name, value: el._id });
-          }
-        });
-
-        const newDivisionsArray = [];
-        this.advancedSearchForm.get('divisions').value.forEach((el) => {
-          const hasThisOption = this.divisionsOptions.find(
-            (option) => option.value === el
-          );
-          if (hasThisOption) {
-            newDivisionsArray.push(el);
-          }
-        });
-        this.advancedSearchForm.get('divisions').setValue(newDivisionsArray);
-
-        this.carsOptions = [];
-        this.cars?.forEach((el) => {
-          if (value?.length > 0) {
-            if (value.includes(el.locality)) {
-              this.carsOptions.push({ text: el.licensePlate, value: el._id });
-            }
-          } else {
-            this.carsOptions.push({ text: el.licensePlate, value: el._id });
-          }
-        });
-
-        const newCarsArray = [];
-        this.advancedSearchForm.get('cars').value.forEach((el) => {
-          const hasThisOption = this.carsOptions.find(
-            (option) => option.value === el
-          );
-          if (hasThisOption) {
-            newCarsArray.push(el);
-          }
-        });
-        this.advancedSearchForm.get('cars').setValue(newCarsArray);
-      });
-
-    this.advancedSearchForm
-      ?.get('divisions')
-      .valueChanges.subscribe((value) => {
-        this.carsOptions = [];
-        this.cars?.forEach((el) => {
-          if (value?.length > 0) {
-            if (value.some((ai) => el.divisions.includes(ai))) {
-              this.carsOptions.push({ text: el.licensePlate, value: el._id });
-            }
-          } else {
-            this.carsOptions.push({ text: el.licensePlate, value: el._id });
-          }
-        });
-
-        const newCarsArray = [];
-        this.advancedSearchForm.get('cars').value.forEach((el) => {
-          const hasThisOption = this.carsOptions.find(
-            (option) => option.value === el
-          );
-          if (hasThisOption) {
-            newCarsArray.push(el);
-          }
-        });
-        this.advancedSearchForm.get('cars').setValue(newCarsArray);
-      });
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
     this.employees$?.unsubscribe?.();
-    this.localities$?.unsubscribe?.();
-    this.divisions$?.unsubscribe?.();
   }
 
   public onTableItemClick(index: number): void {

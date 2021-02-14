@@ -38,23 +38,25 @@
           label="Статус:"
           [options]="carStatusOptions"
           [isMultiple]="true"
-          [shouldMultipleBeActiveAlLeast]="1"
         ></app-select>
+
         <app-select
           [control]="advancedSearchForm.get('type')"
           label="Тип:"
           [options]="carTypeOptions"
           [isMultiple]="true"
-          [shouldMultipleBeActiveAlLeast]="1"
         ></app-select>
+
         <app-text-input
           [control]="advancedSearchForm.get('licensePlate')"
           label="Номерной знак содержит:"
         ></app-text-input>
+
         <app-number-from-to-input
           [control]="advancedSearchForm.get('weight')"
           label="Вес:"
         ></app-number-from-to-input>
+
         <app-select
           [control]="advancedSearchForm.get('isCorporate')"
           label="Принадлежность:"
@@ -63,42 +65,56 @@
             { text: 'Частный', value: 'false' }
           ]"
           [isMultiple]="true"
-          [shouldMultipleBeActiveAlLeast]="1"
         ></app-select>
       </app-accordion>
-      <app-accordion title="Местоположение" [isOpenInitial]="false">
+
+      <app-accordion title="Компания" [isOpenInitial]="false">
         <app-select
           [control]="advancedSearchForm.get('localities')"
           label="Населённые пункты:"
           [options]="localitiesOptions"
           [isMultiple]="true"
         ></app-select>
+
         <app-select
           [control]="advancedSearchForm.get('divisions')"
           label="Подразделения:"
           [options]="divisionsOptions"
           [isMultiple]="true"
         ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('employees')"
+          label="Водители:"
+          [options]="employeesOptions"
+          [isMultiple]="true"
+        ></app-select>
       </app-accordion>
-      <app-accordion title="Даты" [isOpenInitial]="false">
+
+      <app-accordion title="История" [isOpenInitial]="false">
         <br />
         <h3>Дата создания</h3>
         <br />
+
         <app-date-time-input
           [control]="advancedSearchForm.get('createdAtFrom')"
           label="от:"
         ></app-date-time-input>
+
         <app-date-time-input
           [control]="advancedSearchForm.get('createdAtTo')"
           label="до:"
         ></app-date-time-input>
+
         <br />
         <h3>Дата обновления</h3>
         <br />
+
         <app-date-time-input
           [control]="advancedSearchForm.get('updatedAtFrom')"
           label="от:"
         ></app-date-time-input>
+
         <app-date-time-input
           [control]="advancedSearchForm.get('updatedAtTo')"
           label="до:"

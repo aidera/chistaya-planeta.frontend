@@ -11,8 +11,10 @@ import {
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
 
-import { PaginationType } from '../../models/types/PaginationType';
 import * as fromRoot from '../../store/root.reducer';
+import * as AppSelectors from '../../store/app/app.selectors';
+import * as AppActions from '../../store/app/app.actions';
+import { PaginationType } from '../../models/types/PaginationType';
 import { ConverterService } from '../../services/converter/converter.service';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
@@ -25,18 +27,28 @@ import {
 } from '../../components/table/table.component';
 import { removeURLParameter } from '../../utils/removeUrlParameter';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
+import { OptionType } from '../../models/types/OptionType';
+import { IDivisionLessInfo } from '../../models/Division';
+import { ICarLessInfo } from '../../models/Car';
+import { ILocalityLessInfo } from '../../models/Locality';
+import { IEmployeeLessInfo } from '../../models/Employee';
 
 @Component({
   template: '',
 })
 export class TablePageComponent implements OnInit, OnDestroy {
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
   protected isFetching$: Subscription;
   public isFetching: boolean;
   protected getItemsError$: Subscription;
   public getItemsError: string | null;
   protected pagination$: Subscription;
 
+  /* -------------- */
   /* Table settings */
+  /* -------------- */
   public tableColumns: TableColumnType[];
   public tableData: TableDataType[] | null = null;
   public columnsCanBeDisplayed: TableDisplayOutputType[];
@@ -44,13 +56,50 @@ export class TablePageComponent implements OnInit, OnDestroy {
   public tableSorting: TableSortType;
   public tablePagination: PaginationType;
 
+  /* ------------- */
   /* Form settings */
+  /* ------------- */
   public currentForm: 'quick' | 'advanced' = 'quick';
   public createAdvancedSearchForm: () => FormGroup;
   public quickSearchForm: FormGroup;
   public advancedSearchForm: FormGroup;
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
+  protected useLocalitiesOptions = true;
+  private localitiesToSelect$: Subscription;
+  public localitiesToSelect: ILocalityLessInfo[];
+  protected localitiesToSelectCallback: (
+    localitiesToSelect: ILocalityLessInfo[]
+  ) => void;
+  public localitiesOptions: OptionType[] = [];
+  //
+  protected useDivisionsOptions = true;
+  private divisionsToSelect$: Subscription;
+  public divisionsToSelect: IDivisionLessInfo[];
+  protected divisionsToSelectCallback: (
+    divisionsToSelect: IDivisionLessInfo[]
+  ) => void;
+  public divisionsOptions: OptionType[] = [];
+  //
+  protected useCarsOptions = true;
+  private carsToSelect$: Subscription;
+  public carsToSelect: ICarLessInfo[];
+  protected carsToSelectCallback: (carsToSelect: ICarLessInfo[]) => void;
+  public carsOptions: OptionType[] = [];
+  //
+  protected useEmployeesOptions = true;
+  private employeesToSelect$: Subscription;
+  public employeesToSelect: IEmployeeLessInfo[];
+  protected employeesToSelectCallback: (
+    employeesToSelect: IEmployeeLessInfo[]
+  ) => void;
+  public employeesOptions: OptionType[] = [];
+
+  /* ---------------- */
   /* Request settings */
+  /* ---------------- */
   public createServerRequestFilter?: () => ServerFilterRequest | undefined;
   public onTableRequest: (
     request: GetRouteParamsType,
@@ -70,6 +119,10 @@ export class TablePageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    /* ---------------------------------- */
+    /* Execute errors for required params */
+    /* ---------------------------------- */
+
     if (this.tableColumns === undefined) {
       throw new Error(
         'You should define tableColumns as a TableColumnType[] in your class'
@@ -94,14 +147,23 @@ export class TablePageComponent implements OnInit, OnDestroy {
       );
     }
 
-    this.initQuickSearchForm();
+    /* ------------------------------ */
+    /* Initializing forms and request */
+    /* ------------------------------ */
+
     this.setInitialRequestSettings();
 
+    /* ------------------------------------------------------ */
+    /* Getting search, sorting, filters, pages and displaying */
+    /* ------------------------------------------------------ */
+
     this.activatedRoute.queryParams.subscribe((params) => {
+      /* Display */
       if (params.display) {
         this.displayedColumns = params.display.split(';');
       }
 
+      /* Sorting */
       if (params.sortingField) {
         if (
           params.sortingType &&
@@ -116,6 +178,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
         }
       }
 
+      /* Page */
       if (params.page) {
         const paramsPage = params.page;
         if (this.tablePagination) {
@@ -138,8 +201,11 @@ export class TablePageComponent implements OnInit, OnDestroy {
         return;
       }
 
+      /* Filters */
+
       let hasFilter = false;
 
+      // Getting filters from url
       Object.keys(params).forEach((key) => {
         if (key.includes('filter__')) {
           hasFilter = true;
@@ -176,12 +242,254 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
       this.sendRequest(true);
     });
+
+    /* ---------------- */
+    /* Options requests */
+    /* ---------------- */
+
+    /* Localities */
+    if (this.useLocalitiesOptions) {
+      this.localitiesToSelect$ = this.store
+        .select(AppSelectors.selectLocalitiesToSelect)
+        .subscribe((localitiesToSelect) => {
+          this.localitiesToSelect = localitiesToSelect;
+          this.localitiesOptions = [];
+          localitiesToSelect?.forEach((el) => {
+            this.localitiesOptions.push({ text: el.name, value: el._id });
+          });
+          this.localitiesToSelectCallback?.(localitiesToSelect);
+        });
+
+      if (this.localitiesToSelect === null) {
+        this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+      }
+
+      this.socket.get()?.on('localities', (_) => {
+        this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+      });
+    }
+
+    /* Divisions */
+    if (this.useDivisionsOptions) {
+      this.divisionsToSelect$ = this.store
+        .select(AppSelectors.selectDivisionsToSelect)
+        .subscribe((divisionsToSelect) => {
+          this.divisionsToSelect = divisionsToSelect;
+          this.divisionsOptions = [];
+          this.updateDivisionsOptions();
+          this.divisionsToSelectCallback?.(divisionsToSelect);
+        });
+
+      if (this.divisionsToSelect === null) {
+        this.store.dispatch(AppActions.getDivisionsToSelectRequest());
+      }
+
+      this.socket.get()?.on('divisions', (_) => {
+        this.store.dispatch(AppActions.getDivisionsToSelectRequest());
+      });
+    }
+
+    /* Cars */
+    if (this.useCarsOptions) {
+      this.carsToSelect$ = this.store
+        .select(AppSelectors.selectCarsToSelect)
+        .subscribe((carsToSelect) => {
+          this.carsToSelect = carsToSelect;
+          this.updateCarsOptions();
+          this.carsToSelectCallback?.(carsToSelect);
+        });
+
+      if (this.carsToSelect === null) {
+        this.store.dispatch(AppActions.getCarsToSelectRequest());
+      }
+
+      this.socket.get()?.on('cars', (_) => {
+        this.store.dispatch(AppActions.getCarsToSelectRequest());
+      });
+    }
+
+    /* Employees */
+    if (this.useEmployeesOptions) {
+      this.employeesToSelect$ = this.store
+        .select(AppSelectors.selectEmployeesToSelect)
+        .subscribe((employeesToSelect) => {
+          this.employeesToSelect = employeesToSelect;
+          this.updateEmployeesOptions();
+          this.employeesToSelectCallback?.(employeesToSelect);
+        });
+
+      if (this.employeesToSelect === null) {
+        this.store.dispatch(AppActions.getEmployeesToSelectRequest());
+      }
+
+      this.socket.get()?.on('employees', (_) => {
+        this.store.dispatch(AppActions.getEmployeesToSelectRequest());
+      });
+    }
+
+    /* Listening for localities form field value change to update divisions, cars and employees */
+    this.advancedSearchForm?.get('localities')?.valueChanges.subscribe((_) => {
+      this.updateDivisionsOptions();
+      this.updateDivisionsValue();
+      if (
+        this.advancedSearchForm &&
+        !this.advancedSearchForm.get('divisions')
+      ) {
+        this.updateCarsOptions();
+        this.updateCarsValue();
+        this.updateEmployeesOptions();
+        this.updateEmployeesValue();
+      }
+    });
+
+    /* Listening for divisions form field value change to update cars and employees */
+    this.advancedSearchForm?.get('divisions')?.valueChanges.subscribe((_) => {
+      this.updateCarsOptions();
+      this.updateCarsValue();
+      this.updateEmployeesOptions();
+      this.updateEmployeesValue();
+    });
   }
 
   ngOnDestroy(): void {
     this.isFetching$?.unsubscribe?.();
     this.getItemsError$?.unsubscribe?.();
     this.pagination$?.unsubscribe?.();
+    this.localitiesToSelect$?.unsubscribe?.();
+    this.divisionsToSelect$?.unsubscribe?.();
+    this.carsToSelect$?.unsubscribe?.();
+    this.employeesToSelect$?.unsubscribe?.();
+
+    this.socket?.get()?.off('localities');
+    this.socket?.get()?.off('divisions');
+    this.socket?.get()?.off('cars');
+    this.socket?.get()?.off('employees');
+  }
+
+  protected updateDivisionsOptions(): void {
+    const localitiesValue = this.advancedSearchForm?.get('localities')?.value;
+
+    this.divisionsOptions = [];
+    this.divisionsToSelect?.forEach((el) => {
+      if (localitiesValue?.length > 0) {
+        if (localitiesValue.includes(el.locality)) {
+          this.divisionsOptions.push({ text: el.name, value: el._id });
+        }
+      } else {
+        this.divisionsOptions.push({ text: el.name, value: el._id });
+      }
+    });
+  }
+
+  protected updateDivisionsValue(): void {
+    const newDivisionsArray = [];
+
+    this.advancedSearchForm.get('divisions')?.value.forEach((el) => {
+      const hasThisOption = this.divisionsOptions.find(
+        (option) => option.value === el
+      );
+      if (hasThisOption) {
+        newDivisionsArray.push(el);
+      }
+    });
+    this.advancedSearchForm.get('divisions')?.setValue(newDivisionsArray);
+  }
+
+  protected updateCarsOptions(): void {
+    const localitiesValue =
+      this.advancedSearchForm?.get('localities')?.value || [];
+    const divisionsValue =
+      this.advancedSearchForm?.get('divisions')?.value || [];
+
+    this.carsOptions = [];
+
+    this.carsToSelect?.forEach((el) => {
+      if (localitiesValue.length > 0 && !(divisionsValue.length > 0)) {
+        if (localitiesValue.includes(el.locality)) {
+          this.carsOptions.push({ text: el.licensePlate, value: el._id });
+        }
+      } else if (divisionsValue.length > 0) {
+        if (divisionsValue.some((ai) => el.divisions.includes(ai))) {
+          this.carsOptions.push({ text: el.licensePlate, value: el._id });
+        }
+      } else {
+        this.carsOptions.push({ text: el.licensePlate, value: el._id });
+      }
+    });
+  }
+
+  protected updateCarsValue(): void {
+    const newCarsArray = [];
+
+    this.advancedSearchForm?.get('cars')?.value.forEach((el) => {
+      const hasThisOption = this.carsOptions.find(
+        (option) => option.value === el
+      );
+      if (hasThisOption) {
+        newCarsArray.push(el);
+      }
+    });
+
+    this.advancedSearchForm?.get('cars')?.setValue(newCarsArray);
+  }
+
+  protected updateEmployeesOptions(): void {
+    const localitiesValue =
+      this.advancedSearchForm?.get('localities')?.value || [];
+    const divisionsValue =
+      this.advancedSearchForm?.get('divisions')?.value || [];
+
+    this.employeesOptions = [];
+
+    this.employeesToSelect?.forEach((el) => {
+      if (localitiesValue.length > 0 && !(divisionsValue.length > 0)) {
+        if (localitiesValue.includes(el.locality)) {
+          this.employeesOptions.push({
+            text: this.converter.getUserInitials(
+              el.name,
+              el.surname,
+              el.patronymic
+            ),
+            value: el._id,
+          });
+        }
+      } else if (divisionsValue.length > 0) {
+        if (divisionsValue.includes(el.division)) {
+          this.employeesOptions.push({
+            text: this.converter.getUserInitials(
+              el.name,
+              el.surname,
+              el.patronymic
+            ),
+            value: el._id,
+          });
+        }
+      } else {
+        this.employeesOptions.push({
+          text: this.converter.getUserInitials(
+            el.name,
+            el.surname,
+            el.patronymic
+          ),
+          value: el._id,
+        });
+      }
+    });
+  }
+
+  protected updateEmployeesValue(): void {
+    const newEmployeesArray = [];
+
+    this.advancedSearchForm?.get('employees')?.value.forEach((el) => {
+      const hasThisOption = this.employeesOptions.find(
+        (option) => option.value === el
+      );
+      if (hasThisOption) {
+        newEmployeesArray.push(el);
+      }
+    });
+
+    this.advancedSearchForm?.get('employees')?.setValue(newEmployeesArray);
   }
 
   protected highlightSearchedValue(
@@ -243,6 +551,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     } else {
       this.advancedSearchForm = this.createAdvancedSearchForm();
 
+      // Setting filter values to url
       this.advancedSearchForm.valueChanges
         .pipe(debounceTime(500))
         .subscribe((_) => {

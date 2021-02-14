@@ -24,7 +24,14 @@ describe('TablePageComponent', () => {
         SocketIoService,
         { provide: ConverterService },
         provideMockStore({
-          initialState: {},
+          initialState: {
+            app: {
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
+            },
+          },
         }),
       ],
       imports: [RouterTestingModule.withRoutes(routes), MatSnackBarModule],
@@ -54,7 +61,7 @@ describe('TablePageComponent', () => {
       component.createAdvancedSearchForm = () => {
         return new FormGroup({
           name: new FormControl(''),
-          status: new FormControl(['true', 'false']),
+          status: new FormControl([]),
           dateFrom: new FormControl(''),
           dateTo: new FormControl(''),
         });
@@ -179,7 +186,7 @@ describe('TablePageComponent', () => {
       fixture.ngZone.run(() => {
         component.setCurrentForm('advanced');
         fixture.detectChanges();
-        component.advancedSearchForm.get('status').setValue('true');
+        component.advancedSearchForm.get('status').setValue(['true']);
         fixture.whenStable().then(() => {
           expect(decodeURIComponent(location.path())).toContain(
             'filter__status=true'
@@ -192,7 +199,7 @@ describe('TablePageComponent', () => {
       fixture.ngZone.run(() => {
         component.setCurrentForm('advanced');
         fixture.detectChanges();
-        component.advancedSearchForm.get('status').setValue('true');
+        component.advancedSearchForm.get('status').setValue(['true']);
         fixture.detectChanges();
         component.advancedSearchForm.get('status').setValue('');
         fixture.whenStable().then(() => {
@@ -235,7 +242,7 @@ describe('TablePageComponent', () => {
       fixture.ngZone.run(() => {
         component.setCurrentForm('advanced');
         fixture.detectChanges();
-        component.advancedSearchForm.get('status').setValue(true);
+        component.advancedSearchForm.get('status').setValue(['true']);
         component.quickSearchForm.get('search').setValue('хаб');
         fixture.whenStable().then(() => {
           expect(decodeURIComponent(location.path())).toContain('status=true');

@@ -40,10 +40,10 @@ describe('CarsTableComponent', () => {
               cars: [],
             },
             app: {
-              localitiesOptionsToSelect: null,
-              divisionsOptionsToSelect: null,
               localitiesToSelect: null,
               divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
             },
           },
         }),

@@ -4,15 +4,14 @@ import { TablePageComponent } from '../../table-page.component';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
-import * as AppSelectors from '../../../../store/app/app.selectors';
 import * as DivisionActions from '../../../../store/division/division.actions';
 import * as DivisionSelectors from '../../../../store/division/division.selectors';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
-import { OptionType } from '../../../../models/types/OptionType';
-import * as AppActions from '../../../../store/app/app.actions';
 import { ICar } from '../../../../models/Car';
+import { IEmployee } from '../../../../models/Employee';
+import simpleStatusOptions from 'src/app/data/simpleStatusOptions';
 
 @Component({
   selector: 'app-divisions-table',
@@ -24,8 +23,8 @@ export class DivisionsTableComponent
   implements OnInit, OnDestroy {
   private divisions$: Subscription;
   private divisions: IDivision[];
-  private localitiesOptions$: Subscription;
-  public localitiesOptions: OptionType[];
+
+  public simpleStatusOptions = simpleStatusOptions;
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -49,11 +48,6 @@ export class DivisionsTableComponent
         isSorting: true,
       },
       {
-        key: 'locality',
-        title: 'Населённый пункт',
-        isSorting: false,
-      },
-      {
         key: 'street',
         title: 'Адрес',
         isSorting: true,
@@ -64,8 +58,18 @@ export class DivisionsTableComponent
         isSorting: true,
       },
       {
+        key: 'locality',
+        title: 'Населённый пункт',
+        isSorting: true,
+      },
+      {
         key: 'cars',
         title: 'Автомобили',
+        isSorting: false,
+      },
+      {
+        key: 'employees',
+        title: 'Сотрудники',
         isSorting: false,
       },
       {
@@ -95,11 +99,13 @@ export class DivisionsTableComponent
     this.createAdvancedSearchForm = () => {
       return new FormGroup({
         id: new FormControl(''),
-        status: new FormControl(['true', 'false']),
+        status: new FormControl([]),
         name: new FormControl(''),
-        locality: new FormControl(''),
         street: new FormControl(''),
         house: new FormControl(''),
+        localities: new FormControl([]),
+        cars: new FormControl([]),
+        employees: new FormControl([]),
         createdAtFrom: new FormControl(''),
         createdAtTo: new FormControl(''),
         updatedAtFrom: new FormControl(''),
@@ -117,15 +123,13 @@ export class DivisionsTableComponent
           this.converter.clearServerRequestString(
             this.advancedSearchForm.get('name').value
           ) || undefined,
-        status: this.converter.getArrayOrUndefined<boolean>(
-          this.advancedSearchForm.get('status').value,
-          1,
-          this.converter.convertArrayOfStringedBooleanToRealBoolean
-        ),
-        locality:
-          this.converter.clearServerRequestString(
-            this.advancedSearchForm.get('locality').value
-          ) || undefined,
+        status:
+          this.advancedSearchForm.get('status').value.length <= 0 ||
+          this.advancedSearchForm.get('status').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('status').value
+              ),
         street:
           this.converter.clearServerRequestString(
             this.advancedSearchForm.get('street').value
@@ -134,6 +138,27 @@ export class DivisionsTableComponent
           this.converter.clearServerRequestString(
             this.advancedSearchForm.get('house').value
           ) || undefined,
+        localities:
+          this.advancedSearchForm.get('localities').value.length <= 0 ||
+          this.advancedSearchForm.get('localities').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('localities').value
+              ),
+        cars:
+          this.advancedSearchForm.get('cars').value.length <= 0 ||
+          this.advancedSearchForm.get('cars').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('cars').value
+              ),
+        employees:
+          this.advancedSearchForm.get('employees').value.length <= 0 ||
+          this.advancedSearchForm.get('employees').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('employees').value
+              ),
         createdAt: this.converter.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
@@ -177,6 +202,24 @@ export class DivisionsTableComponent
         this.divisions = divisions;
         if (divisions) {
           this.tableData = divisions.map((division) => {
+            let statusText = '';
+            switch (division.status) {
+              case SimpleStatus.active:
+                statusText = `<p class="green-text">${
+                  this.simpleStatusOptions.find(
+                    (el) => el.value === SimpleStatus.active + ''
+                  ).text
+                }</p>`;
+                break;
+              case SimpleStatus.inactive:
+                statusText = `<p class="red-text">${
+                  this.simpleStatusOptions.find(
+                    (el) => el.value === SimpleStatus.inactive + ''
+                  ).text
+                }</p>`;
+                break;
+            }
+
             return {
               id: this.highlightSearchedValue(
                 division._id,
@@ -184,10 +227,7 @@ export class DivisionsTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status:
-                division.status === SimpleStatus.active
-                  ? '<p class="green-text">Активный</p>'
-                  : '<p class="red-text">Не активный</p>',
+              status: statusText,
               name: this.highlightSearchedValue(
                 division.name,
                 this.quickSearchForm
@@ -218,6 +258,22 @@ export class DivisionsTableComponent
               cars: division.cars
                 .map((car: ICar, i) => {
                   return i === 0 ? car.licensePlate : ' ' + car.licensePlate;
+                })
+                .toString(),
+              employees: division.employees
+                .map((employee: IEmployee, i) => {
+                  return i === 0
+                    ? this.converter.getUserInitials(
+                        employee.name,
+                        employee.surname,
+                        employee.patronymic
+                      )
+                    : ' ' +
+                        this.converter.getUserInitials(
+                          employee.name,
+                          employee.surname,
+                          employee.patronymic
+                        );
                 })
                 .toString(),
               createdAt: formatDate(
@@ -262,18 +318,6 @@ export class DivisionsTableComponent
         this.tablePagination = pagination;
       });
 
-    this.localitiesOptions$ = this.store
-      .select(AppSelectors.selectLocalitiesOptionsToSelect)
-      .subscribe((localities) => {
-        this.localitiesOptions = localities;
-        if (localities === null) {
-          this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
-        }
-      });
-    this.socket.get()?.on('localities', (_) => {
-      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
-    });
-
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
@@ -284,7 +328,6 @@ export class DivisionsTableComponent
   ngOnDestroy(): void {
     super.ngOnDestroy();
     this.divisions$?.unsubscribe?.();
-    this.localitiesOptions$?.unsubscribe?.();
   }
 
   public onTableItemClick(index: number): void {

@@ -10,6 +10,8 @@ import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { TablePageComponent } from '../../table-page.component';
 import { ILocality } from '../../../../models/Locality';
 import { ICar } from 'src/app/models/Car';
+import { IEmployee } from '../../../../models/Employee';
+import simpleStatusOptions from '../../../../data/simpleStatusOptions';
 
 @Component({
   selector: 'app-localities-table',
@@ -21,6 +23,8 @@ export class LocalitiesTableComponent
   implements OnInit, OnDestroy {
   private localities$: Subscription;
   private localities: ILocality[];
+
+  public simpleStatusOptions = simpleStatusOptions;
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -54,6 +58,11 @@ export class LocalitiesTableComponent
         isSorting: false,
       },
       {
+        key: 'employees',
+        title: 'Сотрудники',
+        isSorting: false,
+      },
+      {
         key: 'createdAt',
         title: 'Дата создания',
         isSorting: true,
@@ -80,14 +89,25 @@ export class LocalitiesTableComponent
     this.createAdvancedSearchForm = () => {
       return new FormGroup({
         id: new FormControl(''),
+        status: new FormControl([]),
         name: new FormControl(''),
-        status: new FormControl(['true', 'false']),
+        divisions: new FormControl([]),
+        cars: new FormControl([]),
+        employees: new FormControl([]),
         createdAtFrom: new FormControl(''),
         createdAtTo: new FormControl(''),
         updatedAtFrom: new FormControl(''),
         updatedAtTo: new FormControl(''),
       });
     };
+
+    /* ------------------------ */
+    /* --- Options settings --- */
+    /* ------------------------ */
+    this.useLocalitiesOptions = false;
+    this.useDivisionsOptions = true;
+    this.useCarsOptions = true;
+    this.useEmployeesOptions = true;
 
     /* ----------------------- */
     /* --- Request actions --- */
@@ -99,11 +119,34 @@ export class LocalitiesTableComponent
           this.converter.clearServerRequestString(
             this.advancedSearchForm.get('name').value
           ) || undefined,
-        status: this.converter.getArrayOrUndefined<boolean>(
-          this.advancedSearchForm.get('status').value,
-          1,
-          this.converter.convertArrayOfStringedBooleanToRealBoolean
-        ),
+        status:
+          this.advancedSearchForm.get('status').value.length <= 0 ||
+          this.advancedSearchForm.get('status').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('status').value
+              ),
+        divisions:
+          this.advancedSearchForm.get('divisions').value.length <= 0 ||
+          this.advancedSearchForm.get('divisions').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('divisions').value
+              ),
+        cars:
+          this.advancedSearchForm.get('cars').value.length <= 0 ||
+          this.advancedSearchForm.get('cars').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('cars').value
+              ),
+        employees:
+          this.advancedSearchForm.get('employees').value.length <= 0 ||
+          this.advancedSearchForm.get('employees').value[0] === ''
+            ? undefined
+            : this.converter.getArrayOrUndefined<string>(
+                this.advancedSearchForm.get('employees').value
+              ),
         createdAt: this.converter.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
@@ -147,6 +190,24 @@ export class LocalitiesTableComponent
         this.localities = localities;
         if (localities) {
           this.tableData = localities.map((locality) => {
+            let statusText = '';
+            switch (locality.status) {
+              case SimpleStatus.active:
+                statusText = `<p class="green-text">${
+                  this.simpleStatusOptions.find(
+                    (el) => el.value === SimpleStatus.active + ''
+                  ).text
+                }</p>`;
+                break;
+              case SimpleStatus.inactive:
+                statusText = `<p class="red-text">${
+                  this.simpleStatusOptions.find(
+                    (el) => el.value === SimpleStatus.inactive + ''
+                  ).text
+                }</p>`;
+                break;
+            }
+
             return {
               id: this.highlightSearchedValue(
                 locality._id,
@@ -154,10 +215,7 @@ export class LocalitiesTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status:
-                locality.status === SimpleStatus.active
-                  ? '<p class="green-text">Активный</p>'
-                  : '<p class="red-text">Не активный</p>',
+              status: statusText,
               name: this.highlightSearchedValue(
                 locality.name,
                 this.quickSearchForm
@@ -172,6 +230,22 @@ export class LocalitiesTableComponent
               cars: locality.cars
                 .map((car: ICar, i) => {
                   return i === 0 ? car.licensePlate : ' ' + car.licensePlate;
+                })
+                .toString(),
+              employees: locality.employees
+                .map((employee: IEmployee, i) => {
+                  return i === 0
+                    ? this.converter.getUserInitials(
+                        employee.name,
+                        employee.surname,
+                        employee.patronymic
+                      )
+                    : ' ' +
+                        this.converter.getUserInitials(
+                          employee.name,
+                          employee.surname,
+                          employee.patronymic
+                        );
                 })
                 .toString(),
               createdAt: formatDate(

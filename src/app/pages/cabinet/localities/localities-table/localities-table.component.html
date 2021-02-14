@@ -33,25 +33,47 @@
   >
     <div class="cabinet-content__form-content">
       <app-accordion title="Основные фильтры" [isOpenInitial]="true">
+        <app-select
+          [control]="advancedSearchForm.get('status')"
+          label="Статус:"
+          [options]="simpleStatusOptions"
+          [isMultiple]="true"
+        ></app-select>
+
         <app-text-input
           [control]="advancedSearchForm.get('name')"
           label="Название содержит:"
         ></app-text-input>
+      </app-accordion>
+
+      <app-accordion title="Компания" [isOpenInitial]="false">
         <app-select
-          [control]="advancedSearchForm.get('status')"
-          label="Статус"
-          [options]="[
-            { text: 'Активный', value: 'true' },
-            { text: 'Неактивный', value: 'false' }
-          ]"
+          [control]="advancedSearchForm.get('divisions')"
+          label="Подразделения:"
+          [options]="divisionsOptions"
           [isMultiple]="true"
-          [shouldMultipleBeActiveAlLeast]="1"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('cars')"
+          label="Автомобили:"
+          [options]="carsOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('employees')"
+          label="Сотрудники:"
+          [options]="employeesOptions"
+          [isMultiple]="true"
         ></app-select>
       </app-accordion>
-      <app-accordion title="Даты" [isOpenInitial]="false">
+
+      <app-accordion title="История" [isOpenInitial]="false">
         <br />
         <h3>Дата создания</h3>
         <br />
+
         <app-date-time-input
           [control]="advancedSearchForm.get('createdAtFrom')"
           label="от:"
@@ -60,6 +82,7 @@
           [control]="advancedSearchForm.get('createdAtTo')"
           label="до:"
         ></app-date-time-input>
+
         <br />
         <h3>Дата обновления</h3>
         <br />
