@@ -23,7 +23,7 @@ import OrderType from '../../models/enums/OrderType';
 import { OptionType } from '../../models/types/OptionType';
 import { ServerError } from '../../models/ServerResponse';
 import RawUnit from '../../models/enums/RawUnit';
-import { IDivision, IDivisionLessInfo } from '../../models/Division';
+import { IDivisionLessInfo } from '../../models/Division';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 
 @Component({
@@ -112,6 +112,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
       .select(OrderSelectors.selectAddOrderError)
       .subscribe((error) => {
         this.serverError = error;
+        this.store.dispatch(OrderActions.refreshAddOrderFailure());
       });
   }
 

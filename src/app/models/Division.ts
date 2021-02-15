@@ -18,10 +18,11 @@ export interface IDivision {
 
 export interface IDivisionLessInfo {
   _id: string;
+  status: SimpleStatus;
   name: string;
-  locality: string;
   street: string;
   house: string;
+  locality: string;
   cars: string[];
   employees: string[];
 }

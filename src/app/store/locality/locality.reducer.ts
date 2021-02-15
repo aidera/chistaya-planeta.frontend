@@ -103,6 +103,10 @@ const _localityReducer = createReducer(
     ...state,
     updateLocalitySucceed: false,
   })),
+  on(LocalityActions.refreshUpdateLocalityFailure, (state) => ({
+    ...state,
+    updateLocalityError: null,
+  })),
 
   /* -------------------- */
   /* --- Add Locality --- */
@@ -128,6 +132,10 @@ const _localityReducer = createReducer(
     ...state,
     addLocalitySucceed: false,
   })),
+  on(LocalityActions.refreshAddLocalityFailure, (state) => ({
+    ...state,
+    addLocalityError: null,
+  })),
 
   /* ----------------------- */
   /* --- Remove Locality --- */
@@ -152,6 +160,10 @@ const _localityReducer = createReducer(
   on(LocalityActions.refreshRemoveLocalitySucceed, (state) => ({
     ...state,
     removeLocalitySucceed: false,
+  })),
+  on(LocalityActions.refreshRemoveLocalityFailure, (state) => ({
+    ...state,
+    removeLocalityError: null,
   }))
 );
 

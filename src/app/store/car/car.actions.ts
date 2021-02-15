@@ -32,6 +32,7 @@ export const UPDATE_CAR_REQUEST = '[car] update - car - request';
 export const UPDATE_CAR_SUCCESS = '[car] update - car - success';
 export const UPDATE_CAR_FAILURE = '[car] update - car - failure';
 export const REFRESH_UPDATE_CAR_SUCCESS = '[car] refresh - update car success';
+export const REFRESH_UPDATE_CAR_FAILURE = '[car] refresh - update car failure';
 
 /* --------------- */
 /* --- Add Car --- */
@@ -41,6 +42,7 @@ export const ADD_CAR_REQUEST = '[car] add - car - request';
 export const ADD_CAR_SUCCESS = '[car] add - car - success';
 export const ADD_CAR_FAILURE = '[car] add - car - failure';
 export const REFRESH_ADD_CAR_SUCCESS = '[car] refresh - add car success';
+export const REFRESH_ADD_CAR_FAILURE = '[car] refresh - add car failure';
 
 /* ------------------ */
 /* --- Remove Car --- */
@@ -50,6 +52,7 @@ export const REMOVE_CAR_REQUEST = '[car] remove - car - request';
 export const REMOVE_CAR_SUCCESS = '[car] remove - car - success';
 export const REMOVE_CAR_FAILURE = '[car] remove - car - failure';
 export const REFRESH_REMOVE_CAR_SUCCESS = '[car] refresh - remove car success';
+export const REFRESH_REMOVE_CAR_FAILURE = '[car] refresh - remove car failure';
 
 /* ---------------- */
 /* --- Get Cars --- */
@@ -118,8 +121,8 @@ export const updateCarFailure = createAction(
   UPDATE_CAR_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshUpdateCarSucceed = createAction(REFRESH_UPDATE_CAR_SUCCESS);
+export const refreshUpdateCarFailure = createAction(REFRESH_UPDATE_CAR_FAILURE);
 
 /* --------------- */
 /* --- Add Car --- */
@@ -145,8 +148,8 @@ export const addCarFailure = createAction(
   ADD_CAR_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshAddCarSucceed = createAction(REFRESH_ADD_CAR_SUCCESS);
+export const refreshAddCarFailure = createAction(REFRESH_ADD_CAR_FAILURE);
 
 /* ------------------ */
 /* --- Remove Car --- */
@@ -166,5 +169,5 @@ export const removeCarFailure = createAction(
   REMOVE_CAR_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshRemoveCarSucceed = createAction(REFRESH_REMOVE_CAR_SUCCESS);
+export const refreshRemoveCarFailure = createAction(REFRESH_REMOVE_CAR_FAILURE);

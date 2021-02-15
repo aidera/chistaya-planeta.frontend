@@ -31,6 +31,8 @@ export const UPDATE_LOCALITY_SUCCESS = '[locality] update - locality - success';
 export const UPDATE_LOCALITY_FAILURE = '[locality] update - locality - failure';
 export const REFRESH_UPDATE_LOCALITY_SUCCESS =
   '[locality] refresh - update locality success';
+export const REFRESH_UPDATE_LOCALITY_FAILURE =
+  '[locality] refresh - update locality failure';
 
 /* -------------------- */
 /* --- Add Locality --- */
@@ -41,6 +43,8 @@ export const ADD_LOCALITY_SUCCESS = '[locality] add - locality - success';
 export const ADD_LOCALITY_FAILURE = '[locality] add - locality - failure';
 export const REFRESH_ADD_LOCALITY_SUCCESS =
   '[locality] refresh - add locality success';
+export const REFRESH_ADD_LOCALITY_FAILURE =
+  '[locality] refresh - add locality failure';
 
 /* ----------------------- */
 /* --- Remove Locality --- */
@@ -51,6 +55,8 @@ export const REMOVE_LOCALITY_SUCCESS = '[locality] remove - locality - success';
 export const REMOVE_LOCALITY_FAILURE = '[locality] remove - locality - failure';
 export const REFRESH_REMOVE_LOCALITY_SUCCESS =
   '[locality] refresh - remove locality success';
+export const REFRESH_REMOVE_LOCALITY_FAILURE =
+  '[locality] refresh - remove locality failure';
 
 /* ---------------------- */
 /* --- Get Localities --- */
@@ -109,9 +115,11 @@ export const updateLocalityFailure = createAction(
   UPDATE_LOCALITY_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshUpdateLocalitySucceed = createAction(
   REFRESH_UPDATE_LOCALITY_SUCCESS
+);
+export const refreshUpdateLocalityFailure = createAction(
+  REFRESH_UPDATE_LOCALITY_FAILURE
 );
 
 /* -------------------- */
@@ -132,9 +140,11 @@ export const addLocalityFailure = createAction(
   ADD_LOCALITY_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshAddLocalitySucceed = createAction(
   REFRESH_ADD_LOCALITY_SUCCESS
+);
+export const refreshAddLocalityFailure = createAction(
+  REFRESH_ADD_LOCALITY_FAILURE
 );
 
 /* ----------------------- */
@@ -155,7 +165,9 @@ export const removeLocalityFailure = createAction(
   REMOVE_LOCALITY_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshRemoveLocalitySucceed = createAction(
   REFRESH_REMOVE_LOCALITY_SUCCESS
+);
+export const refreshRemoveLocalityFailure = createAction(
+  REFRESH_REMOVE_LOCALITY_FAILURE
 );

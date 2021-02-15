@@ -16,6 +16,7 @@ export interface ILocality {
 
 export interface ILocalityLessInfo {
   _id: string;
+  status: SimpleStatus;
   name: string;
   divisions: string[];
   cars: string[];

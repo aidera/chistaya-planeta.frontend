@@ -103,6 +103,10 @@ const _divisionReducer = createReducer(
     ...state,
     updateDivisionSucceed: false,
   })),
+  on(DivisionActions.refreshUpdateDivisionFailure, (state) => ({
+    ...state,
+    updateDivisionError: null,
+  })),
 
   /* -------------------- */
   /* --- Add Division --- */
@@ -128,6 +132,10 @@ const _divisionReducer = createReducer(
     ...state,
     addDivisionSucceed: false,
   })),
+  on(DivisionActions.refreshAddDivisionFailure, (state) => ({
+    ...state,
+    addDivisionError: null,
+  })),
 
   /* ----------------------- */
   /* --- Remove Division --- */
@@ -152,6 +160,10 @@ const _divisionReducer = createReducer(
   on(DivisionActions.refreshRemoveDivisionSucceed, (state) => ({
     ...state,
     removeDivisionSucceed: false,
+  })),
+  on(DivisionActions.refreshRemoveDivisionFailure, (state) => ({
+    ...state,
+    removeDivisionError: null,
   }))
 );
 

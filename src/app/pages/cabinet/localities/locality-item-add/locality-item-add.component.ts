@@ -4,6 +4,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as LocalitiesActions from '../../../../store/locality/locality.actions';
 import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
 import { ItemAddPageComponent } from '../../item-add-page.component';
+import { debounceTime, take } from 'rxjs/operators';
+import { responseCodes } from '../../../../data/responseCodes';
+import * as CarActions from '../../../../store/car/car.actions';
 
 @Component({
   selector: 'app-locality-item-add',
@@ -13,12 +16,47 @@ import { ItemAddPageComponent } from '../../item-add-page.component';
 export class LocalityItemAddComponent
   extends ItemAddPageComponent
   implements OnInit {
-  public form1: FormGroup;
-
   public alreadyExistId: string;
 
   ngOnInit(): void {
-    this.initForm();
+    /* ------------------------ */
+    /* --- Options settings --- */
+    /* ------------------------ */
+    this.useLocalitiesOptions = false;
+    this.useDivisionsOptions = false;
+    this.useCarsOptions = false;
+    this.useEmployeesOptions = false;
+
+    /* --------------------- */
+    /* --- Form settings --- */
+    /* --------------------- */
+    this.initForm = () => {
+      this.form = new FormGroup({
+        name: new FormControl('', Validators.required),
+      });
+
+      this.form
+        .get('name')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value !== '') {
+            this.localityApi
+              .checkName(this.form.get('name').value)
+              .pipe(take(1))
+              .subscribe((response) => {
+                if (response?.responseCode === responseCodes.found) {
+                  this.form.get('name').markAsTouched();
+                  this.form.get('name').setErrors({ alreadyExists: true });
+                  this.alreadyExistId = response.id;
+                }
+              });
+          }
+        });
+    };
+
+    /* -------------------------- */
+    /* --- Main item settings --- */
+    /* -------------------------- */
 
     this.isFetching$ = this.store
       .select(LocalitiesSelectors.selectAddLocalityIsFetching)
@@ -45,7 +83,7 @@ export class LocalityItemAddComponent
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
-            this.form1.get('name').setErrors({ alreadyExists: true });
+            this.form.get('name').setErrors({ alreadyExists: true });
             this.alreadyExistId = error.foundedItem._id;
           } else {
             this.addSnackbar = this.snackBar.open(
@@ -58,28 +96,26 @@ export class LocalityItemAddComponent
             );
           }
         }
+
+        this.store.dispatch(LocalitiesActions.refreshAddLocalityFailure());
       });
-  }
 
-  private initForm(): void {
-    this.form1 = new FormGroup({
-      name: new FormControl('', Validators.required),
-    });
-  }
+    /* ------------------------ */
+    /* --- Request settings --- */
+    /* ------------------------ */
 
-  public sendForm1Main(): void {
-    Object.keys(this.form1.controls).forEach((field) => {
-      const control = this.form1.get(field);
-      control.markAsTouched({ onlySelf: true });
-      control.updateValueAndValidity();
-    });
-
-    if (this.form1 && this.form1.get('name').value !== '') {
+    this.createRequest = () => {
       this.store.dispatch(
         LocalitiesActions.addLocalityRequest({
-          name: this.form1.get('name').value,
+          name: this.form.get('name').value,
         })
       );
-    }
+    };
+
+    /* --------------------------- */
+    /* --- Parent class ngInit --- */
+    /* --------------------------- */
+
+    super.ngOnInit();
   }
 }

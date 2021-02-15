@@ -36,10 +36,10 @@ describe('DivisionItemAddComponent', () => {
         provideMockStore({
           initialState: {
             app: {
-              localitiesOptionsToSelect: [
-                { value: '1', text: 'City 1' },
-                { value: '2', text: 'City 2' },
-              ],
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
             },
             division: {
               division: null,

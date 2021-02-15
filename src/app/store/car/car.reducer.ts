@@ -103,6 +103,10 @@ const _carReducer = createReducer(
     ...state,
     updateCarSucceed: false,
   })),
+  on(CarActions.refreshUpdateCarFailure, (state) => ({
+    ...state,
+    updateCarError: null,
+  })),
 
   /* --------------- */
   /* --- Add Car --- */
@@ -128,6 +132,10 @@ const _carReducer = createReducer(
     ...state,
     addCarSucceed: false,
   })),
+  on(CarActions.refreshAddCarFailure, (state) => ({
+    ...state,
+    addCarError: null,
+  })),
 
   /* ------------------ */
   /* --- Remove Car --- */
@@ -152,6 +160,10 @@ const _carReducer = createReducer(
   on(CarActions.refreshRemoveCarSucceed, (state) => ({
     ...state,
     removeCarSucceed: false,
+  })),
+  on(CarActions.refreshRemoveCarFailure, (state) => ({
+    ...state,
+    removeCarError: null,
   }))
 );
 

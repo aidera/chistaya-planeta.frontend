@@ -17,6 +17,11 @@ export interface IGetOneLocalityResponse extends ServerResponse {
   locality?: ILocality;
 }
 
+export interface ICheckLocalityNameResponse extends ServerResponse {
+  id?: string;
+  responseCode?: string;
+}
+
 export interface IUpdateLocalityResponse extends ServerResponse {
   updatedLocality?: ILocality;
 }
@@ -62,6 +67,12 @@ export class LocalityService {
   getOne(id: string): Observable<IGetOneLocalityResponse> {
     return this.http.get<IGetOneLocalityResponse>(
       `${environment.serverURL}/${this.path}/${id}`
+    );
+  }
+
+  checkName(name: string): Observable<ICheckLocalityNameResponse> {
+    return this.http.get<ICheckLocalityNameResponse>(
+      `${environment.serverURL}/${this.path}/check-name/${name}`
     );
   }
 

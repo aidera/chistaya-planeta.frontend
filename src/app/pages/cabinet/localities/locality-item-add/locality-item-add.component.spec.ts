@@ -38,6 +38,12 @@ describe('LocalityItemAddComponent', () => {
             locality: {
               locality: null,
             },
+            app: {
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
+            },
           },
         }),
       ],
@@ -47,7 +53,7 @@ describe('LocalityItemAddComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LocalityItemAddComponent);
     component = fixture.componentInstance;
-    component.form1 = new FormGroup({
+    component.form = new FormGroup({
       name: new FormControl('', Validators.required),
     });
     fixture.detectChanges();

@@ -103,6 +103,10 @@ const _employeeReducer = createReducer(
     ...state,
     updateEmployeeSucceed: false,
   })),
+  on(EmployeeActions.refreshUpdateEmployeeFailure, (state) => ({
+    ...state,
+    updateEmployeeError: null,
+  })),
 
   /* -------------------- */
   /* --- Add Employee --- */
@@ -128,6 +132,10 @@ const _employeeReducer = createReducer(
     ...state,
     addEmployeeSucceed: false,
   })),
+  on(EmployeeActions.refreshAddEmployeeFailure, (state) => ({
+    ...state,
+    addEmployeeError: null,
+  })),
 
   /* ----------------------- */
   /* --- Remove Employee --- */
@@ -152,6 +160,10 @@ const _employeeReducer = createReducer(
   on(EmployeeActions.refreshRemoveEmployeeSucceed, (state) => ({
     ...state,
     removeEmployeeSucceed: false,
+  })),
+  on(EmployeeActions.refreshRemoveEmployeeFailure, (state) => ({
+    ...state,
+    removeEmployeeError: null,
   }))
 );
 

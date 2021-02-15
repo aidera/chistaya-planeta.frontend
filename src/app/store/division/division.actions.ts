@@ -31,6 +31,8 @@ export const UPDATE_DIVISION_SUCCESS = '[division] update - division - success';
 export const UPDATE_DIVISION_FAILURE = '[division] update - division - failure';
 export const REFRESH_UPDATE_DIVISION_SUCCESS =
   '[division] refresh - update division success';
+export const REFRESH_UPDATE_DIVISION_FAILURE =
+  '[division] refresh - update division failure';
 
 /* -------------------- */
 /* --- Add Division --- */
@@ -41,6 +43,8 @@ export const ADD_DIVISION_SUCCESS = '[division] add - division - success';
 export const ADD_DIVISION_FAILURE = '[division] add - division - failure';
 export const REFRESH_ADD_DIVISION_SUCCESS =
   '[division] refresh - add division success';
+export const REFRESH_ADD_DIVISION_FAILURE =
+  '[division] refresh - add division failure';
 
 /* ----------------------- */
 /* --- Remove Division --- */
@@ -51,6 +55,8 @@ export const REMOVE_DIVISION_SUCCESS = '[division] remove - division - success';
 export const REMOVE_DIVISION_FAILURE = '[division] remove - division - failure';
 export const REFRESH_REMOVE_DIVISION_SUCCESS =
   '[division] refresh - remove division success';
+export const REFRESH_REMOVE_DIVISION_FAILURE =
+  '[division] refresh - remove division failure';
 
 /* --------------------- */
 /* --- Get Divisions --- */
@@ -116,9 +122,11 @@ export const updateDivisionFailure = createAction(
   UPDATE_DIVISION_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshUpdateDivisionSucceed = createAction(
   REFRESH_UPDATE_DIVISION_SUCCESS
+);
+export const refreshUpdateDivisionFailure = createAction(
+  REFRESH_UPDATE_DIVISION_FAILURE
 );
 
 /* -------------------- */
@@ -139,9 +147,11 @@ export const addDivisionFailure = createAction(
   ADD_DIVISION_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshAddDivisionSucceed = createAction(
   REFRESH_ADD_DIVISION_SUCCESS
+);
+export const refreshAddDivisionFailure = createAction(
+  REFRESH_ADD_DIVISION_FAILURE
 );
 
 /* ----------------------- */
@@ -162,7 +172,9 @@ export const removeDivisionFailure = createAction(
   REMOVE_DIVISION_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshRemoveDivisionSucceed = createAction(
   REFRESH_REMOVE_DIVISION_SUCCESS
+);
+export const refreshRemoveDivisionFailure = createAction(
+  REFRESH_REMOVE_DIVISION_FAILURE
 );

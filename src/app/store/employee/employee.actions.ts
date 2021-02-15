@@ -32,6 +32,8 @@ export const UPDATE_EMPLOYEE_SUCCESS = '[employee] update - employee - success';
 export const UPDATE_EMPLOYEE_FAILURE = '[employee] update - employee - failure';
 export const REFRESH_UPDATE_EMPLOYEE_SUCCESS =
   '[employee] refresh - update employee success';
+export const REFRESH_UPDATE_EMPLOYEE_FAILURE =
+  '[employee] refresh - update employee failure';
 
 /* -------------------- */
 /* --- Add Employee --- */
@@ -42,6 +44,8 @@ export const ADD_EMPLOYEE_SUCCESS = '[employee] add - employee - success';
 export const ADD_EMPLOYEE_FAILURE = '[employee] add - employee - failure';
 export const REFRESH_ADD_EMPLOYEE_SUCCESS =
   '[employee] refresh - add employee success';
+export const REFRESH_ADD_EMPLOYEE_FAILURE =
+  '[employee] refresh - add employee failure';
 
 /* ----------------------- */
 /* --- Remove Employee --- */
@@ -52,6 +56,8 @@ export const REMOVE_EMPLOYEE_SUCCESS = '[employee] remove - employee - success';
 export const REMOVE_EMPLOYEE_FAILURE = '[employee] remove - employee - failure';
 export const REFRESH_REMOVE_EMPLOYEE_SUCCESS =
   '[employee] refresh - remove employee success';
+export const REFRESH_REMOVE_EMPLOYEE_FAILURE =
+  '[employee] refresh - remove employee failure';
 
 /* --------------------- */
 /* --- Get Employees --- */
@@ -122,9 +128,11 @@ export const updateEmployeeFailure = createAction(
   UPDATE_EMPLOYEE_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshUpdateEmployeeSucceed = createAction(
   REFRESH_UPDATE_EMPLOYEE_SUCCESS
+);
+export const refreshUpdateEmployeeFailure = createAction(
+  REFRESH_UPDATE_EMPLOYEE_FAILURE
 );
 
 /* -------------------- */
@@ -153,9 +161,11 @@ export const addEmployeeFailure = createAction(
   ADD_EMPLOYEE_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshAddEmployeeSucceed = createAction(
   REFRESH_ADD_EMPLOYEE_SUCCESS
+);
+export const refreshAddEmployeeFailure = createAction(
+  REFRESH_ADD_EMPLOYEE_FAILURE
 );
 
 /* ----------------------- */
@@ -176,7 +186,9 @@ export const removeEmployeeFailure = createAction(
   REMOVE_EMPLOYEE_FAILURE,
   props<{ error: ServerError }>()
 );
-
 export const refreshRemoveEmployeeSucceed = createAction(
   REFRESH_REMOVE_EMPLOYEE_SUCCESS
+);
+export const refreshRemoveEmployeeFailure = createAction(
+  REFRESH_REMOVE_EMPLOYEE_FAILURE
 );

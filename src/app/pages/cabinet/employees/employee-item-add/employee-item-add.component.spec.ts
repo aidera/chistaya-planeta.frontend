@@ -39,12 +39,10 @@ describe('EmployeeItemAddComponent', () => {
               employee: null,
             },
             app: {
-              localitiesOptionsToSelect: null,
-              divisionsOptionsToSelect: null,
-              carsOptionsToSelect: null,
               localitiesToSelect: null,
               divisionsToSelect: null,
               carsToSelect: null,
+              employeesToSelect: null,
             },
           },
         }),

@@ -2,35 +2,24 @@
   <h1>Добавить подразделение</h1>
 </div>
 
-<div class="cabinet-content">
+<form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
   <div class="cabinet-content__grid">
-    <form
-      id="form1"
-      [formGroup]="form1"
-      (ngSubmit)="sendForm1()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 1"
-    >
-      <div
-        class="cabinet-content__grid-item-overlay"
-        *ngIf="activeForm < 1"
-      ></div>
+    <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Основная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-text-input
+            fieldId="name"
+            [control]="form.get('name')"
             label="Название"
-            [control]="form1.get('name')"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
           >
-            <ng-container
-              error
-              *ngIf="form1.get('name')?.errors?.alreadyExists"
-            >
+            <ng-container error *ngIf="form.get('name')?.errors?.alreadyExists">
               Такое
               <a [routerLink]="['../../', 'divisions', alreadyExistId]"
                 >подразделение</a
@@ -40,41 +29,25 @@
           </app-text-input>
         </div>
       </mat-card>
-      <div class="cabinet-content__grid-item-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
-        >
-          Далее
-        </button>
-      </div>
-    </form>
+    </div>
 
-    <form
-      id="form2"
-      [formGroup]="form2"
-      (ngSubmit)="sendForm2()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 2"
-    >
-      <div
-        class="cabinet-content__grid-item-overlay"
-        *ngIf="activeForm !== 1"
-      ></div>
+    <div></div>
+
+    <div class="cabinet-content__grid-item">
       <mat-card>
-        <h2>Адрес</h2>
+        <h2>Местоположение</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-select
+            fieldId="locality"
+            [control]="form.get('locality')"
+            [options]="localitiesOptions"
             [label]="
-              isQueryLocality
+              isQueryLocalityId
                 ? 'Населённый пункт (добавлено автоматически)'
                 : 'Населённый пункт'
             "
-            [control]="form2.get('locality')"
-            [options]="localitiesOptions"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
@@ -83,8 +56,10 @@
           <br /><br />
 
           <app-text-input
+            fieldId="street"
+            [control]="form.get('street')"
             label="Улица"
-            [control]="form2.get('street')"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
@@ -93,27 +68,24 @@
           <br /><br />
 
           <app-text-input
+            fieldId="house"
+            [control]="form.get('house')"
             label="Дом"
-            [control]="form2.get('house')"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
           ></app-text-input>
         </div>
       </mat-card>
-    </form>
-    <div class="clearfix"></div>
+    </div>
   </div>
-  <div
-    class="cabinet-content__actions"
-    [class.cabinet-content__action_inactive]="activeForm < 2"
-  >
+  <div class="cabinet-content__actions">
     <button
       mat-raised-button
-      type="submit"
       color="primary"
       [disabled]="isFetching"
-      (click)="sendForm2()"
+      type="submit"
     >
       Добавить
     </button>
@@ -121,4 +93,4 @@
   <div *ngIf="serverError" class="cabinet-content__bottom-error">
     {{ serverError }}
   </div>
-</div>
+</form>

@@ -20,9 +20,8 @@ export interface ICar {
 
 export interface ICarLessInfo {
   _id: string;
-  type: CarType;
+  status: CarStatus;
   licensePlate: string;
-  isCorporate: boolean;
   locality: string;
   divisions: string[];
 }

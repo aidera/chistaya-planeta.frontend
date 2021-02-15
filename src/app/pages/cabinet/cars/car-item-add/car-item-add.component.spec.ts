@@ -40,10 +40,10 @@ describe('CarItemAddComponent', () => {
               car: null,
             },
             app: {
-              localitiesOptionsToSelect: null,
-              divisionsOptionsToSelect: null,
               localitiesToSelect: null,
               divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
             },
           },
         }),
@@ -54,9 +54,6 @@ describe('CarItemAddComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CarItemAddComponent);
     component = fixture.componentInstance;
-    component.form1 = new FormGroup({
-      name: new FormControl('', Validators.required),
-    });
     fixture.detectChanges();
   });
 

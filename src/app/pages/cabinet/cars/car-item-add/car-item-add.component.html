@@ -2,30 +2,26 @@
   <h1>Добавить автомобиль</h1>
 </div>
 
-<div class="cabinet-content">
+<form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
   <div class="cabinet-content__grid">
-    <form
-      id="form1"
-      [formGroup]="form1"
-      (ngSubmit)="sendForm1()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 1"
-    >
+    <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Основная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-text-input
+            fieldId="licensePlate"
+            [control]="form.get('licensePlate')"
             label="Номер"
-            [control]="form1.get('licensePlate')"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
           >
             <ng-container
               error
-              *ngIf="form1.get('licensePlate')?.errors?.alreadyExists"
+              *ngIf="form.get('licensePlate')?.errors?.alreadyExists"
             >
               Такой
               <a [routerLink]="['../', alreadyExistId]">автомобиль</a>
@@ -36,9 +32,11 @@
           <br /><br />
 
           <app-select
-            [label]="'Тип'"
-            [control]="form1.get('type')"
+            fieldId="type"
+            [control]="form.get('type')"
             [options]="carTypeOptions"
+            label="Тип"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
@@ -47,12 +45,14 @@
           <br /><br />
 
           <app-select
-            [label]="'Принадлежность'"
-            [control]="form1.get('isCorporate')"
+            fieldId="isCorporate"
+            [control]="form.get('isCorporate')"
             [options]="[
               { text: 'Корпоративный', value: '1' },
               { text: 'Частный', value: '0' }
             ]"
+            label="Принадлежность"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
@@ -61,46 +61,31 @@
           <br /><br />
 
           <app-text-input
-            label="Вес, т"
-            [control]="form1.get('weight')"
-            [errorMessages]="{
-              required: 'Обязательное поле'
-            }"
+            fieldId="weight"
+            [control]="form.get('weight')"
             [fieldType]="'number'"
+            label="Вес, т"
           ></app-text-input>
         </div>
       </mat-card>
-      <div class="cabinet-content__grid-item-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
-        >
-          Далее
-        </button>
-      </div>
-    </form>
+    </div>
 
-    <form
-      id="form2"
-      [formGroup]="form2"
-      (ngSubmit)="sendForm2()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 2"
-    >
+    <div></div>
+
+    <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Местоположение</h2>
-
         <div class="cabinet-content__grid-item-form-content">
           <app-select
+            fieldId="locality"
+            [control]="form.get('locality')"
+            [options]="localitiesOptions"
             [label]="
               isQueryLocalityId
                 ? 'Населённый пункт (добавлено автоматически)'
                 : 'Населённый пункт'
             "
-            [control]="form2.get('locality')"
-            [options]="localitiesOptions"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
@@ -109,21 +94,23 @@
           <br /><br />
 
           <app-select
-            *ngIf="form2.get('locality').value && divisionsOptions.length > 1"
+            *ngIf="form.get('locality').value && divisionsOptions.length > 1"
+            fieldId="divisions"
+            [control]="form.get('divisions')"
+            [options]="divisionsOptions"
+            [isMultiple]="true"
             [label]="
               isQueryDivisionId
                 ? 'Подразделения (добавлено автоматически)'
                 : 'Подразделения'
             "
-            [control]="form2.get('divisions')"
-            [isMultiple]="true"
-            [options]="divisionsOptions"
+            [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
           ></app-select>
           <div
-            *ngIf="!form2.get('locality').value || divisionsOptions.length <= 1"
+            *ngIf="!form.get('locality').value || divisionsOptions.length <= 1"
             class="cabinet-content__field-inactive"
           >
             <label>{{
@@ -133,35 +120,78 @@
             }}</label>
             <p
               *ngIf="
-                form2.get('locality').value && divisionsOptions.length === 1
+                form.get('locality').value && divisionsOptions.length === 1
               "
             >
               {{ divisionsOptions[0].text }}
             </p>
             <i
-              *ngIf="form2.get('locality').value && divisionsOptions.length < 1"
+              *ngIf="form.get('locality').value && divisionsOptions.length < 1"
               class="red-text"
             >
-              Нет подразделений в этом населунном пункте
+              Нет подразделений в этом населённом пункте
             </i>
-            <i *ngIf="!form2.get('locality').value">
+            <i *ngIf="!form.get('locality').value">
               Выберите населённый пункт
             </i>
           </div>
         </div>
       </mat-card>
-    </form>
-    <div class="clearfix"></div>
+    </div>
+
+    <div class="cabinet-content__grid-item">
+      <mat-card>
+        <h2>Дополнительно</h2>
+        <div class="cabinet-content__grid-item-form-content">
+          <app-select
+            *ngIf="
+              form.get('divisions').value.length >= 1 &&
+              employeesOptions.length > 0
+            "
+            fieldId="employees"
+            [control]="form.get('employees')"
+            [options]="employeesOptions"
+            [isMultiple]="true"
+            [label]="
+              isQueryDivisionId
+                ? 'Водители (добавлено автоматически)'
+                : 'Водители'
+            "
+          ></app-select>
+          <div
+            *ngIf="
+              form.get('divisions').value.length < 1 ||
+              employeesOptions.length <= 0
+            "
+            class="cabinet-content__field-inactive"
+          >
+            <label>{{
+              isQueryDivisionId
+                ? 'Водители (добавлено автоматически)'
+                : 'Водители'
+            }}</label>
+            <i
+              *ngIf="
+                form.get('divisions').value.length > 0 &&
+                employeesOptions.length <= 1
+              "
+            >
+              Нет водителей в этом населённом пункте
+            </i>
+            <i *ngIf="form.get('divisions').value.length <= 0">
+              Выберите подразделение
+            </i>
+          </div>
+        </div>
+      </mat-card>
+    </div>
   </div>
-  <div
-    class="cabinet-content__actions"
-    [class.cabinet-content__action_inactive]="activeForm < 2"
-  >
+  <div class="cabinet-content__actions">
     <button
       mat-raised-button
       color="primary"
-      (click)="sendForm2()"
       [disabled]="isFetching"
+      type="submit"
     >
       Добавить
     </button>
@@ -169,4 +199,4 @@
   <div *ngIf="serverError" class="cabinet-content__bottom-error">
     {{ serverError }}
   </div>
-</div>
+</form>

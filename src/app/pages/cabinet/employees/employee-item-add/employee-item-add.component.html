@@ -2,24 +2,19 @@
   <h1>Добавить сотрудника</h1>
 </div>
 
-<div class="cabinet-content">
+<form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
   <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
   <div class="cabinet-content__grid">
-    <form
-      id="form1"
-      [formGroup]="form1"
-      (ngSubmit)="sendForm1()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 1"
-    >
+    <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Основная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-select
-            [label]="'Роль'"
-            [control]="form1.get('role')"
+            fieldId="role"
+            [control]="form.get('role')"
             [options]="employeeRoleOptions"
+            [label]="'Роль'"
             [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
@@ -27,32 +22,17 @@
           ></app-select>
         </div>
       </mat-card>
-      <div class="cabinet-content__grid-item-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 1"
-        >
-          Далее
-        </button>
-      </div>
-    </form>
+    </div>
 
-    <form
-      id="form2"
-      [formGroup]="form2"
-      (ngSubmit)="sendForm2()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 2"
-    >
+    <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Личные данные</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-text-input
+            fieldId="name"
+            [control]="form.get('name')"
             label="Имя"
-            [control]="form2.get('name')"
             [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
@@ -62,8 +42,9 @@
           <br /><br />
 
           <app-text-input
+            fieldId="surname"
+            [control]="form.get('surname')"
             label="Фамилия"
-            [control]="form2.get('surname')"
             [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле'
@@ -73,16 +54,24 @@
           <br /><br />
 
           <app-text-input
+            fieldId="patronymic"
+            [control]="form.get('patronymic')"
             label="Отчество"
-            [control]="form2.get('patronymic')"
           ></app-text-input>
+        </div>
+      </mat-card>
+    </div>
 
-          <br /><br />
+    <div class="cabinet-content__grid-item">
+      <mat-card>
+        <h2>Контактная информация</h2>
 
+        <div class="cabinet-content__grid-item-form-content">
           <app-text-input
+            fieldId="email"
+            [control]="form.get('email')"
             label="Email"
             [isRequired]="true"
-            [control]="form2.get('email')"
             [errorMessages]="{
               required: 'Обязательное поле',
               email: 'Некорректный эмейл'
@@ -90,7 +79,7 @@
           >
             <ng-container
               error
-              *ngIf="form2.get('email')?.errors?.alreadyExists"
+              *ngIf="form.get('email')?.errors?.alreadyExists"
             >
               <a [routerLink]="['../', alreadyExistId]">Сотрудник</a> с таким
               email уже существует.
@@ -100,10 +89,11 @@
           <br /><br />
 
           <app-text-input
-            label="Телефон"
-            [control]="form2.get('phone')"
+            fieldId="phone"
+            [control]="form.get('phone')"
             mask="(000) 000-00-00"
             prefix="+7 "
+            label="Телефон"
             [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле',
@@ -112,46 +102,31 @@
           >
             <ng-container
               error
-              *ngIf="form2.get('phone')?.errors?.alreadyExists"
+              *ngIf="form.get('phone')?.errors?.alreadyExists"
             >
-              <a [routerLink]="['../', alreadyExistId]">Сотрудник</a> с таким
+              <a [routerLink]="['../', alreadyExistId2]">Сотрудник</a> с таким
               телефоном уже существует.
             </ng-container>
           </app-text-input>
         </div>
       </mat-card>
-      <div class="cabinet-content__grid-item-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [class.cabinet-content__grid-item-actions_hidden]="activeForm !== 2"
-        >
-          Далее
-        </button>
-      </div>
-    </form>
+    </div>
 
-    <form
-      id="form3"
-      [formGroup]="form3"
-      (ngSubmit)="sendForm3()"
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 3"
-    >
+    <div class="cabinet-content__grid-item">
       <mat-card>
-        <h2>Местоположение</h2>
+        <h2>Место работы</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-select
+            fieldId="locality"
+            [control]="form.get('locality')"
+            [options]="localitiesOptions"
             [label]="
               isQueryLocalityId
                 ? 'Населённый пункт (добавлено автоматически)'
                 : 'Населённый пункт'
             "
             [isRequired]="true"
-            [control]="form3.get('locality')"
-            [options]="localitiesOptions"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
@@ -160,21 +135,22 @@
           <br /><br />
 
           <app-select
-            *ngIf="form3.get('locality').value && divisionsOptions.length > 1"
+            *ngIf="form.get('locality').value && divisionsOptions.length > 1"
+            fieldId="division"
+            [control]="form.get('division')"
+            [options]="divisionsOptions"
             [label]="
               isQueryDivisionId
                 ? 'Подразделение (добавлено автоматически)'
                 : 'Подразделение'
             "
             [isRequired]="true"
-            [control]="form3.get('division')"
-            [options]="divisionsOptions"
             [errorMessages]="{
               required: 'Обязательное поле'
             }"
           ></app-select>
           <div
-            *ngIf="!form3.get('locality').value || divisionsOptions.length <= 1"
+            *ngIf="!form.get('locality').value || divisionsOptions.length <= 1"
             class="cabinet-content__field-inactive"
           >
             <label>{{
@@ -184,91 +160,64 @@
             }}</label>
             <p
               *ngIf="
-                form3.get('locality').value && divisionsOptions.length === 1
+                form.get('locality').value && divisionsOptions.length === 1
               "
             >
               {{ divisionsOptions[0].text }}
             </p>
             <i
-              *ngIf="form3.get('locality').value && divisionsOptions.length < 1"
+              *ngIf="form.get('locality').value && divisionsOptions.length < 1"
               class="red-text"
             >
-              Нет подразделений в этом населунном пункте
+              Нет подразделений в этом населённом пункте
             </i>
-            <i *ngIf="!form3.get('locality').value">
+            <i *ngIf="!form.get('locality').value">
               Выберите населённый пункт
             </i>
           </div>
         </div>
       </mat-card>
-      <div class="cabinet-content__grid-item-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [class.cabinet-content__grid-item-actions_hidden]="
-            form1.get('role').value === employeeRole.driver + ''
-              ? activeForm !== 3
-              : true
-          "
-        >
-          Далее
-        </button>
-      </div>
-    </form>
+    </div>
 
-    <form
-      id="form4"
-      [formGroup]="form4"
-      (ngSubmit)="sendForm4()"
+    <div
       class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="activeForm < 4"
-      *ngIf="
-        form1.get('role').value === '' ||
-        form1.get('role').value === employeeRole.driver + ''
+      [class.cabinet-content__grid-item_inactive]="
+        form.get('role').value === '' ||
+        form.get('role').value !== employeeRole.driver + ''
       "
     >
       <mat-card>
-        <h2>Дополнительно</h2>
+        <h2>Автомобили</h2>
 
         <div class="cabinet-content__grid-item-form-content">
           <app-select
-            *ngIf="form3.get('division').value && carsOptions.length > 0"
-            [label]="'Привязанные автомобили'"
-            [control]="form4.get('cars')"
-            [isMultiple]="true"
+            *ngIf="form.get('division').value && carsOptions.length > 0"
+            fieldId="cars"
+            [control]="form.get('cars')"
             [options]="carsOptions"
+            label="Привязанные автомобили"
+            [isMultiple]="true"
           ></app-select>
           <div
-            *ngIf="!form3.get('division').value || carsOptions.length <= 0"
+            *ngIf="!form.get('division').value || carsOptions.length <= 0"
             class="cabinet-content__field-inactive"
           >
             <label>Привязанные автомобили</label>
-            <i
-              *ngIf="form3.get('division').value && carsOptions.length <= 0"
-              class="red-text"
-            >
-              Нет автомобилей в этом населунном пункте
+            <i *ngIf="form.get('division').value && carsOptions.length <= 0">
+              Нет автомобилей в этом населённом пункте
             </i>
-            <i *ngIf="!form3.get('division').value"> Выберите подразделение </i>
+            <i *ngIf="!form.get('division').value"> Выберите подразделение </i>
           </div>
         </div>
       </mat-card>
-    </form>
-    <div class="clearfix"></div>
+    </div>
   </div>
-  <div
-    class="cabinet-content__actions"
-    [class.cabinet-content__action_inactive]="
-      form1.get('role').value === employeeRole.driver + ''
-        ? activeForm < 4
-        : activeForm < 3
-    "
-  >
+
+  <div class="cabinet-content__actions">
     <button
       mat-raised-button
       color="primary"
-      (click)="sendForm4()"
+      type="submit"
       [disabled]="isFetching"
     >
       Добавить
@@ -277,4 +226,4 @@
   <div *ngIf="serverError" class="cabinet-content__bottom-error">
     {{ serverError }}
   </div>
-</div>
+</form>
