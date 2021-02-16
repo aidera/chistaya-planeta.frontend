@@ -30,20 +30,6 @@ export const GET_CARS_TO_SELECT_SUCCESS =
 export const GET_CARS_TO_SELECT_FAILURE =
   '[app] get - cars to select - failure';
 
-export const GET_MANAGERS_TO_SELECT_REQUEST =
-  '[app] get - managers to select - request';
-export const GET_MANAGERS_TO_SELECT_SUCCESS =
-  '[app] get - managers to select - success';
-export const GET_MANAGERS_TO_SELECT_FAILURE =
-  '[app] get - managers to select - failure';
-
-export const GET_DRIVERS_TO_SELECT_REQUEST =
-  '[app] get - drivers to select - request';
-export const GET_DRIVERS_TO_SELECT_SUCCESS =
-  '[app] get - drivers to select - success';
-export const GET_DRIVERS_TO_SELECT_FAILURE =
-  '[app] get - drivers to select - failure';
-
 export const GET_EMPLOYEES_TO_SELECT_REQUEST =
   '[app] get - employees to select - request';
 export const GET_EMPLOYEES_TO_SELECT_SUCCESS =
@@ -109,42 +95,6 @@ export const getCarsToSelectSuccess = createAction(
 );
 export const getCarsToSelectFailure = createAction(
   GET_CARS_TO_SELECT_FAILURE,
-  props<{ error: ServerError }>()
-);
-
-/* -------------------------------- */
-/* ------ Managers to select ------ */
-/* -------------------------------- */
-
-export const getManagersToSelectRequest = createAction(
-  GET_MANAGERS_TO_SELECT_REQUEST
-);
-export const getManagersToSelectSuccess = createAction(
-  GET_MANAGERS_TO_SELECT_SUCCESS,
-  props<{
-    managers: IEmployeeLessInfo[];
-  }>()
-);
-export const getManagersToSelectFailure = createAction(
-  GET_MANAGERS_TO_SELECT_FAILURE,
-  props<{ error: ServerError }>()
-);
-
-/* ------------------------------- */
-/* ------ Drivers to select ------ */
-/* ------------------------------- */
-
-export const getDriversToSelectRequest = createAction(
-  GET_DRIVERS_TO_SELECT_REQUEST
-);
-export const getDriversToSelectSuccess = createAction(
-  GET_DRIVERS_TO_SELECT_SUCCESS,
-  props<{
-    drivers: IEmployeeLessInfo[];
-  }>()
-);
-export const getDriversToSelectFailure = createAction(
-  GET_DRIVERS_TO_SELECT_FAILURE,
   props<{ error: ServerError }>()
 );
 

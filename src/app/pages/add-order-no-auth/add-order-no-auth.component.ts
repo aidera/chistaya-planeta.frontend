@@ -71,9 +71,15 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     this.formInit();
 
     this.localitiesOptions$ = this.store
-      .select(AppSelectors.selectLocalitiesOptionsToSelect)
+      .select(AppSelectors.selectLocalitiesToSelect)
       .subscribe((localities) => {
-        this.localitiesOptions = localities;
+        this.localitiesOptions =
+          localities?.map((el) => {
+            return {
+              value: el._id,
+              text: el.name,
+            };
+          }) || [];
         if (localities === null) {
           this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
         }

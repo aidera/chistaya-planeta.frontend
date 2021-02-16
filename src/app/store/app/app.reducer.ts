@@ -4,7 +4,6 @@ import * as AppActions from './app.actions';
 import { ILocalityLessInfo } from '../../models/Locality';
 import { ServerError } from '../../models/ServerResponse';
 import { IDivisionLessInfo } from '../../models/Division';
-import { OptionType } from '../../models/types/OptionType';
 import { IEmployeeLessInfo } from '../../models/Employee';
 import { ICarLessInfo } from '../../models/Car';
 
@@ -18,7 +17,6 @@ export const appInitialState = {
   /* ------ Localities to select ------ */
   /* ---------------------------------- */
   localitiesToSelect: null as ILocalityLessInfo[] | null,
-  localitiesOptionsToSelect: null as OptionType[] | null,
   localitiesToSelectIsFetching: false,
   localitiesToSelectError: null as ServerError | null,
 
@@ -26,7 +24,6 @@ export const appInitialState = {
   /* ------ Divisions to select ------ */
   /* --------------------------------- */
   divisionsToSelect: null as IDivisionLessInfo[] | null,
-  divisionsOptionsToSelect: null as OptionType[] | null,
   divisionsToSelectIsFetching: false,
   divisionsToSelectError: null as ServerError | null,
 
@@ -34,31 +31,13 @@ export const appInitialState = {
   /* ------ Cars to select ------ */
   /* ---------------------------- */
   carsToSelect: null as ICarLessInfo[] | null,
-  carsOptionsToSelect: null as OptionType[] | null,
   carsToSelectIsFetching: false,
   carsToSelectError: null as ServerError | null,
-
-  /* -------------------------------- */
-  /* ------ Managers to select ------ */
-  /* -------------------------------- */
-  managersToSelect: null as IEmployeeLessInfo[] | null,
-  managersOptionsToSelect: null as OptionType[] | null,
-  managersToSelectIsFetching: false,
-  managersToSelectError: null as ServerError | null,
-
-  /* ------------------------------- */
-  /* ------ Drivers to select ------ */
-  /* ------------------------------- */
-  driversToSelect: null as IEmployeeLessInfo[] | null,
-  driversOptionsToSelect: null as OptionType[] | null,
-  driversToSelectIsFetching: false,
-  driversToSelectError: null as ServerError | null,
 
   /* --------------------------------- */
   /* ------ Employees to select ------ */
   /* --------------------------------- */
   employeesToSelect: null as IEmployeeLessInfo[] | null,
-  employeesOptionsToSelect: null as OptionType[] | null,
   employeesToSelectIsFetching: false,
   employeesToSelectError: null as ServerError | null,
 };
@@ -88,12 +67,6 @@ const _appReducer = createReducer(
   on(AppActions.getLocalitiesToSelectSuccess, (state, payload) => ({
     ...state,
     localitiesToSelect: payload.localities,
-    localitiesOptionsToSelect: payload.localities.map((locality) => {
-      return {
-        value: locality._id,
-        text: locality.name,
-      };
-    }),
     localitiesToSelectIsFetching: false,
     localitiesToSelectError: null,
   })),
@@ -115,12 +88,6 @@ const _appReducer = createReducer(
   on(AppActions.getDivisionsToSelectSuccess, (state, payload) => ({
     ...state,
     divisionsToSelect: payload.divisions,
-    divisionsOptionsToSelect: payload.divisions.map((division) => {
-      return {
-        value: division._id,
-        text: division.name,
-      };
-    }),
     divisionsToSelectIsFetching: false,
     divisionsToSelectError: null,
   })),
@@ -142,12 +109,6 @@ const _appReducer = createReducer(
   on(AppActions.getCarsToSelectSuccess, (state, payload) => ({
     ...state,
     carsToSelect: payload.cars,
-    carsOptionsToSelect: payload.cars.map((manager) => {
-      return {
-        value: manager._id,
-        text: manager.licensePlate,
-      };
-    }),
     carsToSelectIsFetching: false,
     carsToSelectError: null,
   })),
@@ -155,60 +116,6 @@ const _appReducer = createReducer(
     ...state,
     carsToSelectIsFetching: false,
     carsToSelectError: payload.error,
-  })),
-
-  /* -------------------------------- */
-  /* ------ Managers to select ------ */
-  /* -------------------------------- */
-
-  on(AppActions.getManagersToSelectSuccess, (state) => ({
-    ...state,
-    managersToSelectIsFetching: true,
-    managersToSelectError: null,
-  })),
-  on(AppActions.getManagersToSelectSuccess, (state, payload) => ({
-    ...state,
-    managersToSelect: payload.managers,
-    managersOptionsToSelect: payload.managers.map((manager) => {
-      return {
-        value: manager._id,
-        text: manager.name,
-      };
-    }),
-    managersToSelectIsFetching: false,
-    managersToSelectError: null,
-  })),
-  on(AppActions.getManagersToSelectFailure, (state, payload) => ({
-    ...state,
-    managersToSelectIsFetching: false,
-    managersToSelectError: payload.error,
-  })),
-
-  /* ------------------------------- */
-  /* ------ Drivers to select ------ */
-  /* ------------------------------- */
-
-  on(AppActions.getDriversToSelectSuccess, (state) => ({
-    ...state,
-    driversToSelectIsFetching: true,
-    driversToSelectError: null,
-  })),
-  on(AppActions.getDriversToSelectSuccess, (state, payload) => ({
-    ...state,
-    driversToSelect: payload.drivers,
-    driversOptionsToSelect: payload.drivers.map((driver) => {
-      return {
-        value: driver._id,
-        text: driver.name,
-      };
-    }),
-    driversToSelectIsFetching: false,
-    driversToSelectError: null,
-  })),
-  on(AppActions.getDriversToSelectFailure, (state, payload) => ({
-    ...state,
-    driversToSelectIsFetching: false,
-    driversToSelectError: payload.error,
   })),
 
   /* --------------------------------- */
@@ -223,12 +130,6 @@ const _appReducer = createReducer(
   on(AppActions.getEmployeesToSelectSuccess, (state, payload) => ({
     ...state,
     employeesToSelect: payload.employees,
-    employeesOptionsToSelect: payload.employees.map((employee) => {
-      return {
-        value: employee._id,
-        text: employee.name,
-      };
-    }),
     employeesToSelectIsFetching: false,
     employeesToSelectError: null,
   })),
