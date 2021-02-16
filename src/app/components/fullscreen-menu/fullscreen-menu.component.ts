@@ -41,12 +41,15 @@ export class FullscreenMenuComponent implements OnInit, OnDestroy {
       .select(AppSelectors.selectIsFullScreenMenuOpen)
       .subscribe((status) => {
         this.isFullscreenMenuOpen = status;
+        if (status) {
+          document.querySelector('body').style.overflowY = 'hidden';
+        } else {
+          document.querySelector('body').style.overflowY = 'auto';
+        }
       });
   }
 
   ngOnDestroy(): void {
-    if (this.isFullscreenMenuOpen$) {
-      this.isFullscreenMenuOpen$.unsubscribe();
-    }
+    this.isFullscreenMenuOpen$?.unsubscribe();
   }
 }
