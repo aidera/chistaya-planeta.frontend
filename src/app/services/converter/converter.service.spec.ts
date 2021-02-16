@@ -215,4 +215,20 @@ describe('ConverterService', () => {
       expect(service.getUserInitials('е', 'михалева')).toBe('Михалева Е.');
     });
   });
+
+  describe('beautifyPhoneNumber', () => {
+    it('should beautify the phone string', () => {
+      const phoneString = '+71231234567';
+
+      expect(service.beautifyPhoneNumber(phoneString)).toBe(
+        '+7 (123) 123-45-67'
+      );
+    });
+
+    it('should not beautify strings which length is more then 12', () => {
+      const phoneString = '+712312345674';
+
+      expect(service.beautifyPhoneNumber(phoneString)).toBe('+712312345674');
+    });
+  });
 });

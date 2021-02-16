@@ -307,12 +307,14 @@ export class EmployeesTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              phone: this.highlightSearchedValue(
-                employee.phone,
-                this.quickSearchForm
-                  ? this.quickSearchForm.get('search').value
-                  : ''
-              ),
+              phone: this.quickSearchForm?.get('search').value
+                ? this.highlightSearchedValue(
+                    employee.phone,
+                    this.quickSearchForm
+                      ? this.quickSearchForm.get('search').value
+                      : ''
+                  )
+                : this.converter.beautifyPhoneNumber(employee.phone),
               locality: (employee.locality as ILocality)?.name || '',
               division: (employee.division as IDivision)?.name || '',
               cars: employee.cars
