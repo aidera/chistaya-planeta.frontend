@@ -84,7 +84,7 @@ export const getDivisionsFailure = createAction(
 
 export const getDivisionRequest = createAction(
   GET_DIVISION_REQUEST,
-  props<{ id: string }>()
+  props<{ id: string; withLoading: boolean }>()
 );
 export const getDivisionSuccess = createAction(
   GET_DIVISION_SUCCESS,

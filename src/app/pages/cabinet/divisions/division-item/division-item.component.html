@@ -1,9 +1,10 @@
+<!-- Header -->
 <div class="cabinet-header">
-  <h1>Подразделения{{ division ? ': ' + division.name : '' }}</h1>
+  <h1>Подразделение{{ item ? ': ' + item.name : '' }}</h1>
   <div class="cabinet-header__actions">
     <button
-      *ngIf="division && division.status === simpleStatus.inactive"
-      [disabled]="isFetching || isUpdating"
+      *ngIf="item && item.status === simpleStatus.inactive"
+      [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
       color="warn"
       (click)="isRemoveModalOpen = true"
@@ -13,43 +14,47 @@
   </div>
 </div>
 
+<!-- Content -->
 <div class="cabinet-content">
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <!-- Backlink -->
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
+    >← Список подразделений</a
+  >
+
+  <!-- Error -->
   <div
-    *ngIf="getDivisionError || updateError || removeError"
+    *ngIf="getItemError || updateItemError || removeItemError"
     class="cabinet-content__top-error"
   >
-    {{ getDivisionError || updateError || removeError }}
+    {{ getItemError || updateItemError || removeItemError }}
   </div>
+
+  <!-- Content grid -->
   <div
-    *ngIf="!getDivisionError && !updateError && !removeError"
+    *ngIf="!getItemError && !updateItemError && !removeItemError"
     class="cabinet-content__grid"
   >
     <div class="cabinet-content__grid-item">
+      <!-- Status -->
       <mat-card class="cabinet-content__status-card">
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-status
             *ngIf="activeField !== 'status'"
-            class="cabinet-content__field-inactive"
-          >
-            <ng-container *ngIf="division && !isFetching">
-              <h2 [innerHTML]="divisionStatusString"></h2>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'status'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+            [content]="statusString"
+            [isFetching]="itemIsFetching"
+            [color]="statusColor"
+            (editClick)="setActiveField('status')"
+          ></app-item-field-inactive-status>
+
           <div
-            *ngIf="form && activeField === 'status'"
-            (clickOutside)="removeActiveField('status', division.status + '')"
+            *ngIf="activeField === 'status'"
+            (clickOutside)="
+              removeActiveField('status', (item?.status || '') + '')
+            "
             [delayClickOutsideInit]="true"
-            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
             [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
@@ -64,22 +69,13 @@
               ></app-select>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating ||
-                  form.get('status').value === division.status + ''
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('status').value === (item?.status || '') + ''
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
       </mat-card>
@@ -89,36 +85,31 @@
       <mat-card>
         <h2>Основная информация</h2>
 
+        <!-- ID -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>ID</label>
-            <p *ngIf="division && !isFetching">{{ division._id }}</p>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          <app-item-field-inactive-string
+            label="ID"
+            [content]="item?._id"
+            [isFetching]="itemIsFetching"
+          >
+          </app-item-field-inactive-string>
         </div>
 
+        <!-- Name -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'name'"
-            class="cabinet-content__field-inactive"
+            label="Название"
+            [content]="item?.name"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('name')"
           >
-            <label>Название</label>
-            <ng-container *ngIf="division && !isFetching">
-              <p>{{ division.name }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'name'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
+
           <div
-            *ngIf="form && activeField === 'name'"
-            (clickOutside)="removeActiveField('name', division.name)"
+            *ngIf="activeField === 'name'"
+            (clickOutside)="removeActiveField('name', item?.name || '')"
             [delayClickOutsideInit]="true"
             class="cabinet-content__field-active"
           >
@@ -128,137 +119,101 @@
                 [control]="form.get('name')"
                 [errorMessages]="{
                   required: 'Обязательное поле',
-                  alreadyExists: 'Такое название уже существует',
                   sameName: 'Новое название должно отличаться'
                 }"
-              ></app-text-input>
+              >
+                <ng-container
+                  error
+                  *ngIf="form.get('name')?.errors?.alreadyExists"
+                >
+                  Такое
+                  <a [routerLink]="['../../', 'divisions', alreadyExistId]"
+                    >подразделение</a
+                  >
+                  уже существует.
+                </ng-container>
+              </app-text-input>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating || form.get('name').value === division.name
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating || form.get('name').value === item?.name
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- Cars -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Автомобили</label>
-            <p *ngIf="division && !isFetching">
-              <i
-                *ngIf="
-                  !division.cars || division.cars.length <= 0;
-                  else carsDisplay
-                "
-                >нет</i
-              >
-              <ng-template #carsDisplay>
-                <ul>
-                  <ng-container
-                    *ngFor="let car of division.cars; let i = index"
-                  >
-                    <li
-                      *ngIf="i <= 2"
-                      [class.red-text]="car.status === carStatus.unavailable"
-                      [class.yellow-text]="
-                        car.status === carStatus.temporaryUnavailable
-                      "
-                      [class.green-text]="car.status === carStatus.active"
-                    >
-                      <a [routerLink]="['../../', 'cars', car._id]">{{
-                        car.licensePlate
-                      }}</a>
-                    </li>
-                  </ng-container>
-                </ul>
-                <a
-                  *ngIf="division?.cars?.length > 3"
-                  [routerLink]="['../../', 'cars']"
-                  [queryParams]="{ filter__localities: division._id, page: 1 }"
-                  >... и еще {{ division.cars.length - 3 }}</a
-                >
-              </ng-template>
-            </p>
+          <app-item-field-inactive-list
+            label="Автомобили"
+            [list]="getItemCarsFieldListElements(item?.cars || [])"
+            [isFetching]="itemIsFetching"
+            [moreLinkArray]="['../../', 'cars']"
+            [moreLinkQueryParams]="{
+              filter__divisions: item?._id || '',
+              page: 1 + ''
+            }"
+            [useAddButton]="true"
+            [addLinkArray]="['../../', 'cars', 'add']"
+            [addLinkQueryParams]="{
+              locality: item?.locality?._id || '',
+              division: item?._id || ''
+            }"
+          >
+          </app-item-field-inactive-list>
+        </div>
 
-            <div
-              *ngIf="division?.status === simpleStatus.active"
-              class="cabinet-content__field-inactive-action"
-            >
-              <button
-                mat-icon-button
-                [routerLink]="['../../', 'cars', 'add']"
-                [queryParams]="{
-                  divisions: division._id,
-                  locality: division.locality?._id
-                }"
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/plus.svg'"
-                ></span>
-              </button>
-            </div>
-
-            <ng-container *ngIf="isFetching">
-              <app-skeleton></app-skeleton>
-              <br />
-              <app-skeleton></app-skeleton>
-              <br />
-              <app-skeleton></app-skeleton>
-              <br />
-            </ng-container>
-          </div>
+        <!-- Employees -->
+        <div class="cabinet-content__field">
+          <app-item-field-inactive-list
+            label="Сотрудники"
+            [list]="getItemEmployeesFieldListElements(item?.employees || [])"
+            [isFetching]="itemIsFetching"
+            [moreLinkArray]="['../../', 'employees']"
+            [moreLinkQueryParams]="{
+              filter__divisions: item?._id || '',
+              page: 1 + ''
+            }"
+            [useAddButton]="true"
+            [addLinkArray]="['../../', 'employees', 'add']"
+            [addLinkQueryParams]="{
+              locality: item?.locality?._id || '',
+              division: item?._id || ''
+            }"
+          >
+          </app-item-field-inactive-list>
         </div>
       </mat-card>
     </div>
 
     <div class="cabinet-content__grid-item">
       <mat-card>
-        <h2>Адрес</h2>
+        <h2>Местоположение</h2>
 
+        <!-- Locality -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'locality'"
-            class="cabinet-content__field-inactive"
+            label="Населённый пункт"
+            [content]="item?.locality?.name"
+            [linkArray]="['../../', 'localities', item?.locality?._id]"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('locality')"
           >
-            <label>Населённый пункт</label>
-            <ng-container *ngIf="division && !isFetching">
-              <a
-                [routerLink]="['../../', 'localities', division?.locality?._id]"
-                [class.red-text]="
-                  division.locality?.status === simpleStatus.inactive
-                "
-                >{{ division.locality?.name }}</a
-              >
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'locality'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
+
           <div
-            *ngIf="form && activeField === 'locality'"
+            *ngIf="activeField === 'locality'"
             (clickOutside)="
-              removeActiveField('locality', division.locality._id)
+              removeActiveField('locality', item?.locality?._id || '')
             "
             [delayClickOutsideInit]="true"
-            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
             [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
@@ -270,48 +225,36 @@
               ></app-select>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating ||
-                  form.get('locality').value === division.locality?._id
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('locality').value === item?.locality?._id
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- Street -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'street'"
-            class="cabinet-content__field-inactive"
+            label="Улица"
+            [content]="item?.street"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('street')"
           >
-            <label>Улица</label>
-            <ng-container *ngIf="division && !isFetching">
-              <p>{{ division?.street }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'street'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
+
           <div
-            *ngIf="form && activeField === 'street'"
-            (clickOutside)="removeActiveField('street', division.street)"
+            *ngIf="activeField === 'street'"
+            (clickOutside)="removeActiveField('street', item?.street || '')"
             [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
             <form [formGroup]="form" (ngSubmit)="update()">
@@ -324,46 +267,30 @@
               ></app-text-input>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating || form.get('street').value === division.street
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating || form.get('street').value === item?.street
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- House -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'house'"
-            class="cabinet-content__field-inactive"
+            label="Дом"
+            [content]="item?.house"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('house')"
           >
-            <label>Дом</label>
-            <ng-container *ngIf="division && !isFetching">
-              <p>{{ division?.house }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'house'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
+
           <div
-            *ngIf="form && activeField === 'house'"
-            (clickOutside)="removeActiveField('house', division.house)"
+            *ngIf="activeField === 'house'"
+            (clickOutside)="removeActiveField('house', item?.house || '')"
             [delayClickOutsideInit]="true"
             class="cabinet-content__field-active"
           >
@@ -377,21 +304,12 @@
               ></app-text-input>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating || form.get('house').value === division.house
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating || form.get('house').value === item?.house
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
       </mat-card>
@@ -401,32 +319,33 @@
       <mat-card>
         <h2>История</h2>
 
+        <!-- Created At -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Создано</label>
-            <p *ngIf="division && !isFetching">
-              {{ division.createdAt | date: 'dd.MM.yyyy - HH:mm' }}
-            </p>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          <app-item-field-inactive-string
+            label="Создано"
+            [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
+            [isFetching]="itemIsFetching"
+          >
+          </app-item-field-inactive-string>
         </div>
 
+        <!-- Updated At -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Обновлено</label>
-            <p *ngIf="division && !isFetching">
-              {{ division.updatedAt | date: 'dd.MM.yyyy - HH:mm' }}
-            </p>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          <app-item-field-inactive-string
+            label="Создано"
+            [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
+            [isFetching]="itemIsFetching"
+          >
+          </app-item-field-inactive-string>
         </div>
       </mat-card>
     </div>
   </div>
 </div>
 
+<!-- Modal -->
 <app-modal
-  [isLoading]="isRemoving"
+  [isLoading]="itemIsRemoving"
   [isOpen]="isRemoveModalOpen"
   [resolveButtonText]="'Оставить в архиве'"
   [rejectButtonText]="'Удалить'"

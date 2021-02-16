@@ -1,12 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ItemPageComponent } from './item-page.component';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
+import { HttpClientModule } from '@angular/common/http';
+import { ConverterService } from '../../services/converter/converter.service';
+import { LocalityService } from '../../services/api/locality.service';
+import { DivisionService } from '../../services/api/division.service';
+import { CarService } from '../../services/api/car.service';
+import { EmployeeService } from '../../services/api/employee.service';
 
 describe('ItemPageComponent', () => {
   let component: ItemPageComponent;
@@ -15,12 +26,29 @@ describe('ItemPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ItemPageComponent],
-      imports: [MatSnackBarModule, RouterTestingModule],
+      imports: [
+        MatSnackBarModule,
+        RouterTestingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+      ],
       providers: [
         RoutingStateService,
         SocketIoService,
+        ConverterService,
+        LocalityService,
+        DivisionService,
+        CarService,
+        EmployeeService,
         provideMockStore({
-          initialState: {},
+          initialState: {
+            app: {
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
+            },
+          },
         }),
       ],
     }).compileComponents();

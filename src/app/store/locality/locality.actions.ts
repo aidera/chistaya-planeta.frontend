@@ -84,7 +84,7 @@ export const getLocalitiesFailure = createAction(
 
 export const getLocalityRequest = createAction(
   GET_LOCALITY_REQUEST,
-  props<{ id: string }>()
+  props<{ id: string; withLoading: boolean }>()
 );
 export const getLocalitySuccess = createAction(
   GET_LOCALITY_SUCCESS,

@@ -1,0 +1,55 @@
+<div class="cabinet-content__field-inactive">
+  <label *ngIf="label">{{ label }}</label>
+  <label *ngIf="!label" class="no-label"></label>
+
+  <ng-container *ngIf="list && list.length > 0 && !hint">
+    <ul>
+      <ng-container *ngFor="let item of list; let i = index">
+        <li
+          *ngIf="i <= 2"
+          [class.green-text]="item.color === 'green'"
+          [class.yellow-text]="item.color === 'yellow'"
+          [class.blue-text]="item.color === 'blue'"
+          [class.red-text]="item.color === 'red'"
+        >
+          <a *ngIf="item.linkArray" [routerLink]="item.linkArray">{{
+            item.text
+          }}</a>
+          <p *ngIf="!item.linkArray">{{ item.text }}</p>
+        </li>
+      </ng-container>
+    </ul>
+    <a
+      *ngIf="list.length > 3"
+      [routerLink]="moreLinkArray"
+      [queryParams]="moreLinkQueryParams"
+      >... и еще {{ list.length - 3 }}</a
+    >
+  </ng-container>
+
+  <i *ngIf="list && list.length <= 0 && !hint">нет</i>
+  <i *ngIf="hint">{{ hint }}</i>
+
+  <div class="cabinet-content__field-inactive-action">
+    <button *ngIf="useEditButton" mat-icon-button (click)="editClick.emit()">
+      <span class="icon" [inlineSVG]="'../../assets/icons/pencil.svg'"></span>
+    </button>
+    <button
+      *ngIf="useAddButton"
+      mat-icon-button
+      [routerLink]="addLinkArray"
+      [queryParams]="addLinkQueryParams"
+    >
+      <span class="icon" [inlineSVG]="'../../assets/icons/plus.svg'"></span>
+    </button>
+  </div>
+
+  <ng-container *ngIf="isFetching">
+    <app-skeleton></app-skeleton>
+    <br />
+    <app-skeleton></app-skeleton>
+    <br />
+    <app-skeleton></app-skeleton>
+    <br />
+  </ng-container>
+</div>

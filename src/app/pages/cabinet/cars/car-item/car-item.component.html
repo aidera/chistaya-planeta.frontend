@@ -1,9 +1,10 @@
+<!-- Header -->
 <div class="cabinet-header">
-  <h1>Автомобили{{ car ? ': ' + car.licensePlate : '' }}</h1>
+  <h1>Автомобиль{{ item ? ': ' + item.licensePlate : '' }}</h1>
   <div class="cabinet-header__actions">
     <button
-      *ngIf="car && car.status === carStatus.unavailable"
-      [disabled]="isFetching || isUpdating"
+      *ngIf="item && item.status === carStatus.unavailable"
+      [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
       color="warn"
       (click)="isRemoveModalOpen = true"
@@ -13,43 +14,47 @@
   </div>
 </div>
 
+<!-- Content -->
 <div class="cabinet-content">
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <!-- Backlink -->
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
+    >← Список автомобилей</a
+  >
+
+  <!-- Error -->
   <div
-    *ngIf="getCarError || updateError || removeError"
+    *ngIf="getItemError || updateItemError || removeItemError"
     class="cabinet-content__top-error"
   >
-    {{ getCarError || updateError || removeError }}
+    {{ getItemError || updateItemError || removeItemError }}
   </div>
+
+  <!-- Content grid -->
   <div
-    *ngIf="!getCarError && !updateError && !removeError"
+    *ngIf="!getItemError && !updateItemError && !removeItemError"
     class="cabinet-content__grid"
   >
     <div class="cabinet-content__grid-item">
+      <!-- Status -->
       <mat-card class="cabinet-content__status-card">
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-status
             *ngIf="activeField !== 'status'"
-            class="cabinet-content__field-inactive"
-          >
-            <ng-container *ngIf="car && !isFetching">
-              <h2 [innerHTML]="carStatusString"></h2>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'status'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+            [content]="statusString"
+            [isFetching]="itemIsFetching"
+            [color]="statusColor"
+            (editClick)="setActiveField('status')"
+          ></app-item-field-inactive-status>
+
           <div
-            *ngIf="form && activeField === 'status'"
-            (clickOutside)="removeActiveField('status', car.status + '')"
+            *ngIf="activeField === 'status'"
+            (clickOutside)="
+              removeActiveField('status', (item?.status || '') + '')
+            "
             [delayClickOutsideInit]="true"
-            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
             [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
@@ -64,21 +69,13 @@
               ></app-select>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating || form.get('status').value === car.status + ''
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('status').value === (item?.status || '') + ''
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
       </mat-card>
@@ -88,38 +85,38 @@
       <mat-card>
         <h2>Основная информация</h2>
 
+        <!-- ID -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>ID</label>
-            <p *ngIf="car && !isFetching">{{ car._id }}</p>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          <app-item-field-inactive-string
+            label="ID"
+            [content]="item?._id"
+            [isFetching]="itemIsFetching"
+          >
+          </app-item-field-inactive-string>
         </div>
 
+        <!-- Name -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'licensePlate'"
-            class="cabinet-content__field-inactive"
+            label="Номер"
+            [content]="item?.licensePlate"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('licensePlate')"
           >
-            <label>Номер</label>
-            <ng-container *ngIf="car && !isFetching">
-              <p>{{ car.licensePlate }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'licensePlate'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
 
           <div
-            *ngIf="form && activeField === 'licensePlate'"
-            (clickOutside)="removeActiveField('licensePlate', car.licensePlate)"
+            *ngIf="activeField === 'licensePlate'"
+            (clickOutside)="
+              removeActiveField('licensePlate', item?.licensePlate || '')
+            "
             [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
             <form [formGroup]="form" (ngSubmit)="update()">
@@ -127,57 +124,51 @@
                 label="Номер"
                 [control]="form.get('licensePlate')"
                 [errorMessages]="{
-                  required: 'Обязательное поле',
-                  alreadyExists: 'Такое название уже существует',
-                  sameName: 'Новое название должно отличаться'
+                  required: 'Обязательное поле'
                 }"
-              ></app-text-input>
+              >
+                <ng-container
+                  error
+                  *ngIf="form.get('licensePlate')?.errors?.alreadyExists"
+                >
+                  Такой
+                  <a [routerLink]="['../../', 'cars', alreadyExistId]"
+                    >автомобиль</a
+                  >
+                  уже существует.
+                </ng-container>
+              </app-text-input>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating ||
-                  form.get('licensePlate').value === car.licensePlate
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('licensePlate').value === item?.licensePlate
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- Type -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'type'"
-            class="cabinet-content__field-inactive"
+            label="Тип"
+            [content]="getCarTypeText()"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('type')"
           >
-            <label>Тип</label>
-            <ng-container *ngIf="car && !isFetching">
-              <p>{{ carTypeOptions[car.type].text }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'type'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
 
           <div
-            *ngIf="form && activeField === 'type'"
-            (clickOutside)="removeActiveField('type', car.type + '')"
+            *ngIf="activeField === 'type'"
+            (clickOutside)="removeActiveField('type', (item?.type || '') + '')"
             [delayClickOutsideInit]="true"
-            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
             [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
@@ -192,49 +183,43 @@
               ></app-select>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="isUpdating || form.get('type').value === car.type"
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('type').value === (item?.type || '') + ''
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- Is Corporate -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'isCorporate'"
-            class="cabinet-content__field-inactive"
+            label="Принадлежность"
+            [content]="
+              item
+                ? item.isCorporate
+                  ? 'Корпоративный'
+                  : 'Частный'
+                : undefined
+            "
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('isCorporate')"
           >
-            <label>Принадлежность</label>
-            <ng-container *ngIf="car && !isFetching">
-              <p>{{ car.isCorporate ? 'Корпоративный' : 'Частный' }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'isCorporate'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
 
           <div
-            *ngIf="form && activeField === 'isCorporate'"
+            *ngIf="activeField === 'isCorporate'"
             (clickOutside)="
-              removeActiveField('isCorporate', car.isCorporate ? '1' : '0')
+              removeActiveField('isCorporate', item?.isCorporate ? '1' : '0')
             "
             [delayClickOutsideInit]="true"
-            [exclude]="'.mat-select,.mat-select-panel,.mat-option'"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
             [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
@@ -252,48 +237,37 @@
               ></app-select>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating ||
-                  form.get('isCorporate').value === car.isCorporate + ''
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('isCorporate').value ===
+                  (item?.isCorporate ? '1' : '0')
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- Weight -->
         <div class="cabinet-content__field">
-          <div
+          <app-item-field-inactive-string
             *ngIf="activeField !== 'weight'"
-            class="cabinet-content__field-inactive"
+            label="Вес, т"
+            [content]="item?.weight.toString()"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('weight')"
           >
-            <label>Вес, т</label>
-            <ng-container *ngIf="car && !isFetching">
-              <p>{{ car.weight }}</p>
-              <div class="cabinet-content__field-inactive-action">
-                <button mat-icon-button (click)="activeField = 'weight'">
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          </app-item-field-inactive-string>
+
           <div
-            *ngIf="form && activeField === 'weight'"
-            (clickOutside)="removeActiveField('weight', car.weight)"
+            *ngIf="activeField === 'weight'"
+            (clickOutside)="removeActiveField('weight', item?.weight || '')"
             [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
             class="cabinet-content__field-active"
           >
             <form [formGroup]="form" (ngSubmit)="update()">
@@ -301,24 +275,19 @@
                 label="Вес, т"
                 [control]="form.get('weight')"
                 [fieldType]="'number'"
+                [errorMessages]="{
+                  min: 'Не может быть меньше или равно 0'
+                }"
               ></app-text-input>
             </form>
 
-            <div class="cabinet-content__field-active-action">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="update()"
-                [disabled]="
-                  isUpdating || form.get('weight').value === car.weight
-                "
-              >
-                <span
-                  class="icon"
-                  [inlineSVG]="'../../assets/icons/floppy-disk.svg'"
-                ></span>
-              </button>
-            </div>
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('weight').value === item?.weight.toString()
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
       </mat-card>
@@ -328,72 +297,171 @@
       <mat-card>
         <h2>Местоположение</h2>
 
+        <!-- Locality -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Населённый пункт</label>
-            <ng-container *ngIf="car && !isFetching">
-              <a
-                *ngIf="car.locality"
-                [routerLink]="['../../', 'localities', car.locality._id]"
-                >{{ car.locality.name }}</a
-              >
-              <i *ngIf="!car.locality">нет</i>
-              <div class="cabinet-content__field-inactive-action">
-                <button
-                  mat-icon-button
-                  (click)="isChangeLocalityDivisionModalOpen = true"
-                >
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          <app-item-field-inactive-string
+            *ngIf="activeField !== 'locality'"
+            label="Населённый пункт"
+            [content]="item?.locality?.name"
+            [linkArray]="['../../', 'localities', item?.locality?._id]"
+            [isFetching]="itemIsFetching"
+            [useEditButton]="true"
+            (editClick)="setActiveField('locality')"
+          >
+          </app-item-field-inactive-string>
+
+          <div
+            *ngIf="activeField === 'locality'"
+            (clickOutside)="
+              removeActiveField('locality', item?.locality?._id || '')
+            "
+            [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Населённый пункт"
+                [control]="form.get('locality')"
+                [options]="localitiesOptions"
+              ></app-select>
+            </form>
+
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('locality').value === item?.locality?._id
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
 
+        <!-- Divisions -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Подразделения</label>
-            <ng-container *ngIf="car && !isFetching">
-              <p *ngIf="car && !isFetching">
-                <i
-                  *ngIf="
-                    !car.divisions || car.divisions.length <= 0;
-                    else divisionsDisplay
-                  "
-                  >нет</i
-                >
-                <ng-template #divisionsDisplay>
-                  <ul>
-                    <li
-                      *ngFor="let division of car.divisions; let i = index"
-                      [class.red-text]="
-                        division.status === simpleStatus.inactive
-                      "
-                    >
-                      <a [routerLink]="['../../', 'divisions', division._id]">{{
-                        division.name
-                      }}</a>
-                    </li>
-                  </ul>
-                </ng-template>
-              </p>
-              <div class="cabinet-content__field-inactive-action">
-                <button
-                  mat-icon-button
-                  (click)="isChangeLocalityDivisionModalOpen = true"
-                >
-                  <span
-                    class="icon"
-                    [inlineSVG]="'../../assets/icons/pencil.svg'"
-                  ></span>
-                </button>
-              </div>
-            </ng-container>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+          <app-item-field-inactive-list
+            *ngIf="activeField !== 'divisions'"
+            label="Подразделения"
+            [list]="getItemDivisionsFieldListElements(item?.divisions || [])"
+            [isFetching]="itemIsFetching"
+            [moreLinkArray]="['../../', 'divisions']"
+            [moreLinkQueryParams]="{
+              filter__cars: item?._id || '',
+              page: 1 + ''
+            }"
+            [useEditButton]="true"
+            (editClick)="
+              setActiveField('divisions');
+              updateDivisionsOptions(item?.locality?._id)
+            "
+          >
+          </app-item-field-inactive-list>
+
+          <div
+            *ngIf="activeField === 'divisions'"
+            (clickOutside)="
+              removeActiveField(
+                'divisions',
+                getDivisionsValuesArray(item?.divisions || [])
+              )
+            "
+            [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="Подразделения"
+                [control]="form.get('divisions')"
+                [options]="divisionsOptions"
+                [isMultiple]="true"
+              ></app-select>
+            </form>
+
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('divisions').value ===
+                  getDivisionsValuesArray(item?.divisions || [])
+              "
+            ></app-item-field-save-button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="cabinet-content__grid-item">
+      <mat-card>
+        <h2>Водители</h2>
+
+        <!-- Drivers -->
+        <div class="cabinet-content__field" style="margin-top: -16px">
+          <app-item-field-inactive-list
+            *ngIf="activeField !== 'drivers'"
+            [list]="getItemEmployeesFieldListElements(item?.drivers || [])"
+            [hint]="
+              !item?.locality ||
+              !item?.divisions ||
+              item?.divisions?.length <= 0
+                ? 'Выберите населённый пункт и подразделение'
+                : undefined
+            "
+            [isFetching]="itemIsFetching"
+            [moreLinkArray]="['../../', 'employees']"
+            [moreLinkQueryParams]="{
+              filter__cars: item?._id || '',
+              page: 1 + ''
+            }"
+            [useEditButton]="true"
+            (editClick)="
+              setActiveField('drivers');
+              updateEmployeesOptions(
+                getDivisionsValuesArray(item?.divisions || []),
+                employeeRole.driver
+              )
+            "
+          >
+          </app-item-field-inactive-list>
+
+          <div
+            *ngIf="activeField === 'drivers'"
+            (clickOutside)="
+              removeActiveField(
+                'drivers',
+                getEmployeesValuesArray(item?.drivers || [])
+              )
+            "
+            [delayClickOutsideInit]="true"
+            [exclude]="
+              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+            "
+            [excludeBeforeClick]="true"
+            class="cabinet-content__field-active"
+          >
+            <form [formGroup]="form" (ngSubmit)="update()">
+              <app-select
+                label="&nbsp;"
+                [control]="form.get('drivers')"
+                [options]="employeesOptions"
+                [isMultiple]="true"
+              ></app-select>
+            </form>
+
+            <app-item-field-save-button
+              (update)="update()"
+              [disable]="
+                itemIsUpdating ||
+                form.get('drivers').value ===
+                  getEmployeesValuesArray(item?.drivers || [])
+              "
+            ></app-item-field-save-button>
           </div>
         </div>
       </mat-card>
@@ -403,24 +471,24 @@
       <mat-card>
         <h2>История</h2>
 
+        <!-- Created At -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Создано</label>
-            <p *ngIf="car && !isFetching">
-              {{ car.createdAt | date: 'dd.MM.yyyy - HH:mm' }}
-            </p>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          <app-item-field-inactive-string
+            label="Создано"
+            [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
+            [isFetching]="itemIsFetching"
+          >
+          </app-item-field-inactive-string>
         </div>
 
+        <!-- Updated At -->
         <div class="cabinet-content__field">
-          <div class="cabinet-content__field-inactive">
-            <label>Обновлено</label>
-            <p *ngIf="car && !isFetching">
-              {{ car.updatedAt | date: 'dd.MM.yyyy - HH:mm' }}
-            </p>
-            <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
-          </div>
+          <app-item-field-inactive-string
+            label="Создано"
+            [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
+            [isFetching]="itemIsFetching"
+          >
+          </app-item-field-inactive-string>
         </div>
       </mat-card>
     </div>
@@ -428,7 +496,7 @@
 </div>
 
 <app-modal
-  [isLoading]="isRemoving"
+  [isLoading]="itemIsRemoving"
   [isOpen]="isRemoveModalOpen"
   [resolveButtonText]="'Оставить в архиве'"
   [rejectButtonText]="'Удалить'"
@@ -440,37 +508,4 @@
   <br />
   Все связанные записи не смогут восстановить автомобиль автоматически, даже
   если новый номер будет идентичен.
-</app-modal>
-
-<app-modal
-  [isLoading]="isFetching"
-  [isOpen]="isChangeLocalityDivisionModalOpen"
-  [resolveButtonText]="'Сохранить'"
-  (action)="onChangeLocalityDivisionModalAction($event)"
-  title="Изменить местоположение"
->
-  <form
-    [formGroup]="formModal"
-    (ngSubmit)="onChangeLocalityDivisionModalAction('resolve')"
-  >
-    <app-select
-      label="Населённый пункт"
-      [options]="localitiesOptions"
-      [control]="formModal.get('locality')"
-      [errorMessages]="{
-        required: 'Обязательное поле'
-      }"
-    ></app-select>
-
-    <app-select
-      label="Подразделения"
-      [options]="divisionsOptions"
-      [control]="formModal.get('divisions')"
-      [isMultiple]="true"
-      [shouldMultipleBeActiveAlLeast]="1"
-      [errorMessages]="{
-        required: 'Обязательное поле'
-      }"
-    ></app-select>
-  </form>
 </app-modal>

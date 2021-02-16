@@ -85,7 +85,7 @@ export const getEmployeesFailure = createAction(
 
 export const getEmployeeRequest = createAction(
   GET_EMPLOYEE_REQUEST,
-  props<{ id: string }>()
+  props<{ id: string; withLoading: boolean }>()
 );
 export const getEmployeeSuccess = createAction(
   GET_EMPLOYEE_SUCCESS,

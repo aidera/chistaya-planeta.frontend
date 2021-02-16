@@ -60,10 +60,10 @@ const _employeeReducer = createReducer(
   /* --- Get Employee --- */
   /* -------------------- */
 
-  on(EmployeeActions.getEmployeeRequest, (state) => ({
+  on(EmployeeActions.getEmployeeRequest, (state, payload) => ({
     ...state,
     employee: null,
-    getEmployeeIsFetching: true,
+    getEmployeeIsFetching: payload.withLoading,
     getEmployeeError: null,
   })),
   on(EmployeeActions.getEmployeeSuccess, (state, payload) => ({

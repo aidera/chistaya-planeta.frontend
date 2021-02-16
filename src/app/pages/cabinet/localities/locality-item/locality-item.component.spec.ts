@@ -8,6 +8,10 @@ import { LocalityItemComponent } from './locality-item.component';
 import { SkeletonComponent } from '../../../../components/skeleton/skeleton.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { ModalComponent } from '../../../../components/modal/modal.component';
+import { ItemFieldInactiveListComponent } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
+import { ItemFieldInactiveStatusComponent } from '../../../../components/item-field/item-field-inactive-status/item-field-inactive-status.component';
+import { ItemFieldInactiveStringComponent } from '../../../../components/item-field/item-field-inactive-string/item-field-inactive-string.component';
+import { ItemFieldSaveButtonComponent } from '../../../../components/item-field/item-field-save-button/item-field-save-button.component';
 
 describe('LocalityItemComponent', () => {
   let component: LocalityItemComponent;
@@ -15,7 +19,15 @@ describe('LocalityItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LocalityItemComponent, SkeletonComponent, ModalComponent],
+      declarations: [
+        LocalityItemComponent,
+        SkeletonComponent,
+        ModalComponent,
+        ItemFieldInactiveListComponent,
+        ItemFieldInactiveStatusComponent,
+        ItemFieldInactiveStringComponent,
+        ItemFieldSaveButtonComponent,
+      ],
       imports: [
         RouterTestingModule,
         MaterialModule,
@@ -27,6 +39,12 @@ describe('LocalityItemComponent', () => {
           initialState: {
             locality: {
               locality: null,
+            },
+            app: {
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
             },
           },
         }),

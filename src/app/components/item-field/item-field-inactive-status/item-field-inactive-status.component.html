@@ -1,0 +1,20 @@
+<div class="cabinet-content__field-inactive">
+  <ng-container *ngIf="!isFetching">
+    <h2>
+      Статус:
+      <span
+        [class.green-text]="color === 'green'"
+        [class.yellow-text]="color === 'yellow'"
+        [class.blue-text]="color === 'blue'"
+        [class.red-text]="color === 'red'"
+        >{{ content }}</span
+      >
+    </h2>
+    <div class="cabinet-content__field-inactive-action">
+      <button mat-icon-button (click)="editClick.emit()">
+        <span class="icon" [inlineSVG]="'../../assets/icons/pencil.svg'"></span>
+      </button>
+    </div>
+  </ng-container>
+  <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+</div>

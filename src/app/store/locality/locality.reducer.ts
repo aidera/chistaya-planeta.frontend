@@ -60,10 +60,9 @@ const _localityReducer = createReducer(
   /* --- Get Locality --- */
   /* -------------------- */
 
-  on(LocalityActions.getLocalityRequest, (state) => ({
+  on(LocalityActions.getLocalityRequest, (state, payload) => ({
     ...state,
-    locality: null,
-    getLocalityIsFetching: true,
+    getLocalityIsFetching: payload.withLoading,
     getLocalityError: null,
   })),
   on(LocalityActions.getLocalitySuccess, (state, payload) => ({

@@ -60,10 +60,10 @@ const _divisionReducer = createReducer(
   /* --- Get Division --- */
   /* -------------------- */
 
-  on(DivisionActions.getDivisionRequest, (state) => ({
+  on(DivisionActions.getDivisionRequest, (state, payload) => ({
     ...state,
     division: null,
-    getDivisionIsFetching: true,
+    getDivisionIsFetching: payload.withLoading,
     getDivisionError: null,
   })),
   on(DivisionActions.getDivisionSuccess, (state, payload) => ({

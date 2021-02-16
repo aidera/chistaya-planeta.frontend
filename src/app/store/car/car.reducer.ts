@@ -60,10 +60,10 @@ const _carReducer = createReducer(
   /* --- Get Car --- */
   /* --------------- */
 
-  on(CarActions.getCarRequest, (state) => ({
+  on(CarActions.getCarRequest, (state, payload) => ({
     ...state,
     car: null,
-    getCarIsFetching: true,
+    getCarIsFetching: payload.withLoading,
     getCarError: null,
   })),
   on(CarActions.getCarSuccess, (state, payload) => ({

@@ -8,6 +8,10 @@ import { DivisionItemComponent } from './division-item.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { SkeletonComponent } from '../../../../components/skeleton/skeleton.component';
 import { ModalComponent } from '../../../../components/modal/modal.component';
+import { ItemFieldInactiveListComponent } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
+import { ItemFieldInactiveStatusComponent } from '../../../../components/item-field/item-field-inactive-status/item-field-inactive-status.component';
+import { ItemFieldInactiveStringComponent } from '../../../../components/item-field/item-field-inactive-string/item-field-inactive-string.component';
+import { ItemFieldSaveButtonComponent } from '../../../../components/item-field/item-field-save-button/item-field-save-button.component';
 
 describe('DivisionItemComponent', () => {
   let component: DivisionItemComponent;
@@ -15,7 +19,15 @@ describe('DivisionItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DivisionItemComponent, SkeletonComponent, ModalComponent],
+      declarations: [
+        DivisionItemComponent,
+        SkeletonComponent,
+        ModalComponent,
+        ItemFieldInactiveListComponent,
+        ItemFieldInactiveStatusComponent,
+        ItemFieldInactiveStringComponent,
+        ItemFieldSaveButtonComponent,
+      ],
       imports: [
         RouterTestingModule,
         MaterialModule,
@@ -26,10 +38,10 @@ describe('DivisionItemComponent', () => {
         provideMockStore({
           initialState: {
             app: {
-              localitiesOptionsToSelect: [
-                { value: '1', text: 'City 1' },
-                { value: '2', text: 'City 2' },
-              ],
+              localitiesToSelect: null,
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
             },
             division: {
               division: null,

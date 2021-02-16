@@ -1,0 +1,33 @@
+<div class="cabinet-content__field-inactive">
+  <label>{{ label }}</label>
+
+  <ng-container *ngIf="!isFetching">
+    <p
+      *ngIf="!linkArray && content"
+      [class.green-text]="color === 'green'"
+      [class.yellow-text]="color === 'yellow'"
+      [class.blue-text]="color === 'blue'"
+      [class.red-text]="color === 'red'"
+    >
+      {{ content }}
+    </p>
+    <a
+      *ngIf="linkArray && content"
+      [class.green-text]="color === 'green'"
+      [class.yellow-text]="color === 'yellow'"
+      [class.blue-text]="color === 'blue'"
+      [class.red-text]="color === 'red'"
+      [routerLink]="linkArray"
+      >{{ content }}</a
+    >
+    <i *ngIf="!content">нет</i>
+  </ng-container>
+
+  <div class="cabinet-content__field-inactive-action">
+    <button *ngIf="useEditButton" mat-icon-button (click)="editClick.emit()">
+      <span class="icon" [inlineSVG]="'../../assets/icons/pencil.svg'"></span>
+    </button>
+  </div>
+
+  <app-skeleton *ngIf="isFetching" maxWidth="200px"></app-skeleton>
+</div>

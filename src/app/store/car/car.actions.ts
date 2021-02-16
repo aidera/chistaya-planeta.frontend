@@ -80,7 +80,7 @@ export const getCarsFailure = createAction(
 
 export const getCarRequest = createAction(
   GET_CAR_REQUEST,
-  props<{ id: string }>()
+  props<{ id: string; withLoading: boolean }>()
 );
 export const getCarSuccess = createAction(
   GET_CAR_SUCCESS,

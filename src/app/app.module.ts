@@ -59,6 +59,10 @@ import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-
 import { EmployeesTableComponent } from './pages/cabinet/employees/employees-table/employees-table.component';
 import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-item-add/employee-item-add.component';
 import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/employee-item.component';
+import { ItemFieldInactiveStringComponent } from './components/item-field/item-field-inactive-string/item-field-inactive-string.component';
+import { ItemFieldSaveButtonComponent } from './components/item-field/item-field-save-button/item-field-save-button.component';
+import { ItemFieldInactiveListComponent } from './components/item-field/item-field-inactive-list/item-field-inactive-list.component';
+import { ItemFieldInactiveStatusComponent } from './components/item-field/item-field-inactive-status/item-field-inactive-status.component';
 
 @NgModule({
   declarations: [
@@ -107,6 +111,10 @@ import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/e
     EmployeesTableComponent,
     EmployeeItemAddComponent,
     EmployeeItemComponent,
+    ItemFieldInactiveStringComponent,
+    ItemFieldSaveButtonComponent,
+    ItemFieldInactiveListComponent,
+    ItemFieldInactiveStatusComponent,
   ],
   imports: [
     BrowserModule,
