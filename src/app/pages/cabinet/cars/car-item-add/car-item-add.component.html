@@ -65,6 +65,9 @@
             [control]="form.get('weight')"
             [fieldType]="'number'"
             label="Вес, т"
+            [errorMessages]="{
+              min: 'Не может быть меньше или равно 0'
+            }"
           ></app-text-input>
         </div>
       </mat-card>
@@ -129,7 +132,7 @@
               *ngIf="form.get('locality').value && divisionsOptions.length < 1"
               class="red-text"
             >
-              Нет подразделений в этом населённом пункте
+              Нет активных подразделений в этом населённом пункте
             </i>
             <i *ngIf="!form.get('locality').value">
               Выберите населённый пункт
@@ -141,7 +144,7 @@
 
     <div class="cabinet-content__grid-item">
       <mat-card>
-        <h2>Дополнительно</h2>
+        <h2>Водители</h2>
         <div class="cabinet-content__grid-item-form-content">
           <app-select
             *ngIf="
@@ -152,11 +155,6 @@
             [control]="form.get('employees')"
             [options]="employeesOptions"
             [isMultiple]="true"
-            [label]="
-              isQueryDivisionId
-                ? 'Водители (добавлено автоматически)'
-                : 'Водители'
-            "
           ></app-select>
           <div
             *ngIf="
@@ -165,18 +163,13 @@
             "
             class="cabinet-content__field-inactive"
           >
-            <label>{{
-              isQueryDivisionId
-                ? 'Водители (добавлено автоматически)'
-                : 'Водители'
-            }}</label>
             <i
               *ngIf="
                 form.get('divisions').value.length > 0 &&
                 employeesOptions.length <= 1
               "
             >
-              Нет водителей в этом населённом пункте
+              Нет активных водителей в этом подразделении
             </i>
             <i *ngIf="form.get('divisions').value.length <= 0">
               Выберите подразделение

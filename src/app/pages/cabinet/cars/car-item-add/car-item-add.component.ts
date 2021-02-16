@@ -42,7 +42,7 @@ export class CarItemAddComponent
       this.form = new FormGroup({
         type: new FormControl('', Validators.required),
         licensePlate: new FormControl('', Validators.required),
-        weight: new FormControl(''),
+        weight: new FormControl('', Validators.min(0.00000001)),
         isCorporate: new FormControl('', Validators.required),
         drivers: new FormControl(''),
         locality: new FormControl(

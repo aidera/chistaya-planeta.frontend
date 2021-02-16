@@ -77,7 +77,7 @@ export class EmployeeService {
 
   checkPhone(phone: string): Observable<ICheckEmployeeResponse> {
     return this.http.get<ICheckEmployeeResponse>(
-      `${environment.serverURL}/${this.path}/check-email/${phone}`
+      `${environment.serverURL}/${this.path}/check-phone/${phone}`
     );
   }
 

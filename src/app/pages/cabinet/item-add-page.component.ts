@@ -115,11 +115,11 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
     /* Url query params activation */
     /* --------------------------- */
     this.route.queryParams.subscribe((params) => {
-      if (params.locality && params.divisions) {
+      if (params.locality && params.division) {
         this.isQueryLocalityId = true;
         this.queryLocalityId = params.locality;
         this.isQueryDivisionId = true;
-        this.queryDivisionId = params.divisions;
+        this.queryDivisionId = params.division;
       } else if (params.locality) {
         this.isQueryLocalityId = true;
         this.queryLocalityId = params.locality;
@@ -319,7 +319,6 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
   }
 
   protected updateCarsOptions(): void {
-    const localityValue = this.form?.get('locality')?.value;
     const divisionsValue = this.form?.get('divisions')?.value;
     const divisionValue = this.form?.get('division')?.value;
 
@@ -327,23 +326,14 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
 
     if (divisionValue) {
       this.carsToSelect?.forEach((el) => {
-        if (localityValue) {
-          if (
-            localityValue === el.locality &&
-            el.divisions.includes(divisionValue)
-          ) {
-            this.carsOptions.push({ text: el.licensePlate, value: el._id });
-          }
+        if (el.divisions.includes(divisionValue)) {
+          this.carsOptions.push({ text: el.licensePlate, value: el._id });
         }
       });
     }
     if (divisionsValue) {
       this.carsToSelect?.forEach((el) => {
-        if (localityValue && !(divisionsValue.length > 0)) {
-          if (localityValue === el.locality) {
-            this.carsOptions.push({ text: el.licensePlate, value: el._id });
-          }
-        } else if (divisionsValue.length > 0) {
+        if (divisionsValue.length > 0) {
           if (divisionsValue.some((ai) => el.divisions.includes(ai))) {
             this.carsOptions.push({ text: el.licensePlate, value: el._id });
           }
@@ -357,24 +347,12 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
   }
 
   protected updateEmployeesOptions(): void {
-    const localityValue = this.form?.get('localities')?.value || '';
     const divisionsValue = this.form?.get('divisions')?.value || [];
 
     this.employeesOptions = [];
 
     this.employeesToSelect?.forEach((el) => {
-      if (localityValue.length > 0 && !(divisionsValue.length > 0)) {
-        if (localityValue.includes(el.locality)) {
-          this.employeesOptions.push({
-            text: this.converter.getUserInitials(
-              el.name,
-              el.surname,
-              el.patronymic
-            ),
-            value: el._id,
-          });
-        }
-      } else if (divisionsValue.length > 0) {
+      if (divisionsValue.length > 0) {
         if (divisionsValue.includes(el.division)) {
           this.employeesOptions.push({
             text: this.converter.getUserInitials(

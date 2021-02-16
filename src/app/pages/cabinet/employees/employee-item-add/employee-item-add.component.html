@@ -74,7 +74,7 @@
             [isRequired]="true"
             [errorMessages]="{
               required: 'Обязательное поле',
-              email: 'Некорректный эмейл'
+              email: 'Некорректный email'
             }"
           >
             <ng-container
@@ -169,7 +169,7 @@
               *ngIf="form.get('locality').value && divisionsOptions.length < 1"
               class="red-text"
             >
-              Нет подразделений в этом населённом пункте
+              Нет активных подразделений в этом населённом пункте
             </i>
             <i *ngIf="!form.get('locality').value">
               Выберите населённый пункт
@@ -204,7 +204,7 @@
           >
             <label>Привязанные автомобили</label>
             <i *ngIf="form.get('division').value && carsOptions.length <= 0">
-              Нет автомобилей в этом населённом пункте
+              Нет активных автомобилей в этом подразделении
             </i>
             <i *ngIf="!form.get('division').value"> Выберите подразделение </i>
           </div>

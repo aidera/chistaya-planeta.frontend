@@ -79,7 +79,7 @@ export class EmployeeItemAddComponent
         .subscribe((value) => {
           if (value !== '') {
             this.employeeApi
-              .checkPhone(this.form.get('phone').value)
+              .checkPhone('+7' + this.form.get('phone').value)
               .pipe(take(1))
               .subscribe((response) => {
                 if (response?.responseCode === responseCodes.found) {
