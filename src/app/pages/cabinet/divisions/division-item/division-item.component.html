@@ -34,311 +34,315 @@
     *ngIf="!getItemError && !updateItemError && !removeItemError"
     class="cabinet-content__grid"
   >
-    <div class="cabinet-content__grid-item">
-      <!-- Status -->
-      <mat-card class="cabinet-content__status-card">
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-status
-            *ngIf="activeField !== 'status'"
-            [content]="statusString"
-            [isFetching]="itemIsFetching"
-            [color]="statusColor"
-            (editClick)="setActiveField('status')"
-          ></app-item-field-inactive-status>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <!-- Status -->
+        <mat-card class="cabinet-content__status-card">
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-status
+              *ngIf="activeField !== 'status'"
+              [content]="statusString"
+              [isFetching]="itemIsFetching"
+              [color]="statusColor"
+              (editClick)="setActiveField('status')"
+            ></app-item-field-inactive-status>
 
-          <div
-            *ngIf="activeField === 'status'"
-            (clickOutside)="
-              removeActiveField('status', (item?.status || '') + '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="Статус"
-                [options]="simpleStatusOptions"
-                [control]="form.get('status')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('status').value === (item?.status || '') + ''
+            <div
+              *ngIf="activeField === 'status'"
+              (clickOutside)="
+                removeActiveField('status', (item?.status || '') + '')
               "
-            ></app-item-field-save-button>
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Статус"
+                  [options]="simpleStatusOptions"
+                  [control]="form.get('status')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('status').value === (item?.status || '') + ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
-      </mat-card>
-    </div>
+        </mat-card>
+      </div>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Основная информация</h2>
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
 
-        <!-- ID -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            label="ID"
-            [content]="item?._id"
-            [isFetching]="itemIsFetching"
-          >
-          </app-item-field-inactive-string>
-        </div>
+          <!-- ID -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="ID"
+              [content]="item?._id"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
 
-        <!-- Name -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'name'"
-            label="Название"
-            [content]="item?.name"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('name')"
-          >
-          </app-item-field-inactive-string>
+          <!-- Name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'name'"
+              label="Название"
+              [content]="item?.name"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('name')"
+            >
+            </app-item-field-inactive-string>
 
-          <div
-            *ngIf="activeField === 'name'"
-            (clickOutside)="removeActiveField('name', item?.name || '')"
-            [delayClickOutsideInit]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Название"
-                [control]="form.get('name')"
-                [errorMessages]="{
-                  required: 'Обязательное поле',
-                  sameName: 'Новое название должно отличаться'
-                }"
-              >
-                <ng-container
-                  error
-                  *ngIf="form.get('name')?.errors?.alreadyExists"
+            <div
+              *ngIf="activeField === 'name'"
+              (clickOutside)="removeActiveField('name', item?.name || '')"
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Название"
+                  [control]="form.get('name')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле',
+                    sameName: 'Новое название должно отличаться'
+                  }"
                 >
-                  Такое
-                  <a [routerLink]="['../../', 'divisions', alreadyExistId]"
-                    >подразделение</a
+                  <ng-container
+                    error
+                    *ngIf="form.get('name')?.errors?.alreadyExists"
                   >
-                  уже существует.
-                </ng-container>
-              </app-text-input>
-            </form>
+                    Такое
+                    <a [routerLink]="['../../', 'divisions', alreadyExistId]"
+                      >подразделение</a
+                    >
+                    уже существует.
+                  </ng-container>
+                </app-text-input>
+              </form>
 
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || form.get('name').value === item?.name
-              "
-            ></app-item-field-save-button>
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating || form.get('name').value === item?.name
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
 
-        <!-- Cars -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-list
-            label="Автомобили"
-            [list]="getItemCarsFieldListElements(item?.cars || [])"
-            [isFetching]="itemIsFetching"
-            [moreLinkArray]="['../../', 'cars']"
-            [moreLinkQueryParams]="{
-              filter__divisions: item?._id || '',
-              page: 1 + ''
-            }"
-            [useAddButton]="true"
-            [addLinkArray]="['../../', 'cars', 'add']"
-            [addLinkQueryParams]="{
-              locality: item?.locality?._id || '',
-              division: item?._id || ''
-            }"
-          >
-          </app-item-field-inactive-list>
-        </div>
+          <!-- Cars -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-list
+              label="Автомобили"
+              [list]="getItemCarsFieldListElements(item?.cars || [])"
+              [isFetching]="itemIsFetching"
+              [moreLinkArray]="['../../', 'cars']"
+              [moreLinkQueryParams]="{
+                filter__divisions: item?._id || '',
+                page: 1 + ''
+              }"
+              [useAddButton]="true"
+              [addLinkArray]="['../../', 'cars', 'add']"
+              [addLinkQueryParams]="{
+                locality: item?.locality?._id || '',
+                division: item?._id || ''
+              }"
+            >
+            </app-item-field-inactive-list>
+          </div>
 
-        <!-- Employees -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-list
-            label="Сотрудники"
-            [list]="getItemEmployeesFieldListElements(item?.employees || [])"
-            [isFetching]="itemIsFetching"
-            [moreLinkArray]="['../../', 'employees']"
-            [moreLinkQueryParams]="{
-              filter__divisions: item?._id || '',
-              page: 1 + ''
-            }"
-            [useAddButton]="true"
-            [addLinkArray]="['../../', 'employees', 'add']"
-            [addLinkQueryParams]="{
-              locality: item?.locality?._id || '',
-              division: item?._id || ''
-            }"
-          >
-          </app-item-field-inactive-list>
-        </div>
-      </mat-card>
+          <!-- Employees -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-list
+              label="Сотрудники"
+              [list]="getItemEmployeesFieldListElements(item?.employees || [])"
+              [isFetching]="itemIsFetching"
+              [moreLinkArray]="['../../', 'employees']"
+              [moreLinkQueryParams]="{
+                filter__divisions: item?._id || '',
+                page: 1 + ''
+              }"
+              [useAddButton]="true"
+              [addLinkArray]="['../../', 'employees', 'add']"
+              [addLinkQueryParams]="{
+                locality: item?.locality?._id || '',
+                division: item?._id || ''
+              }"
+            >
+            </app-item-field-inactive-list>
+          </div>
+        </mat-card>
+      </div>
     </div>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Местоположение</h2>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Местоположение</h2>
 
-        <!-- Locality -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'locality'"
-            label="Населённый пункт"
-            [content]="item?.locality?.name"
-            [linkArray]="['../../', 'localities', item?.locality?._id]"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('locality')"
-          >
-          </app-item-field-inactive-string>
+          <!-- Locality -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'locality'"
+              label="Населённый пункт"
+              [content]="item?.locality?.name"
+              [linkArray]="['../../', 'localities', item?.locality?._id]"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('locality')"
+            >
+            </app-item-field-inactive-string>
 
-          <div
-            *ngIf="activeField === 'locality'"
-            (clickOutside)="
-              removeActiveField('locality', item?.locality?._id || '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="Населённый пункт"
-                [control]="form.get('locality')"
-                [options]="localitiesOptions"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('locality').value === item?.locality?._id
+            <div
+              *ngIf="activeField === 'locality'"
+              (clickOutside)="
+                removeActiveField('locality', item?.locality?._id || '')
               "
-            ></app-item-field-save-button>
-          </div>
-        </div>
-
-        <!-- Street -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'street'"
-            label="Улица"
-            [content]="item?.street"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('street')"
-          >
-          </app-item-field-inactive-string>
-
-          <div
-            *ngIf="activeField === 'street'"
-            (clickOutside)="removeActiveField('street', item?.street || '')"
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Улица"
-                [control]="form.get('street')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              ></app-text-input>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || form.get('street').value === item?.street
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
               "
-            ></app-item-field-save-button>
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Населённый пункт"
+                  [control]="form.get('locality')"
+                  [options]="localitiesOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('locality').value === item?.locality?._id
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
 
-        <!-- House -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'house'"
-            label="Дом"
-            [content]="item?.house"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('house')"
-          >
-          </app-item-field-inactive-string>
+          <!-- Street -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'street'"
+              label="Улица"
+              [content]="item?.street"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('street')"
+            >
+            </app-item-field-inactive-string>
 
-          <div
-            *ngIf="activeField === 'house'"
-            (clickOutside)="removeActiveField('house', item?.house || '')"
-            [delayClickOutsideInit]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Дом"
-                [control]="form.get('house')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              ></app-text-input>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || form.get('house').value === item?.house
+            <div
+              *ngIf="activeField === 'street'"
+              (clickOutside)="removeActiveField('street', item?.street || '')"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
               "
-            ></app-item-field-save-button>
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Улица"
+                  [control]="form.get('street')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating || form.get('street').value === item?.street
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
-      </mat-card>
-    </div>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>История</h2>
+          <!-- House -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'house'"
+              label="Дом"
+              [content]="item?.house"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('house')"
+            >
+            </app-item-field-inactive-string>
 
-        <!-- Created At -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            label="Создано"
-            [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
-            [isFetching]="itemIsFetching"
-          >
-          </app-item-field-inactive-string>
-        </div>
+            <div
+              *ngIf="activeField === 'house'"
+              (clickOutside)="removeActiveField('house', item?.house || '')"
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Дом"
+                  [control]="form.get('house')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-text-input>
+              </form>
 
-        <!-- Updated At -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            label="Создано"
-            [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
-            [isFetching]="itemIsFetching"
-          >
-          </app-item-field-inactive-string>
-        </div>
-      </mat-card>
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating || form.get('house').value === item?.house
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>История</h2>
+
+          <!-- Created At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Создано"
+              [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Updated At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Создано"
+              [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>

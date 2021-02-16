@@ -38,547 +38,562 @@
     *ngIf="!getItemError && !updateItemError && !removeItemError"
     class="cabinet-content__grid"
   >
-    <div class="cabinet-content__grid-item">
-      <!-- Status -->
-      <mat-card class="cabinet-content__status-card">
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-status
-            *ngIf="activeField !== 'status'"
-            [content]="statusString"
-            [isFetching]="itemIsFetching"
-            [color]="statusColor"
-            (editClick)="setActiveField('status')"
-          ></app-item-field-inactive-status>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <!-- Status -->
+        <mat-card class="cabinet-content__status-card">
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-status
+              *ngIf="activeField !== 'status'"
+              [content]="statusString"
+              [isFetching]="itemIsFetching"
+              [color]="statusColor"
+              (editClick)="setActiveField('status')"
+            ></app-item-field-inactive-status>
 
-          <div
-            *ngIf="activeField === 'status'"
-            (clickOutside)="
-              removeActiveField('status', (item?.status || '') + '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="Статус"
-                [options]="employeeStatusOptions"
-                [control]="form.get('status')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('status').value === (item?.status || '') + ''
+            <div
+              *ngIf="activeField === 'status'"
+              (clickOutside)="
+                removeActiveField('status', (item?.status || '') + '')
               "
-            ></app-item-field-save-button>
-          </div>
-        </div>
-      </mat-card>
-    </div>
-
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Основная информация</h2>
-
-        <!-- ID -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            label="ID"
-            [content]="item?._id"
-            [isFetching]="itemIsFetching"
-          >
-          </app-item-field-inactive-string>
-        </div>
-
-        <!-- Role -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'role'"
-            label="Роль"
-            [content]="getCarRoleText()"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('role')"
-          >
-          </app-item-field-inactive-string>
-
-          <div
-            *ngIf="activeField === 'role'"
-            (clickOutside)="removeActiveField('role', (item?.role || '') + '')"
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="Тип"
-                [options]="employeeRoleOptions"
-                [control]="form.get('role')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('role').value === (item?.role || '') + ''
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
               "
-            ></app-item-field-save-button>
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Статус"
+                  [options]="employeeStatusOptions"
+                  [control]="form.get('status')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('status').value === (item?.status || '') + ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
-      </mat-card>
-    </div>
+        </mat-card>
+      </div>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Личные данные</h2>
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
 
-        <!-- Name -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'name'"
-            label="Имя"
-            [content]="item?.name"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('name')"
-          >
-          </app-item-field-inactive-string>
+          <!-- ID -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="ID"
+              [content]="item?._id"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
 
-          <div
-            *ngIf="activeField === 'name'"
-            (clickOutside)="removeActiveField('name', item?.name || '')"
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Имя"
-                [control]="form.get('name')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              >
-              </app-text-input>
-            </form>
+          <!-- Role -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'role'"
+              label="Роль"
+              [content]="getCarRoleText()"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('role')"
+            >
+            </app-item-field-inactive-string>
 
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || form.get('name').value === item?.name
+            <div
+              *ngIf="activeField === 'role'"
+              (clickOutside)="
+                removeActiveField('role', (item?.role || '') + '')
               "
-            ></app-item-field-save-button>
-          </div>
-        </div>
-
-        <!-- Surname -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'surname'"
-            label="Фамилия"
-            [content]="item?.surname"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('surname')"
-          >
-          </app-item-field-inactive-string>
-
-          <div
-            *ngIf="activeField === 'surname'"
-            (clickOutside)="removeActiveField('surname', item?.surname || '')"
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Фамилия"
-                [control]="form.get('surname')"
-                [errorMessages]="{
-                  required: 'Обязательное поле'
-                }"
-              >
-              </app-text-input>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || form.get('surname').value === item?.surname
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
               "
-            ></app-item-field-save-button>
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Тип"
+                  [options]="employeeRoleOptions"
+                  [control]="form.get('role')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('role').value === (item?.role || '') + ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
+        </mat-card>
+      </div>
 
-        <!-- Patronymic -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'patronymic'"
-            label="Отчество"
-            [content]="item?.patronymic"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('patronymic')"
-          >
-          </app-item-field-inactive-string>
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Личные данные</h2>
 
-          <div
-            *ngIf="activeField === 'patronymic'"
-            (clickOutside)="
-              removeActiveField('patronymic', item?.patronymic || '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Отчество"
-                [control]="form.get('patronymic')"
-              >
-              </app-text-input>
-            </form>
+          <!-- Name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'name'"
+              label="Имя"
+              [content]="item?.name"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('name')"
+            >
+            </app-item-field-inactive-string>
 
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('patronymic').value === item?.patronymic
+            <div
+              *ngIf="activeField === 'name'"
+              (clickOutside)="removeActiveField('name', item?.name || '')"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
               "
-            ></app-item-field-save-button>
-          </div>
-        </div>
-      </mat-card>
-    </div>
-
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Контактная информация</h2>
-
-        <!-- Email -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'email'"
-            label="Email"
-            [content]="item?.email"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('email')"
-          >
-          </app-item-field-inactive-string>
-
-          <div
-            *ngIf="activeField === 'email'"
-            (clickOutside)="removeActiveField('email', item?.email || '')"
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Email"
-                [control]="form.get('email')"
-                [errorMessages]="{
-                  required: 'Обязательное поле',
-                  email: 'Некорректный email'
-                }"
-              >
-                <ng-container
-                  error
-                  *ngIf="form.get('email')?.errors?.alreadyExists"
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Имя"
+                  [control]="form.get('name')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
                 >
-                  <a [routerLink]="['../../', 'employees', alreadyExistEmailId]"
-                    >Сотрудник</a
+                </app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating || form.get('name').value === item?.name
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Surname -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'surname'"
+              label="Фамилия"
+              [content]="item?.surname"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('surname')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'surname'"
+              (clickOutside)="removeActiveField('surname', item?.surname || '')"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Фамилия"
+                  [control]="form.get('surname')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                >
+                </app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating || form.get('surname').value === item?.surname
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Patronymic -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'patronymic'"
+              label="Отчество"
+              [content]="item?.patronymic"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('patronymic')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'patronymic'"
+              (clickOutside)="
+                removeActiveField('patronymic', item?.patronymic || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Отчество"
+                  [control]="form.get('patronymic')"
+                >
+                </app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('patronymic').value === item?.patronymic
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Контактная информация</h2>
+
+          <!-- Email -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'email'"
+              label="Email"
+              [content]="item?.email"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('email')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'email'"
+              (clickOutside)="removeActiveField('email', item?.email || '')"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Email"
+                  [control]="form.get('email')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле',
+                    email: 'Некорректный email'
+                  }"
+                >
+                  <ng-container
+                    error
+                    *ngIf="form.get('email')?.errors?.alreadyExists"
                   >
-                  с таким email уже существует.
-                </ng-container>
-              </app-text-input>
-            </form>
+                    <a
+                      [routerLink]="[
+                        '../../',
+                        'employees',
+                        alreadyExistEmailId
+                      ]"
+                      >Сотрудник</a
+                    >
+                    с таким email уже существует.
+                  </ng-container>
+                </app-text-input>
+              </form>
 
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || form.get('email').value === item?.email
-              "
-            ></app-item-field-save-button>
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating || form.get('email').value === item?.email
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
 
-        <!-- Phone -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'phone'"
-            label="Телефон"
-            [content]="item?.phone | mask: '+0 (000) 000-00-00'"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('phone')"
-          >
-          </app-item-field-inactive-string>
+          <!-- Phone -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'phone'"
+              label="Телефон"
+              [content]="item?.phone | mask: '+0 (000) 000-00-00'"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('phone')"
+            >
+            </app-item-field-inactive-string>
 
-          <div
-            *ngIf="activeField === 'phone'"
-            (clickOutside)="
-              removeActiveField('phone', item?.phone.substr(2) || '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-text-input
-                label="Телефон"
-                [control]="form.get('phone')"
-                mask="(000) 000-00-00"
-                prefix="+7 "
-                [errorMessages]="{
-                  required: 'Обязательное поле',
-                  minlength: 'Слишком короткий номер телефона'
-                }"
-              >
-                <ng-container
-                  error
-                  *ngIf="form.get('phone')?.errors?.alreadyExists"
+            <div
+              *ngIf="activeField === 'phone'"
+              (clickOutside)="
+                removeActiveField('phone', item?.phone.substr(2) || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-text-input
+                  label="Телефон"
+                  [control]="form.get('phone')"
+                  mask="(000) 000-00-00"
+                  prefix="+7 "
+                  [errorMessages]="{
+                    required: 'Обязательное поле',
+                    minlength: 'Слишком короткий номер телефона'
+                  }"
                 >
-                  <a [routerLink]="['../', alreadyExistPhoneId]">Сотрудник</a> с
-                  таким телефоном уже существует.
-                </ng-container>
-              </app-text-input>
-            </form>
+                  <ng-container
+                    error
+                    *ngIf="form.get('phone')?.errors?.alreadyExists"
+                  >
+                    <a [routerLink]="['../', alreadyExistPhoneId]">Сотрудник</a>
+                    с таким телефоном уже существует.
+                  </ng-container>
+                </app-text-input>
+              </form>
 
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating || '+7' + form.get('phone').value === item?.phone
-              "
-            ></app-item-field-save-button>
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  '+7' + form.get('phone').value === item?.phone
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
-      </mat-card>
+        </mat-card>
+      </div>
     </div>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Место работы</h2>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Место работы</h2>
 
-        <!-- Locality -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'locality'"
-            label="Населённый пункт"
-            [content]="item?.locality?.name"
-            [linkArray]="['../../', 'localities', item?.locality?._id]"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="setActiveField('locality')"
-          >
-          </app-item-field-inactive-string>
+          <!-- Locality -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'locality'"
+              label="Населённый пункт"
+              [content]="item?.locality?.name"
+              [linkArray]="['../../', 'localities', item?.locality?._id]"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('locality')"
+            >
+            </app-item-field-inactive-string>
 
-          <div
-            *ngIf="activeField === 'locality'"
-            (clickOutside)="
-              removeActiveField('locality', item?.locality?._id || '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="Населённый пункт"
-                [control]="form.get('locality')"
-                [options]="localitiesOptions"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('locality').value === item?.locality?._id
+            <div
+              *ngIf="activeField === 'locality'"
+              (clickOutside)="
+                removeActiveField('locality', item?.locality?._id || '')
               "
-            ></app-item-field-save-button>
-          </div>
-        </div>
-
-        <!-- Division -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            *ngIf="activeField !== 'division'"
-            label="Поразделение"
-            [content]="item?.division?.name"
-            [linkArray]="['../../', 'divisions', item?.division?._id]"
-            [isFetching]="itemIsFetching"
-            [useEditButton]="true"
-            (editClick)="
-              setActiveField('division');
-              updateDivisionsOptions(item?.locality?._id)
-            "
-          >
-          </app-item-field-inactive-string>
-
-          <div
-            *ngIf="activeField === 'division'"
-            (clickOutside)="
-              removeActiveField('division', item?.division?._id || '')
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="Подразделение"
-                [control]="form.get('division')"
-                [options]="divisionsOptions"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('division').value === item?.division?._id
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
               "
-            ></app-item-field-save-button>
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Населённый пункт"
+                  [control]="form.get('locality')"
+                  [options]="localitiesOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('locality').value === item?.locality?._id
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
-      </mat-card>
-    </div>
 
-    <div
-      class="cabinet-content__grid-item"
-      [class.cabinet-content__grid-item_inactive]="
-        item?.role !== employeeRole.driver
-      "
-    >
-      <mat-card>
-        <h2>Автомобили</h2>
-
-        <!-- Cars -->
-        <div
-          *ngIf="item?.role === employeeRole.driver"
-          class="cabinet-content__field"
-          style="margin-top: -16px"
-        >
-          <app-item-field-inactive-list
-            *ngIf="activeField !== 'cars'"
-            [list]="getItemCarsFieldListElements(item?.cars || [])"
-            [hint]="
-              !item?.locality || !item?.division
-                ? 'Выберите населённый пункт и подразделение'
-                : undefined
-            "
-            [isFetching]="itemIsFetching"
-            [moreLinkArray]="['../../', 'cars']"
-            [moreLinkQueryParams]="{
-              filter__employees: item?._id || '',
-              page: 1 + ''
-            }"
-            [useEditButton]="true"
-            (editClick)="
-              setActiveField('cars');
-              updateCarsOptions(
-                getDivisionsValuesArray(item?.division ? [item?.division] : [])
-              )
-            "
-          >
-          </app-item-field-inactive-list>
-
-          <div
-            *ngIf="activeField === 'cars'"
-            (clickOutside)="
-              removeActiveField('cars', getCarsValuesArray(item?.cars || []))
-            "
-            [delayClickOutsideInit]="true"
-            [exclude]="
-              '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-            "
-            [excludeBeforeClick]="true"
-            class="cabinet-content__field-active"
-          >
-            <form [formGroup]="form" (ngSubmit)="update()">
-              <app-select
-                label="&nbsp;"
-                [control]="form.get('cars')"
-                [options]="carsOptions"
-                [isMultiple]="true"
-              ></app-select>
-            </form>
-
-            <app-item-field-save-button
-              (update)="update()"
-              [disable]="
-                itemIsUpdating ||
-                form.get('cars').value === getCarsValuesArray(item?.cars || [])
+          <!-- Division -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'division'"
+              label="Поразделение"
+              [content]="item?.division?.name"
+              [linkArray]="['../../', 'divisions', item?.division?._id]"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="
+                setActiveField('division');
+                updateDivisionsOptions(item?.locality?._id)
               "
-            ></app-item-field-save-button>
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'division'"
+              (clickOutside)="
+                removeActiveField('division', item?.division?._id || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Подразделение"
+                  [control]="form.get('division')"
+                  [options]="divisionsOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('division').value === item?.division?._id
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
-        </div>
-      </mat-card>
-    </div>
+        </mat-card>
+      </div>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>История</h2>
+      <div
+        class="cabinet-content__grid-item"
+        [class.cabinet-content__grid-item_inactive]="
+          item?.role !== employeeRole.driver
+        "
+      >
+        <mat-card>
+          <h2>Автомобили</h2>
 
-        <!-- Created At -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            label="Создано"
-            [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
-            [isFetching]="itemIsFetching"
+          <!-- Cars -->
+          <div
+            *ngIf="item?.role === employeeRole.driver"
+            class="cabinet-content__field"
+            style="margin-top: -16px"
           >
-          </app-item-field-inactive-string>
-        </div>
+            <app-item-field-inactive-list
+              *ngIf="activeField !== 'cars'"
+              [list]="getItemCarsFieldListElements(item?.cars || [])"
+              [hint]="
+                !item?.locality || !item?.division
+                  ? 'Выберите населённый пункт и подразделение'
+                  : undefined
+              "
+              [isFetching]="itemIsFetching"
+              [moreLinkArray]="['../../', 'cars']"
+              [moreLinkQueryParams]="{
+                filter__employees: item?._id || '',
+                page: 1 + ''
+              }"
+              [useEditButton]="true"
+              (editClick)="
+                setActiveField('cars');
+                updateCarsOptions(
+                  getDivisionsValuesArray(
+                    item?.division ? [item?.division] : []
+                  )
+                )
+              "
+            >
+            </app-item-field-inactive-list>
 
-        <!-- Updated At -->
-        <div class="cabinet-content__field">
-          <app-item-field-inactive-string
-            label="Создано"
-            [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
-            [isFetching]="itemIsFetching"
-          >
-          </app-item-field-inactive-string>
-        </div>
-      </mat-card>
+            <div
+              *ngIf="activeField === 'cars'"
+              (clickOutside)="
+                removeActiveField('cars', getCarsValuesArray(item?.cars || []))
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="&nbsp;"
+                  [control]="form.get('cars')"
+                  [options]="carsOptions"
+                  [isMultiple]="true"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('cars').value ===
+                    getCarsValuesArray(item?.cars || [])
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>История</h2>
+
+          <!-- Created At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Создано"
+              [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Updated At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Создано"
+              [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>

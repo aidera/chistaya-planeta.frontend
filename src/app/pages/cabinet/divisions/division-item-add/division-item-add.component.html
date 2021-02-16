@@ -11,81 +11,87 @@
   >
 
   <div class="cabinet-content__grid">
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Основная информация</h2>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
 
-        <div class="cabinet-content__grid-item-form-content">
-          <app-text-input
-            fieldId="name"
-            [control]="form.get('name')"
-            label="Название"
-            [isRequired]="true"
-            [errorMessages]="{
-              required: 'Обязательное поле'
-            }"
-          >
-            <ng-container error *ngIf="form.get('name')?.errors?.alreadyExists">
-              Такое
-              <a [routerLink]="['../../', 'divisions', alreadyExistId]"
-                >подразделение</a
+          <div class="cabinet-content__grid-item-form-content">
+            <app-text-input
+              fieldId="name"
+              [control]="form.get('name')"
+              label="Название"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            >
+              <ng-container
+                error
+                *ngIf="form.get('name')?.errors?.alreadyExists"
               >
-              уже существует.
-            </ng-container>
-          </app-text-input>
-        </div>
-      </mat-card>
+                Такое
+                <a [routerLink]="['../../', 'divisions', alreadyExistId]"
+                  >подразделение</a
+                >
+                уже существует.
+              </ng-container>
+            </app-text-input>
+          </div>
+        </mat-card>
+      </div>
     </div>
 
-    <div></div>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Местоположение</h2>
 
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Местоположение</h2>
+          <div class="cabinet-content__grid-item-form-content">
+            <app-select
+              fieldId="locality"
+              [control]="form.get('locality')"
+              [options]="localitiesOptions"
+              [label]="
+                isQueryLocalityId
+                  ? 'Населённый пункт (добавлено автоматически)'
+                  : 'Населённый пункт'
+              "
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-select>
 
-        <div class="cabinet-content__grid-item-form-content">
-          <app-select
-            fieldId="locality"
-            [control]="form.get('locality')"
-            [options]="localitiesOptions"
-            [label]="
-              isQueryLocalityId
-                ? 'Населённый пункт (добавлено автоматически)'
-                : 'Населённый пункт'
-            "
-            [isRequired]="true"
-            [errorMessages]="{
-              required: 'Обязательное поле'
-            }"
-          ></app-select>
+            <br /><br />
 
-          <br /><br />
+            <app-text-input
+              fieldId="street"
+              [control]="form.get('street')"
+              label="Улица"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-text-input>
 
-          <app-text-input
-            fieldId="street"
-            [control]="form.get('street')"
-            label="Улица"
-            [isRequired]="true"
-            [errorMessages]="{
-              required: 'Обязательное поле'
-            }"
-          ></app-text-input>
+            <br /><br />
 
-          <br /><br />
-
-          <app-text-input
-            fieldId="house"
-            [control]="form.get('house')"
-            label="Дом"
-            [isRequired]="true"
-            [errorMessages]="{
-              required: 'Обязательное поле'
-            }"
-          ></app-text-input>
-        </div>
-      </mat-card>
+            <app-text-input
+              fieldId="house"
+              [control]="form.get('house')"
+              label="Дом"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-text-input>
+          </div>
+        </mat-card>
+      </div>
     </div>
   </div>
+
   <div class="cabinet-content__actions">
     <button
       mat-raised-button

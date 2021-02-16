@@ -11,34 +11,39 @@
   >
 
   <div class="cabinet-content__grid">
-    <div class="cabinet-content__grid-item">
-      <mat-card>
-        <h2>Основная информация</h2>
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
 
-        <div class="cabinet-content__grid-item-form-content">
-          <!-- Name -->
-          <app-text-input
-            fieldId="name"
-            [control]="form.get('name')"
-            label="Название"
-            [isRequired]="true"
-            [errorMessages]="{
-              required: 'Обязательное поле'
-            }"
-          >
-            <ng-container error *ngIf="form.get('name')?.errors?.alreadyExists">
-              Такой
-              <a [routerLink]="['../../', 'localities', alreadyExistId]"
-                >населённый пункт</a
+          <div class="cabinet-content__grid-item-form-content">
+            <!-- Name -->
+            <app-text-input
+              fieldId="name"
+              [control]="form.get('name')"
+              label="Название"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            >
+              <ng-container
+                error
+                *ngIf="form.get('name')?.errors?.alreadyExists"
               >
-              уже существует.
-            </ng-container>
-          </app-text-input>
-        </div>
-      </mat-card>
+                Такой
+                <a [routerLink]="['../../', 'localities', alreadyExistId]"
+                  >населённый пункт</a
+                >
+                уже существует.
+              </ng-container>
+            </app-text-input>
+          </div>
+        </mat-card>
+      </div>
     </div>
-    <div class="clearfix"></div>
   </div>
+
   <div class="cabinet-content__actions">
     <button
       mat-raised-button

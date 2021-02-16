@@ -99,18 +99,11 @@
 
   .cabinet-content__grid {
     width: 100%;
-    column-count: 2;
-    column-gap: 32px;
-    column-fill: auto;
-    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 32px;
     @media (max-width: 1250px) {
-      column-count: 1;
-    }
-    @media (max-width: $bp-lg) {
-      column-count: 2;
-    }
-    @media (max-width: $bp-md) {
-      column-count: 1;
+      grid-template-columns: 1fr;
     }
 
     .cabinet-content__grid-item {
