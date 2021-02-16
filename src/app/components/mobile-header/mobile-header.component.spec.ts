@@ -1,18 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { By } from '@angular/platform-browser';
-import { Location } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MobileHeaderComponent } from './mobile-header.component';
 import * as AppActions from '../../store/app/app.actions';
+import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
-const locationStub = {
-  back: jasmine.createSpy('back'),
-};
 
 describe('MobileHeaderComponent', () => {
   let component: MobileHeaderComponent;
@@ -22,6 +20,7 @@ describe('MobileHeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [MobileHeaderComponent],
       providers: [
+        RoutingStateService,
         provideMockStore({
           initialState: {
             app: {
@@ -29,9 +28,12 @@ describe('MobileHeaderComponent', () => {
             },
           },
         }),
-        { provide: Location, useValue: locationStub },
       ],
-      imports: [HttpClientModule, InlineSVGModule.forRoot()],
+      imports: [
+        RouterTestingModule,
+        HttpClientModule,
+        InlineSVGModule.forRoot(),
+      ],
     }).compileComponents();
   }));
 
@@ -60,13 +62,6 @@ describe('MobileHeaderComponent', () => {
 
     backlink = fixture.debugElement.query(By.css('.mobile-header__backlink'));
     expect(backlink).toBeFalsy();
-  });
-
-  it('should call location back, when goToPreviousPage function called', () => {
-    component.goToPreviousPage();
-    fixture.detectChanges();
-    const location = fixture.debugElement.injector.get(Location);
-    expect(location.back).toHaveBeenCalled();
   });
 
   it('should call goToPreviousPage function, when user clicks on backlink button', () => {

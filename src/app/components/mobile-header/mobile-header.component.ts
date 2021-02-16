@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import * as fromRoot from '../../store/root.reducer';
 import * as AppActions from '../../store/app/app.actions';
 import * as AppSelectors from '../../store/app/app.selectors';
+import { RoutingStateService } from '../../services/routing-state/routing-state.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-mobile-header',
@@ -19,7 +21,9 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private location: Location,
-    private store: Store<fromRoot.State>
+    private store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    private routingState: RoutingStateService
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +52,6 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
         isOpen: false,
       })
     );
-    this.location.back();
+    this.routingState.goToPreviousPage(this.route);
   }
 }
