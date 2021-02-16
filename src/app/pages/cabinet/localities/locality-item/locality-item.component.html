@@ -22,12 +22,11 @@
   >
 
   <!-- Error -->
-  <div
-    *ngIf="getItemError || updateItemError || removeItemError"
-    class="cabinet-content__top-error"
-  >
-    {{ getItemError || updateItemError || removeItemError }}
-  </div>
+  <app-item-not-found
+    *ngIf="(getItemError || !item) && !itemIsFetching"
+    title="Населённый пункт исчез"
+    description="К сожалению, этот населённый пункт мы не нашли... Возможно, его кто-то разобрал на вторсырьё :)"
+  ></app-item-not-found>
 
   <!-- Content grid -->
   <div

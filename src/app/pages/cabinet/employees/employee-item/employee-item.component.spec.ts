@@ -16,6 +16,7 @@ import { ItemFieldInactiveStatusComponent } from '../../../../components/item-fi
 import { ItemFieldInactiveStringComponent } from '../../../../components/item-field/item-field-inactive-string/item-field-inactive-string.component';
 import { ItemFieldSaveButtonComponent } from '../../../../components/item-field/item-field-save-button/item-field-save-button.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { ItemNotFoundComponent } from '../../../../components/item-not-found/item-not-found.component';
 
 describe('EmployeeItemComponent', () => {
   let component: EmployeeItemComponent;
@@ -32,6 +33,7 @@ describe('EmployeeItemComponent', () => {
         ItemFieldInactiveStatusComponent,
         ItemFieldInactiveStringComponent,
         ItemFieldSaveButtonComponent,
+        ItemNotFoundComponent,
       ],
       imports: [
         BrowserAnimationsModule,

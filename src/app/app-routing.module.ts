@@ -22,6 +22,7 @@ import { CarItemAddComponent } from './pages/cabinet/cars/car-item-add/car-item-
 import { EmployeesTableComponent } from './pages/cabinet/employees/employees-table/employees-table.component';
 import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-item-add/employee-item-add.component';
 import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/employee-item.component';
+import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 
 export const routes: Routes = [
   {
@@ -99,6 +100,7 @@ export const routes: Routes = [
         component: EmployeeItemComponent,
         data: { useBacklink: true },
       },
+      { path: '**', component: ItemNotFoundComponent },
     ],
   },
   {

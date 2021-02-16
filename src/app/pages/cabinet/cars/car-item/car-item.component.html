@@ -22,12 +22,11 @@
   >
 
   <!-- Error -->
-  <div
-    *ngIf="getItemError || updateItemError || removeItemError"
-    class="cabinet-content__top-error"
-  >
-    {{ getItemError || updateItemError || removeItemError }}
-  </div>
+  <app-item-not-found
+    *ngIf="(getItemError || !item) && !itemIsFetching"
+    title="Автомобиль исчез"
+    description="К сожалению, этого автомобиля мы не нашли... Возможно, его сдали на вторсырьё :)"
+  ></app-item-not-found>
 
   <!-- Content grid -->
   <div

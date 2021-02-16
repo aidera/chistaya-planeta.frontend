@@ -63,6 +63,7 @@ import { ItemFieldInactiveStringComponent } from './components/item-field/item-f
 import { ItemFieldSaveButtonComponent } from './components/item-field/item-field-save-button/item-field-save-button.component';
 import { ItemFieldInactiveListComponent } from './components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import { ItemFieldInactiveStatusComponent } from './components/item-field/item-field-inactive-status/item-field-inactive-status.component';
+import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { ItemFieldInactiveStatusComponent } from './components/item-field/item-f
     ItemFieldSaveButtonComponent,
     ItemFieldInactiveListComponent,
     ItemFieldInactiveStatusComponent,
+    ItemNotFoundComponent,
   ],
   imports: [
     BrowserModule,

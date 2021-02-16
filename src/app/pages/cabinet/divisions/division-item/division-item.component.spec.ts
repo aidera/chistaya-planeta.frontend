@@ -12,6 +12,7 @@ import { ItemFieldInactiveListComponent } from '../../../../components/item-fiel
 import { ItemFieldInactiveStatusComponent } from '../../../../components/item-field/item-field-inactive-status/item-field-inactive-status.component';
 import { ItemFieldInactiveStringComponent } from '../../../../components/item-field/item-field-inactive-string/item-field-inactive-string.component';
 import { ItemFieldSaveButtonComponent } from '../../../../components/item-field/item-field-save-button/item-field-save-button.component';
+import { ItemNotFoundComponent } from '../../../../components/item-not-found/item-not-found.component';
 
 describe('DivisionItemComponent', () => {
   let component: DivisionItemComponent;
@@ -27,6 +28,7 @@ describe('DivisionItemComponent', () => {
         ItemFieldInactiveStatusComponent,
         ItemFieldInactiveStringComponent,
         ItemFieldSaveButtonComponent,
+        ItemNotFoundComponent,
       ],
       imports: [
         RouterTestingModule,
