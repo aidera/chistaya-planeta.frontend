@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { IAddOrderRequest } from '../../services/api/order.service';
+import { IAddOrderRequest } from '../../services/api/orders-api.service';
 import { ServerError } from '../../models/ServerResponse';
 
 export const ADD_ORDER_REQUEST = '[order] add - order - request';

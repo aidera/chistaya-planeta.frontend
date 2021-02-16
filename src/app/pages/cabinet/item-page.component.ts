@@ -24,10 +24,10 @@ import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import CarStatus from '../../models/enums/CarStatus';
 import EmployeeStatus from '../../models/enums/EmployeeStatus';
 import { ModalAction } from '../../components/modal/modal.component';
-import { LocalityService } from '../../services/api/locality.service';
-import { DivisionService } from '../../services/api/division.service';
-import { CarService } from '../../services/api/car.service';
-import { EmployeeService } from '../../services/api/employee.service';
+import { LocalitiesApiService } from '../../services/api/localities-api.service';
+import { DivisionsApiService } from '../../services/api/divisions-api.service';
+import { CarsApiService } from '../../services/api/cars-api.service';
+import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { TextColor } from '../../models/types/TextColor';
 import { ItemFieldListElement } from '../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import EmployeeRole from '../../models/enums/EmployeeRole';
@@ -128,10 +128,10 @@ export class ItemPageComponent implements OnInit, OnDestroy {
     private routingState: RoutingStateService,
     protected socket: SocketIoService,
     protected converter: ConverterService,
-    protected localityApi: LocalityService,
-    protected divisionApi: DivisionService,
-    protected carApi: CarService,
-    protected employeeApi: EmployeeService
+    protected localitiesApi: LocalitiesApiService,
+    protected divisionsApi: DivisionsApiService,
+    protected carsApi: CarsApiService,
+    protected employeesApi: EmployeesApiService
   ) {}
 
   ngOnInit(): void {

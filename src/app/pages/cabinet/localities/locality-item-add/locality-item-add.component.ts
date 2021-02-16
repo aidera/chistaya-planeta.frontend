@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as LocalitiesActions from '../../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
+import * as LocalitiesActions from '../../../../store/localities/localities.actions';
+import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import { debounceTime, take } from 'rxjs/operators';
 import { responseCodes } from '../../../../data/responseCodes';
-import * as CarActions from '../../../../store/car/car.actions';
 
 @Component({
   selector: 'app-locality-item-add',
@@ -40,7 +39,7 @@ export class LocalityItemAddComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.localityApi
+            this.localitiesApi
               .checkName(this.form.get('name').value)
               .pipe(take(1))
               .subscribe((response) => {

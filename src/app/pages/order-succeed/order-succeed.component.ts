@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import * as fromRoot from '../../store/root.reducer';
-import * as OrderActions from '../../store/order/order.actions';
+import * as OrdersActions from '../../store/orders/orders.actions';
 
 @Component({
   selector: 'app-order-succeed',
@@ -13,6 +13,6 @@ export class OrderSucceedComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
-    this.store.dispatch(OrderActions.refreshAddOrderSuccess());
+    this.store.dispatch(OrdersActions.refreshAddOrderSuccess());
   }
 }

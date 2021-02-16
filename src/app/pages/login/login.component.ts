@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../store/root.reducer';
-import * as UserActions from '../../store/user/user.actions';
-import * as UserSelectors from '../../store/user/user.selectors';
+import * as UsersActions from '../../store/users/users.actions';
+import * as UsersSelectors from '../../store/users/users.selectors';
 import { UserType } from '../../models/enums/UserType';
 import { responseCodes } from '../../data/responseCodes';
 
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     this.isLoginSucceed$ = this.store
-      .select(UserSelectors.selectIsLoginSucceed)
+      .select(UsersSelectors.selectIsLoginSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.router.navigate(['/order-succeed']);
@@ -45,13 +45,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
 
     this.isFetching$ = this.store
-      .select(UserSelectors.selectIsLoggingIn)
+      .select(UsersSelectors.selectIsLoggingIn)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.serverError$ = this.store
-      .select(UserSelectors.selectServerError)
+      .select(UsersSelectors.selectServerError)
       .subscribe((error) => {
         if (error) {
           let errorCode: string;
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     if (this.form.valid) {
       this.store.dispatch(
-        UserActions.loginRequest({
+        UsersActions.loginRequest({
           userType: this.isEmployee ? UserType.employee : UserType.client,
           email: this.form.get('email').value,
           password: this.form.get('password').value,

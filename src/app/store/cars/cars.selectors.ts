@@ -1,86 +1,86 @@
 import { createSelector } from '@ngrx/store';
 
 import { State } from '../root.reducer';
-import { CarState } from './car.reducer';
+import { CarsState } from './cars.reducer';
 
-export const selectAll = (state: State) => state.car;
+export const selectAll = (state: State) => state.cars;
 
 export const selectCars = createSelector(
   selectAll,
-  (state: CarState) => state.cars
+  (state: CarsState) => state.cars
 );
 
 export const selectGetCarsIsFetching = createSelector(
   selectAll,
-  (state: CarState) => state.getCarsIsFetching
+  (state: CarsState) => state.getCarsIsFetching
 );
 
 export const selectGetCarsPagination = createSelector(
   selectAll,
-  (state: CarState) => state.getCarsPagination
+  (state: CarsState) => state.getCarsPagination
 );
 
 export const selectGetCarsError = createSelector(
   selectAll,
-  (state: CarState) => state.getCarsError
+  (state: CarsState) => state.getCarsError
 );
 
 export const selectCar = createSelector(
   selectAll,
-  (state: CarState) => state.car
+  (state: CarsState) => state.car
 );
 
 export const selectGetCarIsFetching = createSelector(
   selectAll,
-  (state: CarState) => state.getCarIsFetching
+  (state: CarsState) => state.getCarIsFetching
 );
 
 export const selectGetCarError = createSelector(
   selectAll,
-  (state: CarState) => state.getCarError
+  (state: CarsState) => state.getCarError
 );
 
 export const selectUpdateCarIsFetching = createSelector(
   selectAll,
-  (state: CarState) => state.updateCarIsFetching
+  (state: CarsState) => state.updateCarIsFetching
 );
 
 export const selectUpdateCarError = createSelector(
   selectAll,
-  (state: CarState) => state.updateCarError
+  (state: CarsState) => state.updateCarError
 );
 
 export const selectUpdateCarSucceed = createSelector(
   selectAll,
-  (state: CarState) => state.updateCarSucceed
+  (state: CarsState) => state.updateCarSucceed
 );
 
 export const selectAddCarIsFetching = createSelector(
   selectAll,
-  (state: CarState) => state.addCarIsFetching
+  (state: CarsState) => state.addCarIsFetching
 );
 
 export const selectAddCarSucceed = createSelector(
   selectAll,
-  (state: CarState) => state.addCarSucceed
+  (state: CarsState) => state.addCarSucceed
 );
 
 export const selectAddCarError = createSelector(
   selectAll,
-  (state: CarState) => state.addCarError
+  (state: CarsState) => state.addCarError
 );
 
 export const selectRemoveCarIsFetching = createSelector(
   selectAll,
-  (state: CarState) => state.removeCarIsFetching
+  (state: CarsState) => state.removeCarIsFetching
 );
 
 export const selectRemoveCarSucceed = createSelector(
   selectAll,
-  (state: CarState) => state.removeCarSucceed
+  (state: CarsState) => state.removeCarSucceed
 );
 
 export const selectRemoveCarError = createSelector(
   selectAll,
-  (state: CarState) => state.removeCarError
+  (state: CarsState) => state.removeCarError
 );

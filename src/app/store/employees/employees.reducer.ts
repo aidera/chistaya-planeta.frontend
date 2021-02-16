@@ -1,11 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as EmployeeActions from './employee.actions';
+import * as EmployeesActions from './employees.actions';
 import { ServerError } from '../../models/ServerResponse';
 import { PaginationType } from '../../models/types/PaginationType';
 import { IEmployee } from '../../models/Employee';
 
-export const employeeInitialState = {
+export const employeesInitialState = {
   employees: null as IEmployee[] | null,
 
   getEmployeesIsFetching: false,
@@ -29,28 +29,28 @@ export const employeeInitialState = {
   removeEmployeeError: null as ServerError | null,
   removeEmployeeSucceed: false as boolean,
 };
-export type EmployeeState = typeof employeeInitialState;
+export type EmployeesState = typeof employeesInitialState;
 
-const _employeeReducer = createReducer(
-  employeeInitialState,
+const _employeesReducer = createReducer(
+  employeesInitialState,
 
   /* --------------------- */
   /* --- Get Employees --- */
   /* --------------------- */
 
-  on(EmployeeActions.getEmployeesRequest, (state, payload) => ({
+  on(EmployeesActions.getEmployeesRequest, (state, payload) => ({
     ...state,
     getEmployeesIsFetching: payload.withLoading,
     getEmployeesError: null,
   })),
-  on(EmployeeActions.getEmployeesSuccess, (state, payload) => ({
+  on(EmployeesActions.getEmployeesSuccess, (state, payload) => ({
     ...state,
     employees: payload.employees,
     getEmployeesIsFetching: false,
     getEmployeesError: null,
     getEmployeesPagination: payload.pagination,
   })),
-  on(EmployeeActions.getEmployeesFailure, (state, payload) => ({
+  on(EmployeesActions.getEmployeesFailure, (state, payload) => ({
     ...state,
     getEmployeesIsFetching: false,
     getEmployeesError: payload.error,
@@ -60,19 +60,19 @@ const _employeeReducer = createReducer(
   /* --- Get Employee --- */
   /* -------------------- */
 
-  on(EmployeeActions.getEmployeeRequest, (state, payload) => ({
+  on(EmployeesActions.getEmployeeRequest, (state, payload) => ({
     ...state,
     employee: null,
     getEmployeeIsFetching: payload.withLoading,
     getEmployeeError: null,
   })),
-  on(EmployeeActions.getEmployeeSuccess, (state, payload) => ({
+  on(EmployeesActions.getEmployeeSuccess, (state, payload) => ({
     ...state,
     employee: payload.employee,
     getEmployeeIsFetching: false,
     getEmployeeError: null,
   })),
-  on(EmployeeActions.getEmployeeFailure, (state, payload) => ({
+  on(EmployeesActions.getEmployeeFailure, (state, payload) => ({
     ...state,
     getEmployeeIsFetching: false,
     getEmployeeError: payload.error,
@@ -82,28 +82,28 @@ const _employeeReducer = createReducer(
   /* --- Update Employee --- */
   /* ----------------------- */
 
-  on(EmployeeActions.updateEmployeeRequest, (state) => ({
+  on(EmployeesActions.updateEmployeeRequest, (state) => ({
     ...state,
     updateEmployeeIsFetching: true,
     updateEmployeeError: null,
   })),
-  on(EmployeeActions.updateEmployeeSuccess, (state, payload) => ({
+  on(EmployeesActions.updateEmployeeSuccess, (state, payload) => ({
     ...state,
     employee: payload.employee,
     updateEmployeeIsFetching: false,
     updateEmployeeError: null,
     updateEmployeeSucceed: true,
   })),
-  on(EmployeeActions.updateEmployeeFailure, (state, payload) => ({
+  on(EmployeesActions.updateEmployeeFailure, (state, payload) => ({
     ...state,
     updateEmployeeIsFetching: false,
     updateEmployeeError: payload.error,
   })),
-  on(EmployeeActions.refreshUpdateEmployeeSucceed, (state) => ({
+  on(EmployeesActions.refreshUpdateEmployeeSucceed, (state) => ({
     ...state,
     updateEmployeeSucceed: false,
   })),
-  on(EmployeeActions.refreshUpdateEmployeeFailure, (state) => ({
+  on(EmployeesActions.refreshUpdateEmployeeFailure, (state) => ({
     ...state,
     updateEmployeeError: null,
   })),
@@ -112,27 +112,27 @@ const _employeeReducer = createReducer(
   /* --- Add Employee --- */
   /* -------------------- */
 
-  on(EmployeeActions.addEmployeeRequest, (state) => ({
+  on(EmployeesActions.addEmployeeRequest, (state) => ({
     ...state,
     addEmployeeIsFetching: true,
     addEmployeeError: null,
   })),
-  on(EmployeeActions.addEmployeeSuccess, (state) => ({
+  on(EmployeesActions.addEmployeeSuccess, (state) => ({
     ...state,
     addEmployeeIsFetching: false,
     addEmployeeError: null,
     addEmployeeSucceed: true,
   })),
-  on(EmployeeActions.addEmployeeFailure, (state, payload) => ({
+  on(EmployeesActions.addEmployeeFailure, (state, payload) => ({
     ...state,
     addEmployeeIsFetching: false,
     addEmployeeError: payload.error,
   })),
-  on(EmployeeActions.refreshAddEmployeeSucceed, (state) => ({
+  on(EmployeesActions.refreshAddEmployeeSucceed, (state) => ({
     ...state,
     addEmployeeSucceed: false,
   })),
-  on(EmployeeActions.refreshAddEmployeeFailure, (state) => ({
+  on(EmployeesActions.refreshAddEmployeeFailure, (state) => ({
     ...state,
     addEmployeeError: null,
   })),
@@ -141,35 +141,35 @@ const _employeeReducer = createReducer(
   /* --- Remove Employee --- */
   /* ----------------------- */
 
-  on(EmployeeActions.removeEmployeeRequest, (state) => ({
+  on(EmployeesActions.removeEmployeeRequest, (state) => ({
     ...state,
     removeEmployeeIsFetching: true,
     removeEmployeeError: null,
   })),
-  on(EmployeeActions.removeEmployeeSuccess, (state) => ({
+  on(EmployeesActions.removeEmployeeSuccess, (state) => ({
     ...state,
     removeEmployeeIsFetching: false,
     removeEmployeeError: null,
     removeEmployeeSucceed: true,
   })),
-  on(EmployeeActions.removeEmployeeFailure, (state, payload) => ({
+  on(EmployeesActions.removeEmployeeFailure, (state, payload) => ({
     ...state,
     removeEmployeeIsFetching: false,
     removeEmployeeError: payload.error,
   })),
-  on(EmployeeActions.refreshRemoveEmployeeSucceed, (state) => ({
+  on(EmployeesActions.refreshRemoveEmployeeSucceed, (state) => ({
     ...state,
     removeEmployeeSucceed: false,
   })),
-  on(EmployeeActions.refreshRemoveEmployeeFailure, (state) => ({
+  on(EmployeesActions.refreshRemoveEmployeeFailure, (state) => ({
     ...state,
     removeEmployeeError: null,
   }))
 );
 
-export function employeeReducer(
-  state: EmployeeState | undefined,
+export function employeesReducer(
+  state: EmployeesState | undefined,
   action: Action
-): EmployeeState {
-  return _employeeReducer(state, action);
+): EmployeesState {
+  return _employeesReducer(state, action);
 }

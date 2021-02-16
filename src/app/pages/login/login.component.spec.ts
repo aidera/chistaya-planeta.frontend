@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { LoginComponent } from './login.component';
 import { TextInputComponent } from '../../components/form-controls/text-input/text-input.component';
-import * as UserActions from '../../store/user/user.actions';
+import * as UsersActions from '../../store/users/users.actions';
 import { UserType } from '../../models/enums/UserType';
 import { MaterialModule } from '../../modules/material/material.module';
 import { ErrorMessageComponent } from '../../components/form-controls/error-message/error-message.component';
@@ -42,7 +42,7 @@ describe('LoginComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            user: {
+            users: {
               isLoginSucceed: false,
               isLoggingIn: false,
               user: null,
@@ -141,7 +141,7 @@ describe('LoginComponent', () => {
 
     expect(storeDispatchSpy).toHaveBeenCalledTimes(1);
     expect(storeDispatchSpy).toHaveBeenCalledWith(
-      UserActions.loginRequest({
+      UsersActions.loginRequest({
         userType: UserType.employee,
         password: '987987987',
         email: 'test@test.test',
@@ -162,7 +162,7 @@ describe('LoginComponent', () => {
 
     expect(storeDispatchSpy).toHaveBeenCalledTimes(1);
     expect(storeDispatchSpy).toHaveBeenCalledWith(
-      UserActions.loginRequest({
+      UsersActions.loginRequest({
         userType: UserType.client,
         password: '987987987',
         email: 'test@test.test',

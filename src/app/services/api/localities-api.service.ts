@@ -45,7 +45,7 @@ export interface IGetLocalitiesResponse extends ServerResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class LocalityService {
+export class LocalitiesApiService {
   private path = 'localities';
 
   constructor(private http: HttpClient, private api: ApiService) {}

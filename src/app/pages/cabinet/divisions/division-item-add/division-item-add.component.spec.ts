@@ -41,7 +41,7 @@ describe('DivisionItemAddComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
-            division: {
+            divisions: {
               division: null,
             },
           },

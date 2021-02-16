@@ -23,7 +23,7 @@ export interface ILoginResponse extends ServerResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class UsersApiService {
   private path = 'users';
 
   constructor(private http: HttpClient) {}

@@ -43,7 +43,7 @@ describe('CarItemComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            car: {
+            cars: {
               car: null,
             },
             app: {

@@ -1,11 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as CarActions from './car.actions';
+import * as CarsActions from './cars.actions';
 import { ServerError } from '../../models/ServerResponse';
 import { PaginationType } from '../../models/types/PaginationType';
 import { ICar } from 'src/app/models/Car';
 
-export const carInitialState = {
+export const carsInitialState = {
   cars: null as ICar[] | null,
 
   getCarsIsFetching: false,
@@ -29,28 +29,28 @@ export const carInitialState = {
   removeCarError: null as ServerError | null,
   removeCarSucceed: false as boolean,
 };
-export type CarState = typeof carInitialState;
+export type CarsState = typeof carsInitialState;
 
-const _carReducer = createReducer(
-  carInitialState,
+const _carsReducer = createReducer(
+  carsInitialState,
 
   /* ---------------- */
   /* --- Get Cars --- */
   /* ---------------- */
 
-  on(CarActions.getCarsRequest, (state, payload) => ({
+  on(CarsActions.getCarsRequest, (state, payload) => ({
     ...state,
     getCarsIsFetching: payload.withLoading,
     getCarsError: null,
   })),
-  on(CarActions.getCarsSuccess, (state, payload) => ({
+  on(CarsActions.getCarsSuccess, (state, payload) => ({
     ...state,
     cars: payload.cars,
     getCarsIsFetching: false,
     getCarsError: null,
     getCarsPagination: payload.pagination,
   })),
-  on(CarActions.getCarsFailure, (state, payload) => ({
+  on(CarsActions.getCarsFailure, (state, payload) => ({
     ...state,
     getCarsIsFetching: false,
     getCarsError: payload.error,
@@ -60,19 +60,19 @@ const _carReducer = createReducer(
   /* --- Get Car --- */
   /* --------------- */
 
-  on(CarActions.getCarRequest, (state, payload) => ({
+  on(CarsActions.getCarRequest, (state, payload) => ({
     ...state,
     car: null,
     getCarIsFetching: payload.withLoading,
     getCarError: null,
   })),
-  on(CarActions.getCarSuccess, (state, payload) => ({
+  on(CarsActions.getCarSuccess, (state, payload) => ({
     ...state,
     car: payload.car,
     getCarIsFetching: false,
     getCarError: null,
   })),
-  on(CarActions.getCarFailure, (state, payload) => ({
+  on(CarsActions.getCarFailure, (state, payload) => ({
     ...state,
     getCarIsFetching: false,
     getCarError: payload.error,
@@ -82,28 +82,28 @@ const _carReducer = createReducer(
   /* --- Update Car --- */
   /* ----------------------- */
 
-  on(CarActions.updateCarRequest, (state) => ({
+  on(CarsActions.updateCarRequest, (state) => ({
     ...state,
     updateCarIsFetching: true,
     updateCarError: null,
   })),
-  on(CarActions.updateCarSuccess, (state, payload) => ({
+  on(CarsActions.updateCarSuccess, (state, payload) => ({
     ...state,
     car: payload.car,
     updateCarIsFetching: false,
     updateCarError: null,
     updateCarSucceed: true,
   })),
-  on(CarActions.updateCarFailure, (state, payload) => ({
+  on(CarsActions.updateCarFailure, (state, payload) => ({
     ...state,
     updateCarIsFetching: false,
     updateCarError: payload.error,
   })),
-  on(CarActions.refreshUpdateCarSucceed, (state) => ({
+  on(CarsActions.refreshUpdateCarSucceed, (state) => ({
     ...state,
     updateCarSucceed: false,
   })),
-  on(CarActions.refreshUpdateCarFailure, (state) => ({
+  on(CarsActions.refreshUpdateCarFailure, (state) => ({
     ...state,
     updateCarError: null,
   })),
@@ -112,27 +112,27 @@ const _carReducer = createReducer(
   /* --- Add Car --- */
   /* --------------- */
 
-  on(CarActions.addCarRequest, (state) => ({
+  on(CarsActions.addCarRequest, (state) => ({
     ...state,
     addCarIsFetching: true,
     addCarError: null,
   })),
-  on(CarActions.addCarSuccess, (state) => ({
+  on(CarsActions.addCarSuccess, (state) => ({
     ...state,
     addCarIsFetching: false,
     addCarError: null,
     addCarSucceed: true,
   })),
-  on(CarActions.addCarFailure, (state, payload) => ({
+  on(CarsActions.addCarFailure, (state, payload) => ({
     ...state,
     addCarIsFetching: false,
     addCarError: payload.error,
   })),
-  on(CarActions.refreshAddCarSucceed, (state) => ({
+  on(CarsActions.refreshAddCarSucceed, (state) => ({
     ...state,
     addCarSucceed: false,
   })),
-  on(CarActions.refreshAddCarFailure, (state) => ({
+  on(CarsActions.refreshAddCarFailure, (state) => ({
     ...state,
     addCarError: null,
   })),
@@ -141,35 +141,35 @@ const _carReducer = createReducer(
   /* --- Remove Car --- */
   /* ------------------ */
 
-  on(CarActions.removeCarRequest, (state) => ({
+  on(CarsActions.removeCarRequest, (state) => ({
     ...state,
     removeCarIsFetching: true,
     removeCarError: null,
   })),
-  on(CarActions.removeCarSuccess, (state) => ({
+  on(CarsActions.removeCarSuccess, (state) => ({
     ...state,
     removeCarIsFetching: false,
     removeCarError: null,
     removeCarSucceed: true,
   })),
-  on(CarActions.removeCarFailure, (state, payload) => ({
+  on(CarsActions.removeCarFailure, (state, payload) => ({
     ...state,
     removeCarIsFetching: false,
     removeCarError: payload.error,
   })),
-  on(CarActions.refreshRemoveCarSucceed, (state) => ({
+  on(CarsActions.refreshRemoveCarSucceed, (state) => ({
     ...state,
     removeCarSucceed: false,
   })),
-  on(CarActions.refreshRemoveCarFailure, (state) => ({
+  on(CarsActions.refreshRemoveCarFailure, (state) => ({
     ...state,
     removeCarError: null,
   }))
 );
 
-export function carReducer(
-  state: CarState | undefined,
+export function carsReducer(
+  state: CarsState | undefined,
   action: Action
-): CarState {
-  return _carReducer(state, action);
+): CarsState {
+  return _carsReducer(state, action);
 }

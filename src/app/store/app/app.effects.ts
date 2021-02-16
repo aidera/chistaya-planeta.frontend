@@ -4,26 +4,26 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import * as AppActions from '../app/app.actions';
-import { DivisionService } from '../../services/api/division.service';
-import { LocalityService } from '../../services/api/locality.service';
-import { CarService } from '../../services/api/car.service';
-import { EmployeeService } from '../../services/api/employee.service';
+import { DivisionsApiService } from '../../services/api/divisions-api.service';
+import { LocalitiesApiService } from '../../services/api/localities-api.service';
+import { CarsApiService } from '../../services/api/cars-api.service';
+import { EmployeesApiService } from '../../services/api/employees-api.service';
 
 @Injectable()
 export class AppEffects {
   constructor(
     private actions$: Actions,
-    private localityApi: LocalityService,
-    private divisionApi: DivisionService,
-    private carApi: CarService,
-    private employeesApi: EmployeeService
+    private localitiesApi: LocalitiesApiService,
+    private divisionsApi: DivisionsApiService,
+    private carsApi: CarsApiService,
+    private employeesApi: EmployeesApiService
   ) {}
 
   getLocalitiesToSelect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AppActions.getLocalitiesToSelectRequest),
       switchMap((_) => {
-        return this.localityApi.getAllLessInfo().pipe(
+        return this.localitiesApi.getAllLessInfo().pipe(
           map((resData) => {
             if (resData && resData.localities) {
               return AppActions.getLocalitiesToSelectSuccess({
@@ -50,7 +50,7 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(AppActions.getDivisionsToSelectRequest),
       switchMap((_) => {
-        return this.divisionApi.getAllLessInfo().pipe(
+        return this.divisionsApi.getAllLessInfo().pipe(
           map((resData) => {
             if (resData && resData.divisions) {
               return AppActions.getDivisionsToSelectSuccess({
@@ -77,7 +77,7 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(AppActions.getCarsToSelectRequest),
       switchMap((_) => {
-        return this.carApi.getAllLessInfo().pipe(
+        return this.carsApi.getAllLessInfo().pipe(
           map((resData) => {
             if (resData && resData.cars) {
               return AppActions.getCarsToSelectSuccess({

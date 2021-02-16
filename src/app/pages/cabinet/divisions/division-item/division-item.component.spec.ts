@@ -43,7 +43,7 @@ describe('DivisionItemComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
-            division: {
+            divisions: {
               division: null,
             },
           },

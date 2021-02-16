@@ -1,86 +1,86 @@
 import { createSelector } from '@ngrx/store';
 
 import { State } from '../root.reducer';
-import { DivisionState } from './division.reducer';
+import { DivisionsState } from './divisions.reducer';
 
-export const selectAll = (state: State) => state.division;
+export const selectAll = (state: State) => state.divisions;
 
 export const selectDivisions = createSelector(
   selectAll,
-  (state: DivisionState) => state.divisions
+  (state: DivisionsState) => state.divisions
 );
 
 export const selectGetDivisionsIsFetching = createSelector(
   selectAll,
-  (state: DivisionState) => state.getDivisionsIsFetching
+  (state: DivisionsState) => state.getDivisionsIsFetching
 );
 
 export const selectGetDivisionsPagination = createSelector(
   selectAll,
-  (state: DivisionState) => state.getDivisionsPagination
+  (state: DivisionsState) => state.getDivisionsPagination
 );
 
 export const selectGetDivisionsError = createSelector(
   selectAll,
-  (state: DivisionState) => state.getDivisionsError
+  (state: DivisionsState) => state.getDivisionsError
 );
 
 export const selectDivision = createSelector(
   selectAll,
-  (state: DivisionState) => state.division
+  (state: DivisionsState) => state.division
 );
 
 export const selectGetDivisionIsFetching = createSelector(
   selectAll,
-  (state: DivisionState) => state.getDivisionIsFetching
+  (state: DivisionsState) => state.getDivisionIsFetching
 );
 
 export const selectGetDivisionError = createSelector(
   selectAll,
-  (state: DivisionState) => state.getDivisionError
+  (state: DivisionsState) => state.getDivisionError
 );
 
 export const selectUpdateDivisionIsFetching = createSelector(
   selectAll,
-  (state: DivisionState) => state.updateDivisionIsFetching
+  (state: DivisionsState) => state.updateDivisionIsFetching
 );
 
 export const selectUpdateDivisionError = createSelector(
   selectAll,
-  (state: DivisionState) => state.updateDivisionError
+  (state: DivisionsState) => state.updateDivisionError
 );
 
 export const selectUpdateDivisionSucceed = createSelector(
   selectAll,
-  (state: DivisionState) => state.updateDivisionSucceed
+  (state: DivisionsState) => state.updateDivisionSucceed
 );
 
 export const selectAddDivisionIsFetching = createSelector(
   selectAll,
-  (state: DivisionState) => state.addDivisionIsFetching
+  (state: DivisionsState) => state.addDivisionIsFetching
 );
 
 export const selectAddDivisionSucceed = createSelector(
   selectAll,
-  (state: DivisionState) => state.addDivisionSucceed
+  (state: DivisionsState) => state.addDivisionSucceed
 );
 
 export const selectAddDivisionError = createSelector(
   selectAll,
-  (state: DivisionState) => state.addDivisionError
+  (state: DivisionsState) => state.addDivisionError
 );
 
 export const selectRemoveDivisionIsFetching = createSelector(
   selectAll,
-  (state: DivisionState) => state.removeDivisionIsFetching
+  (state: DivisionsState) => state.removeDivisionIsFetching
 );
 
 export const selectRemoveDivisionSucceed = createSelector(
   selectAll,
-  (state: DivisionState) => state.removeDivisionSucceed
+  (state: DivisionsState) => state.removeDivisionSucceed
 );
 
 export const selectRemoveDivisionError = createSelector(
   selectAll,
-  (state: DivisionState) => state.removeDivisionError
+  (state: DivisionsState) => state.removeDivisionError
 );

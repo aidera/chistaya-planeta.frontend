@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as CarActions from '../../../../store/car/car.actions';
-import * as CarSelectors from '../../../../store/car/car.selectors';
+import * as CarsActions from '../../../../store/cars/cars.actions';
+import * as CarsSelectors from '../../../../store/cars/cars.selectors';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import carTypeOptions from '../../../../data/carTypeOptions';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
@@ -61,7 +61,7 @@ export class CarItemAddComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.carApi
+            this.carsApi
               .checkLicensePlate(this.form.get('licensePlate').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -78,27 +78,27 @@ export class CarItemAddComponent
     };
 
     this.isFetching$ = this.store
-      .select(CarSelectors.selectAddCarIsFetching)
+      .select(CarsSelectors.selectAddCarIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.addingSucceed$ = this.store
-      .select(CarSelectors.selectAddCarSucceed)
+      .select(CarsSelectors.selectAddCarSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
-          this.store.dispatch(CarActions.refreshAddCarSucceed());
+          this.store.dispatch(CarsActions.refreshAddCarSucceed());
 
           this.router.navigate(['../'], { relativeTo: this.route });
         }
       });
 
     this.serverError$ = this.store
-      .select(CarSelectors.selectAddCarError)
+      .select(CarsSelectors.selectAddCarError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
@@ -137,7 +137,7 @@ export class CarItemAddComponent
           }
         }
 
-        this.store.dispatch(CarActions.refreshAddCarFailure());
+        this.store.dispatch(CarsActions.refreshAddCarFailure());
       });
 
     /* ------------------------ */
@@ -146,7 +146,7 @@ export class CarItemAddComponent
 
     this.createRequest = () => {
       this.store.dispatch(
-        CarActions.addCarRequest({
+        CarsActions.addCarRequest({
           carType: +this.form.get('type').value,
           isCorporate: this.form.get('isCorporate').value === '1',
           licensePlate: this.form.get('licensePlate').value,

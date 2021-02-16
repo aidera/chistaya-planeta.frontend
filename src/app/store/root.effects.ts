@@ -1,17 +1,17 @@
 import { AppEffects } from './app/app.effects';
-import { OrderEffects } from './order/order.effects';
-import { LocalityEffects } from './locality/locality.effects';
-import { UserEffects } from './user/user.effects';
-import { DivisionEffects } from './division/division.effects';
-import { CarEffects } from './car/car.effects';
-import { EmployeeEffects } from './employee/employee.effects';
+import { OrdersEffects } from './orders/orders.effects';
+import { LocalitiesEffects } from './localities/localities.effects';
+import { UsersEffects } from './users/users.effects';
+import { DivisionsEffects } from './divisions/divisions.effects';
+import { CarsEffects } from './cars/cars.effects';
+import { EmployeesEffects } from './employees/employees.effects';
 
 export const rootEffects = [
   AppEffects,
-  UserEffects,
-  OrderEffects,
-  LocalityEffects,
-  DivisionEffects,
-  CarEffects,
-  EmployeeEffects,
+  UsersEffects,
+  OrdersEffects,
+  LocalitiesEffects,
+  DivisionsEffects,
+  CarsEffects,
+  EmployeesEffects,
 ];

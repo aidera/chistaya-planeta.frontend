@@ -36,7 +36,7 @@ describe('EmployeesTableComponent', () => {
         { provide: ConverterService },
         provideMockStore({
           initialState: {
-            employee: {
+            employees: {
               employees: [],
             },
             app: {

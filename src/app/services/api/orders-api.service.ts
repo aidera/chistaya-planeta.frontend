@@ -40,7 +40,7 @@ export interface IAddOrderResponse extends ServerResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class OrderService {
+export class OrdersApiService {
   private path = 'orders';
 
   constructor(private http: HttpClient) {}

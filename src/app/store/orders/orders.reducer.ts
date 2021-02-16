@@ -1,49 +1,49 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as OrderActions from './order.actions';
+import * as OrdersActions from './orders.actions';
 import { ServerError } from '../../models/ServerResponse';
 
-export const orderInitialState = {
+export const ordersInitialState = {
   addOrderIsFetching: false,
   addOrderSucceed: false,
   addOrderError: null as ServerError | null,
 };
-export type OrderState = typeof orderInitialState;
+export type OrdersState = typeof ordersInitialState;
 
-const _orderReducer = createReducer(
-  orderInitialState,
+const _ordersReducer = createReducer(
+  ordersInitialState,
 
-  on(OrderActions.addOrderRequest, (state) => ({
+  on(OrdersActions.addOrderRequest, (state) => ({
     ...state,
     addOrderIsFetching: true,
     addOrderSucceed: false,
     addOrderError: null,
   })),
-  on(OrderActions.addOrderSuccess, (state, payload) => ({
+  on(OrdersActions.addOrderSuccess, (state, payload) => ({
     ...state,
     addOrderIsFetching: false,
     addOrderSucceed: true,
     addOrderError: null,
   })),
-  on(OrderActions.addOrderFailure, (state, payload) => ({
+  on(OrdersActions.addOrderFailure, (state, payload) => ({
     ...state,
     addOrderIsFetching: false,
     addOrderSucceed: false,
     addOrderError: payload.error,
   })),
-  on(OrderActions.refreshAddOrderSuccess, (state, payload) => ({
+  on(OrdersActions.refreshAddOrderSuccess, (state, payload) => ({
     ...state,
     addOrderSucceed: false,
   })),
-  on(OrderActions.refreshAddOrderFailure, (state, payload) => ({
+  on(OrdersActions.refreshAddOrderFailure, (state, payload) => ({
     ...state,
     addOrderError: null,
   }))
 );
 
-export function orderReducer(
-  state: OrderState | undefined,
+export function ordersReducer(
+  state: OrdersState | undefined,
   action: Action
-): OrderState {
-  return _orderReducer(state, action);
+): OrdersState {
+  return _ordersReducer(state, action);
 }

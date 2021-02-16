@@ -65,7 +65,7 @@ describe('AddOrderNoAuthComponent', () => {
                 { value: '2', text: 'City 2' },
               ],
             },
-            order: {
+            orders: {
               addOrderLocalities: [] as ILocality[],
             },
           },

@@ -3,21 +3,21 @@ import { of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as LocalityActions from './locality.actions';
-import { LocalityService } from '../../services/api/locality.service';
+import * as LocalitiesActions from './localities.actions';
+import { LocalitiesApiService } from '../../services/api/localities-api.service';
 
 @Injectable()
-export class LocalityEffects {
+export class LocalitiesEffects {
   constructor(
     private actions$: Actions,
-    private localityApi: LocalityService
+    private localitiesApi: LocalitiesApiService
   ) {}
 
   getLocalities$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(LocalityActions.getLocalitiesRequest),
+      ofType(LocalitiesActions.getLocalitiesRequest),
       switchMap((action) => {
-        return this.localityApi
+        return this.localitiesApi
           .get({
             pagination: action.params.pagination,
             sorting: action.params.sorting,
@@ -27,7 +27,7 @@ export class LocalityEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.localities) {
-                return LocalityActions.getLocalitiesSuccess({
+                return LocalitiesActions.getLocalitiesSuccess({
                   localities: resData.localities,
                   pagination: {
                     perPage: resData.perPage,
@@ -37,13 +37,13 @@ export class LocalityEffects {
                   },
                 });
               }
-              return LocalityActions.getLocalitiesFailure({
+              return LocalitiesActions.getLocalitiesFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                LocalityActions.getLocalitiesFailure({
+                LocalitiesActions.getLocalitiesFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -55,22 +55,22 @@ export class LocalityEffects {
 
   getLocality$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(LocalityActions.getLocalityRequest),
+      ofType(LocalitiesActions.getLocalityRequest),
       switchMap((action) => {
-        return this.localityApi.getOne(action.id).pipe(
+        return this.localitiesApi.getOne(action.id).pipe(
           map((resData) => {
             if (resData && resData.locality) {
-              return LocalityActions.getLocalitySuccess({
+              return LocalitiesActions.getLocalitySuccess({
                 locality: resData.locality,
               });
             }
-            return LocalityActions.getLocalityFailure({
+            return LocalitiesActions.getLocalityFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              LocalityActions.getLocalityFailure({
+              LocalitiesActions.getLocalityFailure({
                 error: errorRes.error.error,
               })
             );
@@ -82,24 +82,24 @@ export class LocalityEffects {
 
   updateLocality$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(LocalityActions.updateLocalityRequest),
+      ofType(LocalitiesActions.updateLocalityRequest),
       switchMap((action) => {
-        return this.localityApi
+        return this.localitiesApi
           .update(action.id, { name: action.name, status: action.status })
           .pipe(
             map((resData) => {
               if (resData && resData.updatedLocality) {
-                return LocalityActions.updateLocalitySuccess({
+                return LocalitiesActions.updateLocalitySuccess({
                   locality: resData.updatedLocality,
                 });
               }
-              return LocalityActions.updateLocalityFailure({
+              return LocalitiesActions.updateLocalityFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                LocalityActions.updateLocalityFailure({
+                LocalitiesActions.updateLocalityFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -111,22 +111,22 @@ export class LocalityEffects {
 
   addLocality$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(LocalityActions.addLocalityRequest),
+      ofType(LocalitiesActions.addLocalityRequest),
       switchMap((action) => {
-        return this.localityApi.add({ name: action.name }).pipe(
+        return this.localitiesApi.add({ name: action.name }).pipe(
           map((resData) => {
             if (resData && resData.addedLocality) {
-              return LocalityActions.addLocalitySuccess({
+              return LocalitiesActions.addLocalitySuccess({
                 locality: resData.addedLocality,
               });
             }
-            return LocalityActions.addLocalityFailure({
+            return LocalitiesActions.addLocalityFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              LocalityActions.addLocalityFailure({
+              LocalitiesActions.addLocalityFailure({
                 error: errorRes.error.error,
               })
             );
@@ -138,22 +138,22 @@ export class LocalityEffects {
 
   removeLocality$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(LocalityActions.removeLocalityRequest),
+      ofType(LocalitiesActions.removeLocalityRequest),
       switchMap((action) => {
-        return this.localityApi.remove(action.id).pipe(
+        return this.localitiesApi.remove(action.id).pipe(
           map((resData) => {
             if (resData && resData.removedLocality) {
-              return LocalityActions.removeLocalitySuccess({
+              return LocalitiesActions.removeLocalitySuccess({
                 locality: resData.removedLocality,
               });
             }
-            return LocalityActions.removeLocalityFailure({
+            return LocalitiesActions.removeLocalityFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              LocalityActions.removeLocalityFailure({
+              LocalitiesActions.removeLocalityFailure({
                 error: errorRes.error.error,
               })
             );

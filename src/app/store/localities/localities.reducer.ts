@@ -1,11 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as LocalityActions from './locality.actions';
+import * as LocalitiesActions from './localities.actions';
 import { ServerError } from '../../models/ServerResponse';
 import { ILocality } from '../../models/Locality';
 import { PaginationType } from '../../models/types/PaginationType';
 
-export const localityInitialState = {
+export const localitiesInitialState = {
   localities: null as ILocality[] | null,
 
   getLocalitiesIsFetching: false,
@@ -29,28 +29,28 @@ export const localityInitialState = {
   removeLocalityError: null as ServerError | null,
   removeLocalitySucceed: false as boolean,
 };
-export type LocalityState = typeof localityInitialState;
+export type LocalitiesState = typeof localitiesInitialState;
 
-const _localityReducer = createReducer(
-  localityInitialState,
+const _localitiesReducer = createReducer(
+  localitiesInitialState,
 
   /* ---------------------- */
   /* --- Get Localities --- */
   /* ---------------------- */
 
-  on(LocalityActions.getLocalitiesRequest, (state, payload) => ({
+  on(LocalitiesActions.getLocalitiesRequest, (state, payload) => ({
     ...state,
     getLocalitiesIsFetching: payload.withLoading,
     getLocalitiesError: null,
   })),
-  on(LocalityActions.getLocalitiesSuccess, (state, payload) => ({
+  on(LocalitiesActions.getLocalitiesSuccess, (state, payload) => ({
     ...state,
     localities: payload.localities,
     getLocalitiesIsFetching: false,
     getLocalitiesError: null,
     getLocalitiesPagination: payload.pagination,
   })),
-  on(LocalityActions.getLocalitiesFailure, (state, payload) => ({
+  on(LocalitiesActions.getLocalitiesFailure, (state, payload) => ({
     ...state,
     getLocalitiesIsFetching: false,
     getLocalitiesError: payload.error,
@@ -60,18 +60,18 @@ const _localityReducer = createReducer(
   /* --- Get Locality --- */
   /* -------------------- */
 
-  on(LocalityActions.getLocalityRequest, (state, payload) => ({
+  on(LocalitiesActions.getLocalityRequest, (state, payload) => ({
     ...state,
     getLocalityIsFetching: payload.withLoading,
     getLocalityError: null,
   })),
-  on(LocalityActions.getLocalitySuccess, (state, payload) => ({
+  on(LocalitiesActions.getLocalitySuccess, (state, payload) => ({
     ...state,
     locality: payload.locality,
     getLocalityIsFetching: false,
     getLocalityError: null,
   })),
-  on(LocalityActions.getLocalityFailure, (state, payload) => ({
+  on(LocalitiesActions.getLocalityFailure, (state, payload) => ({
     ...state,
     getLocalityIsFetching: false,
     getLocalityError: payload.error,
@@ -81,28 +81,28 @@ const _localityReducer = createReducer(
   /* --- Update Locality --- */
   /* ----------------------- */
 
-  on(LocalityActions.updateLocalityRequest, (state) => ({
+  on(LocalitiesActions.updateLocalityRequest, (state) => ({
     ...state,
     updateLocalityIsFetching: true,
     updateLocalityError: null,
   })),
-  on(LocalityActions.updateLocalitySuccess, (state, payload) => ({
+  on(LocalitiesActions.updateLocalitySuccess, (state, payload) => ({
     ...state,
     locality: payload.locality,
     updateLocalityIsFetching: false,
     updateLocalityError: null,
     updateLocalitySucceed: true,
   })),
-  on(LocalityActions.updateLocalityFailure, (state, payload) => ({
+  on(LocalitiesActions.updateLocalityFailure, (state, payload) => ({
     ...state,
     updateLocalityIsFetching: false,
     updateLocalityError: payload.error,
   })),
-  on(LocalityActions.refreshUpdateLocalitySucceed, (state) => ({
+  on(LocalitiesActions.refreshUpdateLocalitySucceed, (state) => ({
     ...state,
     updateLocalitySucceed: false,
   })),
-  on(LocalityActions.refreshUpdateLocalityFailure, (state) => ({
+  on(LocalitiesActions.refreshUpdateLocalityFailure, (state) => ({
     ...state,
     updateLocalityError: null,
   })),
@@ -111,27 +111,27 @@ const _localityReducer = createReducer(
   /* --- Add Locality --- */
   /* -------------------- */
 
-  on(LocalityActions.addLocalityRequest, (state) => ({
+  on(LocalitiesActions.addLocalityRequest, (state) => ({
     ...state,
     addLocalityIsFetching: true,
     addLocalityError: null,
   })),
-  on(LocalityActions.addLocalitySuccess, (state) => ({
+  on(LocalitiesActions.addLocalitySuccess, (state) => ({
     ...state,
     addLocalityIsFetching: false,
     addLocalityError: null,
     addLocalitySucceed: true,
   })),
-  on(LocalityActions.addLocalityFailure, (state, payload) => ({
+  on(LocalitiesActions.addLocalityFailure, (state, payload) => ({
     ...state,
     addLocalityIsFetching: false,
     addLocalityError: payload.error,
   })),
-  on(LocalityActions.refreshAddLocalitySucceed, (state) => ({
+  on(LocalitiesActions.refreshAddLocalitySucceed, (state) => ({
     ...state,
     addLocalitySucceed: false,
   })),
-  on(LocalityActions.refreshAddLocalityFailure, (state) => ({
+  on(LocalitiesActions.refreshAddLocalityFailure, (state) => ({
     ...state,
     addLocalityError: null,
   })),
@@ -140,35 +140,35 @@ const _localityReducer = createReducer(
   /* --- Remove Locality --- */
   /* ----------------------- */
 
-  on(LocalityActions.removeLocalityRequest, (state) => ({
+  on(LocalitiesActions.removeLocalityRequest, (state) => ({
     ...state,
     removeLocalityIsFetching: true,
     removeLocalityError: null,
   })),
-  on(LocalityActions.removeLocalitySuccess, (state) => ({
+  on(LocalitiesActions.removeLocalitySuccess, (state) => ({
     ...state,
     removeLocalityIsFetching: false,
     removeLocalityError: null,
     removeLocalitySucceed: true,
   })),
-  on(LocalityActions.removeLocalityFailure, (state, payload) => ({
+  on(LocalitiesActions.removeLocalityFailure, (state, payload) => ({
     ...state,
     removeLocalityIsFetching: false,
     removeLocalityError: payload.error,
   })),
-  on(LocalityActions.refreshRemoveLocalitySucceed, (state) => ({
+  on(LocalitiesActions.refreshRemoveLocalitySucceed, (state) => ({
     ...state,
     removeLocalitySucceed: false,
   })),
-  on(LocalityActions.refreshRemoveLocalityFailure, (state) => ({
+  on(LocalitiesActions.refreshRemoveLocalityFailure, (state) => ({
     ...state,
     removeLocalityError: null,
   }))
 );
 
-export function localityReducer(
-  state: LocalityState | undefined,
+export function localitiesReducer(
+  state: LocalitiesState | undefined,
   action: Action
-): LocalityState {
-  return _localityReducer(state, action);
+): LocalitiesState {
+  return _localitiesReducer(state, action);
 }

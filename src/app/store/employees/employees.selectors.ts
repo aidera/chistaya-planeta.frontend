@@ -1,86 +1,86 @@
 import { createSelector } from '@ngrx/store';
 
 import { State } from '../root.reducer';
-import { EmployeeState } from './employee.reducer';
+import { EmployeesState } from './employees.reducer';
 
-export const selectAll = (state: State) => state.employee;
+export const selectAll = (state: State) => state.employees;
 
 export const selectEmployees = createSelector(
   selectAll,
-  (state: EmployeeState) => state.employees
+  (state: EmployeesState) => state.employees
 );
 
 export const selectGetEmployeesIsFetching = createSelector(
   selectAll,
-  (state: EmployeeState) => state.getEmployeesIsFetching
+  (state: EmployeesState) => state.getEmployeesIsFetching
 );
 
 export const selectGetEmployeesPagination = createSelector(
   selectAll,
-  (state: EmployeeState) => state.getEmployeesPagination
+  (state: EmployeesState) => state.getEmployeesPagination
 );
 
 export const selectGetEmployeesError = createSelector(
   selectAll,
-  (state: EmployeeState) => state.getEmployeesError
+  (state: EmployeesState) => state.getEmployeesError
 );
 
 export const selectEmployee = createSelector(
   selectAll,
-  (state: EmployeeState) => state.employee
+  (state: EmployeesState) => state.employee
 );
 
 export const selectGetEmployeeIsFetching = createSelector(
   selectAll,
-  (state: EmployeeState) => state.getEmployeeIsFetching
+  (state: EmployeesState) => state.getEmployeeIsFetching
 );
 
 export const selectGetEmployeeError = createSelector(
   selectAll,
-  (state: EmployeeState) => state.getEmployeeError
+  (state: EmployeesState) => state.getEmployeeError
 );
 
 export const selectUpdateEmployeeIsFetching = createSelector(
   selectAll,
-  (state: EmployeeState) => state.updateEmployeeIsFetching
+  (state: EmployeesState) => state.updateEmployeeIsFetching
 );
 
 export const selectUpdateEmployeeError = createSelector(
   selectAll,
-  (state: EmployeeState) => state.updateEmployeeError
+  (state: EmployeesState) => state.updateEmployeeError
 );
 
 export const selectUpdateEmployeeSucceed = createSelector(
   selectAll,
-  (state: EmployeeState) => state.updateEmployeeSucceed
+  (state: EmployeesState) => state.updateEmployeeSucceed
 );
 
 export const selectAddEmployeeIsFetching = createSelector(
   selectAll,
-  (state: EmployeeState) => state.addEmployeeIsFetching
+  (state: EmployeesState) => state.addEmployeeIsFetching
 );
 
 export const selectAddEmployeeSucceed = createSelector(
   selectAll,
-  (state: EmployeeState) => state.addEmployeeSucceed
+  (state: EmployeesState) => state.addEmployeeSucceed
 );
 
 export const selectAddEmployeeError = createSelector(
   selectAll,
-  (state: EmployeeState) => state.addEmployeeError
+  (state: EmployeesState) => state.addEmployeeError
 );
 
 export const selectRemoveEmployeeIsFetching = createSelector(
   selectAll,
-  (state: EmployeeState) => state.removeEmployeeIsFetching
+  (state: EmployeesState) => state.removeEmployeeIsFetching
 );
 
 export const selectRemoveEmployeeSucceed = createSelector(
   selectAll,
-  (state: EmployeeState) => state.removeEmployeeSucceed
+  (state: EmployeesState) => state.removeEmployeeSucceed
 );
 
 export const selectRemoveEmployeeError = createSelector(
   selectAll,
-  (state: EmployeeState) => state.removeEmployeeError
+  (state: EmployeesState) => state.removeEmployeeError
 );

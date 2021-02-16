@@ -35,7 +35,7 @@ describe('EmployeeItemAddComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            employee: {
+            employees: {
               employee: null,
             },
             app: {

@@ -1,21 +1,21 @@
 import { createSelector } from '@ngrx/store';
 
 import { State } from '../root.reducer';
-import { OrderState } from './order.reducer';
+import { OrdersState } from './orders.reducer';
 
-export const selectAll = (state: State) => state.order;
+export const selectAll = (state: State) => state.orders;
 
 export const selectAddOrderIsFetching = createSelector(
   selectAll,
-  (state: OrderState) => state.addOrderIsFetching
+  (state: OrdersState) => state.addOrderIsFetching
 );
 
 export const selectAddOrderError = createSelector(
   selectAll,
-  (state: OrderState) => state.addOrderError
+  (state: OrdersState) => state.addOrderError
 );
 
 export const selectAddOrderSucceed = createSelector(
   selectAll,
-  (state: OrderState) => state.addOrderSucceed
+  (state: OrdersState) => state.addOrderSucceed
 );

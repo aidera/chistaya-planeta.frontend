@@ -1,32 +1,32 @@
 import { ActionReducerMap } from '@ngrx/store';
 
 import * as fromApp from './app/app.reducer';
-import * as fromUser from './user/user.reducer';
-import * as fromOrder from './order/order.reducer';
-import * as fromLocality from './locality/locality.reducer';
-import * as fromDivision from './division/division.reducer';
-import * as fromCar from './car/car.reducer';
-import * as fromEmployee from './employee/employee.reducer';
-import { LOGOUT } from './user/user.actions';
+import * as fromUsers from './users/users.reducer';
+import * as fromOrders from './orders/orders.reducer';
+import * as fromLocalities from './localities/localities.reducer';
+import * as fromDivisions from './divisions/divisions.reducer';
+import * as fromCars from './cars/cars.reducer';
+import * as fromEmployees from './employees/employees.reducer';
+import { LOGOUT } from './users/users.actions';
 
 export interface State {
   app: fromApp.AppState;
-  user: fromUser.UserState;
-  order: fromOrder.OrderState;
-  locality: fromLocality.LocalityState;
-  division: fromDivision.DivisionState;
-  car: fromCar.CarState;
-  employee: fromEmployee.EmployeeState;
+  users: fromUsers.UsersState;
+  orders: fromOrders.OrdersState;
+  localities: fromLocalities.LocalitiesState;
+  divisions: fromDivisions.DivisionsState;
+  cars: fromCars.CarsState;
+  employees: fromEmployees.EmployeesState;
 }
 
 export const rootReducer: ActionReducerMap<State> = {
   app: fromApp.appReducer,
-  user: fromUser.userReducer,
-  order: fromOrder.orderReducer,
-  locality: fromLocality.localityReducer,
-  division: fromDivision.divisionReducer,
-  car: fromCar.carReducer,
-  employee: fromEmployee.employeeReducer,
+  users: fromUsers.usersReducer,
+  orders: fromOrders.ordersReducer,
+  localities: fromLocalities.localitiesReducer,
+  divisions: fromDivisions.divisionsReducer,
+  cars: fromCars.carsReducer,
+  employees: fromEmployees.employeesReducer,
 };
 
 export function clearState(reducer): any {

@@ -15,10 +15,10 @@ import * as AppActions from '../../store/app/app.actions';
 import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ConverterService } from '../../services/converter/converter.service';
-import { LocalityService } from '../../services/api/locality.service';
-import { DivisionService } from '../../services/api/division.service';
-import { CarService } from '../../services/api/car.service';
-import { EmployeeService } from '../../services/api/employee.service';
+import { LocalitiesApiService } from '../../services/api/localities-api.service';
+import { DivisionsApiService } from '../../services/api/divisions-api.service';
+import { CarsApiService } from '../../services/api/cars-api.service';
+import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { ILocalityLessInfo } from '../../models/Locality';
 import { OptionType } from '../../models/types/OptionType';
 import { IDivisionLessInfo } from '../../models/Division';
@@ -104,10 +104,10 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
     protected routingState: RoutingStateService,
     protected socket: SocketIoService,
     protected converter: ConverterService,
-    protected localityApi: LocalityService,
-    protected divisionApi: DivisionService,
-    protected carApi: CarService,
-    protected employeeApi: EmployeeService
+    protected localitiesApi: LocalitiesApiService,
+    protected divisionsApi: DivisionsApiService,
+    protected carsApi: CarsApiService,
+    protected employeesApi: EmployeesApiService
   ) {}
 
   ngOnInit(): void {

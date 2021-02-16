@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as EmployeeActions from '../../../../store/employee/employee.actions';
-import * as EmployeeSelectors from '../../../../store/employee/employee.selectors';
+import * as EmployeesActions from '../../../../store/employees/employees.actions';
+import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
 import { ItemPageComponent } from '../../item-page.component';
 import { ICar } from '../../../../models/Car';
 import { IDivision } from '../../../../models/Division';
@@ -70,7 +70,7 @@ export class EmployeeItemComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.employeeApi
+            this.employeesApi
               .checkEmail(this.form.get('email').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -94,7 +94,7 @@ export class EmployeeItemComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.employeeApi
+            this.employeesApi
               .checkPhone('+7' + this.form.get('phone').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -119,13 +119,13 @@ export class EmployeeItemComponent
     /* ---------------- */
     this.getItemRequest = (withLoading: boolean) => {
       this.store.dispatch(
-        EmployeeActions.getEmployeeRequest({ id: this.itemId, withLoading })
+        EmployeesActions.getEmployeeRequest({ id: this.itemId, withLoading })
       );
     };
 
     this.updateItemRequest = () => {
       this.store.dispatch(
-        EmployeeActions.updateEmployeeRequest({
+        EmployeesActions.updateEmployeeRequest({
           id: this.item._id,
           status:
             this.activeField === 'status'
@@ -173,7 +173,7 @@ export class EmployeeItemComponent
 
     this.removeItemRequest = () => {
       this.store.dispatch(
-        EmployeeActions.removeEmployeeRequest({ id: this.item._id })
+        EmployeesActions.removeEmployeeRequest({ id: this.item._id })
       );
     };
 
@@ -182,7 +182,7 @@ export class EmployeeItemComponent
     /* ----------------- */
 
     this.item$ = this.store
-      .select(EmployeeSelectors.selectEmployee)
+      .select(EmployeesSelectors.selectEmployee)
       .subscribe((employee) => {
         this.item = employee;
 
@@ -226,7 +226,7 @@ export class EmployeeItemComponent
       });
 
     this.getItemError$ = this.store
-      .select(EmployeeSelectors.selectGetEmployeeError)
+      .select(EmployeesSelectors.selectGetEmployeeError)
       .subscribe((error) => {
         if (error?.code) {
           this.getItemError =
@@ -237,19 +237,19 @@ export class EmployeeItemComponent
       });
 
     this.itemIsFetching$ = this.store
-      .select(EmployeeSelectors.selectGetEmployeeIsFetching)
+      .select(EmployeesSelectors.selectGetEmployeeIsFetching)
       .subscribe((status) => {
         this.itemIsFetching = status;
       });
 
     this.itemIsUpdating$ = this.store
-      .select(EmployeeSelectors.selectUpdateEmployeeIsFetching)
+      .select(EmployeesSelectors.selectUpdateEmployeeIsFetching)
       .subscribe((status) => {
         this.itemIsUpdating = status;
       });
 
     this.itemIsUpdateSucceed$ = this.store
-      .select(EmployeeSelectors.selectUpdateEmployeeSucceed)
+      .select(EmployeesSelectors.selectUpdateEmployeeSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.activeField = null;
@@ -258,12 +258,12 @@ export class EmployeeItemComponent
             duration: 2000,
           });
 
-          this.store.dispatch(EmployeeActions.refreshUpdateEmployeeSucceed());
+          this.store.dispatch(EmployeesActions.refreshUpdateEmployeeSucceed());
         }
       });
 
     this.updateItemError$ = this.store
-      .select(EmployeeSelectors.selectUpdateEmployeeError)
+      .select(EmployeesSelectors.selectUpdateEmployeeError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
@@ -319,22 +319,22 @@ export class EmployeeItemComponent
           }
         }
 
-        this.store.dispatch(EmployeeActions.refreshUpdateEmployeeFailure());
+        this.store.dispatch(EmployeesActions.refreshUpdateEmployeeFailure());
       });
 
     this.itemIsRemoving$ = this.store
-      .select(EmployeeSelectors.selectRemoveEmployeeIsFetching)
+      .select(EmployeesSelectors.selectRemoveEmployeeIsFetching)
       .subscribe((status) => {
         this.itemIsRemoving = status;
       });
 
     this.itemIsRemoveSucceed$ = this.store
-      .select(EmployeeSelectors.selectRemoveEmployeeSucceed)
+      .select(EmployeesSelectors.selectRemoveEmployeeSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.isRemoveModalOpen = false;
 
-          this.store.dispatch(EmployeeActions.refreshRemoveEmployeeSucceed());
+          this.store.dispatch(EmployeesActions.refreshRemoveEmployeeSucceed());
 
           this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
@@ -345,7 +345,7 @@ export class EmployeeItemComponent
       });
 
     this.removeItemError$ = this.store
-      .select(EmployeeSelectors.selectRemoveEmployeeError)
+      .select(EmployeesSelectors.selectRemoveEmployeeError)
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
@@ -360,7 +360,7 @@ export class EmployeeItemComponent
           );
         }
 
-        this.store.dispatch(EmployeeActions.refreshRemoveEmployeeFailure());
+        this.store.dispatch(EmployeesActions.refreshRemoveEmployeeFailure());
       });
 
     this.socket.get()?.on('employees', (data) => {

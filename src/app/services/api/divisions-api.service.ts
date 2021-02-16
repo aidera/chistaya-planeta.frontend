@@ -45,7 +45,7 @@ export interface IGetDivisionResponse extends ServerResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class DivisionService {
+export class DivisionsApiService {
   private path = 'divisions';
 
   constructor(private http: HttpClient, private api: ApiService) {}

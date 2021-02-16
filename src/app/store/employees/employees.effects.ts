@@ -3,21 +3,21 @@ import { of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as EmployeeActions from './employee.actions';
-import { EmployeeService } from '../../services/api/employee.service';
+import * as EmployeesActions from './employees.actions';
+import { EmployeesApiService } from '../../services/api/employees-api.service';
 
 @Injectable()
-export class EmployeeEffects {
+export class EmployeesEffects {
   constructor(
     private actions$: Actions,
-    private employeeApi: EmployeeService
+    private employeesApi: EmployeesApiService
   ) {}
 
   getEmployees$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EmployeeActions.getEmployeesRequest),
+      ofType(EmployeesActions.getEmployeesRequest),
       switchMap((action) => {
-        return this.employeeApi
+        return this.employeesApi
           .get({
             pagination: action.params.pagination,
             sorting: action.params.sorting,
@@ -27,7 +27,7 @@ export class EmployeeEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.employees) {
-                return EmployeeActions.getEmployeesSuccess({
+                return EmployeesActions.getEmployeesSuccess({
                   employees: resData.employees,
                   pagination: {
                     perPage: resData.perPage,
@@ -37,13 +37,13 @@ export class EmployeeEffects {
                   },
                 });
               }
-              return EmployeeActions.getEmployeesFailure({
+              return EmployeesActions.getEmployeesFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                EmployeeActions.getEmployeesFailure({
+                EmployeesActions.getEmployeesFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -55,22 +55,22 @@ export class EmployeeEffects {
 
   getEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EmployeeActions.getEmployeeRequest),
+      ofType(EmployeesActions.getEmployeeRequest),
       switchMap((action) => {
-        return this.employeeApi.getOne(action.id).pipe(
+        return this.employeesApi.getOne(action.id).pipe(
           map((resData) => {
             if (resData && resData.employee) {
-              return EmployeeActions.getEmployeeSuccess({
+              return EmployeesActions.getEmployeeSuccess({
                 employee: resData.employee,
               });
             }
-            return EmployeeActions.getEmployeeFailure({
+            return EmployeesActions.getEmployeeFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              EmployeeActions.getEmployeeFailure({
+              EmployeesActions.getEmployeeFailure({
                 error: errorRes.error.error,
               })
             );
@@ -82,9 +82,9 @@ export class EmployeeEffects {
 
   updateEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EmployeeActions.updateEmployeeRequest),
+      ofType(EmployeesActions.updateEmployeeRequest),
       switchMap((action) => {
-        return this.employeeApi
+        return this.employeesApi
           .update(action.id, {
             status: action.status,
             email: action.email,
@@ -100,17 +100,17 @@ export class EmployeeEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.updatedEmployee) {
-                return EmployeeActions.updateEmployeeSuccess({
+                return EmployeesActions.updateEmployeeSuccess({
                   employee: resData.updatedEmployee,
                 });
               }
-              return EmployeeActions.updateEmployeeFailure({
+              return EmployeesActions.updateEmployeeFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                EmployeeActions.updateEmployeeFailure({
+                EmployeesActions.updateEmployeeFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -122,9 +122,9 @@ export class EmployeeEffects {
 
   addEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EmployeeActions.addEmployeeRequest),
+      ofType(EmployeesActions.addEmployeeRequest),
       switchMap((action) => {
-        return this.employeeApi
+        return this.employeesApi
           .add({
             surname: action.surname,
             role: action.role,
@@ -139,17 +139,17 @@ export class EmployeeEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.addedEmployee) {
-                return EmployeeActions.addEmployeeSuccess({
+                return EmployeesActions.addEmployeeSuccess({
                   employee: resData.addedEmployee,
                 });
               }
-              return EmployeeActions.addEmployeeFailure({
+              return EmployeesActions.addEmployeeFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                EmployeeActions.addEmployeeFailure({
+                EmployeesActions.addEmployeeFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -161,22 +161,22 @@ export class EmployeeEffects {
 
   removeEmployee$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EmployeeActions.removeEmployeeRequest),
+      ofType(EmployeesActions.removeEmployeeRequest),
       switchMap((action) => {
-        return this.employeeApi.remove(action.id).pipe(
+        return this.employeesApi.remove(action.id).pipe(
           map((resData) => {
             if (resData && resData.removedEmployee) {
-              return EmployeeActions.removeEmployeeSuccess({
+              return EmployeesActions.removeEmployeeSuccess({
                 employee: resData.removedEmployee,
               });
             }
-            return EmployeeActions.removeEmployeeFailure({
+            return EmployeesActions.removeEmployeeFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              EmployeeActions.removeEmployeeFailure({
+              EmployeesActions.removeEmployeeFailure({
                 error: errorRes.error.error,
               })
             );

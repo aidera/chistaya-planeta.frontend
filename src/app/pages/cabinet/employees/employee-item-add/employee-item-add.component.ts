@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as EmployeeSelectors from '../../../../store/employee/employee.selectors';
-import * as EmployeeActions from '../../../../store/employee/employee.actions';
+import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
+import * as EmployeesActions from '../../../../store/employees/employees.actions';
 import { responseCodes } from '../../../../data/responseCodes';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
 import employeeRoleOptions from '../../../../data/employeeRoleOptions';
@@ -60,7 +60,7 @@ export class EmployeeItemAddComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.employeeApi
+            this.employeesApi
               .checkEmail(this.form.get('email').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -78,7 +78,7 @@ export class EmployeeItemAddComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.employeeApi
+            this.employeesApi
               .checkPhone('+7' + this.form.get('phone').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -93,27 +93,27 @@ export class EmployeeItemAddComponent
     };
 
     this.isFetching$ = this.store
-      .select(EmployeeSelectors.selectAddEmployeeIsFetching)
+      .select(EmployeesSelectors.selectAddEmployeeIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.addingSucceed$ = this.store
-      .select(EmployeeSelectors.selectAddEmployeeSucceed)
+      .select(EmployeesSelectors.selectAddEmployeeSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
-          this.store.dispatch(EmployeeActions.refreshAddEmployeeSucceed());
+          this.store.dispatch(EmployeesActions.refreshAddEmployeeSucceed());
 
           this.router.navigate(['../'], { relativeTo: this.route });
         }
       });
 
     this.serverError$ = this.store
-      .select(EmployeeSelectors.selectAddEmployeeError)
+      .select(EmployeesSelectors.selectAddEmployeeError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
@@ -169,7 +169,7 @@ export class EmployeeItemAddComponent
           }
         }
 
-        this.store.dispatch(EmployeeActions.refreshAddEmployeeFailure());
+        this.store.dispatch(EmployeesActions.refreshAddEmployeeFailure());
       });
 
     /* ------------------------ */
@@ -178,7 +178,7 @@ export class EmployeeItemAddComponent
 
     this.createRequest = () => {
       this.store.dispatch(
-        EmployeeActions.addEmployeeRequest({
+        EmployeesActions.addEmployeeRequest({
           role: +this.form.get('role').value,
           name: this.form.get('name').value,
           surname: this.form.get('surname').value,

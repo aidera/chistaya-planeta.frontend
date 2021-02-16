@@ -1,86 +1,86 @@
 import { createSelector } from '@ngrx/store';
 
 import { State } from '../root.reducer';
-import { LocalityState } from './locality.reducer';
+import { LocalitiesState } from './localities.reducer';
 
-export const selectAll = (state: State) => state.locality;
+export const selectAll = (state: State) => state.localities;
 
 export const selectLocalities = createSelector(
   selectAll,
-  (state: LocalityState) => state.localities
+  (state: LocalitiesState) => state.localities
 );
 
 export const selectGetLocalitiesIsFetching = createSelector(
   selectAll,
-  (state: LocalityState) => state.getLocalitiesIsFetching
+  (state: LocalitiesState) => state.getLocalitiesIsFetching
 );
 
 export const selectGetLocalitiesPagination = createSelector(
   selectAll,
-  (state: LocalityState) => state.getLocalitiesPagination
+  (state: LocalitiesState) => state.getLocalitiesPagination
 );
 
 export const selectGetLocalitiesError = createSelector(
   selectAll,
-  (state: LocalityState) => state.getLocalitiesError
+  (state: LocalitiesState) => state.getLocalitiesError
 );
 
 export const selectLocality = createSelector(
   selectAll,
-  (state: LocalityState) => state.locality
+  (state: LocalitiesState) => state.locality
 );
 
 export const selectGetLocalityIsFetching = createSelector(
   selectAll,
-  (state: LocalityState) => state.getLocalityIsFetching
+  (state: LocalitiesState) => state.getLocalityIsFetching
 );
 
 export const selectGetLocalityError = createSelector(
   selectAll,
-  (state: LocalityState) => state.getLocalityError
+  (state: LocalitiesState) => state.getLocalityError
 );
 
 export const selectUpdateLocalityIsFetching = createSelector(
   selectAll,
-  (state: LocalityState) => state.updateLocalityIsFetching
+  (state: LocalitiesState) => state.updateLocalityIsFetching
 );
 
 export const selectUpdateLocalityError = createSelector(
   selectAll,
-  (state: LocalityState) => state.updateLocalityError
+  (state: LocalitiesState) => state.updateLocalityError
 );
 
 export const selectUpdateLocalitySucceed = createSelector(
   selectAll,
-  (state: LocalityState) => state.updateLocalitySucceed
+  (state: LocalitiesState) => state.updateLocalitySucceed
 );
 
 export const selectAddLocalityIsFetching = createSelector(
   selectAll,
-  (state: LocalityState) => state.addLocalityIsFetching
+  (state: LocalitiesState) => state.addLocalityIsFetching
 );
 
 export const selectAddLocalitySucceed = createSelector(
   selectAll,
-  (state: LocalityState) => state.addLocalitySucceed
+  (state: LocalitiesState) => state.addLocalitySucceed
 );
 
 export const selectAddLocalityError = createSelector(
   selectAll,
-  (state: LocalityState) => state.addLocalityError
+  (state: LocalitiesState) => state.addLocalityError
 );
 
 export const selectRemoveLocalityIsFetching = createSelector(
   selectAll,
-  (state: LocalityState) => state.removeLocalityIsFetching
+  (state: LocalitiesState) => state.removeLocalityIsFetching
 );
 
 export const selectRemoveLocalitySucceed = createSelector(
   selectAll,
-  (state: LocalityState) => state.removeLocalitySucceed
+  (state: LocalitiesState) => state.removeLocalitySucceed
 );
 
 export const selectRemoveLocalityError = createSelector(
   selectAll,
-  (state: LocalityState) => state.removeLocalityError
+  (state: LocalitiesState) => state.removeLocalityError
 );

@@ -7,8 +7,8 @@ import { Subscription } from 'rxjs';
 import * as fromRoot from '../../store/root.reducer';
 import * as AppActions from '../../store/app/app.actions';
 import * as AppSelectors from '../../store/app/app.selectors';
-import * as OrderActions from '../../store/order/order.actions';
-import * as OrderSelectors from '../../store/order/order.selectors';
+import * as OrdersActions from '../../store/orders/orders.actions';
+import * as OrdersSelectors from '../../store/orders/orders.selectors';
 import orderTypeOptions from '../../data/orderTypeOptions';
 import rawRecyclableTypeOptions from '../../data/rawRecyclableTypeOptions';
 import rawUnitOptions from '../../data/rawUnitOptions';
@@ -101,7 +101,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     });
 
     this.isAddOrderSucceed$ = this.store
-      .select(OrderSelectors.selectAddOrderSucceed)
+      .select(OrdersSelectors.selectAddOrderSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.router.navigate(['/order-succeed']);
@@ -109,16 +109,16 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
       });
 
     this.isFetching$ = this.store
-      .select(OrderSelectors.selectAddOrderIsFetching)
+      .select(OrdersSelectors.selectAddOrderIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.serverError$ = this.store
-      .select(OrderSelectors.selectAddOrderError)
+      .select(OrdersSelectors.selectAddOrderError)
       .subscribe((error) => {
         this.serverError = error;
-        this.store.dispatch(OrderActions.refreshAddOrderFailure());
+        this.store.dispatch(OrdersActions.refreshAddOrderFailure());
       });
   }
 
@@ -305,7 +305,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
         type: this.form.get('type').value,
       };
 
-      this.store.dispatch(OrderActions.addOrderRequest({ order }));
+      this.store.dispatch(OrdersActions.addOrderRequest({ order }));
     } else {
       let hasOneElementToScroll = false;
 

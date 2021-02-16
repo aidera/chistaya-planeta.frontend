@@ -47,7 +47,7 @@ export interface IGetCarsResponse extends ServerResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class CarService {
+export class CarsApiService {
   private path = 'cars';
 
   constructor(private http: HttpClient, private api: ApiService) {}

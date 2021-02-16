@@ -50,7 +50,7 @@ export interface IGetEmployeesResponse extends ServerResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class EmployeeService {
+export class EmployeesApiService {
   private path = 'employees';
 
   constructor(private http: HttpClient, private api: ApiService) {}

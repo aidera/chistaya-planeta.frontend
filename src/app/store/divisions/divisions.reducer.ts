@@ -1,11 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as DivisionActions from './division.actions';
+import * as DivisionsActions from './divisions.actions';
 import { ServerError } from '../../models/ServerResponse';
 import { PaginationType } from '../../models/types/PaginationType';
 import { IDivision } from '../../models/Division';
 
-export const divisionInitialState = {
+export const divisionsInitialState = {
   divisions: null as IDivision[] | null,
 
   getDivisionsIsFetching: false,
@@ -29,28 +29,28 @@ export const divisionInitialState = {
   removeDivisionError: null as ServerError | null,
   removeDivisionSucceed: false as boolean,
 };
-export type DivisionState = typeof divisionInitialState;
+export type DivisionsState = typeof divisionsInitialState;
 
-const _divisionReducer = createReducer(
-  divisionInitialState,
+const _divisionsReducer = createReducer(
+  divisionsInitialState,
 
   /* --------------------- */
   /* --- Get Divisions --- */
   /* --------------------- */
 
-  on(DivisionActions.getDivisionsRequest, (state, payload) => ({
+  on(DivisionsActions.getDivisionsRequest, (state, payload) => ({
     ...state,
     getDivisionsIsFetching: payload.withLoading,
     getDivisionsError: null,
   })),
-  on(DivisionActions.getDivisionsSuccess, (state, payload) => ({
+  on(DivisionsActions.getDivisionsSuccess, (state, payload) => ({
     ...state,
     divisions: payload.divisions,
     getDivisionsIsFetching: false,
     getDivisionsError: null,
     getDivisionsPagination: payload.pagination,
   })),
-  on(DivisionActions.getDivisionsFailure, (state, payload) => ({
+  on(DivisionsActions.getDivisionsFailure, (state, payload) => ({
     ...state,
     getDivisionsIsFetching: false,
     getDivisionsError: payload.error,
@@ -60,19 +60,19 @@ const _divisionReducer = createReducer(
   /* --- Get Division --- */
   /* -------------------- */
 
-  on(DivisionActions.getDivisionRequest, (state, payload) => ({
+  on(DivisionsActions.getDivisionRequest, (state, payload) => ({
     ...state,
     division: null,
     getDivisionIsFetching: payload.withLoading,
     getDivisionError: null,
   })),
-  on(DivisionActions.getDivisionSuccess, (state, payload) => ({
+  on(DivisionsActions.getDivisionSuccess, (state, payload) => ({
     ...state,
     division: payload.division,
     getDivisionIsFetching: false,
     getDivisionError: null,
   })),
-  on(DivisionActions.getDivisionFailure, (state, payload) => ({
+  on(DivisionsActions.getDivisionFailure, (state, payload) => ({
     ...state,
     getDivisionIsFetching: false,
     getDivisionError: payload.error,
@@ -82,28 +82,28 @@ const _divisionReducer = createReducer(
   /* --- Update Division --- */
   /* ----------------------- */
 
-  on(DivisionActions.updateDivisionRequest, (state) => ({
+  on(DivisionsActions.updateDivisionRequest, (state) => ({
     ...state,
     updateDivisionIsFetching: true,
     updateDivisionError: null,
   })),
-  on(DivisionActions.updateDivisionSuccess, (state, payload) => ({
+  on(DivisionsActions.updateDivisionSuccess, (state, payload) => ({
     ...state,
     division: payload.division,
     updateDivisionIsFetching: false,
     updateDivisionError: null,
     updateDivisionSucceed: true,
   })),
-  on(DivisionActions.updateDivisionFailure, (state, payload) => ({
+  on(DivisionsActions.updateDivisionFailure, (state, payload) => ({
     ...state,
     updateDivisionIsFetching: false,
     updateDivisionError: payload.error,
   })),
-  on(DivisionActions.refreshUpdateDivisionSucceed, (state) => ({
+  on(DivisionsActions.refreshUpdateDivisionSucceed, (state) => ({
     ...state,
     updateDivisionSucceed: false,
   })),
-  on(DivisionActions.refreshUpdateDivisionFailure, (state) => ({
+  on(DivisionsActions.refreshUpdateDivisionFailure, (state) => ({
     ...state,
     updateDivisionError: null,
   })),
@@ -112,27 +112,27 @@ const _divisionReducer = createReducer(
   /* --- Add Division --- */
   /* -------------------- */
 
-  on(DivisionActions.addDivisionRequest, (state) => ({
+  on(DivisionsActions.addDivisionRequest, (state) => ({
     ...state,
     addDivisionIsFetching: true,
     addDivisionError: null,
   })),
-  on(DivisionActions.addDivisionSuccess, (state) => ({
+  on(DivisionsActions.addDivisionSuccess, (state) => ({
     ...state,
     addDivisionIsFetching: false,
     addDivisionError: null,
     addDivisionSucceed: true,
   })),
-  on(DivisionActions.addDivisionFailure, (state, payload) => ({
+  on(DivisionsActions.addDivisionFailure, (state, payload) => ({
     ...state,
     addDivisionIsFetching: false,
     addDivisionError: payload.error,
   })),
-  on(DivisionActions.refreshAddDivisionSucceed, (state) => ({
+  on(DivisionsActions.refreshAddDivisionSucceed, (state) => ({
     ...state,
     addDivisionSucceed: false,
   })),
-  on(DivisionActions.refreshAddDivisionFailure, (state) => ({
+  on(DivisionsActions.refreshAddDivisionFailure, (state) => ({
     ...state,
     addDivisionError: null,
   })),
@@ -141,35 +141,35 @@ const _divisionReducer = createReducer(
   /* --- Remove Division --- */
   /* ----------------------- */
 
-  on(DivisionActions.removeDivisionRequest, (state) => ({
+  on(DivisionsActions.removeDivisionRequest, (state) => ({
     ...state,
     removeDivisionIsFetching: true,
     removeDivisionError: null,
   })),
-  on(DivisionActions.removeDivisionSuccess, (state) => ({
+  on(DivisionsActions.removeDivisionSuccess, (state) => ({
     ...state,
     removeDivisionIsFetching: false,
     removeDivisionError: null,
     removeDivisionSucceed: true,
   })),
-  on(DivisionActions.removeDivisionFailure, (state, payload) => ({
+  on(DivisionsActions.removeDivisionFailure, (state, payload) => ({
     ...state,
     removeDivisionIsFetching: false,
     removeDivisionError: payload.error,
   })),
-  on(DivisionActions.refreshRemoveDivisionSucceed, (state) => ({
+  on(DivisionsActions.refreshRemoveDivisionSucceed, (state) => ({
     ...state,
     removeDivisionSucceed: false,
   })),
-  on(DivisionActions.refreshRemoveDivisionFailure, (state) => ({
+  on(DivisionsActions.refreshRemoveDivisionFailure, (state) => ({
     ...state,
     removeDivisionError: null,
   }))
 );
 
-export function divisionReducer(
-  state: DivisionState | undefined,
+export function divisionsReducer(
+  state: DivisionsState | undefined,
   action: Action
-): DivisionState {
-  return _divisionReducer(state, action);
+): DivisionsState {
+  return _divisionsReducer(state, action);
 }

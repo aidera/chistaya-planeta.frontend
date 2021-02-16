@@ -42,7 +42,7 @@ describe('LocalitiesTableComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
-            locality: {
+            localities: {
               localities: [],
             },
           },

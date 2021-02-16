@@ -4,8 +4,8 @@ import { TablePageComponent } from '../../table-page.component';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
-import * as DivisionActions from '../../../../store/division/division.actions';
-import * as DivisionSelectors from '../../../../store/division/division.selectors';
+import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
+import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
@@ -172,7 +172,7 @@ export class DivisionsTableComponent
 
     this.onTableRequest = (request, withLoading) => {
       this.store.dispatch(
-        DivisionActions.getDivisionsRequest({ params: request, withLoading })
+        DivisionsActions.getDivisionsRequest({ params: request, withLoading })
       );
     };
 
@@ -197,7 +197,7 @@ export class DivisionsTableComponent
     /* ------------------------ */
 
     this.divisions$ = this.store
-      .select(DivisionSelectors.selectDivisions)
+      .select(DivisionsSelectors.selectDivisions)
       .subscribe((divisions) => {
         this.divisions = divisions;
         if (divisions) {
@@ -292,13 +292,13 @@ export class DivisionsTableComponent
       });
 
     this.isFetching$ = this.store
-      .select(DivisionSelectors.selectGetDivisionsIsFetching)
+      .select(DivisionsSelectors.selectGetDivisionsIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.getItemsError$ = this.store
-      .select(DivisionSelectors.selectGetDivisionsError)
+      .select(DivisionsSelectors.selectGetDivisionsError)
       .subscribe((error) => {
         if (error) {
           this.getItemsSnackbar = this.snackBar.open(
@@ -313,7 +313,7 @@ export class DivisionsTableComponent
       });
 
     this.pagination$ = this.store
-      .select(DivisionSelectors.selectGetDivisionsPagination)
+      .select(DivisionsSelectors.selectGetDivisionsPagination)
       .subscribe((pagination) => {
         this.tablePagination = pagination;
       });

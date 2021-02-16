@@ -36,7 +36,7 @@ describe('CarsTableComponent', () => {
         { provide: ConverterService },
         provideMockStore({
           initialState: {
-            car: {
+            cars: {
               cars: [],
             },
             app: {

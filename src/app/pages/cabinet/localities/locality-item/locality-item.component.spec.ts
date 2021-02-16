@@ -37,7 +37,7 @@ describe('LocalityItemComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            locality: {
+            localities: {
               locality: null,
             },
             app: {

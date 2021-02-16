@@ -1,31 +1,31 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as UserActions from './user.actions';
+import * as UsersActions from './users.actions';
 import { UserType } from '../../models/enums/UserType';
 import { IEmployee } from '../../models/Employee';
 import IClient from '../../models/Client';
 import { ServerError } from '../../models/ServerResponse';
 
-export const userInitialState = {
+export const usersInitialState = {
   type: null as UserType | null,
   user: null as IEmployee | IClient | null,
   isLoggingIn: false,
   isLoginSucceed: false,
   serverError: null as ServerError | null,
 };
-export type UserState = typeof userInitialState;
+export type UsersState = typeof usersInitialState;
 
-const _userReducer = createReducer(
-  userInitialState,
+const _usersReducer = createReducer(
+  usersInitialState,
 
-  on(UserActions.loginRequest, (state) => ({
+  on(UsersActions.loginRequest, (state) => ({
     ...state,
     isLoggingIn: true,
     isLoginSucceed: false,
     serverError: null,
   })),
 
-  on(UserActions.loginSuccess, (state, payload) => ({
+  on(UsersActions.loginSuccess, (state, payload) => ({
     ...state,
     isLoggingIn: false,
     isLoginSucceed: true,
@@ -34,22 +34,22 @@ const _userReducer = createReducer(
     serverError: null,
   })),
 
-  on(UserActions.loginFailure, (state, payload) => ({
+  on(UsersActions.loginFailure, (state, payload) => ({
     ...state,
     isLoggingIn: false,
     isLoginSucceed: false,
     serverError: { ...payload.error },
   })),
 
-  on(UserActions.loginSuccessRefresher, (state, payload) => ({
+  on(UsersActions.loginSuccessRefresher, (state, payload) => ({
     ...state,
     isLoginSucceed: false,
   }))
 );
 
-export function userReducer(
-  state: UserState | undefined,
+export function usersReducer(
+  state: UsersState | undefined,
   action: Action
-): UserState {
-  return _userReducer(state, action);
+): UsersState {
+  return _usersReducer(state, action);
 }

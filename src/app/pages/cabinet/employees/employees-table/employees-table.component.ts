@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
-import * as EmployeeActions from '../../../../store/employee/employee.actions';
-import * as EmployeeSelectors from '../../../../store/employee/employee.selectors';
+import * as EmployeesActions from '../../../../store/employees/employees.actions';
+import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
 import { TablePageComponent } from '../../table-page.component';
 import { IEmployee } from '../../../../models/Employee';
 import { IDivision } from '../../../../models/Division';
@@ -217,7 +217,7 @@ export class EmployeesTableComponent
 
     this.onTableRequest = (request, withLoading) => {
       this.store.dispatch(
-        EmployeeActions.getEmployeesRequest({ params: request, withLoading })
+        EmployeesActions.getEmployeesRequest({ params: request, withLoading })
       );
     };
 
@@ -242,7 +242,7 @@ export class EmployeesTableComponent
     /* ------------------------ */
 
     this.employees$ = this.store
-      .select(EmployeeSelectors.selectEmployees)
+      .select(EmployeesSelectors.selectEmployees)
       .subscribe((employees) => {
         this.employees = employees;
         if (employees) {
@@ -336,13 +336,13 @@ export class EmployeesTableComponent
       });
 
     this.isFetching$ = this.store
-      .select(EmployeeSelectors.selectGetEmployeesIsFetching)
+      .select(EmployeesSelectors.selectGetEmployeesIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.getItemsError$ = this.store
-      .select(EmployeeSelectors.selectGetEmployeesError)
+      .select(EmployeesSelectors.selectGetEmployeesError)
       .subscribe((error) => {
         if (error) {
           this.getItemsSnackbar = this.snackBar.open(
@@ -357,7 +357,7 @@ export class EmployeesTableComponent
       });
 
     this.pagination$ = this.store
-      .select(EmployeeSelectors.selectGetEmployeesPagination)
+      .select(EmployeesSelectors.selectGetEmployeesPagination)
       .subscribe((pagination) => {
         this.tablePagination = pagination;
       });

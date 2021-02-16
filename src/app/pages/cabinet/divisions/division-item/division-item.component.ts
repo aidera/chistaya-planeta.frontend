@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 
-import * as DivisionActions from '../../../../store/division/division.actions';
-import * as DivisionSelectors from '../../../../store/division/division.selectors';
+import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
+import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
@@ -54,7 +54,7 @@ export class DivisionItemComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.divisionApi
+            this.divisionsApi
               .checkName(this.form.get('name').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -75,13 +75,13 @@ export class DivisionItemComponent
     /* ---------------- */
     this.getItemRequest = (withLoading: boolean) => {
       this.store.dispatch(
-        DivisionActions.getDivisionRequest({ id: this.itemId, withLoading })
+        DivisionsActions.getDivisionRequest({ id: this.itemId, withLoading })
       );
     };
 
     this.updateItemRequest = () => {
       this.store.dispatch(
-        DivisionActions.updateDivisionRequest({
+        DivisionsActions.updateDivisionRequest({
           id: this.item._id,
           status:
             this.activeField === 'status'
@@ -109,7 +109,7 @@ export class DivisionItemComponent
 
     this.removeItemRequest = () => {
       this.store.dispatch(
-        DivisionActions.removeDivisionRequest({ id: this.item._id })
+        DivisionsActions.removeDivisionRequest({ id: this.item._id })
       );
     };
 
@@ -117,7 +117,7 @@ export class DivisionItemComponent
     /* Store connections */
     /* ----------------- */
     this.item$ = this.store
-      .select(DivisionSelectors.selectDivision)
+      .select(DivisionsSelectors.selectDivision)
       .subscribe((division) => {
         this.item = division;
 
@@ -150,7 +150,7 @@ export class DivisionItemComponent
       });
 
     this.getItemError$ = this.store
-      .select(DivisionSelectors.selectGetDivisionError)
+      .select(DivisionsSelectors.selectGetDivisionError)
       .subscribe((error) => {
         if (error?.code) {
           this.getItemError =
@@ -161,19 +161,19 @@ export class DivisionItemComponent
       });
 
     this.itemIsFetching$ = this.store
-      .select(DivisionSelectors.selectGetDivisionIsFetching)
+      .select(DivisionsSelectors.selectGetDivisionIsFetching)
       .subscribe((status) => {
         this.itemIsFetching = status;
       });
 
     this.itemIsUpdating$ = this.store
-      .select(DivisionSelectors.selectUpdateDivisionIsFetching)
+      .select(DivisionsSelectors.selectUpdateDivisionIsFetching)
       .subscribe((status) => {
         this.itemIsUpdating = status;
       });
 
     this.itemIsUpdateSucceed$ = this.store
-      .select(DivisionSelectors.selectUpdateDivisionSucceed)
+      .select(DivisionsSelectors.selectUpdateDivisionSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.activeField = null;
@@ -182,12 +182,12 @@ export class DivisionItemComponent
             duration: 2000,
           });
 
-          this.store.dispatch(DivisionActions.refreshUpdateDivisionSucceed());
+          this.store.dispatch(DivisionsActions.refreshUpdateDivisionSucceed());
         }
       });
 
     this.updateItemError$ = this.store
-      .select(DivisionSelectors.selectUpdateDivisionError)
+      .select(DivisionsSelectors.selectUpdateDivisionError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
@@ -215,22 +215,22 @@ export class DivisionItemComponent
           }
         }
 
-        this.store.dispatch(DivisionActions.refreshUpdateDivisionFailure());
+        this.store.dispatch(DivisionsActions.refreshUpdateDivisionFailure());
       });
 
     this.itemIsRemoving$ = this.store
-      .select(DivisionSelectors.selectRemoveDivisionIsFetching)
+      .select(DivisionsSelectors.selectRemoveDivisionIsFetching)
       .subscribe((status) => {
         this.itemIsRemoving = status;
       });
 
     this.itemIsRemoveSucceed$ = this.store
-      .select(DivisionSelectors.selectRemoveDivisionSucceed)
+      .select(DivisionsSelectors.selectRemoveDivisionSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.isRemoveModalOpen = false;
 
-          this.store.dispatch(DivisionActions.refreshRemoveDivisionSucceed());
+          this.store.dispatch(DivisionsActions.refreshRemoveDivisionSucceed());
 
           this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
@@ -241,7 +241,7 @@ export class DivisionItemComponent
       });
 
     this.removeItemError$ = this.store
-      .select(DivisionSelectors.selectRemoveDivisionError)
+      .select(DivisionsSelectors.selectRemoveDivisionError)
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
@@ -256,7 +256,7 @@ export class DivisionItemComponent
           );
         }
 
-        this.store.dispatch(DivisionActions.refreshRemoveDivisionFailure());
+        this.store.dispatch(DivisionsActions.refreshRemoveDivisionFailure());
       });
 
     this.socket.get()?.on('divisions', (data) => {

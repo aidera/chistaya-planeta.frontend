@@ -3,18 +3,18 @@ import { of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as UserActions from './user.actions';
-import { UserService } from '../../services/api/user.service';
+import * as UsersActions from './users.actions';
+import { UsersApiService } from '../../services/api/users-api.service';
 
 @Injectable()
-export class UserEffects {
-  constructor(private actions$: Actions, private userApi: UserService) {}
+export class UsersEffects {
+  constructor(private actions$: Actions, private usersApi: UsersApiService) {}
 
   login$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(UserActions.loginRequest),
+      ofType(UsersActions.loginRequest),
       switchMap((action) => {
-        return this.userApi
+        return this.usersApi
           .login({
             type: action.userType,
             email: action.email,
@@ -23,18 +23,18 @@ export class UserEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.user) {
-                return UserActions.loginSuccess({
+                return UsersActions.loginSuccess({
                   userType: action.userType,
                   user: resData.user,
                 });
               }
-              return UserActions.loginFailure({
+              return UsersActions.loginFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                UserActions.loginFailure({
+                UsersActions.loginFailure({
                   error: errorRes.error.error,
                 })
               );

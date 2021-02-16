@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
-import * as LocalitiesActions from '../../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
+import * as LocalitiesActions from '../../../../store/localities/localities.actions';
+import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { IDivision } from '../../../../models/Division';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { TablePageComponent } from '../../table-page.component';

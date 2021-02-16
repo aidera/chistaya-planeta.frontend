@@ -44,7 +44,7 @@ describe('DivisionsTableComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
-            division: {
+            divisions: {
               divisions: [],
             },
           },

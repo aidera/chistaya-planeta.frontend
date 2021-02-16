@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as CarSelectors from '../../../../store/car/car.selectors';
-import * as CarActions from '../../../../store/car/car.actions';
+import * as CarsSelectors from '../../../../store/cars/cars.selectors';
+import * as CarsActions from '../../../../store/cars/cars.actions';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 import { ICar } from '../../../../models/Car';
@@ -64,7 +64,7 @@ export class CarItemComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.carApi
+            this.carsApi
               .checkLicensePlate(this.form.get('licensePlate').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -87,13 +87,13 @@ export class CarItemComponent
     /* ---------------- */
     this.getItemRequest = (withLoading: boolean) => {
       this.store.dispatch(
-        CarActions.getCarRequest({ id: this.itemId, withLoading })
+        CarsActions.getCarRequest({ id: this.itemId, withLoading })
       );
     };
 
     this.updateItemRequest = () => {
       this.store.dispatch(
-        CarActions.updateCarRequest({
+        CarsActions.updateCarRequest({
           id: this.item._id,
           weight:
             this.activeField === 'weight'
@@ -132,13 +132,13 @@ export class CarItemComponent
     };
 
     this.removeItemRequest = () => {
-      this.store.dispatch(CarActions.removeCarRequest({ id: this.item._id }));
+      this.store.dispatch(CarsActions.removeCarRequest({ id: this.item._id }));
     };
 
     /* ----------------- */
     /* Store connections */
     /* ----------------- */
-    this.item$ = this.store.select(CarSelectors.selectCar).subscribe((car) => {
+    this.item$ = this.store.select(CarsSelectors.selectCar).subscribe((car) => {
       this.item = car;
 
       this.initForm();
@@ -179,7 +179,7 @@ export class CarItemComponent
     });
 
     this.getItemError$ = this.store
-      .select(CarSelectors.selectGetCarError)
+      .select(CarsSelectors.selectGetCarError)
       .subscribe((error) => {
         if (error?.code) {
           this.getItemError =
@@ -190,19 +190,19 @@ export class CarItemComponent
       });
 
     this.itemIsFetching$ = this.store
-      .select(CarSelectors.selectGetCarIsFetching)
+      .select(CarsSelectors.selectGetCarIsFetching)
       .subscribe((status) => {
         this.itemIsFetching = status;
       });
 
     this.itemIsUpdating$ = this.store
-      .select(CarSelectors.selectUpdateCarIsFetching)
+      .select(CarsSelectors.selectUpdateCarIsFetching)
       .subscribe((status) => {
         this.itemIsUpdating = status;
       });
 
     this.itemIsUpdateSucceed$ = this.store
-      .select(CarSelectors.selectUpdateCarSucceed)
+      .select(CarsSelectors.selectUpdateCarSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.activeField = null;
@@ -211,12 +211,12 @@ export class CarItemComponent
             duration: 2000,
           });
 
-          this.store.dispatch(CarActions.refreshUpdateCarSucceed());
+          this.store.dispatch(CarsActions.refreshUpdateCarSucceed());
         }
       });
 
     this.updateItemError$ = this.store
-      .select(CarSelectors.selectUpdateCarError)
+      .select(CarsSelectors.selectUpdateCarError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
@@ -255,22 +255,22 @@ export class CarItemComponent
           }
         }
 
-        this.store.dispatch(CarActions.refreshUpdateCarFailure());
+        this.store.dispatch(CarsActions.refreshUpdateCarFailure());
       });
 
     this.itemIsRemoving$ = this.store
-      .select(CarSelectors.selectRemoveCarIsFetching)
+      .select(CarsSelectors.selectRemoveCarIsFetching)
       .subscribe((status) => {
         this.itemIsRemoving = status;
       });
 
     this.itemIsRemoveSucceed$ = this.store
-      .select(CarSelectors.selectRemoveCarSucceed)
+      .select(CarsSelectors.selectRemoveCarSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.isRemoveModalOpen = false;
 
-          this.store.dispatch(CarActions.refreshRemoveCarSucceed());
+          this.store.dispatch(CarsActions.refreshRemoveCarSucceed());
 
           this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
@@ -281,7 +281,7 @@ export class CarItemComponent
       });
 
     this.removeItemError$ = this.store
-      .select(CarSelectors.selectRemoveCarError)
+      .select(CarsSelectors.selectRemoveCarError)
       .subscribe((error) => {
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
@@ -296,7 +296,7 @@ export class CarItemComponent
           );
         }
 
-        this.store.dispatch(CarActions.refreshRemoveCarFailure());
+        this.store.dispatch(CarsActions.refreshRemoveCarFailure());
       });
 
     this.socket.get()?.on('cars', (data) => {

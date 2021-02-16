@@ -1,31 +1,31 @@
 import { createSelector } from '@ngrx/store';
 
 import { State } from '../root.reducer';
-import { UserState } from './user.reducer';
+import { UsersState } from './users.reducer';
 
-export const selectAll = (state: State) => state.user;
+export const selectAll = (state: State) => state.users;
 
 export const selectUserType = createSelector(
   selectAll,
-  (state: UserState) => state.type
+  (state: UsersState) => state.type
 );
 
 export const selectUser = createSelector(
   selectAll,
-  (state: UserState) => state.user
+  (state: UsersState) => state.user
 );
 
 export const selectIsLoggingIn = createSelector(
   selectAll,
-  (state: UserState) => state.isLoggingIn
+  (state: UsersState) => state.isLoggingIn
 );
 
 export const selectIsLoginSucceed = createSelector(
   selectAll,
-  (state: UserState) => state.isLoginSucceed
+  (state: UsersState) => state.isLoginSucceed
 );
 
 export const selectServerError = createSelector(
   selectAll,
-  (state: UserState) => state.serverError
+  (state: UsersState) => state.serverError
 );

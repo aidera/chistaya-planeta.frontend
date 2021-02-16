@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 
-import * as DivisionSelectors from '../../../../store/division/division.selectors';
-import * as DivisionActions from '../../../../store/division/division.actions';
+import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
+import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 
@@ -43,7 +43,7 @@ export class DivisionItemAddComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.divisionApi
+            this.divisionsApi
               .checkName(this.form.get('name').value)
               .pipe(take(1))
               .subscribe((response) => {
@@ -71,27 +71,27 @@ export class DivisionItemAddComponent
     /* -------------------------- */
 
     this.isFetching$ = this.store
-      .select(DivisionSelectors.selectAddDivisionIsFetching)
+      .select(DivisionsSelectors.selectAddDivisionIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.addingSucceed$ = this.store
-      .select(DivisionSelectors.selectAddDivisionSucceed)
+      .select(DivisionsSelectors.selectAddDivisionSucceed)
       .subscribe((status) => {
         if (status === true) {
           this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
-          this.store.dispatch(DivisionActions.refreshAddDivisionSucceed());
+          this.store.dispatch(DivisionsActions.refreshAddDivisionSucceed());
 
           this.router.navigate(['../'], { relativeTo: this.route });
         }
       });
 
     this.serverError$ = this.store
-      .select(DivisionSelectors.selectAddDivisionError)
+      .select(DivisionsSelectors.selectAddDivisionError)
       .subscribe((error) => {
         if (error) {
           if (error.foundedItem) {
@@ -119,7 +119,7 @@ export class DivisionItemAddComponent
           }
         }
 
-        this.store.dispatch(DivisionActions.refreshAddDivisionFailure());
+        this.store.dispatch(DivisionsActions.refreshAddDivisionFailure());
       });
 
     /* ------------------------ */
@@ -128,7 +128,7 @@ export class DivisionItemAddComponent
 
     this.createRequest = () => {
       this.store.dispatch(
-        DivisionActions.addDivisionRequest({
+        DivisionsActions.addDivisionRequest({
           name: this.form.get('name').value,
           locality: this.form.get('locality').value,
           street: this.form.get('street').value,

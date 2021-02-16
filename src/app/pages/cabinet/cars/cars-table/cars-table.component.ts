@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 
-import * as CarActions from '../../../../store/car/car.actions';
-import * as CarSelectors from '../../../../store/car/car.selectors';
+import * as CarsActions from '../../../../store/cars/cars.actions';
+import * as CarsSelectors from '../../../../store/cars/cars.selectors';
 import { TablePageComponent } from '../../table-page.component';
 import { ICar } from '../../../../models/Car';
 import CarStatus from '../../../../models/enums/CarStatus';
@@ -206,7 +206,7 @@ export class CarsTableComponent
 
     this.onTableRequest = (request, withLoading) => {
       this.store.dispatch(
-        CarActions.getCarsRequest({ params: request, withLoading })
+        CarsActions.getCarsRequest({ params: request, withLoading })
       );
     };
 
@@ -231,7 +231,7 @@ export class CarsTableComponent
     /* ------------------------ */
 
     this.cars$ = this.store
-      .select(CarSelectors.selectCars)
+      .select(CarsSelectors.selectCars)
       .subscribe((cars) => {
         this.cars = cars;
         if (cars) {
@@ -329,13 +329,13 @@ export class CarsTableComponent
       });
 
     this.isFetching$ = this.store
-      .select(CarSelectors.selectGetCarsIsFetching)
+      .select(CarsSelectors.selectGetCarsIsFetching)
       .subscribe((status) => {
         this.isFetching = status;
       });
 
     this.getItemsError$ = this.store
-      .select(CarSelectors.selectGetCarsError)
+      .select(CarsSelectors.selectGetCarsError)
       .subscribe((error) => {
         if (error) {
           this.getItemsSnackbar = this.snackBar.open(
@@ -350,7 +350,7 @@ export class CarsTableComponent
       });
 
     this.pagination$ = this.store
-      .select(CarSelectors.selectGetCarsPagination)
+      .select(CarsSelectors.selectGetCarsPagination)
       .subscribe((pagination) => {
         this.tablePagination = pagination;
       });

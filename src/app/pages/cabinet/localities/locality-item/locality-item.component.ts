@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import * as LocalitiesActions from '../../../../store/locality/locality.actions';
-import * as LocalitiesSelectors from '../../../../store/locality/locality.selectors';
+import * as LocalitiesActions from '../../../../store/localities/localities.actions';
+import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { ILocality } from '../../../../models/Locality';
 import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
@@ -53,7 +53,7 @@ export class LocalityItemComponent
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
           if (value !== '') {
-            this.localityApi
+            this.localitiesApi
               .checkName(this.form.get('name').value)
               .pipe(take(1))
               .subscribe((response) => {

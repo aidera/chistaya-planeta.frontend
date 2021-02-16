@@ -3,21 +3,21 @@ import { of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as DivisionActions from './division.actions';
-import { DivisionService } from '../../services/api/division.service';
+import * as DivisionsActions from './divisions.actions';
+import { DivisionsApiService } from '../../services/api/divisions-api.service';
 
 @Injectable()
-export class DivisionEffects {
+export class DivisionsEffects {
   constructor(
     private actions$: Actions,
-    private divisionApi: DivisionService
+    private divisionsApi: DivisionsApiService
   ) {}
 
   getDivisions$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.getDivisionsRequest),
+      ofType(DivisionsActions.getDivisionsRequest),
       switchMap((action) => {
-        return this.divisionApi
+        return this.divisionsApi
           .get({
             pagination: action.params.pagination,
             sorting: action.params.sorting,
@@ -27,7 +27,7 @@ export class DivisionEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.divisions) {
-                return DivisionActions.getDivisionsSuccess({
+                return DivisionsActions.getDivisionsSuccess({
                   divisions: resData.divisions,
                   pagination: {
                     perPage: resData.perPage,
@@ -37,13 +37,13 @@ export class DivisionEffects {
                   },
                 });
               }
-              return DivisionActions.getDivisionsFailure({
+              return DivisionsActions.getDivisionsFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                DivisionActions.getDivisionsFailure({
+                DivisionsActions.getDivisionsFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -55,22 +55,22 @@ export class DivisionEffects {
 
   getDivision$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.getDivisionRequest),
+      ofType(DivisionsActions.getDivisionRequest),
       switchMap((action) => {
-        return this.divisionApi.getOne(action.id).pipe(
+        return this.divisionsApi.getOne(action.id).pipe(
           map((resData) => {
             if (resData && resData.division) {
-              return DivisionActions.getDivisionSuccess({
+              return DivisionsActions.getDivisionSuccess({
                 division: resData.division,
               });
             }
-            return DivisionActions.getDivisionFailure({
+            return DivisionsActions.getDivisionFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              DivisionActions.getDivisionFailure({
+              DivisionsActions.getDivisionFailure({
                 error: errorRes.error.error,
               })
             );
@@ -82,9 +82,9 @@ export class DivisionEffects {
 
   updateDivision$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.updateDivisionRequest),
+      ofType(DivisionsActions.updateDivisionRequest),
       switchMap((action) => {
-        return this.divisionApi
+        return this.divisionsApi
           .update(action.id, {
             status: action.status,
             name: action.name,
@@ -95,17 +95,17 @@ export class DivisionEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.updatedDivision) {
-                return DivisionActions.updateDivisionSuccess({
+                return DivisionsActions.updateDivisionSuccess({
                   division: resData.updatedDivision,
                 });
               }
-              return DivisionActions.updateDivisionFailure({
+              return DivisionsActions.updateDivisionFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                DivisionActions.updateDivisionFailure({
+                DivisionsActions.updateDivisionFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -117,9 +117,9 @@ export class DivisionEffects {
 
   addDivision$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.addDivisionRequest),
+      ofType(DivisionsActions.addDivisionRequest),
       switchMap((action) => {
-        return this.divisionApi
+        return this.divisionsApi
           .add({
             name: action.name,
             locality: action.locality,
@@ -129,17 +129,17 @@ export class DivisionEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.addedDivision) {
-                return DivisionActions.addDivisionSuccess({
+                return DivisionsActions.addDivisionSuccess({
                   division: resData.addedDivision,
                 });
               }
-              return DivisionActions.addDivisionFailure({
+              return DivisionsActions.addDivisionFailure({
                 error: resData.error,
               });
             }),
             catchError((errorRes) => {
               return of(
-                DivisionActions.addDivisionFailure({
+                DivisionsActions.addDivisionFailure({
                   error: errorRes.error.error,
                 })
               );
@@ -151,22 +151,22 @@ export class DivisionEffects {
 
   removeDivision$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(DivisionActions.removeDivisionRequest),
+      ofType(DivisionsActions.removeDivisionRequest),
       switchMap((action) => {
-        return this.divisionApi.remove(action.id).pipe(
+        return this.divisionsApi.remove(action.id).pipe(
           map((resData) => {
             if (resData && resData.removedDivision) {
-              return DivisionActions.removeDivisionSuccess({
+              return DivisionsActions.removeDivisionSuccess({
                 division: resData.removedDivision,
               });
             }
-            return DivisionActions.removeDivisionFailure({
+            return DivisionsActions.removeDivisionFailure({
               error: resData.error,
             });
           }),
           catchError((errorRes) => {
             return of(
-              DivisionActions.removeDivisionFailure({
+              DivisionsActions.removeDivisionFailure({
                 error: errorRes.error.error,
               })
             );

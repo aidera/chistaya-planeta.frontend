@@ -24,7 +24,7 @@ describe('OrderSucceedComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            order: {
+            orders: {
               addOrderLocalities: [],
             },
           },

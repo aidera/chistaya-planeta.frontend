@@ -9,10 +9,10 @@ import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ConverterService } from '../../services/converter/converter.service';
-import { LocalityService } from '../../services/api/locality.service';
-import { DivisionService } from '../../services/api/division.service';
-import { CarService } from '../../services/api/car.service';
-import { EmployeeService } from '../../services/api/employee.service';
+import { LocalitiesApiService } from '../../services/api/localities-api.service';
+import { DivisionsApiService } from '../../services/api/divisions-api.service';
+import { CarsApiService } from '../../services/api/cars-api.service';
+import { EmployeesApiService } from '../../services/api/employees-api.service';
 
 describe('ItemAddComponent', () => {
   let component: ItemAddPageComponent;
@@ -31,10 +31,10 @@ describe('ItemAddComponent', () => {
         SocketIoService,
         RoutingStateService,
         ConverterService,
-        LocalityService,
-        DivisionService,
-        CarService,
-        EmployeeService,
+        LocalitiesApiService,
+        DivisionsApiService,
+        CarsApiService,
+        EmployeesApiService,
         provideMockStore({
           initialState: {
             app: {
