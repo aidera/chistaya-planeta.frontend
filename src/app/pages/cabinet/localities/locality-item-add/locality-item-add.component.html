@@ -1,15 +1,22 @@
+<!-- Header -->
 <div class="cabinet-header">
   <h1>Добавить населённый пункт</h1>
 </div>
 
+<!-- Content -->
 <form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <!-- Backlink -->
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
+    >← Список населённых пунктов</a
+  >
+
   <div class="cabinet-content__grid">
     <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Основная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Name -->
           <app-text-input
             fieldId="name"
             [control]="form.get('name')"

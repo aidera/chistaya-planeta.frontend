@@ -1,15 +1,22 @@
+<!-- Header -->
 <div class="cabinet-header">
   <h1>Добавить сотрудника</h1>
 </div>
 
+<!-- Content -->
 <form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <!-- Backlink -->
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
+    >← Список сотрудников</a
+  >
+
   <div class="cabinet-content__grid">
     <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Основная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Role -->
           <app-select
             fieldId="role"
             [control]="form.get('role')"
@@ -29,6 +36,7 @@
         <h2>Личные данные</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Name -->
           <app-text-input
             fieldId="name"
             [control]="form.get('name')"
@@ -41,6 +49,7 @@
 
           <br /><br />
 
+          <!-- Surname -->
           <app-text-input
             fieldId="surname"
             [control]="form.get('surname')"
@@ -53,6 +62,7 @@
 
           <br /><br />
 
+          <!-- Patronymic -->
           <app-text-input
             fieldId="patronymic"
             [control]="form.get('patronymic')"
@@ -67,6 +77,7 @@
         <h2>Контактная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Email -->
           <app-text-input
             fieldId="email"
             [control]="form.get('email')"
@@ -88,6 +99,7 @@
 
           <br /><br />
 
+          <!-- Phone -->
           <app-text-input
             fieldId="phone"
             [control]="form.get('phone')"
@@ -117,6 +129,7 @@
         <h2>Место работы</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Locality -->
           <app-select
             fieldId="locality"
             [control]="form.get('locality')"
@@ -134,6 +147,7 @@
 
           <br /><br />
 
+          <!-- Division -->
           <app-select
             *ngIf="form.get('locality').value && divisionsOptions.length > 1"
             fieldId="division"
@@ -190,6 +204,7 @@
         <h2>Автомобили</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Cars -->
           <app-select
             *ngIf="form.get('division').value && carsOptions.length > 0"
             fieldId="cars"

@@ -1,15 +1,22 @@
+<!-- Header -->
 <div class="cabinet-header">
   <h1>Добавить автомобиль</h1>
 </div>
 
+<!-- Content -->
 <form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()">← Назад</a>
+  <!-- Backlink -->
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
+    >← Список автомобилей</a
+  >
+
   <div class="cabinet-content__grid">
     <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Основная информация</h2>
 
         <div class="cabinet-content__grid-item-form-content">
+          <!-- License Plate -->
           <app-text-input
             fieldId="licensePlate"
             [control]="form.get('licensePlate')"
@@ -31,6 +38,7 @@
 
           <br /><br />
 
+          <!-- Type -->
           <app-select
             fieldId="type"
             [control]="form.get('type')"
@@ -44,6 +52,7 @@
 
           <br /><br />
 
+          <!-- Is Corporate -->
           <app-select
             fieldId="isCorporate"
             [control]="form.get('isCorporate')"
@@ -60,6 +69,7 @@
 
           <br /><br />
 
+          <!-- Weight -->
           <app-text-input
             fieldId="weight"
             [control]="form.get('weight')"
@@ -78,7 +88,9 @@
     <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Местоположение</h2>
+
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Locality -->
           <app-select
             fieldId="locality"
             [control]="form.get('locality')"
@@ -96,6 +108,7 @@
 
           <br /><br />
 
+          <!-- Divisions -->
           <app-select
             *ngIf="form.get('locality').value && divisionsOptions.length > 1"
             fieldId="divisions"
@@ -145,7 +158,9 @@
     <div class="cabinet-content__grid-item">
       <mat-card>
         <h2>Водители</h2>
+
         <div class="cabinet-content__grid-item-form-content">
+          <!-- Drivers -->
           <app-select
             *ngIf="
               form.get('divisions').value.length >= 1 &&
