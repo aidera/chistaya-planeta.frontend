@@ -371,6 +371,8 @@ export class CarItemComponent
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
+    this.socket.get()?.off('cars');
+
     this.localitiesOptions$?.unsubscribe?.();
     this.divisionsOptions$?.unsubscribe?.();
     this.employeesOptions$?.unsubscribe?.();

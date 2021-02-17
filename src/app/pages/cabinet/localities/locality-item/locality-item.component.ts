@@ -249,6 +249,12 @@ export class LocalityItemComponent
     super.ngOnInit();
   }
 
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.socket.get()?.off('localities');
+  }
+
   public onDeactivateModalAction(action: ModalAction): void {
     this.isDeactivateModalOpen = false;
     if (action === 'reject') {

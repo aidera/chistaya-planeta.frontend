@@ -285,4 +285,10 @@ export class DivisionItemComponent
 
     super.ngOnInit();
   }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.socket.get()?.off('divisions');
+  }
 }

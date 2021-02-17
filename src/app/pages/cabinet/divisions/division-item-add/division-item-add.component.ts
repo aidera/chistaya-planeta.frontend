@@ -160,6 +160,8 @@ export class DivisionItemAddComponent
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
+    this.socket.get()?.off('divisions');
+
     this.localitiesOptions$?.unsubscribe?.();
     this.options.destroyLocalitiesOptions();
   }

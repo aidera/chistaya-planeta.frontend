@@ -433,6 +433,8 @@ export class EmployeeItemComponent
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
+    this.socket.get()?.off('employees');
+
     this.localitiesOptions$?.unsubscribe?.();
     this.divisionsOptions$?.unsubscribe?.();
     this.carsOptions$?.unsubscribe?.();

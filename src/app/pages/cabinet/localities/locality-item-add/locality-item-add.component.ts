@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as LocalitiesActions from '../../../../store/localities/localities.actions';
@@ -14,7 +14,7 @@ import { responseCodes } from '../../../../data/responseCodes';
 })
 export class LocalityItemAddComponent
   extends ItemAddPageComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   public alreadyExistId: string;
 
   ngOnInit(): void {
@@ -108,5 +108,11 @@ export class LocalityItemAddComponent
     /* --------------------------- */
 
     super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.socket.get()?.off('localities');
   }
 }
