@@ -105,6 +105,7 @@
     grid-gap: 32px;
     @media (max-width: 1250px) {
       grid-template-columns: 1fr;
+      grid-gap: 0;
     }
 
     .cabinet-content__grid-item {
