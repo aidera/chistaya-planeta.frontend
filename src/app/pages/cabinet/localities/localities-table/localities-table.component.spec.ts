@@ -16,6 +16,7 @@ import { TextInputComponent } from '../../../../components/form-controls/text-in
 import { DateTimeInputComponent } from '../../../../components/form-controls/date-time-input/date-time-input.component';
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
+import { OptionsService } from '../../../../services/options/options.service';
 
 describe('LocalitiesTableComponent', () => {
   let component: LocalitiesTableComponent;
@@ -33,6 +34,7 @@ describe('LocalitiesTableComponent', () => {
         CheckboxComponent,
       ],
       providers: [
+        OptionsService,
         { provide: ConverterService },
         provideMockStore({
           initialState: {

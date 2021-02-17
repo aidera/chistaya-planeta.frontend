@@ -6,11 +6,12 @@ import { formatDate } from '@angular/common';
 import * as LocalitiesActions from '../../../../store/localities/localities.actions';
 import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { IDivision } from '../../../../models/Division';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
-import { TablePageComponent } from '../../table-page.component';
 import { ILocality } from '../../../../models/Locality';
 import { ICar } from 'src/app/models/Car';
 import { IEmployee } from '../../../../models/Employee';
+import { OptionType } from '../../../../models/types/OptionType';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import { TablePageComponent } from '../../table-page.component';
 import simpleStatusOptions from '../../../../data/simpleStatusOptions';
 
 @Component({
@@ -23,6 +24,13 @@ export class LocalitiesTableComponent
   implements OnInit, OnDestroy {
   private localities$: Subscription;
   private localities: ILocality[];
+
+  public divisionsOptions$: Subscription;
+  public divisionsOptions: OptionType[] = [];
+  public carsOptions$: Subscription;
+  public carsOptions: OptionType[] = [];
+  public employeesOptions$: Subscription;
+  public employeesOptions: OptionType[] = [];
 
   public simpleStatusOptions = simpleStatusOptions;
 
@@ -101,13 +109,70 @@ export class LocalitiesTableComponent
       });
     };
 
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = false;
-    this.useDivisionsOptions = true;
-    this.useCarsOptions = true;
-    this.useEmployeesOptions = true;
+    this.afterAdvancedSearchFormInit = () => {
+      /* ---------------- */
+      /* Options requests */
+      /* ---------------- */
+
+      /* Divisions */
+      this.divisionsOptions$?.unsubscribe();
+      this.divisionsOptions$ = this.options
+        .getDivisionsOptions({})
+        .subscribe((value) => {
+          this.divisionsOptions = value;
+          if (value === null) {
+            this.options.initDivisionsOptions();
+          }
+        });
+
+      /* Employees */
+      this.employeesOptions$?.unsubscribe();
+      this.employeesOptions$ = this.options
+        .getEmployeesOptions({})
+        .subscribe((value) => {
+          this.employeesOptions = value;
+          if (value === null) {
+            this.options.initEmployeesOptions();
+          }
+        });
+
+      /* Cars */
+      this.carsOptions$?.unsubscribe();
+      this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
+        this.carsOptions = value;
+        if (value === null) {
+          this.options.initCarsOptions();
+        }
+      });
+
+      this.advancedSearchForm
+        ?.get('divisions')
+        .valueChanges.subscribe((fieldValues) => {
+          this.advancedSearchForm.get('employees').setValue([]);
+
+          /* Employees */
+          this.employeesOptions$?.unsubscribe();
+          this.employeesOptions$ = this.options
+            .getEmployeesOptions({ divisionsIds: fieldValues })
+            .subscribe((value) => {
+              this.employeesOptions = value;
+              if (value === null) {
+                this.options.initEmployeesOptions();
+              }
+            });
+
+          /* Cars */
+          this.carsOptions$?.unsubscribe();
+          this.carsOptions$ = this.options
+            .getCarsOptions({ divisionsIds: fieldValues })
+            .subscribe((value) => {
+              this.carsOptions = value;
+              if (value === null) {
+                this.options.initCarsOptions();
+              }
+            });
+        });
+    };
 
     /* ----------------------- */
     /* --- Request actions --- */
@@ -299,7 +364,13 @@ export class LocalitiesTableComponent
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
+
     this.localities$?.unsubscribe?.();
+    this.socket.get()?.off('localities');
+
+    this.options.destroyDivisionsOptions();
+    this.options.destroyCarsOptions();
+    this.options.destroyEmployeesOptions();
   }
 
   public onTableItemClick(index: number): void {

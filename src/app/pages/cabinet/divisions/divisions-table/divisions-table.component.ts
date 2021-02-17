@@ -6,12 +6,13 @@ import { formatDate } from '@angular/common';
 
 import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
 import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
 import { ICar } from '../../../../models/Car';
 import { IEmployee } from '../../../../models/Employee';
-import simpleStatusOptions from 'src/app/data/simpleStatusOptions';
+import { OptionType } from '../../../../models/types/OptionType';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import simpleStatusOptions from '../../../../data/simpleStatusOptions';
 
 @Component({
   selector: 'app-divisions-table',
@@ -23,6 +24,13 @@ export class DivisionsTableComponent
   implements OnInit, OnDestroy {
   private divisions$: Subscription;
   private divisions: IDivision[];
+
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
+  public carsOptions$: Subscription;
+  public carsOptions: OptionType[] = [];
+  public employeesOptions$: Subscription;
+  public employeesOptions: OptionType[] = [];
 
   public simpleStatusOptions = simpleStatusOptions;
 
@@ -111,6 +119,72 @@ export class DivisionsTableComponent
         updatedAtFrom: new FormControl(''),
         updatedAtTo: new FormControl(''),
       });
+    };
+
+    this.afterAdvancedSearchFormInit = () => {
+      /* ---------------- */
+      /* Options requests */
+      /* ---------------- */
+
+      /* Localities */
+      this.localitiesOptions$?.unsubscribe();
+      this.localitiesOptions$ = this.options
+        .getLocalitiesOptions({})
+        .subscribe((value) => {
+          this.localitiesOptions = value;
+          if (value === null) {
+            this.options.initLocalitiesOptions();
+          }
+        });
+
+      /* Cars */
+      this.carsOptions$?.unsubscribe();
+      this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
+        this.carsOptions = value;
+        if (value === null) {
+          this.options.initCarsOptions();
+        }
+      });
+
+      /* Employees */
+      this.employeesOptions$?.unsubscribe();
+      this.employeesOptions$ = this.options
+        .getEmployeesOptions({})
+        .subscribe((value) => {
+          this.employeesOptions = value;
+          if (value === null) {
+            this.options.initEmployeesOptions();
+          }
+        });
+
+      this.advancedSearchForm
+        ?.get('localities')
+        .valueChanges.subscribe((fieldValues) => {
+          this.advancedSearchForm.get('cars').setValue([]);
+          this.advancedSearchForm.get('employees').setValue([]);
+
+          /* Cars */
+          this.carsOptions$?.unsubscribe();
+          this.carsOptions$ = this.options
+            .getCarsOptions({ localitiesIds: fieldValues })
+            .subscribe((value) => {
+              this.carsOptions = value;
+              if (value === null) {
+                this.options.initCarsOptions();
+              }
+            });
+
+          /* Employees */
+          this.employeesOptions$?.unsubscribe();
+          this.employeesOptions$ = this.options
+            .getEmployeesOptions({ localitiesIds: fieldValues })
+            .subscribe((value) => {
+              this.employeesOptions = value;
+              if (value === null) {
+                this.options.initEmployeesOptions();
+              }
+            });
+        });
     };
 
     /* ----------------------- */
@@ -327,7 +401,13 @@ export class DivisionsTableComponent
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
+
     this.divisions$?.unsubscribe?.();
+    this.socket.get()?.off('divisions');
+
+    this.options.destroyLocalitiesOptions();
+    this.options.destroyCarsOptions();
+    this.options.destroyEmployeesOptions();
   }
 
   public onTableItemClick(index: number): void {

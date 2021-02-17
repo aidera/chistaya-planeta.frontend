@@ -16,6 +16,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
+import { OptionsService } from '../../../../services/options/options.service';
 
 describe('EmployeesTableComponent', () => {
   let component: EmployeesTableComponent;
@@ -33,6 +34,7 @@ describe('EmployeesTableComponent', () => {
         CheckboxComponent,
       ],
       providers: [
+        OptionsService,
         { provide: ConverterService },
         provideMockStore({
           initialState: {

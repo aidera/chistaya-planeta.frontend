@@ -5,13 +5,14 @@ import { formatDate } from '@angular/common';
 
 import * as EmployeesActions from '../../../../store/employees/employees.actions';
 import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
-import { TablePageComponent } from '../../table-page.component';
 import { IEmployee } from '../../../../models/Employee';
 import { IDivision } from '../../../../models/Division';
 import { ICar } from '../../../../models/Car';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
-import employeeRoleOptions from '../../../../data/employeeRoleOptions';
 import { ILocality } from '../../../../models/Locality';
+import { OptionType } from '../../../../models/types/OptionType';
+import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { TablePageComponent } from '../../table-page.component';
+import employeeRoleOptions from '../../../../data/employeeRoleOptions';
 import employeeStatusOptions from '../../../../data/employeeStatusOptions';
 
 @Component({
@@ -24,6 +25,13 @@ export class EmployeesTableComponent
   implements OnInit, OnDestroy {
   private employees$: Subscription;
   private employees: IEmployee[];
+
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
+  public divisionsOptions$: Subscription;
+  public divisionsOptions: OptionType[] = [];
+  public carsOptions$: Subscription;
+  public carsOptions: OptionType[] = [];
 
   public employeeStatusOptions = employeeStatusOptions;
   public employeeRoleOptions = employeeRoleOptions;
@@ -133,13 +141,88 @@ export class EmployeesTableComponent
       });
     };
 
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = true;
-    this.useDivisionsOptions = true;
-    this.useCarsOptions = true;
-    this.useEmployeesOptions = false;
+    this.afterAdvancedSearchFormInit = () => {
+      /* ---------------- */
+      /* Options requests */
+      /* ---------------- */
+
+      /* Localities */
+      this.localitiesOptions$?.unsubscribe();
+      this.localitiesOptions$ = this.options
+        .getLocalitiesOptions({})
+        .subscribe((value) => {
+          this.localitiesOptions = value;
+          if (value === null) {
+            this.options.initLocalitiesOptions();
+          }
+        });
+
+      /* Divisions */
+      this.divisionsOptions$?.unsubscribe();
+      this.divisionsOptions$ = this.options
+        .getDivisionsOptions({})
+        .subscribe((value) => {
+          this.divisionsOptions = value;
+          if (value === null) {
+            this.options.initDivisionsOptions();
+          }
+        });
+
+      /* Cars */
+      this.carsOptions$?.unsubscribe();
+      this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
+        this.carsOptions = value;
+        if (value === null) {
+          this.options.initCarsOptions();
+        }
+      });
+
+      this.advancedSearchForm
+        ?.get('localities')
+        .valueChanges.subscribe((fieldValues) => {
+          this.advancedSearchForm.get('divisions').setValue([]);
+          this.advancedSearchForm.get('cars').setValue([]);
+
+          /* Divisions */
+          this.divisionsOptions$?.unsubscribe();
+          this.divisionsOptions$ = this.options
+            .getDivisionsOptions({ localitiesIds: fieldValues })
+            .subscribe((value) => {
+              this.divisionsOptions = value;
+              if (value === null) {
+                this.options.initDivisionsOptions();
+              }
+            });
+
+          /* Cars */
+          this.carsOptions$?.unsubscribe();
+          this.carsOptions$ = this.options
+            .getCarsOptions({ localitiesIds: fieldValues })
+            .subscribe((value) => {
+              this.carsOptions = value;
+              if (value === null) {
+                this.options.initCarsOptions();
+              }
+            });
+        });
+
+      this.advancedSearchForm
+        ?.get('divisions')
+        .valueChanges.subscribe((fieldValues) => {
+          this.advancedSearchForm.get('cars').setValue([]);
+
+          /* Cars */
+          this.carsOptions$?.unsubscribe();
+          this.carsOptions$ = this.options
+            .getCarsOptions({ divisionsIds: fieldValues })
+            .subscribe((value) => {
+              this.carsOptions = value;
+              if (value === null) {
+                this.options.initCarsOptions();
+              }
+            });
+        });
+    };
 
     /* ----------------------- */
     /* --- Request actions --- */
@@ -373,7 +456,13 @@ export class EmployeesTableComponent
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
+
     this.employees$?.unsubscribe?.();
+    this.socket.get()?.off('employees');
+
+    this.options.destroyLocalitiesOptions();
+    this.options.destroyDivisionsOptions();
+    this.options.destroyCarsOptions();
   }
 
   public onTableItemClick(index: number): void {

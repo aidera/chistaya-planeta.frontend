@@ -10,6 +10,8 @@ import { TablePageComponent } from './table-page.component';
 import { ConverterService } from '../../services/converter/converter.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { routes } from '../../app-routing.module';
+import { OptionsService } from '../../services/options/options.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('TablePageComponent', () => {
   let component: TablePageComponent;
@@ -22,6 +24,7 @@ describe('TablePageComponent', () => {
       declarations: [TablePageComponent],
       providers: [
         SocketIoService,
+        OptionsService,
         { provide: ConverterService },
         provideMockStore({
           initialState: {
@@ -34,7 +37,11 @@ describe('TablePageComponent', () => {
           },
         }),
       ],
-      imports: [RouterTestingModule.withRoutes(routes), MatSnackBarModule],
+      imports: [
+        RouterTestingModule.withRoutes(routes),
+        MatSnackBarModule,
+        HttpClientModule,
+      ],
     }).compileComponents();
 
     location = TestBed.inject(Location);
@@ -74,26 +81,6 @@ describe('TablePageComponent', () => {
   describe('common', () => {
     it('should create the component', () => {
       expect(component).toBeTruthy();
-    });
-
-    it('should not create the component if tableColumns is not defined', () => {
-      component.tableColumns = undefined;
-      expect(() => component.ngOnInit()).toThrowError();
-    });
-
-    it('should not create the component if createAdvancedSearchForm is not defined', () => {
-      component.createAdvancedSearchForm = undefined;
-      expect(() => component.ngOnInit()).toThrowError();
-    });
-
-    it('should not create the component if displayedColumns is not defined', () => {
-      component.displayedColumns = undefined;
-      expect(() => component.ngOnInit()).toThrowError();
-    });
-
-    it('should not create the component if columnsCanBeDisplayed is not defined', () => {
-      component.columnsCanBeDisplayed = undefined;
-      expect(() => component.ngOnInit()).toThrowError();
     });
 
     it('should update vars correctly if setInitialRequestSettings is called', async(() => {

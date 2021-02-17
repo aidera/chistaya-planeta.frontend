@@ -17,6 +17,7 @@ import { DateTimeInputComponent } from '../../../../components/form-controls/dat
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { ErrorMessageComponent } from '../../../../components/form-controls/error-message/error-message.component';
+import { OptionsService } from '../../../../services/options/options.service';
 
 describe('DivisionsTableComponent', () => {
   let component: DivisionsTableComponent;
@@ -35,6 +36,7 @@ describe('DivisionsTableComponent', () => {
         ErrorMessageComponent,
       ],
       providers: [
+        OptionsService,
         { provide: ConverterService },
         provideMockStore({
           initialState: {
