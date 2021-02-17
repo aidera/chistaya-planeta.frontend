@@ -454,10 +454,7 @@
               [linkArray]="['../../', 'divisions', item?.division?._id]"
               [isFetching]="itemIsFetching"
               [useEditButton]="true"
-              (editClick)="
-                setActiveField('division');
-                updateDivisionsOptions(item?.locality?._id)
-              "
+              (editClick)="setActiveField('division')"
             >
             </app-item-field-inactive-string>
 
@@ -523,14 +520,7 @@
                 page: 1 + ''
               }"
               [useEditButton]="true"
-              (editClick)="
-                setActiveField('cars');
-                updateCarsOptions(
-                  getDivisionsValuesArray(
-                    item?.division ? [item?.division] : []
-                  )
-                )
-              "
+              (editClick)="setActiveField('cars')"
             >
             </app-item-field-inactive-list>
 

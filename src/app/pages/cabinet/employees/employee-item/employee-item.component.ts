@@ -1,21 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import * as EmployeesActions from '../../../../store/employees/employees.actions';
 import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
-import { ItemPageComponent } from '../../item-page.component';
 import { ICar } from '../../../../models/Car';
 import { IDivision } from '../../../../models/Division';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ILocality } from '../../../../models/Locality';
-import { responseCodes } from '../../../../data/responseCodes';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
-import employeeRoleOptions from '../../../../data/employeeRoleOptions';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
-import employeeStatusOptions from '../../../../data/employeeStatusOptions';
 import { IEmployee } from '../../../../models/Employee';
+import { OptionType } from '../../../../models/types/OptionType';
+import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import EmployeeRole from '../../../../models/enums/EmployeeRole';
 import CarStatus from '../../../../models/enums/CarStatus';
-import { debounceTime, take } from 'rxjs/operators';
+import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { ItemPageComponent } from '../../item-page.component';
+import { responseCodes } from '../../../../data/responseCodes';
+import employeeRoleOptions from '../../../../data/employeeRoleOptions';
+import employeeStatusOptions from '../../../../data/employeeStatusOptions';
 
 @Component({
   selector: 'app-employee-item',
@@ -27,27 +29,27 @@ export class EmployeeItemComponent
   implements OnInit, OnDestroy {
   public item: IEmployee;
 
-  public simpleStatus = SimpleStatus;
-  public carStatus = CarStatus;
-  public employeeStatus = EmployeeStatus;
-  public employeeRole = EmployeeRole;
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
+  public divisionsOptions$: Subscription;
+  public divisionsOptions: OptionType[] = [];
+  public carsOptions$: Subscription;
+  public carsOptions: OptionType[] = [];
+
   public employeeRoleOptions = employeeRoleOptions.filter(
     (el) => el.value !== EmployeeRole.head + ''
   );
   public employeeStatusOptions = employeeStatusOptions;
 
+  public simpleStatus = SimpleStatus;
+  public carStatus = CarStatus;
+  public employeeStatus = EmployeeStatus;
+  public employeeRole = EmployeeRole;
+
   public alreadyExistEmailId: string;
   public alreadyExistPhoneId: string;
 
   ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = true;
-    this.useDivisionsOptions = true;
-    this.useCarsOptions = true;
-    this.useEmployeesOptions = false;
-
     /* ------------- */
     /* Form settings */
     /* ------------- */
@@ -223,6 +225,53 @@ export class EmployeeItemComponent
             cars: (employee.cars as ICar[])?.map((el) => el._id) || [],
           });
         }
+
+        /* ----------------------------------- */
+        /* Options requests in item connection */
+        /* ----------------------------------- */
+
+        /* Localities */
+        this.localitiesOptions$?.unsubscribe();
+        this.localitiesOptions$ = this.options
+          .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+          .subscribe((value) => {
+            this.localitiesOptions = value;
+            if (value === null) {
+              this.options.initLocalitiesOptions();
+            }
+          });
+
+        /* Divisions */
+        this.divisionsOptions$?.unsubscribe();
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({
+            statuses: [SimpleStatus.active],
+            localitiesIds: (employee?.locality as ILocality)?._id
+              ? [(employee?.locality as ILocality)?._id]
+              : undefined,
+          })
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+            if (value === null) {
+              this.options.initDivisionsOptions();
+            }
+          });
+
+        /* Cars */
+        this.carsOptions$?.unsubscribe();
+        this.carsOptions$ = this.options
+          .getCarsOptions({
+            statuses: [CarStatus.active, CarStatus.temporaryUnavailable],
+            divisionsIds: (employee?.division as IDivision)?._id
+              ? [(employee?.division as IDivision)?._id]
+              : undefined,
+          })
+          .subscribe((value) => {
+            this.carsOptions = value;
+            if (value === null) {
+              this.options.initCarsOptions();
+            }
+          });
       });
 
     this.getItemError$ = this.store
@@ -381,11 +430,31 @@ export class EmployeeItemComponent
     super.ngOnInit();
   }
 
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.localitiesOptions$?.unsubscribe?.();
+    this.divisionsOptions$?.unsubscribe?.();
+    this.carsOptions$?.unsubscribe?.();
+
+    this.options.destroyLocalitiesOptions();
+    this.options.destroyDivisionsOptions();
+    this.options.destroyCarsOptions();
+  }
+
   public getCarRoleText(): string {
     return (
       employeeRoleOptions.find(
         (el) => el.value === (this.item?.role || '') + ''
       )?.text || ''
+    );
+  }
+
+  public getCarsValuesArray(employees: (ICar | string)[]): string[] {
+    return (
+      (employees as ICar[])?.map((el) => {
+        return el._id;
+      }) || []
     );
   }
 }

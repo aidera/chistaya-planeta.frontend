@@ -1,17 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, take } from 'rxjs/operators';
 
 import * as LocalitiesActions from '../../../../store/localities/localities.actions';
 import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { ILocality } from '../../../../models/Locality';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
-import { ItemPageComponent } from '../../item-page.component';
 import { ModalAction } from '../../../../components/modal/modal.component';
-import { responseCodes } from '../../../../data/responseCodes';
-import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import CarStatus from '../../../../models/enums/CarStatus';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
-import { debounceTime, take } from 'rxjs/operators';
+import { responseCodes } from '../../../../data/responseCodes';
+import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import { ItemPageComponent } from '../../item-page.component';
 
 @Component({
   selector: 'app-locality-item',
@@ -31,14 +31,6 @@ export class LocalityItemComponent
   public simpleStatusOptions = simpleStatusOptions;
 
   ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = false;
-    this.useDivisionsOptions = false;
-    this.useCarsOptions = false;
-    this.useEmployeesOptions = false;
-
     /* ------------- */
     /* Form settings */
     /* ------------- */

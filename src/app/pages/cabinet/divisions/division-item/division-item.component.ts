@@ -1,17 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
 import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
-import { ItemPageComponent } from '../../item-page.component';
-import { responseCodes } from '../../../../data/responseCodes';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
-import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import { OptionType } from '../../../../models/types/OptionType';
+import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import CarStatus from '../../../../models/enums/CarStatus';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { ItemPageComponent } from '../../item-page.component';
+import { responseCodes } from '../../../../data/responseCodes';
+import simpleStatusOptions from '../../../../data/simpleStatusOptions';
 
 @Component({
   selector: 'app-division-item',
@@ -23,20 +25,16 @@ export class DivisionItemComponent
   implements OnInit, OnDestroy {
   public item: IDivision;
 
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
+
+  public simpleStatusOptions = simpleStatusOptions;
+
   public simpleStatus = SimpleStatus;
   public employeeStatus = EmployeeStatus;
   public carStatus = CarStatus;
-  public simpleStatusOptions = simpleStatusOptions;
 
   ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = true;
-    this.useDivisionsOptions = false;
-    this.useCarsOptions = false;
-    this.useEmployeesOptions = false;
-
     /* ------------- */
     /* Form settings */
     /* ------------- */
@@ -147,6 +145,17 @@ export class DivisionItemComponent
             house: division?.house || '',
           });
         }
+
+        /* Localities */
+        this.localitiesOptions$?.unsubscribe();
+        this.localitiesOptions$ = this.options
+          .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+          .subscribe((value) => {
+            this.localitiesOptions = value;
+            if (value === null) {
+              this.options.initLocalitiesOptions();
+            }
+          });
       });
 
     this.getItemError$ = this.store
@@ -275,5 +284,12 @@ export class DivisionItemComponent
     /* --------------------------- */
 
     super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.localitiesOptions$?.unsubscribe?.();
+    this.options.destroyLocalitiesOptions();
   }
 }

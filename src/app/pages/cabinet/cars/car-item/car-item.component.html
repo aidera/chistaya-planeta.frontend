@@ -357,10 +357,7 @@
                 page: 1 + ''
               }"
               [useEditButton]="true"
-              (editClick)="
-                setActiveField('divisions');
-                updateDivisionsOptions(item?.locality?._id)
-              "
+              (editClick)="setActiveField('divisions')"
             >
             </app-item-field-inactive-list>
 
@@ -424,13 +421,7 @@
                 page: 1 + ''
               }"
               [useEditButton]="true"
-              (editClick)="
-                setActiveField('drivers');
-                updateEmployeesOptions(
-                  getDivisionsValuesArray(item?.divisions || []),
-                  employeeRole.driver
-                )
-              "
+              (editClick)="setActiveField('drivers')"
             >
             </app-item-field-inactive-list>
 

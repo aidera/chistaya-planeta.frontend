@@ -17,6 +17,7 @@ import { ItemFieldInactiveStringComponent } from '../../../../components/item-fi
 import { ItemFieldSaveButtonComponent } from '../../../../components/item-field/item-field-save-button/item-field-save-button.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { ItemNotFoundComponent } from '../../../../components/item-not-found/item-not-found.component';
+import { OptionsService } from '../../../../services/options/options.service';
 
 describe('EmployeeItemComponent', () => {
   let component: EmployeeItemComponent;
@@ -45,6 +46,7 @@ describe('EmployeeItemComponent', () => {
         NgxMaskModule.forRoot(),
       ],
       providers: [
+        OptionsService,
         provideMockStore({
           initialState: {
             employees: {

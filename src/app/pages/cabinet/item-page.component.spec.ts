@@ -18,6 +18,7 @@ import { LocalitiesApiService } from '../../services/api/localities-api.service'
 import { DivisionsApiService } from '../../services/api/divisions-api.service';
 import { CarsApiService } from '../../services/api/cars-api.service';
 import { EmployeesApiService } from '../../services/api/employees-api.service';
+import { OptionsService } from '../../services/options/options.service';
 
 describe('ItemPageComponent', () => {
   let component: ItemPageComponent;
@@ -40,6 +41,7 @@ describe('ItemPageComponent', () => {
         DivisionsApiService,
         CarsApiService,
         EmployeesApiService,
+        OptionsService,
         provideMockStore({
           initialState: {
             app: {
