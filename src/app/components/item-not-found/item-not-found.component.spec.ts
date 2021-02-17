@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 
 import { ItemNotFoundComponent } from './item-not-found.component';
+import { MaterialModule } from '../../modules/material/material.module';
 
 describe('ItemNotFoundComponent', () => {
   let component: ItemNotFoundComponent;
@@ -15,6 +16,7 @@ describe('ItemNotFoundComponent', () => {
       imports: [
         BrowserAnimationsModule,
         HttpClientModule,
+        MaterialModule,
         InlineSVGModule.forRoot(),
       ],
     }).compileComponents();
