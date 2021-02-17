@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { debounceTime, take } from 'rxjs/operators';
 
 import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
 import * as EmployeesActions from '../../../../store/employees/employees.actions';
-import { responseCodes } from '../../../../data/responseCodes';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import CarStatus from '../../../../models/enums/CarStatus';
+import { OptionType } from '../../../../models/types/OptionType';
+import { responseCodes } from '../../../../data/responseCodes';
 import employeeRoleOptions from '../../../../data/employeeRoleOptions';
-import { debounceTime, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-employee-item-add',
@@ -16,7 +20,14 @@ import { debounceTime, take } from 'rxjs/operators';
 })
 export class EmployeeItemAddComponent
   extends ItemAddPageComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
+  public divisionsOptions$: Subscription;
+  public divisionsOptions: OptionType[] = [];
+  public carsOptions$: Subscription;
+  public carsOptions: OptionType[] = [];
+
   public employeeRole = EmployeeRole;
   public employeeRoleOptions = employeeRoleOptions.filter(
     (el) => el.value !== EmployeeRole.head + ''
@@ -25,13 +36,19 @@ export class EmployeeItemAddComponent
   public alreadyExistId2: string;
 
   ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = true;
-    this.useDivisionsOptions = true;
-    this.useCarsOptions = true;
-    this.useEmployeesOptions = false;
+    /* -------------------------- */
+    /* Localities options request */
+    /* -------------------------- */
+
+    this.localitiesOptions$?.unsubscribe();
+    this.localitiesOptions$ = this.options
+      .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+      .subscribe((value) => {
+        this.localitiesOptions = value;
+        if (value === null) {
+          this.options.initLocalitiesOptions();
+        }
+      });
 
     /* --------------------- */
     /* --- Form settings --- */
@@ -90,6 +107,54 @@ export class EmployeeItemAddComponent
               });
           }
         });
+
+      this.form.get('locality').valueChanges.subscribe((fieldValue) => {
+        this.form.get('division').setValue('');
+
+        /* -------------------------- */
+        /* Divisions options request */
+        /* -------------------------- */
+
+        this.divisionsOptions$?.unsubscribe();
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({
+            statuses: [SimpleStatus.active],
+            localitiesIds: fieldValue ? [fieldValue] : undefined,
+          })
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+            if (value === null) {
+              this.options.initDivisionsOptions();
+            }
+
+            if (this.divisionsOptions?.length === 1) {
+              this.form
+                .get('division')
+                .setValue(this.divisionsOptions[0].value);
+            }
+          });
+      });
+
+      this.form.get('division').valueChanges.subscribe((fieldValue) => {
+        this.form.get('cars').setValue([]);
+
+        /* -------------------------- */
+        /* Cars options request */
+        /* -------------------------- */
+
+        this.carsOptions$?.unsubscribe();
+        this.carsOptions$ = this.options
+          .getCarsOptions({
+            statuses: [CarStatus.active, CarStatus.temporaryUnavailable],
+            divisionsIds: [fieldValue],
+          })
+          .subscribe((value) => {
+            this.carsOptions = value;
+            if (value === null) {
+              this.options.initCarsOptions();
+            }
+          });
+      });
     };
 
     this.isFetching$ = this.store
@@ -200,5 +265,17 @@ export class EmployeeItemAddComponent
     /* --------------------------- */
 
     super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.localitiesOptions$?.unsubscribe?.();
+    this.divisionsOptions$?.unsubscribe?.();
+    this.carsOptions$?.unsubscribe?.();
+
+    this.options.destroyLocalitiesOptions();
+    this.options.destroyDivisionsOptions();
+    this.options.destroyCarsOptions();
   }
 }

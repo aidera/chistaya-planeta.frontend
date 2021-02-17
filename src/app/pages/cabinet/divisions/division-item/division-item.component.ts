@@ -285,11 +285,4 @@ export class DivisionItemComponent
 
     super.ngOnInit();
   }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
-
-    this.localitiesOptions$?.unsubscribe?.();
-    this.options.destroyLocalitiesOptions();
-  }
 }

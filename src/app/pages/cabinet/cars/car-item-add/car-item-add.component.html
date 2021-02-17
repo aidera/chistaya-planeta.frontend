@@ -111,7 +111,7 @@
 
             <!-- Divisions -->
             <app-select
-              *ngIf="form.get('locality').value && divisionsOptions.length > 1"
+              *ngIf="form.get('locality').value && divisionsOptions?.length > 1"
               fieldId="divisions"
               [control]="form.get('divisions')"
               [options]="divisionsOptions"
@@ -128,7 +128,7 @@
             ></app-select>
             <div
               *ngIf="
-                !form.get('locality').value || divisionsOptions.length <= 1
+                !form.get('locality').value || divisionsOptions?.length <= 1
               "
               class="cabinet-content__field-inactive"
             >
@@ -139,14 +139,14 @@
               }}</label>
               <p
                 *ngIf="
-                  form.get('locality').value && divisionsOptions.length === 1
+                  form.get('locality').value && divisionsOptions?.length === 1
                 "
               >
                 {{ divisionsOptions[0].text }}
               </p>
               <i
                 *ngIf="
-                  form.get('locality').value && divisionsOptions.length < 1
+                  form.get('locality').value && divisionsOptions?.length < 1
                 "
                 class="red-text"
               >

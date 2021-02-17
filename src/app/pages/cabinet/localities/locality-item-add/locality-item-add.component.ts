@@ -18,14 +18,6 @@ export class LocalityItemAddComponent
   public alreadyExistId: string;
 
   ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = false;
-    this.useDivisionsOptions = false;
-    this.useCarsOptions = false;
-    this.useEmployeesOptions = false;
-
     /* --------------------- */
     /* --- Form settings --- */
     /* --------------------- */

@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
 import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
+import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { OptionType } from '../../../../models/types/OptionType';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 
@@ -14,16 +17,11 @@ import { responseCodes } from '../../../../data/responseCodes';
 })
 export class DivisionItemAddComponent
   extends ItemAddPageComponent
-  implements OnInit {
-  ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = true;
-    this.useDivisionsOptions = false;
-    this.useCarsOptions = false;
-    this.useEmployeesOptions = false;
+  implements OnInit, OnDestroy {
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
 
+  ngOnInit(): void {
     /* --------------------- */
     /* --- Form settings --- */
     /* --------------------- */
@@ -62,6 +60,21 @@ export class DivisionItemAddComponent
         .subscribe((value) => {
           if (value !== this.queryLocalityId) {
             this.isQueryLocalityId = false;
+          }
+        });
+
+      /* ---------------- */
+      /* Options requests */
+      /* ---------------- */
+
+      /* Localities */
+      this.localitiesOptions$?.unsubscribe();
+      this.localitiesOptions$ = this.options
+        .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+        .subscribe((value) => {
+          this.localitiesOptions = value;
+          if (value === null) {
+            this.options.initLocalitiesOptions();
           }
         });
     };
@@ -142,5 +155,12 @@ export class DivisionItemAddComponent
     /* --------------------------- */
 
     super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.localitiesOptions$?.unsubscribe?.();
+    this.options.destroyLocalitiesOptions();
   }
 }

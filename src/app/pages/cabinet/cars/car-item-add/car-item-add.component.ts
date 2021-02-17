@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { debounceTime, take } from 'rxjs/operators';
 
 import * as CarsActions from '../../../../store/cars/cars.actions';
 import * as CarsSelectors from '../../../../store/cars/cars.selectors';
+import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { OptionType } from '../../../../models/types/OptionType';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import carTypeOptions from '../../../../data/carTypeOptions';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
-import { debounceTime, take } from 'rxjs/operators';
 import { responseCodes } from '../../../../data/responseCodes';
 
 @Component({
@@ -16,24 +20,30 @@ import { responseCodes } from '../../../../data/responseCodes';
 })
 export class CarItemAddComponent
   extends ItemAddPageComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
+  public localitiesOptions$: Subscription;
+  public localitiesOptions: OptionType[] = [];
+  public divisionsOptions$: Subscription;
+  public divisionsOptions: OptionType[] = [];
+  public employeesOptions$: Subscription;
+  public employeesOptions: OptionType[] = [];
+
   public carTypeOptions = carTypeOptions;
 
   ngOnInit(): void {
-    /* ------------------------ */
-    /* --- Options settings --- */
-    /* ------------------------ */
-    this.useLocalitiesOptions = true;
-    this.useDivisionsOptions = true;
-    this.useCarsOptions = false;
-    this.useEmployeesOptions = true;
-    this.employeesToSelectCallback = (_) => {
-      if (this.employeesToSelect) {
-        this.employeesToSelect = this.employeesToSelect.filter(
-          (employee) => employee.role === EmployeeRole.driver
-        );
-      }
-    };
+    /* -------------------------- */
+    /* Localities options request */
+    /* -------------------------- */
+
+    this.localitiesOptions$?.unsubscribe();
+    this.localitiesOptions$ = this.options
+      .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+      .subscribe((value) => {
+        this.localitiesOptions = value;
+        if (value === null) {
+          this.options.initLocalitiesOptions();
+        }
+      });
 
     /* --------------------- */
     /* --- Form settings --- */
@@ -75,6 +85,55 @@ export class CarItemAddComponent
               });
           }
         });
+
+      this.form.get('locality').valueChanges.subscribe((fieldValue) => {
+        this.form.get('divisions').setValue([]);
+
+        /* -------------------------- */
+        /* Divisions options request */
+        /* -------------------------- */
+
+        this.divisionsOptions$?.unsubscribe();
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({
+            statuses: [SimpleStatus.active],
+            localitiesIds: fieldValue ? [fieldValue] : undefined,
+          })
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+            if (value === null) {
+              this.options.initDivisionsOptions();
+            }
+
+            if (this.divisionsOptions?.length === 1) {
+              this.form
+                .get('divisions')
+                .setValue([this.divisionsOptions[0].value]);
+            }
+          });
+      });
+
+      this.form.get('divisions').valueChanges.subscribe((fieldValues) => {
+        this.form.get('drivers').setValue([]);
+
+        /* -------------------------- */
+        /* Employees options request */
+        /* -------------------------- */
+
+        this.employeesOptions$?.unsubscribe();
+        this.employeesOptions$ = this.options
+          .getEmployeesOptions({
+            statuses: [EmployeeStatus.active, EmployeeStatus.vacation],
+            roles: [EmployeeRole.driver],
+            divisionsIds: fieldValues,
+          })
+          .subscribe((value) => {
+            this.employeesOptions = value;
+            if (value === null) {
+              this.options.initEmployeesOptions();
+            }
+          });
+      });
     };
 
     this.isFetching$ = this.store
@@ -163,5 +222,17 @@ export class CarItemAddComponent
     /* --------------------------- */
 
     super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    this.localitiesOptions$?.unsubscribe?.();
+    this.divisionsOptions$?.unsubscribe?.();
+    this.employeesOptions$?.unsubscribe?.();
+
+    this.options.destroyLocalitiesOptions();
+    this.options.destroyDivisionsOptions();
+    this.options.destroyEmployeesOptions();
   }
 }

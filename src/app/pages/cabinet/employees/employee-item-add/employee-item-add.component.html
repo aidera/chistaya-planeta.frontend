@@ -152,7 +152,7 @@
 
             <!-- Division -->
             <app-select
-              *ngIf="form.get('locality').value && divisionsOptions.length > 1"
+              *ngIf="form.get('locality').value && divisionsOptions?.length > 1"
               fieldId="division"
               [control]="form.get('division')"
               [options]="divisionsOptions"
@@ -168,7 +168,7 @@
             ></app-select>
             <div
               *ngIf="
-                !form.get('locality').value || divisionsOptions.length <= 1
+                !form.get('locality').value || divisionsOptions?.length <= 1
               "
               class="cabinet-content__field-inactive"
             >
@@ -179,14 +179,14 @@
               }}</label>
               <p
                 *ngIf="
-                  form.get('locality').value && divisionsOptions.length === 1
+                  form.get('locality').value && divisionsOptions?.length === 1
                 "
               >
                 {{ divisionsOptions[0].text }}
               </p>
               <i
                 *ngIf="
-                  form.get('locality').value && divisionsOptions.length < 1
+                  form.get('locality').value && divisionsOptions?.length < 1
                 "
                 class="red-text"
               >
@@ -213,7 +213,7 @@
           <div class="cabinet-content__grid-item-form-content">
             <!-- Cars -->
             <app-select
-              *ngIf="form.get('division').value && carsOptions.length > 0"
+              *ngIf="form.get('division').value && carsOptions?.length > 0"
               fieldId="cars"
               [control]="form.get('cars')"
               [options]="carsOptions"
@@ -221,11 +221,11 @@
               [isMultiple]="true"
             ></app-select>
             <div
-              *ngIf="!form.get('division').value || carsOptions.length <= 0"
+              *ngIf="!form.get('division').value || carsOptions?.length <= 0"
               class="cabinet-content__field-inactive"
             >
               <label>Привязанные автомобили</label>
-              <i *ngIf="form.get('division').value && carsOptions.length <= 0">
+              <i *ngIf="form.get('division').value && carsOptions?.length <= 0">
                 Нет активных автомобилей в этом подразделении
               </i>
               <i *ngIf="!form.get('division').value">
