@@ -9,7 +9,7 @@ const rawRecyclableTypeOptions: OptionType[] = [
     value: RawType.stretchAndHighPressurePolyethyleneFilm + '',
   },
   {
-    text: 'Пэт бутылка до 5 л включительно',
+    text: 'ПЭТ бутылка до 5л',
     value: RawType.petBottleUpTo5l + '',
   },
 ];

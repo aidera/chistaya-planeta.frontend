@@ -1,1 +1,398 @@
-<p>prices works!</p>
+<div class="cabinet-header">
+  <h1>Расценки</h1>
+  <div class="cabinet-header__actions"></div>
+</div>
+
+<div class="cabinet-content">
+  <div class="cabinet-content__grid">
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Предложения</h2>
+
+          <div class="price-element" *ngFor="let offer of offers">
+            <div class="price-element__header">
+              <h3
+                [class.red-text]="offer.status === simpleStatus.inactive"
+                [class.green-text]="offer.status === simpleStatus.active"
+              >
+                {{ offer.name }}
+              </h3>
+
+              <div class="price-element__inactive-actions">
+                <button
+                  *ngIf="offerFormActiveField !== offer._id"
+                  mat-icon-button
+                  (click)="setOffersFormActiveField(offer._id)"
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+
+                <button
+                  *ngIf="offer.status === simpleStatus.active"
+                  mat-icon-button
+                  color="warn"
+                  (click)="updateOfferStatus(offer._id, simpleStatus.inactive)"
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pause.svg'"
+                  ></span>
+                </button>
+
+                <button
+                  *ngIf="offer.status !== simpleStatus.active"
+                  mat-icon-button
+                  color="primary"
+                  (click)="updateOfferStatus(offer._id, simpleStatus.active)"
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/play.svg'"
+                  ></span>
+                </button>
+              </div>
+            </div>
+
+            <div
+              *ngIf="offerFormActiveField !== offer._id"
+              class="price-element__inactive"
+            >
+              <div class="price-element__content">
+                <div class="price-element__content-greed">
+                  <div class="price-element__content-column">
+                    <h4>с нашей доставкой</h4>
+                    <div class="price-element__content-column-description">
+                      <div>
+                        {{
+                          findOfferPriceByUnit(offer._id, rawUnit.kg)
+                            .amountWithDelivery <= 0
+                            ? 'бесплатно (кг)'
+                            : findOfferPriceByUnit(offer._id, rawUnit.kg)
+                                .amountWithDelivery + ' руб./кг'
+                        }}
+                      </div>
+                      <div>
+                        {{
+                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                            .amountWithDelivery <= 0
+                            ? 'бесплатно (куб)'
+                            : findOfferPriceByUnit(offer._id, rawUnit.cube)
+                                .amountWithDelivery + ' руб./куб'
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="price-element__content-column">
+                    <h4>без доставки</h4>
+                    <div class="price-element__content-column-description">
+                      <div>
+                        {{
+                          findOfferPriceByUnit(offer._id, rawUnit.kg)
+                            .amountWithoutDelivery <= 0
+                            ? 'бесплатно (кг)'
+                            : findOfferPriceByUnit(offer._id, rawUnit.kg)
+                                .amountWithoutDelivery + ' руб./кг'
+                        }}
+                      </div>
+                      <div>
+                        {{
+                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                            .amountWithoutDelivery <= 0
+                            ? 'бесплатно (куб)'
+                            : findOfferPriceByUnit(offer._id, rawUnit.cube)
+                                .amountWithoutDelivery + ' руб./куб'
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              *ngIf="offerFormActiveField === offer._id"
+              class="price-element__active"
+              (clickOutside)="removeOffersFormActiveField(offer._id)"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+            >
+              <form
+                class="price-element__content"
+                [formGroup]="offerForm"
+                (ngSubmit)="updateOfferPrices(offer._id)"
+              >
+                <div class="price-element__content-greed">
+                  <div class="price-element__content-column">
+                    <h4>с нашей доставкой</h4>
+                    <div class="price-element__content-column-description">
+                      <div class="price-element__input-wrapper">
+                        <app-text-input
+                          [control]="
+                            offerForm.get('kg').get('amountWithDelivery')
+                          "
+                          fieldType="number"
+                        ></app-text-input>
+                        <span>руб./кг</span>
+                      </div>
+                      <div class="price-element__input-wrapper">
+                        <app-text-input
+                          [control]="
+                            offerForm.get('cube').get('amountWithDelivery')
+                          "
+                          fieldType="number"
+                        ></app-text-input>
+                        <span>руб./куб</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="price-element__content-column">
+                    <h4>без доставки</h4>
+                    <div class="price-element__content-column-description">
+                      <div class="price-element__input-wrapper">
+                        <app-text-input
+                          [control]="
+                            offerForm.get('kg').get('amountWithoutDelivery')
+                          "
+                          fieldType="number"
+                        ></app-text-input>
+                        <span>руб./кг</span>
+                      </div>
+                      <div class="price-element__input-wrapper">
+                        <app-text-input
+                          [control]="
+                            offerForm.get('cube').get('amountWithoutDelivery')
+                          "
+                          fieldType="number"
+                        ></app-text-input>
+                        <span>руб./куб</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="price-element__active-action">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="
+                      offersAreFetching ||
+                      offersAreUpdating ||
+                      !offerForm.valid ||
+                      (offerForm.get('kg').get('amountWithDelivery').value ===
+                        findOfferPriceByUnit(offer._id, rawUnit.kg)
+                          .amountWithDelivery &&
+                        offerForm.get('kg').get('amountWithoutDelivery')
+                          .value ===
+                          findOfferPriceByUnit(offer._id, rawUnit.kg)
+                            .amountWithoutDelivery &&
+                        offerForm.get('cube').get('amountWithDelivery')
+                          .value ===
+                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                            .amountWithDelivery &&
+                        offerForm.get('cube').get('amountWithoutDelivery')
+                          .value ===
+                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                            .amountWithoutDelivery)
+                    "
+                    (click)="updateOfferPrices(offer._id)"
+                  >
+                    Сохранить
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Услуги</h2>
+
+          <div class="price-element" *ngFor="let service of services">
+            <div class="price-element__header">
+              <h3
+                [class.red-text]="service.status === simpleStatus.inactive"
+                [class.green-text]="service.status === simpleStatus.active"
+              >
+                {{ service.name }}
+              </h3>
+
+              <div class="price-element__inactive-actions">
+                <button
+                  *ngIf="serviceFormActiveField !== service._id"
+                  mat-icon-button
+                  (click)="setServicesFormActiveField(service._id)"
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pencil.svg'"
+                  ></span>
+                </button>
+
+                <button
+                  *ngIf="service.status === simpleStatus.active"
+                  mat-icon-button
+                  color="warn"
+                  (click)="
+                    updateServiceStatus(service._id, simpleStatus.inactive)
+                  "
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/pause.svg'"
+                  ></span>
+                </button>
+
+                <button
+                  *ngIf="service.status !== simpleStatus.active"
+                  mat-icon-button
+                  color="primary"
+                  (click)="
+                    updateServiceStatus(service._id, simpleStatus.active)
+                  "
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/play.svg'"
+                  ></span>
+                </button>
+              </div>
+            </div>
+
+            <div
+              *ngIf="serviceFormActiveField !== service._id"
+              class="price-element__inactive"
+            >
+              <div class="price-element__content">
+                <div class="price-element__content-column-description">
+                  <div>
+                    {{
+                      findServicePriceByUnit(service._id, rawUnit.kg).amount <=
+                      0
+                        ? 'бесплатно (кг)'
+                        : findServicePriceByUnit(service._id, rawUnit.kg)
+                            .amount + ' руб./кг'
+                    }}
+                  </div>
+                  <div>
+                    {{
+                      findServicePriceByUnit(service._id, rawUnit.cube)
+                        .amount <= 0
+                        ? 'бесплатно (куб)'
+                        : findServicePriceByUnit(service._id, rawUnit.cube)
+                            .amount + ' руб./куб'
+                    }}
+                  </div>
+                  <div>
+                    {{
+                      findServicePriceByUnit(service._id, rawUnit.bag120)
+                        .amount <= 0
+                        ? 'бесплатно (мешок 120л)'
+                        : findServicePriceByUnit(service._id, rawUnit.bag120)
+                            .amount + ' руб./мешок 120л'
+                    }}
+                  </div>
+                  <div>
+                    {{
+                      findServicePriceByUnit(service._id, rawUnit.bag160)
+                        .amount <= 0
+                        ? 'бесплатно (мешок 160л)'
+                        : findServicePriceByUnit(service._id, rawUnit.bag160)
+                            .amount + ' руб./мешок 160л'
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              *ngIf="serviceFormActiveField === service._id"
+              class="price-element__active"
+              (clickOutside)="removeServicesFormActiveField(service._id)"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+            >
+              <form
+                class="price-element__content"
+                [formGroup]="serviceForm"
+                (ngSubmit)="updateServicePrices(service._id)"
+              >
+                <div class="price-element__input-wrapper">
+                  <app-text-input
+                    [control]="serviceForm.get('kg')"
+                    fieldType="number"
+                  ></app-text-input>
+                  <span>руб./кг</span>
+                </div>
+
+                <div class="price-element__input-wrapper">
+                  <app-text-input
+                    [control]="serviceForm.get('cube')"
+                    fieldType="number"
+                  ></app-text-input>
+                  <span>руб./куб</span>
+                </div>
+
+                <div class="price-element__input-wrapper">
+                  <app-text-input
+                    [control]="serviceForm.get('bag120')"
+                    fieldType="number"
+                  ></app-text-input>
+                  <span>руб./мешок 120л</span>
+                </div>
+
+                <div class="price-element__input-wrapper">
+                  <app-text-input
+                    [control]="serviceForm.get('bag160')"
+                    fieldType="number"
+                  ></app-text-input>
+                  <span>руб./мешок 160л</span>
+                </div>
+
+                <div class="price-element__active-action">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="
+                      servicesAreFetching ||
+                      servicesAreUpdating ||
+                      !serviceForm.valid ||
+                      (serviceForm.get('kg').value ===
+                        findServicePriceByUnit(service._id, rawUnit.kg)
+                          .amount &&
+                        serviceForm.get('cube').value ===
+                          findServicePriceByUnit(service._id, rawUnit.cube)
+                            .amount &&
+                        serviceForm.get('bag120').value ===
+                          findServicePriceByUnit(service._id, rawUnit.bag120)
+                            .amount &&
+                        serviceForm.get('bag160').value ===
+                          findServicePriceByUnit(service._id, rawUnit.bag160)
+                            .amount)
+                    "
+                    (click)="updateServicePrices(service._id)"
+                  >
+                    Сохранить
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

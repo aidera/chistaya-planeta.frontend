@@ -23,6 +23,7 @@ import { EmployeesTableComponent } from './pages/cabinet/employees/employees-tab
 import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-item-add/employee-item-add.component';
 import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/employee-item.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
+import { PricesComponent } from './pages/cabinet/prices/prices.component';
 
 export const routes: Routes = [
   {
@@ -99,6 +100,11 @@ export const routes: Routes = [
         path: 'employees/:id',
         component: EmployeeItemComponent,
         data: { useBacklink: true },
+      },
+      {
+        path: 'prices',
+        component: PricesComponent,
+        data: { useBacklink: false },
       },
       { path: '**', component: ItemNotFoundComponent },
     ],

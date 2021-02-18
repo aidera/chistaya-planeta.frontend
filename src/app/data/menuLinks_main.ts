@@ -36,4 +36,9 @@ export const menuLinksMain: MenuLink[] = [
     iconPath: 'assets/icons/world.svg',
     link: 'localities',
   },
+  {
+    title: 'Расценки',
+    iconPath: 'assets/icons/price-tag.svg',
+    link: 'prices',
+  },
 ];
