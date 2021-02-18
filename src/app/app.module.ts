@@ -64,6 +64,7 @@ import { ItemFieldSaveButtonComponent } from './components/item-field/item-field
 import { ItemFieldInactiveListComponent } from './components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import { ItemFieldInactiveStatusComponent } from './components/item-field/item-field-inactive-status/item-field-inactive-status.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
+import { PricesComponent } from './pages/cabinet/prices/prices.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
     ItemFieldInactiveListComponent,
     ItemFieldInactiveStatusComponent,
     ItemNotFoundComponent,
+    PricesComponent,
   ],
   imports: [
     BrowserModule,
