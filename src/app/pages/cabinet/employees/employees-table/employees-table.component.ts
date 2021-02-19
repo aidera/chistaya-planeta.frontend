@@ -141,6 +141,13 @@ export class EmployeesTableComponent
       });
     };
 
+    /* --------------------- */
+    /* --- Options init --- */
+    /* --------------------- */
+    this.options.initLocalitiesOptions();
+    this.options.initDivisionsOptions();
+    this.options.initCarsOptions();
+
     this.afterAdvancedSearchFormInit = () => {
       /* ---------------- */
       /* Options requests */
@@ -152,9 +159,6 @@ export class EmployeesTableComponent
         .getLocalitiesOptions({})
         .subscribe((value) => {
           this.localitiesOptions = value;
-          if (value === null) {
-            this.options.initLocalitiesOptions();
-          }
         });
 
       /* Divisions */
@@ -163,18 +167,12 @@ export class EmployeesTableComponent
         .getDivisionsOptions({})
         .subscribe((value) => {
           this.divisionsOptions = value;
-          if (value === null) {
-            this.options.initDivisionsOptions();
-          }
         });
 
       /* Cars */
       this.carsOptions$?.unsubscribe();
       this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
         this.carsOptions = value;
-        if (value === null) {
-          this.options.initCarsOptions();
-        }
       });
 
       this.advancedSearchForm

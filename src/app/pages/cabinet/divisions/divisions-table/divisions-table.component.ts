@@ -121,6 +121,13 @@ export class DivisionsTableComponent
       });
     };
 
+    /* --------------------- */
+    /* --- Options init --- */
+    /* --------------------- */
+    this.options.initLocalitiesOptions();
+    this.options.initCarsOptions();
+    this.options.initEmployeesOptions();
+
     this.afterAdvancedSearchFormInit = () => {
       /* ---------------- */
       /* Options requests */
@@ -132,18 +139,12 @@ export class DivisionsTableComponent
         .getLocalitiesOptions({})
         .subscribe((value) => {
           this.localitiesOptions = value;
-          if (value === null) {
-            this.options.initLocalitiesOptions();
-          }
         });
 
       /* Cars */
       this.carsOptions$?.unsubscribe();
       this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
         this.carsOptions = value;
-        if (value === null) {
-          this.options.initCarsOptions();
-        }
       });
 
       /* Employees */
@@ -152,9 +153,6 @@ export class DivisionsTableComponent
         .getEmployeesOptions({})
         .subscribe((value) => {
           this.employeesOptions = value;
-          if (value === null) {
-            this.options.initEmployeesOptions();
-          }
         });
 
       this.advancedSearchForm
@@ -169,9 +167,6 @@ export class DivisionsTableComponent
             .getCarsOptions({ localitiesIds: fieldValues })
             .subscribe((value) => {
               this.carsOptions = value;
-              if (value === null) {
-                this.options.initCarsOptions();
-              }
             });
 
           /* Employees */
@@ -180,9 +175,6 @@ export class DivisionsTableComponent
             .getEmployeesOptions({ localitiesIds: fieldValues })
             .subscribe((value) => {
               this.employeesOptions = value;
-              if (value === null) {
-                this.options.initEmployeesOptions();
-              }
             });
         });
     };

@@ -44,6 +44,13 @@ export class CarItemComponent
   public employeeRole = EmployeeRole;
 
   ngOnInit(): void {
+    /* ------------ */
+    /* Options init */
+    /* ------------ */
+    this.options.initLocalitiesOptions();
+    this.options.initDivisionsOptions();
+    this.options.initEmployeesOptions();
+
     /* ------------- */
     /* Form settings */
     /* ------------- */
@@ -190,9 +197,6 @@ export class CarItemComponent
         .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
         .subscribe((value) => {
           this.localitiesOptions = value;
-          if (value === null) {
-            this.options.initLocalitiesOptions();
-          }
         });
 
       /* Divisions */
@@ -206,9 +210,6 @@ export class CarItemComponent
         })
         .subscribe((value) => {
           this.divisionsOptions = value;
-          if (value === null) {
-            this.options.initDivisionsOptions();
-          }
         });
 
       /* Employees */
@@ -223,9 +224,6 @@ export class CarItemComponent
         })
         .subscribe((value) => {
           this.employeesOptions = value;
-          if (value === null) {
-            this.options.initEmployeesOptions();
-          }
         });
     });
 

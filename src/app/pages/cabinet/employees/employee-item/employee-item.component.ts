@@ -50,6 +50,13 @@ export class EmployeeItemComponent
   public alreadyExistPhoneId: string;
 
   ngOnInit(): void {
+    /* ------------ */
+    /* Options init */
+    /* ------------ */
+    this.options.initLocalitiesOptions();
+    this.options.initDivisionsOptions();
+    this.options.initCarsOptions();
+
     /* ------------- */
     /* Form settings */
     /* ------------- */
@@ -236,9 +243,6 @@ export class EmployeeItemComponent
           .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
           .subscribe((value) => {
             this.localitiesOptions = value;
-            if (value === null) {
-              this.options.initLocalitiesOptions();
-            }
           });
 
         /* Divisions */
@@ -252,9 +256,6 @@ export class EmployeeItemComponent
           })
           .subscribe((value) => {
             this.divisionsOptions = value;
-            if (value === null) {
-              this.options.initDivisionsOptions();
-            }
           });
 
         /* Cars */
@@ -268,9 +269,6 @@ export class EmployeeItemComponent
           })
           .subscribe((value) => {
             this.carsOptions = value;
-            if (value === null) {
-              this.options.initCarsOptions();
-            }
           });
       });
 

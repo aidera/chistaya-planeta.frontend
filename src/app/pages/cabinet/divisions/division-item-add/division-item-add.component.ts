@@ -22,6 +22,18 @@ export class DivisionItemAddComponent
   public localitiesOptions: OptionType[] = [];
 
   ngOnInit(): void {
+    /* ------------ */
+    /* Options init */
+    /* ------------ */
+
+    /* Localities */
+    this.options.initLocalitiesOptions();
+    this.localitiesOptions$ = this.options
+      .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+      .subscribe((value) => {
+        this.localitiesOptions = value;
+      });
+
     /* --------------------- */
     /* --- Form settings --- */
     /* --------------------- */
@@ -60,21 +72,6 @@ export class DivisionItemAddComponent
         .subscribe((value) => {
           if (value !== this.queryLocalityId) {
             this.isQueryLocalityId = false;
-          }
-        });
-
-      /* ---------------- */
-      /* Options requests */
-      /* ---------------- */
-
-      /* Localities */
-      this.localitiesOptions$?.unsubscribe();
-      this.localitiesOptions$ = this.options
-        .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
-        .subscribe((value) => {
-          this.localitiesOptions = value;
-          if (value === null) {
-            this.options.initLocalitiesOptions();
           }
         });
     };

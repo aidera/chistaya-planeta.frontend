@@ -35,6 +35,18 @@ export class DivisionItemComponent
   public carStatus = CarStatus;
 
   ngOnInit(): void {
+    /* ------------ */
+    /* Options init */
+    /* ------------ */
+
+    /* Localities */
+    this.options.initLocalitiesOptions();
+    this.localitiesOptions$ = this.options
+      .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
+      .subscribe((value) => {
+        this.localitiesOptions = value;
+      });
+
     /* ------------- */
     /* Form settings */
     /* ------------- */
@@ -145,17 +157,6 @@ export class DivisionItemComponent
             house: division?.house || '',
           });
         }
-
-        /* Localities */
-        this.localitiesOptions$?.unsubscribe();
-        this.localitiesOptions$ = this.options
-          .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
-          .subscribe((value) => {
-            this.localitiesOptions = value;
-            if (value === null) {
-              this.options.initLocalitiesOptions();
-            }
-          });
       });
 
     this.getItemError$ = this.store

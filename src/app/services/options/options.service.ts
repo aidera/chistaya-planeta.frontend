@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as AppActions from '../../store/app/app.actions';
@@ -37,11 +37,13 @@ export class OptionsService {
   /* ---------- */
 
   public initLocalitiesOptions(): void {
-    this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
-
     this.socket.get()?.on('localities', (_) => {
       this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
     });
+  }
+
+  public requestLocalitiesOptions(): void {
+    this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
   }
 
   public getLocalitiesOptions({
@@ -50,6 +52,12 @@ export class OptionsService {
     statuses?: SimpleStatus[];
   }): Observable<OptionType[] | null> {
     return this.store.select(AppSelectors.selectLocalitiesToSelect).pipe(
+      tap((value) => {
+        if (value === null) {
+          this.requestLocalitiesOptions();
+        }
+        return value;
+      }),
       map((value) => {
         if (value === null) {
           return null;
@@ -81,15 +89,16 @@ export class OptionsService {
 
   /* ---------- */
   /* Divisions */
-
   /* ---------- */
 
   public initDivisionsOptions(): void {
-    this.store.dispatch(AppActions.getDivisionsToSelectRequest());
-
     this.socket.get()?.on('divisions', (_) => {
       this.store.dispatch(AppActions.getDivisionsToSelectRequest());
     });
+  }
+
+  public requestDivisionsOptions(): void {
+    this.store.dispatch(AppActions.getDivisionsToSelectRequest());
   }
 
   public getDivisionsOptions({
@@ -100,6 +109,12 @@ export class OptionsService {
     statuses?: SimpleStatus[];
   }): Observable<OptionType[] | null> {
     return this.store.select(AppSelectors.selectDivisionsToSelect).pipe(
+      tap((value) => {
+        if (value === null) {
+          this.requestDivisionsOptions();
+        }
+        return value;
+      }),
       map((value) => {
         if (value === null) {
           return null;
@@ -135,15 +150,16 @@ export class OptionsService {
 
   /* ---- */
   /* Cars */
-
   /* ---- */
 
   public initCarsOptions(): void {
-    this.store.dispatch(AppActions.getCarsToSelectRequest());
-
     this.socket.get()?.on('cars', (_) => {
       this.store.dispatch(AppActions.getCarsToSelectRequest());
     });
+  }
+
+  public requestCarsOptions(): void {
+    this.store.dispatch(AppActions.getCarsToSelectRequest());
   }
 
   public getCarsOptions({
@@ -156,6 +172,12 @@ export class OptionsService {
     statuses?: CarStatus[];
   }): Observable<OptionType[] | null> {
     return this.store.select(AppSelectors.selectCarsToSelect).pipe(
+      tap((value) => {
+        if (value === null) {
+          this.requestCarsOptions();
+        }
+        return value;
+      }),
       map((value) => {
         if (value === null) {
           return null;
@@ -200,11 +222,13 @@ export class OptionsService {
   /* --------- */
 
   public initEmployeesOptions(): void {
-    this.store.dispatch(AppActions.getEmployeesToSelectRequest());
-
     this.socket.get()?.on('employees', (_) => {
       this.store.dispatch(AppActions.getEmployeesToSelectRequest());
     });
+  }
+
+  public requestEmployeesOptions(): void {
+    this.store.dispatch(AppActions.getEmployeesToSelectRequest());
   }
 
   public getEmployeesOptions({
@@ -219,6 +243,12 @@ export class OptionsService {
     roles?: EmployeeRole[];
   }): Observable<OptionType[] | null> {
     return this.store.select(AppSelectors.selectEmployeesToSelect).pipe(
+      tap((value) => {
+        if (value === null) {
+          this.requestEmployeesOptions();
+        }
+        return value;
+      }),
       map((value) => {
         if (value === null) {
           return null;

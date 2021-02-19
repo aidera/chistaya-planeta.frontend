@@ -36,18 +36,21 @@ export class EmployeeItemAddComponent
   public alreadyExistId2: string;
 
   ngOnInit(): void {
+    /* ------------ */
+    /* Options init */
+    /* ------------ */
+    this.options.initLocalitiesOptions();
+    this.options.initDivisionsOptions();
+    this.options.initCarsOptions();
+
     /* -------------------------- */
     /* Localities options request */
     /* -------------------------- */
 
-    this.localitiesOptions$?.unsubscribe();
     this.localitiesOptions$ = this.options
       .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
       .subscribe((value) => {
         this.localitiesOptions = value;
-        if (value === null) {
-          this.options.initLocalitiesOptions();
-        }
       });
 
     /* --------------------- */
@@ -111,9 +114,9 @@ export class EmployeeItemAddComponent
       this.form.get('locality').valueChanges.subscribe((fieldValue) => {
         this.form.get('division').setValue('');
 
-        /* -------------------------- */
+        /* ------------------------- */
         /* Divisions options request */
-        /* -------------------------- */
+        /* ------------------------- */
 
         this.divisionsOptions$?.unsubscribe();
         this.divisionsOptions$ = this.options
@@ -123,9 +126,6 @@ export class EmployeeItemAddComponent
           })
           .subscribe((value) => {
             this.divisionsOptions = value;
-            if (value === null) {
-              this.options.initDivisionsOptions();
-            }
 
             if (this.divisionsOptions?.length === 1) {
               this.form
@@ -138,9 +138,9 @@ export class EmployeeItemAddComponent
       this.form.get('division').valueChanges.subscribe((fieldValue) => {
         this.form.get('cars').setValue([]);
 
-        /* -------------------------- */
+        /* -------------------- */
         /* Cars options request */
-        /* -------------------------- */
+        /* -------------------- */
 
         this.carsOptions$?.unsubscribe();
         this.carsOptions$ = this.options
@@ -150,9 +150,6 @@ export class EmployeeItemAddComponent
           })
           .subscribe((value) => {
             this.carsOptions = value;
-            if (value === null) {
-              this.options.initCarsOptions();
-            }
           });
       });
     };

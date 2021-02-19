@@ -31,18 +31,20 @@ export class CarItemAddComponent
   public carTypeOptions = carTypeOptions;
 
   ngOnInit(): void {
+    /* ------------ */
+    /* Options init */
+    /* ------------ */
+    this.options.initLocalitiesOptions();
+    this.options.initDivisionsOptions();
+    this.options.initEmployeesOptions();
+
     /* -------------------------- */
     /* Localities options request */
     /* -------------------------- */
-
-    this.localitiesOptions$?.unsubscribe();
     this.localitiesOptions$ = this.options
       .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
       .subscribe((value) => {
         this.localitiesOptions = value;
-        if (value === null) {
-          this.options.initLocalitiesOptions();
-        }
       });
 
     /* --------------------- */
@@ -101,10 +103,6 @@ export class CarItemAddComponent
           })
           .subscribe((value) => {
             this.divisionsOptions = value;
-            if (value === null) {
-              this.options.initDivisionsOptions();
-            }
-
             if (this.divisionsOptions?.length === 1) {
               this.form
                 .get('divisions')
@@ -129,9 +127,6 @@ export class CarItemAddComponent
           })
           .subscribe((value) => {
             this.employeesOptions = value;
-            if (value === null) {
-              this.options.initEmployeesOptions();
-            }
           });
       });
     };
