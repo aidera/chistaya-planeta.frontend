@@ -1,52 +1,58 @@
 import DeliveryType from './enums/DeliveryType';
-import RawType from './enums/RawType';
 import RawUnit from './enums/RawUnit';
 import PaymentMethod from './enums/PaymentMethod';
-import Address from './types/Address';
 import OrderStatus from './enums/OrderStatus';
 import OrderType from './enums/OrderType';
 import { IDivision } from './Division';
+import { IOffer } from './Offer';
+import { IService } from './Service';
+import { ILocality } from './Locality';
 
 export interface IOrder {
   _id: string;
+  status: OrderStatus;
   type: OrderType;
   scheduledOrder?: string;
+  locality?: ILocality | string;
+  division?: IDivision | string;
+  desiredPickupDate: Date; // Желаемая дата, чтобы приехал водитель и забрал (если доставка компанией) или дата приезда (если самовывоз)
+  comment: string; // комментарий от заказчика (комментарий компании в процессинге)
+  customer: {
+    // Информация о заказчике
+    client?: string; // Является ли заказчик зарегистрированным клиентом
+    organizationLegalName?: string;
+    organizationActualName?: string;
+    contactName: string;
+    contactPhone: string;
+  };
   delivery: {
     _type: DeliveryType;
     customerCarNumber?: string; // если выбран самовывоз, то необходимо указать номер автомобиля заказчика.
     hasAssistant?: boolean; // если доставка компанией, то нужно спросить, будет ли помошник для загрузки авто
-    addressFrom?: Address; // если доставка компанией, то нужно узнать адрес точки, с который забирать сырье
+    addressFrom?: {
+      street: string;
+      house: string;
+    }; // если доставка компанией, то нужно узнать адрес точки, с который забирать сырье
   };
-  division?: string | IDivision;
   approximateRaw: {
     // предположительное сырье. Может отличатся от реального взвешивания. Все равно вписывается для удобства менеджеру в определении авто
-    _type: RawType[];
+    offers: (IOffer | string)[];
+    services: (IService | string)[];
     amountUnit: RawUnit;
     amount: number;
   };
-  customer: {
-    // Информация о заказчике
-    client?: string; // Является ли заказчик зарегистрированным клиентом
-    organizationLegalName: string;
-    organizationActualName: string;
-    contactName: string;
-    contactPhone: string;
-  };
   payment: {
     // Вознаграждение (тут указывается спомоб вознаграждения и карта/счет если не нал. Все остальное в процессинге)
-    method: PaymentMethod;
+    method?: PaymentMethod;
     methodData?: string;
   };
-  desiredPickupDate: Date; // Желаемая дата, чтобы приехал водитель и забрал (если доставка компанией) или дата приезда (если самовывоз)
-  comment: string; // комментарий от заказчика (комментарий компании в процессинге)
   processing?: {
-    status: OrderStatus;
-    managerAssign?: string;
-    managerAccepted?: boolean; // принял ли менеджер заявку
+    clientManagerAssign?: string;
+    clientManagerAccepted?: boolean; // принял ли менеджер заявку
+    receivingManagerAssign?: string;
+    receivingManagerAccepted?: boolean;
     driverAssign?: string;
     driverAccepted?: boolean; // принял ли водитель заявку
-    weigherAssign?: string;
-    weigherAccepted?: boolean; // принял ли весовщик заявку
     carAssign?: string;
     statusDateAccepted?: Date;
     statusDateInTransit?: Date;
@@ -59,11 +65,13 @@ export interface IOrder {
     comment?: string; // комментарий компании о клиенте (клиент не должен это видеть)
     weighedRaw?: {
       // взвешивание привезеного сырья
-      _type: RawType;
+      offers: (IOffer | string)[];
+      services: (IService | string)[];
       amount: number;
       amountUnit: RawUnit;
       paymentAmount: number;
     }[];
+    rawAmount?: number; // итоговый вес взвешенного сырья
     paymentAmount?: number; // итоговая стоимость вознаграждения
   };
   createdAt?: Date;

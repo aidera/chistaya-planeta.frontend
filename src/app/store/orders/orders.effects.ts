@@ -131,12 +131,12 @@ export class OrdersEffects {
     )
   );
 
-  setOrderManagerAssign$ = createEffect(() =>
+  assignOrderClientManager$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrdersActions.setOrderManagerAssignRequest),
+      ofType(OrdersActions.assignOrderClientManagerRequest),
       switchMap((action) => {
         return this.ordersApi
-          .setOrderManagerAssign(action.id, action.manager)
+          .assignClientManager(action.id, action.manager)
           .pipe(
             map((resData) => {
               if (resData && resData.updatedOrder) {
@@ -160,11 +160,11 @@ export class OrdersEffects {
     )
   );
 
-  setOrderManagerAccept$ = createEffect(() =>
+  acceptOrderClientManager$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrdersActions.setOrderManagerAcceptRequest),
+      ofType(OrdersActions.acceptOrderClientManagerRequest),
       switchMap((action) => {
-        return this.ordersApi.setOrderManagerAccept(action.id).pipe(
+        return this.ordersApi.acceptClientManager(action.id).pipe(
           map((resData) => {
             if (resData && resData.updatedOrder) {
               return OrdersActions.updateOrderSuccess({
@@ -187,12 +187,12 @@ export class OrdersEffects {
     )
   );
 
-  setOrderDriverAssign$ = createEffect(() =>
+  assignOrderReceivingManager$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrdersActions.setOrderDriverAssignRequest),
+      ofType(OrdersActions.assignOrderReceivingManagerRequest),
       switchMap((action) => {
         return this.ordersApi
-          .setOrderDriverAssign(action.id, action.driver)
+          .assignReceivingManager(action.id, action.manager)
           .pipe(
             map((resData) => {
               if (resData && resData.updatedOrder) {
@@ -216,11 +216,65 @@ export class OrdersEffects {
     )
   );
 
-  setOrderDriverAccept$ = createEffect(() =>
+  acceptOrderReceivingManager$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrdersActions.setOrderDriverAcceptRequest),
+      ofType(OrdersActions.acceptOrderReceivingManagerRequest),
       switchMap((action) => {
-        return this.ordersApi.setOrderDriverAccept(action.id).pipe(
+        return this.ordersApi.acceptReceivingManager(action.id).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  assignOrderDriver$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.assignOrderDriverRequest),
+      switchMap((action) => {
+        return this.ordersApi.assignDriver(action.id, action.driver).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  acceptOrderDriver$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.acceptOrderDriverRequest),
+      switchMap((action) => {
+        return this.ordersApi.acceptDriver(action.id).pipe(
           map((resData) => {
             if (resData && resData.updatedOrder) {
               return OrdersActions.updateOrderSuccess({

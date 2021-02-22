@@ -40,14 +40,18 @@ export const REFRESH_UPDATE_ORDER_FAILURE =
 /* Other updates */
 export const UPDATE_ORDER_STATUS_REQUEST =
   '[orders] update - order status - request';
-export const SET_ORDER_MANAGER_ASSIGN_REQUEST =
-  '[orders] set - order manager assign - request';
-export const SET_ORDER_MANAGER_ACCEPT_REQUEST =
-  '[orders] set - order manager accept - request';
-export const SET_ORDER_DRIVER_ASSIGN_REQUEST =
-  '[orders] set - order driver assign - request';
-export const SET_ORDER_DRIVER_ACCEPT_REQUEST =
-  '[orders] set - order driver accept - request';
+export const ASSIGN_ORDER_CLIENT_MANAGER_REQUEST =
+  '[orders] assign - order client manager - request';
+export const ACCEPT_ORDER_CLIENT_MANAGER_REQUEST =
+  '[orders] accept - order client manager - request';
+export const ASSIGN_ORDER_RECEIVING_MANAGER_REQUEST =
+  '[orders] assign - order receiving manager - request';
+export const ACCEPT_ORDER_RECEIVING_MANAGER_REQUEST =
+  '[orders] accept - order receiving manager - request';
+export const ASSIGN_ORDER_DRIVER_REQUEST =
+  '[orders] assign - order driver - request';
+export const ACCEPT_ORDER_DRIVER_REQUEST =
+  '[orders] accept - order driver - request';
 
 /* ----------------- */
 /* --- Add Order --- */
@@ -140,20 +144,28 @@ export const updateOrderStatusRequest = createAction(
   UPDATE_ORDER_STATUS_REQUEST,
   props<{ id: string; status: OrderStatus }>()
 );
-export const setOrderManagerAssignRequest = createAction(
-  SET_ORDER_MANAGER_ASSIGN_REQUEST,
+export const assignOrderClientManagerRequest = createAction(
+  ASSIGN_ORDER_CLIENT_MANAGER_REQUEST,
   props<{ id: string; manager: string }>()
 );
-export const setOrderManagerAcceptRequest = createAction(
-  SET_ORDER_MANAGER_ACCEPT_REQUEST,
+export const acceptOrderClientManagerRequest = createAction(
+  ACCEPT_ORDER_CLIENT_MANAGER_REQUEST,
   props<{ id: string }>()
 );
-export const setOrderDriverAssignRequest = createAction(
-  SET_ORDER_DRIVER_ASSIGN_REQUEST,
+export const assignOrderReceivingManagerRequest = createAction(
+  ASSIGN_ORDER_RECEIVING_MANAGER_REQUEST,
+  props<{ id: string; manager: string }>()
+);
+export const acceptOrderReceivingManagerRequest = createAction(
+  ACCEPT_ORDER_RECEIVING_MANAGER_REQUEST,
+  props<{ id: string }>()
+);
+export const assignOrderDriverRequest = createAction(
+  ASSIGN_ORDER_DRIVER_REQUEST,
   props<{ id: string; driver: string }>()
 );
-export const setOrderDriverAcceptRequest = createAction(
-  SET_ORDER_DRIVER_ACCEPT_REQUEST,
+export const acceptOrderDriverRequest = createAction(
+  ACCEPT_ORDER_DRIVER_REQUEST,
   props<{ id: string }>()
 );
 

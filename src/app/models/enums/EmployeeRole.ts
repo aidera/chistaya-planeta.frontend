@@ -2,9 +2,9 @@
  * Роли сторудников:
  * -- главный администратор
  * -- администратор
- * -- менеджер
+ * -- менеджер по работе с клиентами
  * -- водитель
- * -- весовщик
+ * -- принимающий менеджер
  */
 
 enum EmployeeRole {
@@ -12,7 +12,7 @@ enum EmployeeRole {
   admin,
   clientManager,
   driver,
-  acceptManager,
+  receivingManager,
 }
 
 export default EmployeeRole;

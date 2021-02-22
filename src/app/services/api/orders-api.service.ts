@@ -134,36 +134,50 @@ export class OrdersApiService {
     );
   }
 
-  setOrderManagerAssign(
+  assignClientManager(
     id: string,
     manager: string
   ): Observable<IUpdateOrderResponse> {
     return this.http.patch<IUpdateOrderResponse>(
-      `${environment.serverURL}/${this.path}/set-manager-assign/${id}`,
+      `${environment.serverURL}/${this.path}/assign-client-manager/${id}`,
       { manager }
     );
   }
 
-  setOrderManagerAccept(id: string): Observable<IUpdateOrderResponse> {
+  acceptClientManager(id: string): Observable<IUpdateOrderResponse> {
     return this.http.patch<IUpdateOrderResponse>(
-      `${environment.serverURL}/${this.path}/set-manager-accept/${id}`,
+      `${environment.serverURL}/${this.path}/accept-client-manager/${id}`,
       {}
     );
   }
 
-  setOrderDriverAssign(
+  assignReceivingManager(
     id: string,
-    driver: string
+    manager: string
   ): Observable<IUpdateOrderResponse> {
     return this.http.patch<IUpdateOrderResponse>(
-      `${environment.serverURL}/${this.path}/set-driver-assign/${id}`,
+      `${environment.serverURL}/${this.path}/assign-receiving-manager/${id}`,
+      { manager }
+    );
+  }
+
+  acceptReceivingManager(id: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/accept-receiving-manager/${id}`,
+      {}
+    );
+  }
+
+  assignDriver(id: string, driver: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/assign-driver/${id}`,
       { driver }
     );
   }
 
-  setOrderDriverAccept(id: string): Observable<IUpdateOrderResponse> {
+  acceptDriver(id: string): Observable<IUpdateOrderResponse> {
     return this.http.patch<IUpdateOrderResponse>(
-      `${environment.serverURL}/${this.path}/set-driver-accept/${id}`,
+      `${environment.serverURL}/${this.path}/accept-driver/${id}`,
       {}
     );
   }

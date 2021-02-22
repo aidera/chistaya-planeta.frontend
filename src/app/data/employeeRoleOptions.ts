@@ -9,7 +9,7 @@ const employeeRoleOptions: OptionType[] = [
     value: EmployeeRole.clientManager + '',
   },
   { text: 'Водитель', value: EmployeeRole.driver + '' },
-  { text: 'Принимающий менеджер', value: EmployeeRole.acceptManager + '' },
+  { text: 'Принимающий менеджер', value: EmployeeRole.receivingManager + '' },
 ];
 
 export default employeeRoleOptions;
