@@ -305,7 +305,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
         type: this.form.get('type').value,
       };
 
-      this.store.dispatch(OrdersActions.addOrderRequest({ order }));
+      // this.store.dispatch(OrdersActions.addOrderRequest({ order }));
     } else {
       let hasOneElementToScroll = false;
 

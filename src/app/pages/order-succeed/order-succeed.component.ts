@@ -13,6 +13,6 @@ export class OrderSucceedComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
-    this.store.dispatch(OrdersActions.refreshAddOrderSuccess());
+    this.store.dispatch(OrdersActions.refreshAddOrderSucceed());
   }
 }
