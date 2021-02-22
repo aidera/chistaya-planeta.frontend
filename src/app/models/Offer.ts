@@ -10,3 +10,10 @@ export interface IOffer {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface IOfferLessInfo {
+  _id: string;
+  name: string;
+  status: SimpleStatus;
+  prices: Price[];
+}

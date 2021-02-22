@@ -10,3 +10,10 @@ export interface IService {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface IServiceLessInfo {
+  _id: string;
+  name: string;
+  status: SimpleStatus;
+  prices: Price[];
+}

@@ -17,6 +17,8 @@ import { LocalitiesApiService } from '../api/localities-api.service';
 import { DivisionsApiService } from '../api/divisions-api.service';
 import { CarsApiService } from '../api/cars-api.service';
 import { EmployeesApiService } from '../api/employees-api.service';
+import { OffersApiService } from '../api/offers-api.service';
+import { ServicesApiService } from '../api/services-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,11 +31,14 @@ export class OptionsService {
     protected localitiesApi: LocalitiesApiService,
     protected divisionsApi: DivisionsApiService,
     protected carsApi: CarsApiService,
-    protected employeesApi: EmployeesApiService
+    protected employeesApi: EmployeesApiService,
+    protected offersApi: OffersApiService,
+    protected servicesApi: ServicesApiService
   ) {}
 
   /* ---------- */
   /* Localities */
+
   /* ---------- */
 
   public initLocalitiesOptions(): void {
@@ -89,6 +94,7 @@ export class OptionsService {
 
   /* ---------- */
   /* Divisions */
+
   /* ---------- */
 
   public initDivisionsOptions(): void {
@@ -150,6 +156,7 @@ export class OptionsService {
 
   /* ---- */
   /* Cars */
+
   /* ---- */
 
   public initCarsOptions(): void {
@@ -219,6 +226,7 @@ export class OptionsService {
 
   /* --------- */
   /* Employees */
+
   /* --------- */
 
   public initEmployeesOptions(): void {
@@ -299,5 +307,115 @@ export class OptionsService {
 
   public destroyEmployeesOptions(): void {
     this.socket?.get()?.off('employees');
+  }
+
+  /* ------ */
+  /* Offers */
+  /* ------ */
+
+  public initOffersOptions(): void {
+    this.socket.get()?.on('offers', (_) => {
+      this.store.dispatch(AppActions.getOffersToSelectRequest());
+    });
+  }
+
+  public requestOffersOptions(): void {
+    this.store.dispatch(AppActions.getOffersToSelectRequest());
+  }
+
+  public getOffersOptions({
+    statuses,
+  }: {
+    statuses?: SimpleStatus[];
+  }): Observable<OptionType[] | null> {
+    return this.store.select(AppSelectors.selectOffersToSelect).pipe(
+      tap((value) => {
+        if (value === null) {
+          this.requestOffersOptions();
+        }
+        return value;
+      }),
+      map((value) => {
+        if (value === null) {
+          return null;
+        }
+
+        const offersOptions = [];
+        let offersToSelect = value;
+
+        if (offersToSelect) {
+          if (statuses !== undefined) {
+            offersToSelect = offersToSelect.filter((el) => {
+              return statuses.includes(el.status);
+            });
+          }
+
+          offersToSelect?.forEach((el) => {
+            offersOptions.push({ text: el.name, value: el._id });
+          });
+        }
+
+        return offersOptions;
+      })
+    );
+  }
+
+  public destroyOffersOptions(): void {
+    this.socket?.get()?.off('offers');
+  }
+
+  /* -------- */
+  /* Services */
+  /* -------- */
+
+  public initServicesOptions(): void {
+    this.socket.get()?.on('services', (_) => {
+      this.store.dispatch(AppActions.getServicesToSelectRequest());
+    });
+  }
+
+  public requestServicesOptions(): void {
+    this.store.dispatch(AppActions.getServicesToSelectRequest());
+  }
+
+  public getServicesOptions({
+    statuses,
+  }: {
+    statuses?: SimpleStatus[];
+  }): Observable<OptionType[] | null> {
+    return this.store.select(AppSelectors.selectServicesToSelect).pipe(
+      tap((value) => {
+        if (value === null) {
+          this.requestServicesOptions();
+        }
+        return value;
+      }),
+      map((value) => {
+        if (value === null) {
+          return null;
+        }
+
+        const servicesOptions = [];
+        let servicesToSelect = value;
+
+        if (servicesToSelect) {
+          if (statuses !== undefined) {
+            servicesToSelect = servicesToSelect.filter((el) => {
+              return statuses.includes(el.status);
+            });
+          }
+
+          servicesToSelect?.forEach((el) => {
+            servicesOptions.push({ text: el.name, value: el._id });
+          });
+        }
+
+        return servicesOptions;
+      })
+    );
+  }
+
+  public destroyServicesOptions(): void {
+    this.socket?.get()?.off('services');
   }
 }

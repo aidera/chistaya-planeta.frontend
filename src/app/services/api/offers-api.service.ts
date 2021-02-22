@@ -5,8 +5,12 @@ import { Observable } from 'rxjs';
 import ServerResponse from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
-import { IOffer } from '../../models/Offer';
+import { IOffer, IOfferLessInfo } from '../../models/Offer';
 import Price from '../../models/types/Price';
+
+export interface IGetAllOffersResponse extends ServerResponse {
+  offers?: IOfferLessInfo[];
+}
 
 export interface IGetOffersResponse extends ServerResponse {
   offers?: IOffer[];
@@ -32,6 +36,12 @@ export class OffersApiService {
   private path = 'offers';
 
   constructor(private http: HttpClient) {}
+
+  getAllLessInfo(): Observable<IGetAllOffersResponse> {
+    return this.http.get<IGetAllOffersResponse>(
+      `${environment.serverURL}/${this.path}/all-less-info`
+    );
+  }
 
   get(): Observable<IGetOffersResponse> {
     return this.http.get<IGetOffersResponse>(

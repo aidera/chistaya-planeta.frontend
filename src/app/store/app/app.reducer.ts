@@ -6,6 +6,8 @@ import { ServerError } from '../../models/ServerResponse';
 import { IDivisionLessInfo } from '../../models/Division';
 import { IEmployeeLessInfo } from '../../models/Employee';
 import { ICarLessInfo } from '../../models/Car';
+import { IOfferLessInfo } from '../../models/Offer';
+import { IServiceLessInfo } from '../../models/Service';
 
 export const appInitialState = {
   /* ---------------------------- */
@@ -40,6 +42,20 @@ export const appInitialState = {
   employeesToSelect: null as IEmployeeLessInfo[] | null,
   employeesToSelectIsFetching: false,
   employeesToSelectError: null as ServerError | null,
+
+  /* ------------------------------ */
+  /* ------ Offers to select ------ */
+  /* ------------------------------ */
+  offersToSelect: null as IOfferLessInfo[] | null,
+  offersToSelectIsFetching: false,
+  offersToSelectError: null as ServerError | null,
+
+  /* -------------------------------- */
+  /* ------ Services to select ------ */
+  /* -------------------------------- */
+  servicesToSelect: null as IServiceLessInfo[] | null,
+  servicesToSelectIsFetching: false,
+  servicesToSelectError: null as ServerError | null,
 };
 export type AppState = typeof appInitialState;
 
@@ -137,6 +153,48 @@ const _appReducer = createReducer(
     ...state,
     employeesToSelectIsFetching: false,
     employeesToSelectError: payload.error,
+  })),
+
+  /* ------------------------------ */
+  /* ------ Offers to select ------ */
+  /* ------------------------------ */
+
+  on(AppActions.getOffersToSelectSuccess, (state) => ({
+    ...state,
+    offersToSelectIsFetching: true,
+    offersToSelectError: null,
+  })),
+  on(AppActions.getOffersToSelectSuccess, (state, payload) => ({
+    ...state,
+    offersToSelect: payload.offers,
+    offersToSelectIsFetching: false,
+    offersToSelectError: null,
+  })),
+  on(AppActions.getOffersToSelectFailure, (state, payload) => ({
+    ...state,
+    offersToSelectIsFetching: false,
+    offersToSelectError: payload.error,
+  })),
+
+  /* -------------------------------- */
+  /* ------ Services to select ------ */
+  /* -------------------------------- */
+
+  on(AppActions.getServicesToSelectSuccess, (state) => ({
+    ...state,
+    servicesToSelectIsFetching: true,
+    servicesToSelectError: null,
+  })),
+  on(AppActions.getServicesToSelectSuccess, (state, payload) => ({
+    ...state,
+    servicesToSelect: payload.services,
+    servicesToSelectIsFetching: false,
+    servicesToSelectError: null,
+  })),
+  on(AppActions.getServicesToSelectFailure, (state, payload) => ({
+    ...state,
+    servicesToSelectIsFetching: false,
+    servicesToSelectError: payload.error,
   }))
 );
 

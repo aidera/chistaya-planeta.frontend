@@ -81,3 +81,37 @@ export const selectEmployeesToSelectError = createSelector(
   selectAll,
   (state: AppState) => state.employeesToSelectError
 );
+
+/* ------------------------------ */
+/* ------ Offers to select ------ */
+/* ------------------------------ */
+
+export const selectOffersToSelect = createSelector(
+  selectAll,
+  (state: AppState) => state.offersToSelect
+);
+export const selectOffersToSelectIsFetching = createSelector(
+  selectAll,
+  (state: AppState) => state.offersToSelectIsFetching
+);
+export const selectOffersToSelectError = createSelector(
+  selectAll,
+  (state: AppState) => state.offersToSelectError
+);
+
+/* -------------------------------- */
+/* ------ Services to select ------ */
+/* -------------------------------- */
+
+export const selectServicesToSelect = createSelector(
+  selectAll,
+  (state: AppState) => state.servicesToSelect
+);
+export const selectServicesToSelectIsFetching = createSelector(
+  selectAll,
+  (state: AppState) => state.servicesToSelectIsFetching
+);
+export const selectServicesToSelectError = createSelector(
+  selectAll,
+  (state: AppState) => state.servicesToSelectError
+);

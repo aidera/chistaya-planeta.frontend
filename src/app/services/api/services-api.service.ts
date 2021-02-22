@@ -6,7 +6,11 @@ import ServerResponse from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import Price from '../../models/types/Price';
-import { IService } from '../../models/Service';
+import { IService, IServiceLessInfo } from '../../models/Service';
+
+export interface IGetAllServicesResponse extends ServerResponse {
+  services?: IServiceLessInfo[];
+}
 
 export interface IGetServicesResponse extends ServerResponse {
   services?: IService[];
@@ -32,6 +36,12 @@ export class ServicesApiService {
   private path = 'services';
 
   constructor(private http: HttpClient) {}
+
+  getAllLessInfo(): Observable<IGetAllServicesResponse> {
+    return this.http.get<IGetAllServicesResponse>(
+      `${environment.serverURL}/${this.path}/all-less-info`
+    );
+  }
 
   get(): Observable<IGetServicesResponse> {
     return this.http.get<IGetServicesResponse>(
