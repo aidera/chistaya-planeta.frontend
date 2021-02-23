@@ -26,14 +26,14 @@
     <div class="order-block">
       <h2>
         {{
-          form.get('type').value === orderTypeEnum.recyclable + ''
+          form.get('type').value === orderTypeEnum.offer + ''
             ? 'Сырье'
             : 'Отходы'
         }}
       </h2>
 
       <app-select
-        *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
+        *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
         [control]="form.get('rawType')"
         fieldId="rawType"
         label="Тип"
@@ -47,7 +47,7 @@
 
       <div
         class="combined-fields"
-        *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
+        *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
       >
         <app-text-input
           [control]="form.get('rawAmount')"
@@ -62,7 +62,7 @@
         ></app-text-input>
 
         <app-select
-          *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
+          *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
           [control]="form.get('rawAmountUnit')"
           fieldId="rawAmountUnit"
           [options]="selectRawUnitOptions"
@@ -71,7 +71,7 @@
       </div>
 
       <app-text-input
-        *ngIf="form.get('type').value === orderTypeEnum.garbage + ''"
+        *ngIf="form.get('type').value === orderTypeEnum.service + ''"
         [control]="form.get('rawAmount')"
         fieldId="rawAmount"
         [label]="'Приблизительное количество, куб.'"
@@ -88,14 +88,14 @@
     <div class="order-block">
       <h2>
         {{
-          form.get('type').value === orderTypeEnum.recyclable + ''
+          form.get('type').value === orderTypeEnum.offer + ''
             ? 'Доставка'
             : 'Вывоз'
         }}
       </h2>
 
       <app-select
-        *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
+        *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
         [control]="form.get('deliveryType')"
         fieldId="deliveryType"
         label="Тип доставки"
@@ -117,7 +117,7 @@
 
       <ng-container
         *ngIf="
-          form.get('type').value === orderTypeEnum.recyclable + '' &&
+          form.get('type').value === orderTypeEnum.offer + '' &&
           form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
           selectDivisionsOptions.length > 1
         "
@@ -138,7 +138,7 @@
 
       <div
         *ngIf="
-          form.get('type').value === orderTypeEnum.recyclable + '' &&
+          form.get('type').value === orderTypeEnum.offer + '' &&
           form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
           selectDivisionsOptions.length === 1
         "
@@ -153,7 +153,7 @@
       <ng-container
         *ngIf="
           form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
-          form.get('type').value === orderTypeEnum.garbage + ''
+          form.get('type').value === orderTypeEnum.service + ''
         "
       >
         <div class="field-spacer"></div>
@@ -180,7 +180,7 @@
       <ng-container
         *ngIf="
           form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
-          form.get('type').value === orderTypeEnum.recyclable + ''
+          form.get('type').value === orderTypeEnum.offer + ''
         "
       >
         <div class="field-spacer"></div>
@@ -227,7 +227,7 @@
       <app-checkbox
         *ngIf="
           form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
-          form.get('type').value === orderTypeEnum.garbage + ''
+          form.get('type').value === orderTypeEnum.service + ''
         "
         [control]="form.get('hasAssistant')"
         fieldId="hasAssistant"
@@ -281,7 +281,7 @@
 
     <div
       class="order-block"
-      *ngIf="form.get('type').value === orderTypeEnum.recyclable + ''"
+      *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
     >
       <h2>Вознаграждение</h2>
 
@@ -312,7 +312,7 @@
 
     <div
       class="order-block"
-      *ngIf="form.get('type').value === orderTypeEnum.garbage + ''"
+      *ngIf="form.get('type').value === orderTypeEnum.service + ''"
     >
       <h2>Оплата</h2>
 

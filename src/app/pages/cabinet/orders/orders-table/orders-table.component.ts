@@ -18,7 +18,7 @@ import deliveryTypeOptions from '../../../../data/deliveryTypeOptions';
 import { IOrder } from '../../../../models/Order';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
 import OrderStatus from '../../../../models/enums/OrderStatus';
-import paymentMethodRecyclableOptions from '../../../../data/paymentMethodRecyclableOptions';
+import paymentMethodOffersOptions from '../../../../data/paymentMethodOffersOptions';
 
 @Component({
   selector: 'app-orders-table',
@@ -48,7 +48,7 @@ export class OrdersTableComponent
   public orderStatusOptions = orderStatusOptions;
   public orderTypeOptions = orderTypeOptions;
   public orderDeliveryTypeOptions = deliveryTypeOptions;
-  public paymentMethodOptions = paymentMethodRecyclableOptions;
+  public paymentMethodOptions = paymentMethodOffersOptions;
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -851,7 +851,7 @@ export class OrdersTableComponent
                   )
                 : '',
 
-              paymentMethod: paymentMethodRecyclableOptions.find(
+              paymentMethod: paymentMethodOffersOptions.find(
                 (el) => el.value === order.payment.method + ''
               ).text,
               paymentMethodData: this.highlightSearchedValue(

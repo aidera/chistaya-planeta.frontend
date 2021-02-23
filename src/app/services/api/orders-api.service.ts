@@ -39,7 +39,6 @@ export interface IAddOrderRequest {
   deadline: Date;
 
   locality: string;
-  division?: string;
 
   offersItems?: string[];
   offersAmountUnit?: Unit;
@@ -156,12 +155,12 @@ export class OrdersApiService {
   }
 
   add(order: IAddOrderRequest): Observable<IAddOrderResponse> {
+    console.log(order);
     const newOrder = {
-      type: order.type ? Number(order.type) : undefined,
+      type: order.type,
       deadline: order.deadline ? order.deadline.toISOString() : undefined,
 
       locality: order.locality || undefined,
-      division: order.division || undefined,
 
       offersItems: order.offersItems || undefined,
       offersAmountUnit: order.offersAmountUnit || undefined,
@@ -178,7 +177,7 @@ export class OrdersApiService {
       customerOrganizationLegalName:
         order.customerOrganizationLegalName || undefined,
 
-      deliveryType: order.deliveryType ? Number(order.deliveryType) : undefined,
+      deliveryType: order.deliveryType,
       deliveryCustomerCarNumber: order.deliveryCustomerCarNumber || undefined,
       deliveryHasAssistant: order.deliveryHasAssistant,
       deliveryAddressHouse: order.deliveryAddressHouse || undefined,

@@ -108,9 +108,11 @@ export class OptionsService {
   }
 
   public getDivisionsOptions({
+    useAddress,
     localitiesIds,
     statuses,
   }: {
+    useAddress?: boolean;
     localitiesIds?: string[];
     statuses?: SimpleStatus[];
   }): Observable<OptionType[] | null> {
@@ -142,7 +144,14 @@ export class OptionsService {
         }
 
         divisionsToSelect?.forEach((el) => {
-          divisionsOptions.push({ text: el.name, value: el._id });
+          if (useAddress) {
+            divisionsOptions.push({
+              text: el.name + ' (' + el.street + ', ' + el.house + ')',
+              value: el._id,
+            });
+          } else {
+            divisionsOptions.push({ text: el.name, value: el._id });
+          }
         });
 
         return divisionsOptions;

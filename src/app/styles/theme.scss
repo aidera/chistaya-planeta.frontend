@@ -108,6 +108,21 @@ b {
   }
 }
 
+.combined-fields_mobile-wrap {
+  @media (max-width: $bp-sm) {
+    flex-wrap: wrap;
+    > * {
+      width: 100%;
+    }
+    > *:nth-child(1) {
+      width: 100%;
+    }
+    > *:nth-child(2) {
+      width: 100%;
+    }
+  }
+}
+
 .submit-button {
   width: 100%;
 }

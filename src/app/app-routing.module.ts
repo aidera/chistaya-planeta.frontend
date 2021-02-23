@@ -24,6 +24,7 @@ import { EmployeeItemAddComponent } from './pages/cabinet/employees/employee-ite
 import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/employee-item.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 import { PricesComponent } from './pages/cabinet/prices/prices.component';
+import { OrderItemAddComponent } from './pages/cabinet/orders/order-item-add/order-item-add.component';
 
 export const routes: Routes = [
   {
@@ -37,8 +38,8 @@ export const routes: Routes = [
         data: { useBacklink: false },
       },
       {
-        path: 'order',
-        component: OrdersTableComponent,
+        path: 'orders/add',
+        component: OrderItemAddComponent,
         data: { useBacklink: true },
       },
       {

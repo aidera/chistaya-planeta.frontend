@@ -65,6 +65,7 @@ import { ItemFieldInactiveListComponent } from './components/item-field/item-fie
 import { ItemFieldInactiveStatusComponent } from './components/item-field/item-field-inactive-status/item-field-inactive-status.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 import { PricesComponent } from './pages/cabinet/prices/prices.component';
+import { OrderItemAddComponent } from './pages/cabinet/orders/order-item-add/order-item-add.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +120,7 @@ import { PricesComponent } from './pages/cabinet/prices/prices.component';
     ItemFieldInactiveStatusComponent,
     ItemNotFoundComponent,
     PricesComponent,
+    OrderItemAddComponent,
   ],
   imports: [
     BrowserModule,
