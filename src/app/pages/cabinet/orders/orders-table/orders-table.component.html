@@ -1,6 +1,310 @@
 <div class="cabinet-header">
   <h1>Заявки</h1>
   <div class="cabinet-header__actions">
-    <button mat-raised-button color="primary">Добавить новую заявку</button>
+    <button mat-raised-button color="primary" [routerLink]="['add']">
+      Добавить новую
+    </button>
   </div>
+</div>
+
+<div class="cabinet-content" [ngSwitch]="currentForm">
+  <form
+    *ngSwitchCase="'quick'"
+    [formGroup]="quickSearchForm"
+    class="cabinet-content__form cabinet-content__fast-search-form"
+  >
+    <div class="cabinet-content__form-content">
+      <app-text-input
+        [control]="quickSearchForm.get('search')"
+        [placeholder]="'Быстрый поиск...'"
+        [icon]="'search.svg'"
+      ></app-text-input>
+    </div>
+    <div class="cabinet-content__links">
+      <a (click)="setCurrentForm('advanced')">Расширенный поиск</a>
+      <a (click)="resetRequest()">Сбросить фильтры</a>
+    </div>
+  </form>
+
+  <form
+    *ngSwitchCase="'advanced'"
+    class="cabinet-content__form cabinet-content__advanced-search-form"
+    [formGroup]="advancedSearchForm"
+  >
+    <div class="cabinet-content__form-content">
+      <app-accordion title="Основные фильтры" [isOpenInitial]="true">
+        <app-select
+          [control]="advancedSearchForm.get('status')"
+          label="Статус:"
+          [options]="orderStatusOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('type')"
+          label="Тип:"
+          [options]="orderTypeOptions"
+          [isMultiple]="true"
+        ></app-select>
+      </app-accordion>
+
+      <app-accordion title="Заказчик" [isOpenInitial]="false">
+        <app-text-input
+          [control]="advancedSearchForm.get('customerContactName')"
+          label="Контактное лицо содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('customerContactPhone')"
+          label="Контактный телефон содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('customerOrganizationLegalName')"
+          label="Юр. название компании содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('customerOrganizationActualName')"
+          label="Факт. название компании содержит:"
+        ></app-text-input>
+      </app-accordion>
+
+      <app-accordion title="Доставка" [isOpenInitial]="false">
+        <app-select
+          [control]="advancedSearchForm.get('deliveryType')"
+          label="Тип доставки:"
+          [options]="orderDeliveryTypeOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('deliveryCustomerCarNumber')"
+          label="Номер автомобиля заказчика содержит:"
+        ></app-text-input>
+
+        <app-select
+          [control]="advancedSearchForm.get('deliveryHasAssistant')"
+          label="Помошник:"
+          [options]="[
+            { value: 'true', text: 'есть' },
+            { value: 'false', text: 'нет' }
+          ]"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('deliveryAddressFromStreet')"
+          label="Улица доставки содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('deliveryAddressFromHouse')"
+          label="Дом доставки содержит:"
+        ></app-text-input>
+      </app-accordion>
+
+      <app-accordion title="Оплата" [isOpenInitial]="false">
+        <app-select
+          [control]="advancedSearchForm.get('paymentMethod')"
+          label="Способ оплаты:"
+          [options]="paymentMethodOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('paymentMethodData')"
+          label="Данные об оплате содержат:"
+        ></app-text-input>
+
+        <app-number-from-to-input
+          [control]="advancedSearchForm.get('weighedPaymentAmount')"
+          label="Итоговая стоимость:"
+        ></app-number-from-to-input>
+      </app-accordion>
+
+      <app-accordion title="Компания" [isOpenInitial]="false">
+        <app-select
+          [control]="advancedSearchForm.get('localities')"
+          label="Населённые пункты:"
+          [options]="localitiesOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('divisions')"
+          label="Подразделения:"
+          [options]="divisionsOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('performersClientManagers')"
+          label="Менеджеры по работе с клиентами:"
+          [options]="clientManagersOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('performersReceivingManagers')"
+          label="Принимающие менеджеры:"
+          [options]="receivingManagersOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('performersDrivers')"
+          label="Водители:"
+          [options]="driversOptions"
+          [isMultiple]="true"
+        ></app-select>
+
+        <app-select
+          [control]="advancedSearchForm.get('performersCars')"
+          label="Автомобили компании:"
+          [options]="carsOptions"
+          [isMultiple]="true"
+        ></app-select>
+      </app-accordion>
+
+      <app-accordion title="Комментарии" [isOpenInitial]="false">
+        <app-text-input
+          [control]="advancedSearchForm.get('customerComment')"
+          label="Комментарий клиента содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('companyComment')"
+          label="Комментарий компании содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('customerCancellationReason')"
+          label="Причина отмены заказа клиентом содержит:"
+        ></app-text-input>
+
+        <app-text-input
+          [control]="advancedSearchForm.get('companyCancellationReason')"
+          label="Причина отмены заказа компанией содержит:"
+        ></app-text-input>
+      </app-accordion>
+
+      <app-accordion title="История" [isOpenInitial]="false">
+        <br />
+        <h3>Желаемая дата доставки</h3>
+        <br />
+        <app-date-time-input
+          [control]="advancedSearchForm.get('deadlineFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('deadlineTo')"
+          label="до:"
+        ></app-date-time-input>
+
+        <br />
+        <h3>Дата создания</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('createdAtFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('createdAtTo')"
+          label="до:"
+        ></app-date-time-input>
+
+        <br />
+        <h3>Дата обновления</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('updatedAtFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('updatedAtTo')"
+          label="до:"
+        ></app-date-time-input>
+
+        <br />
+        <h3>Дата обработки</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateAcceptedFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateAcceptedTo')"
+          label="до:"
+        ></app-date-time-input>
+
+        <br />
+        <h3>Дата доставки</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateDeliveredFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateDeliveredTo')"
+          label="до:"
+        ></app-date-time-input>
+
+        <br />
+        <h3>Дата взвешивания</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateWeighedFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateWeighedTo')"
+          label="до:"
+        ></app-date-time-input>
+
+        <br />
+        <h3>Дата завершения</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateCompletedFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateCompletedTo')"
+          label="до:"
+        ></app-date-time-input>
+      </app-accordion>
+    </div>
+    <div class="cabinet-content__links">
+      <a (click)="setCurrentForm('quick')">Быстрый поиск</a>
+      <a (click)="resetRequest()">Сбросить фильтры</a>
+    </div>
+  </form>
+
+  <app-table
+    [columnsData]="tableColumns"
+    [data]="tableData"
+    [columnsCanBeDisplayed]="columnsCanBeDisplayed"
+    [displayedColumns]="displayedColumns"
+    [sorting]="tableSorting"
+    [pagination]="tablePagination"
+    [isLoading]="isFetching"
+    (display)="onTableDisplay($event)"
+    (sort)="onTableSort($event)"
+    (paginate)="onTablePaginate($event)"
+    (itemClick)="onTableItemClick($event)"
+  ></app-table>
 </div>

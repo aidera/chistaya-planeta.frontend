@@ -5,14 +5,14 @@
  */
 
 enum OrderType {
-  recyclable,
-  garbage,
+  offer,
+  service,
 }
 
 export default OrderType;
 
 const orderTypeStrings: string[] = [];
-orderTypeStrings[OrderType.recyclable] = 'продажа вторсырья';
-orderTypeStrings[OrderType.garbage] = 'вывоз муcора';
+orderTypeStrings[OrderType.offer] = 'продажа вторсырья';
+orderTypeStrings[OrderType.service] = 'вывоз мусора';
 
 export { orderTypeStrings };

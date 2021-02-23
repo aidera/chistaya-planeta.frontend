@@ -12,37 +12,10 @@ import { IOrder } from '../../models/Order';
 import ServerResponse from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import OrderStatus from '../../models/enums/OrderStatus';
+import Unit from '../../models/enums/Unit';
 
 export interface IGetOneOrderResponse extends ServerResponse {
   order?: IOrder;
-}
-
-export interface IUpdateOrderRequest {
-  type?: OrderType;
-  locality: string;
-  division: string;
-  desiredPickupDate?: Date;
-  customerComment?: string;
-  employeeComment?: string;
-
-  customerOrganizationLegalName?: string;
-  customerOrganizationActualName?: string;
-  customerContactName?: string;
-  customerContactPhone?: string;
-
-  deliveryType?: DeliveryType;
-  deliveryCustomerCarNumber?: string;
-  deliveryHasAssistant?: boolean;
-  deliveryAddressStreet?: string;
-  deliveryAddressHouse?: string;
-
-  approximateRawOffers?: string[];
-  approximateRawServices?: string[];
-  approximateRawAmountUnit?: RawUnit;
-  approximateRawAmount?: number;
-
-  paymentMethod?: PaymentMethod;
-  paymentMethodData?: string;
 }
 
 export interface IUpdateOrderResponse extends ServerResponse {
@@ -63,10 +36,18 @@ export interface IGetOrdersResponse extends ServerResponse {
 
 export interface IAddOrderRequest {
   type: OrderType;
+  deadline: Date;
+
   locality: string;
   division?: string;
-  desiredPickupDate: Date;
-  comment?: string;
+
+  offersItems?: string[];
+  offersAmountUnit?: Unit;
+  offersAmount?: number;
+
+  servicesItems?: string[];
+  servicesAmountUnit?: Unit;
+  servicesAmount?: number;
 
   customerOrganizationLegalName?: string;
   customerOrganizationActualName?: string;
@@ -86,6 +67,8 @@ export interface IAddOrderRequest {
 
   paymentMethod?: PaymentMethod;
   paymentMethodData?: string;
+
+  customerComment?: string;
 }
 
 export interface IAddOrderResponse extends ServerResponse {
@@ -111,16 +94,6 @@ export class OrdersApiService {
   getOne(id: string): Observable<IGetOneOrderResponse> {
     return this.http.get<IGetOneOrderResponse>(
       `${environment.serverURL}/${this.path}/${id}`
-    );
-  }
-
-  update(
-    id: string,
-    fields: IUpdateOrderRequest
-  ): Observable<IUpdateOrderResponse> {
-    return this.http.patch<IUpdateOrderResponse>(
-      `${environment.serverURL}/${this.path}/${id}`,
-      { ...fields }
     );
   }
 
@@ -185,12 +158,18 @@ export class OrdersApiService {
   add(order: IAddOrderRequest): Observable<IAddOrderResponse> {
     const newOrder = {
       type: order.type ? Number(order.type) : undefined,
+      deadline: order.deadline ? order.deadline.toISOString() : undefined,
+
       locality: order.locality || undefined,
       division: order.division || undefined,
-      desiredPickupDate: order.desiredPickupDate
-        ? order.desiredPickupDate.toISOString()
-        : undefined,
-      comment: order.comment || undefined,
+
+      offersItems: order.offersItems || undefined,
+      offersAmountUnit: order.offersAmountUnit || undefined,
+      offersAmount: order.offersAmount || undefined,
+
+      servicesItems: order.servicesItems || undefined,
+      servicesAmountUnit: order.servicesAmountUnit || undefined,
+      servicesAmount: order.servicesAmount || undefined,
 
       customerContactName: order.customerContactName || undefined,
       customerContactPhone: order.customerContactPhone || undefined,
@@ -218,13 +197,9 @@ export class OrdersApiService {
         ? Number(order.paymentMethod)
         : undefined,
       paymentMethodData: order.paymentMethodData || undefined,
-    };
 
-    Object.keys(newOrder).forEach((key) =>
-      newOrder[key] === undefined || newOrder[key] === null
-        ? delete newOrder[key]
-        : {}
-    );
+      customerComment: order.customerComment || undefined,
+    };
 
     return this.http.put<IAddOrderResponse>(
       `${environment.serverURL}/${this.path}/`,

@@ -162,7 +162,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     тип сырья, единица измерения сырья, тип доставки, группа полей вознаграждения */
     /* Если тип заказа выбран "Вывести мусор", то поля вторсырья убираются */
     this.form.get('type').valueChanges.subscribe((value) => {
-      if (value === OrderType.recyclable + '') {
+      if (value === OrderType.offer + '') {
         this.form.get('rawType').setValidators(Validators.required);
         this.form.get('rawAmountUnit').setValidators(Validators.required);
         this.form.get('deliveryType').setValidators(Validators.required);
@@ -208,7 +208,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   private deliveryTypeValidatorsChange(value): void {
     if (
       value === DeliveryType.company + '' &&
-      this.form.get('type').value === OrderType.recyclable + ''
+      this.form.get('type').value === OrderType.offer + ''
     ) {
       this.form.get('deliveryAddressStreet').setValidators(Validators.required);
       this.form.get('deliveryAddressHouse').setValidators(Validators.required);
@@ -220,7 +220,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
         .get('deliveryCustomerCarNumber')
         .setValidators([Validators.required, Validators.minLength(5)]);
     }
-    if (this.form.get('type').value === OrderType.garbage + '') {
+    if (this.form.get('type').value === OrderType.service + '') {
       this.form.get('deliveryCustomerCarNumber').clearValidators();
     }
   }
@@ -228,7 +228,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   public divisionsChange(value): void {
     this.selectDivisionsOptions = [];
     if (
-      this.form.get('type').value === OrderType.recyclable + '' &&
+      this.form.get('type').value === OrderType.offer + '' &&
       this.form.get('deliveryType').value === DeliveryType.pickup + ''
     ) {
       if (value) {
@@ -261,7 +261,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     if (
       value === PaymentMethod.card + '' ||
       (value === PaymentMethod.nonCash + '' &&
-        this.form.get('type').value === OrderType.recyclable + '')
+        this.form.get('type').value === OrderType.offer + '')
     ) {
       this.form.get('paymentMethodData').setValidators(Validators.required);
     } else {

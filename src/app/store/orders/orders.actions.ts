@@ -1,9 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import {
-  IAddOrderRequest,
-  IUpdateOrderRequest,
-} from '../../services/api/orders-api.service';
+import { IAddOrderRequest } from '../../services/api/orders-api.service';
 import { ServerError } from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { PaginationType } from '../../models/types/PaginationType';
@@ -29,8 +26,6 @@ export const GET_ORDER_FAILURE = '[orders] get - order - failure';
 /* -------------------- */
 /* --- Update Order --- */
 /* -------------------- */
-
-export const UPDATE_ORDER_REQUEST = '[orders] update - order - request';
 export const UPDATE_ORDER_SUCCESS = '[orders] update - order - success';
 export const UPDATE_ORDER_FAILURE = '[orders] update - order - failure';
 export const REFRESH_UPDATE_ORDER_SUCCESS =
@@ -118,10 +113,6 @@ export const getOrderFailure = createAction(
 /* --- Update Order --- */
 /* -------------------- */
 
-export const updateOrderRequest = createAction(
-  UPDATE_ORDER_REQUEST,
-  props<{ id: string; fields: IUpdateOrderRequest }>()
-);
 export const updateOrderSuccess = createAction(
   UPDATE_ORDER_SUCCESS,
   props<{

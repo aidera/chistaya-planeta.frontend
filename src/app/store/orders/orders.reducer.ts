@@ -81,11 +81,6 @@ const _ordersReducer = createReducer(
   /* --- Update Order --- */
   /* -------------------- */
 
-  on(OrdersActions.updateOrderRequest, (state) => ({
-    ...state,
-    updateOrderIsFetching: true,
-    updateOrderError: null,
-  })),
   on(OrdersActions.updateOrderSuccess, (state, payload) => ({
     ...state,
     order: payload.order,

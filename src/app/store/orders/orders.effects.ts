@@ -77,33 +77,6 @@ export class OrdersEffects {
     )
   );
 
-  updateOrder$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OrdersActions.updateOrderRequest),
-      switchMap((action) => {
-        return this.ordersApi.update(action.id, action.fields).pipe(
-          map((resData) => {
-            if (resData && resData.updatedOrder) {
-              return OrdersActions.updateOrderSuccess({
-                order: resData.updatedOrder,
-              });
-            }
-            return OrdersActions.updateOrderFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              OrdersActions.updateOrderFailure({
-                error: errorRes.error.error,
-              })
-            );
-          })
-        );
-      })
-    )
-  );
-
   updateOrderStatus$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrdersActions.updateOrderStatusRequest),

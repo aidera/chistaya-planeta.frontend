@@ -5,6 +5,7 @@
  */
 
 enum DeliveryType {
+  without,
   company,
   pickup,
 }
@@ -12,6 +13,7 @@ enum DeliveryType {
 export default DeliveryType;
 
 const deliveryTypeStrings: string[] = [];
+deliveryTypeStrings[DeliveryType.without] = '-';
 deliveryTypeStrings[DeliveryType.company] = 'компанией';
 deliveryTypeStrings[DeliveryType.pickup] = 'самовывоз';
 
