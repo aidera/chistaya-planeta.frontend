@@ -68,19 +68,19 @@
                     <div class="price-element__content-column-description">
                       <div>
                         {{
-                          findOfferPriceByUnit(offer._id, rawUnit.kg)
+                          findOfferPriceByUnit(offer._id, unit.kg)
                             .amountWithDelivery <= 0
                             ? 'бесплатно (кг)'
-                            : findOfferPriceByUnit(offer._id, rawUnit.kg)
+                            : findOfferPriceByUnit(offer._id, unit.kg)
                                 .amountWithDelivery + ' руб./кг'
                         }}
                       </div>
                       <div>
                         {{
-                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                          findOfferPriceByUnit(offer._id, unit.cube)
                             .amountWithDelivery <= 0
                             ? 'бесплатно (куб)'
-                            : findOfferPriceByUnit(offer._id, rawUnit.cube)
+                            : findOfferPriceByUnit(offer._id, unit.cube)
                                 .amountWithDelivery + ' руб./куб'
                         }}
                       </div>
@@ -91,19 +91,19 @@
                     <div class="price-element__content-column-description">
                       <div>
                         {{
-                          findOfferPriceByUnit(offer._id, rawUnit.kg)
+                          findOfferPriceByUnit(offer._id, unit.kg)
                             .amountWithoutDelivery <= 0
                             ? 'бесплатно (кг)'
-                            : findOfferPriceByUnit(offer._id, rawUnit.kg)
+                            : findOfferPriceByUnit(offer._id, unit.kg)
                                 .amountWithoutDelivery + ' руб./кг'
                         }}
                       </div>
                       <div>
                         {{
-                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                          findOfferPriceByUnit(offer._id, unit.cube)
                             .amountWithoutDelivery <= 0
                             ? 'бесплатно (куб)'
-                            : findOfferPriceByUnit(offer._id, rawUnit.cube)
+                            : findOfferPriceByUnit(offer._id, unit.cube)
                                 .amountWithoutDelivery + ' руб./куб'
                         }}
                       </div>
@@ -186,19 +186,19 @@
                       offersAreUpdating ||
                       !offerForm.valid ||
                       (offerForm.get('kg').get('amountWithDelivery').value ===
-                        findOfferPriceByUnit(offer._id, rawUnit.kg)
+                        findOfferPriceByUnit(offer._id, unit.kg)
                           .amountWithDelivery &&
                         offerForm.get('kg').get('amountWithoutDelivery')
                           .value ===
-                          findOfferPriceByUnit(offer._id, rawUnit.kg)
+                          findOfferPriceByUnit(offer._id, unit.kg)
                             .amountWithoutDelivery &&
                         offerForm.get('cube').get('amountWithDelivery')
                           .value ===
-                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                          findOfferPriceByUnit(offer._id, unit.cube)
                             .amountWithDelivery &&
                         offerForm.get('cube').get('amountWithoutDelivery')
                           .value ===
-                          findOfferPriceByUnit(offer._id, rawUnit.cube)
+                          findOfferPriceByUnit(offer._id, unit.cube)
                             .amountWithoutDelivery)
                     "
                     (click)="updateOfferPrices(offer._id)"
@@ -277,37 +277,35 @@
                 <div class="price-element__content-column-description">
                   <div>
                     {{
-                      findServicePriceByUnit(service._id, rawUnit.kg).amount <=
-                      0
+                      findServicePriceByUnit(service._id, unit.kg).amount <= 0
                         ? 'бесплатно (кг)'
-                        : findServicePriceByUnit(service._id, rawUnit.kg)
-                            .amount + ' руб./кг'
+                        : findServicePriceByUnit(service._id, unit.kg).amount +
+                          ' руб./кг'
                     }}
                   </div>
                   <div>
                     {{
-                      findServicePriceByUnit(service._id, rawUnit.cube)
-                        .amount <= 0
+                      findServicePriceByUnit(service._id, unit.cube).amount <= 0
                         ? 'бесплатно (куб)'
-                        : findServicePriceByUnit(service._id, rawUnit.cube)
+                        : findServicePriceByUnit(service._id, unit.cube)
                             .amount + ' руб./куб'
                     }}
                   </div>
                   <div>
                     {{
-                      findServicePriceByUnit(service._id, rawUnit.bag120)
-                        .amount <= 0
+                      findServicePriceByUnit(service._id, unit.bag120).amount <=
+                      0
                         ? 'бесплатно (мешок 120л)'
-                        : findServicePriceByUnit(service._id, rawUnit.bag120)
+                        : findServicePriceByUnit(service._id, unit.bag120)
                             .amount + ' руб./мешок 120л'
                     }}
                   </div>
                   <div>
                     {{
-                      findServicePriceByUnit(service._id, rawUnit.bag160)
-                        .amount <= 0
+                      findServicePriceByUnit(service._id, unit.bag160).amount <=
+                      0
                         ? 'бесплатно (мешок 160л)'
-                        : findServicePriceByUnit(service._id, rawUnit.bag160)
+                        : findServicePriceByUnit(service._id, unit.bag160)
                             .amount + ' руб./мешок 160л'
                     }}
                   </div>
@@ -371,16 +369,15 @@
                       servicesAreUpdating ||
                       !serviceForm.valid ||
                       (serviceForm.get('kg').value ===
-                        findServicePriceByUnit(service._id, rawUnit.kg)
-                          .amount &&
+                        findServicePriceByUnit(service._id, unit.kg).amount &&
                         serviceForm.get('cube').value ===
-                          findServicePriceByUnit(service._id, rawUnit.cube)
+                          findServicePriceByUnit(service._id, unit.cube)
                             .amount &&
                         serviceForm.get('bag120').value ===
-                          findServicePriceByUnit(service._id, rawUnit.bag120)
+                          findServicePriceByUnit(service._id, unit.bag120)
                             .amount &&
                         serviceForm.get('bag160').value ===
-                          findServicePriceByUnit(service._id, rawUnit.bag160)
+                          findServicePriceByUnit(service._id, unit.bag160)
                             .amount)
                     "
                     (click)="updateServicePrices(service._id)"

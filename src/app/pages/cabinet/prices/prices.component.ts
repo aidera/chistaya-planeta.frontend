@@ -55,7 +55,7 @@ export class PricesComponent implements OnInit, OnDestroy {
   public serviceFormActiveField: string | null = null;
 
   public simpleStatus = SimpleStatus;
-  public rawUnit = Unit;
+  public unit = Unit;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -201,11 +201,11 @@ export class PricesComponent implements OnInit, OnDestroy {
     this.offerForm = new FormGroup({
       kg: new FormGroup({
         amountWithDelivery: new FormControl(
-          offer.prices.find((el) => el.unit === Unit.kg).amountWithDelivery,
+          offer.prices.find((el) => el.unit === Unit.kg)?.amountWithDelivery,
           [Validators.required, Validators.min(0)]
         ),
         amountWithoutDelivery: new FormControl(
-          offer.prices.find((el) => el.unit === Unit.kg).amountWithoutDelivery,
+          offer.prices.find((el) => el.unit === Unit.kg)?.amountWithoutDelivery,
           [Validators.required, Validators.min(0)]
         ),
       }),
