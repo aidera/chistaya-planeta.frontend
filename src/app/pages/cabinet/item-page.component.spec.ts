@@ -10,7 +10,6 @@ import {
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ItemPageComponent } from './item-page.component';
-import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ConverterService } from '../../services/converter/converter.service';
@@ -34,7 +33,6 @@ describe('ItemPageComponent', () => {
         ReactiveFormsModule,
       ],
       providers: [
-        RoutingStateService,
         SocketIoService,
         ConverterService,
         LocalitiesApiService,

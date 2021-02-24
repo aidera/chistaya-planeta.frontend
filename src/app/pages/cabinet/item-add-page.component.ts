@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 
 import * as fromRoot from '../../store/root.reducer';
-import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ConverterService } from '../../services/converter/converter.service';
 import { LocalitiesApiService } from '../../services/api/localities-api.service';
@@ -59,7 +58,6 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     protected router: Router,
     protected snackBar: MatSnackBar,
-    protected routingState: RoutingStateService,
     protected socket: SocketIoService,
     protected converter: ConverterService,
     protected localitiesApi: LocalitiesApiService,
@@ -92,10 +90,6 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
     this.isFetching$?.unsubscribe?.();
     this.serverError$?.unsubscribe?.();
     this.addingSucceed$?.unsubscribe?.();
-  }
-
-  public goToPreviousPage(): void {
-    this.routingState.goToPreviousPage(this.route);
   }
 
   public scrollToInvalidField(): void {

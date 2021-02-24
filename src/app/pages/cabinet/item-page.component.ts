@@ -20,7 +20,6 @@ import { ItemFieldListElement } from '../../components/item-field/item-field-ina
 import SimpleStatus from '../../models/enums/SimpleStatus';
 import CarStatus from '../../models/enums/CarStatus';
 import EmployeeStatus from '../../models/enums/EmployeeStatus';
-import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ConverterService } from '../../services/converter/converter.service';
 import { LocalitiesApiService } from '../../services/api/localities-api.service';
@@ -90,7 +89,6 @@ export class ItemPageComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     protected router: Router,
     protected snackBar: MatSnackBar,
-    private routingState: RoutingStateService,
     protected socket: SocketIoService,
     public converter: ConverterService,
     protected localitiesApi: LocalitiesApiService,
@@ -133,10 +131,6 @@ export class ItemPageComponent implements OnInit, OnDestroy {
 
       this.form?.get(fieldName).setValue(controlValue);
     }
-  }
-
-  public goToPreviousPage(): void {
-    this.routingState.goToPreviousPage(this.route);
   }
 
   public update(): void {

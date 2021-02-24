@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { AppComponent } from './app.component';
-import { RoutingStateService } from './services/routing-state/routing-state.service';
 import { MaterialModule } from './modules/material/material.module';
 
 describe('AppComponent', () => {
@@ -12,7 +11,6 @@ describe('AppComponent', () => {
       imports: [RouterTestingModule, MaterialModule],
       declarations: [AppComponent],
       providers: [
-        RoutingStateService,
         provideMockStore({
           initialState: {},
         }),

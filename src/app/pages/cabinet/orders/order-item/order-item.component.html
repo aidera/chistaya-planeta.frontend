@@ -6,11 +6,6 @@
 
 <!-- Content -->
 <div class="cabinet-content">
-  <!-- Backlink -->
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
-    >← Список заявок</a
-  >
-
   <!-- Error -->
   <app-item-not-found
     *ngIf="(getItemError || !item) && !itemIsFetching"

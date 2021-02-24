@@ -1,13 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { By } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { MobileHeaderComponent } from './mobile-header.component';
 import * as AppActions from '../../store/app/app.actions';
-import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
@@ -20,7 +16,6 @@ describe('MobileHeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [MobileHeaderComponent],
       providers: [
-        RoutingStateService,
         provideMockStore({
           initialState: {
             app: {
@@ -29,11 +24,7 @@ describe('MobileHeaderComponent', () => {
           },
         }),
       ],
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-      ],
+      imports: [InlineSVGModule.forRoot()],
     }).compileComponents();
   }));
 
@@ -46,37 +37,6 @@ describe('MobileHeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should display backlink if this parameter is true', () => {
-    component.useBacklink = true;
-    fixture.detectChanges();
-
-    let backlink = fixture.debugElement.query(
-      By.css('.mobile-header__backlink')
-    );
-    expect(backlink).toBeTruthy();
-
-    component.useBacklink = false;
-    fixture.detectChanges();
-
-    backlink = fixture.debugElement.query(By.css('.mobile-header__backlink'));
-    expect(backlink).toBeFalsy();
-  });
-
-  it('should call goToPreviousPage function, when user clicks on backlink button', () => {
-    spyOn(component, 'goToPreviousPage');
-
-    component.useBacklink = true;
-    fixture.detectChanges();
-
-    const backlink = fixture.debugElement.query(
-      By.css('.mobile-header__backlink')
-    ).nativeElement;
-    backlink.dispatchEvent(new MouseEvent('click'));
-    fixture.detectChanges();
-
-    expect(component.goToPreviousPage).toHaveBeenCalled();
   });
 
   it('should dispatch a store action to close fullscreen menu', () => {

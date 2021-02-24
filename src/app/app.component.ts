@@ -6,7 +6,6 @@ import {
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
 
-import { RoutingStateService } from './services/routing-state/routing-state.service';
 import { SocketIoService } from './services/socket-io/socket-io.service';
 
 @Component({
@@ -20,13 +19,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private noInternetSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   constructor(
-    private routingState: RoutingStateService,
     private socketIoService: SocketIoService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.routingState.loadRouting();
     this.socketIoService.setupSocketConnection();
 
     this.offlineEvent = fromEvent(window, 'offline');

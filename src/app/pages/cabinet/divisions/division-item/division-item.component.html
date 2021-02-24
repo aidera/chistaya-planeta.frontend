@@ -16,11 +16,6 @@
 
 <!-- Content -->
 <div class="cabinet-content">
-  <!-- Backlink -->
-  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
-    >← Список подразделений</a
-  >
-
   <!-- Error -->
   <app-item-not-found
     *ngIf="(getItemError || !item) && !itemIsFetching"
@@ -44,6 +39,7 @@
               [isFetching]="itemIsFetching"
               [color]="statusColor"
               (editClick)="setActiveField('status')"
+              [useEditButton]="true"
             ></app-item-field-inactive-status>
 
             <div
@@ -334,7 +330,7 @@
           <!-- Updated At -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
-              label="Создано"
+              label="Обновлено"
               [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
               [isFetching]="itemIsFetching"
             >

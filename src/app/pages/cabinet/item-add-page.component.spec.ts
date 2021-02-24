@@ -4,7 +4,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ItemAddPageComponent } from './item-add-page.component';
-import { RoutingStateService } from '../../services/routing-state/routing-state.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,7 +29,6 @@ describe('ItemAddComponent', () => {
       ],
       providers: [
         SocketIoService,
-        RoutingStateService,
         ConverterService,
         LocalitiesApiService,
         DivisionsApiService,
