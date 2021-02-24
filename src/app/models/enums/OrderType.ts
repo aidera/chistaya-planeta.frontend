@@ -12,7 +12,7 @@ enum OrderType {
 export default OrderType;
 
 const orderTypeStrings: string[] = [];
-orderTypeStrings[OrderType.offer] = 'продажа вторсырья';
-orderTypeStrings[OrderType.service] = 'вывоз мусора';
+orderTypeStrings[OrderType.offer] = 'Продажа вторсырья';
+orderTypeStrings[OrderType.service] = 'Вывоз мусора';
 
 export { orderTypeStrings };

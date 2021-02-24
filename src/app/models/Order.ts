@@ -74,7 +74,7 @@ export interface IOrder {
       paymentAmount: number;
     }[];
     services: {
-      items: IService | string;
+      item: IService | string;
       amountUnit: Unit;
       amount: number;
       paymentAmount: number;

@@ -1,0 +1,595 @@
+<!-- Header -->
+<div class="cabinet-header">
+  <h1>Заявка</h1>
+  <div class="cabinet-header__actions"></div>
+</div>
+
+<!-- Content -->
+<div class="cabinet-content">
+  <!-- Backlink -->
+  <a class="cabinet-content__backlink" (click)="goToPreviousPage()"
+    >← Список заявок</a
+  >
+
+  <!-- Error -->
+  <app-item-not-found
+    *ngIf="(getItemError || !item) && !itemIsFetching"
+    title="Заявка исчезла"
+    description="К сожалению, этой заявки мы не нашли... Возможно, оно уже сдала вторсырьё :)"
+  ></app-item-not-found>
+
+  <!-- Content grid -->
+  <div
+    *ngIf="!getItemError && !updateItemError && !removeItemError"
+    class="cabinet-content__grid"
+  >
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <!-- Status -->
+        <mat-card class="cabinet-content__status-card">
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-status
+              *ngIf="activeField !== 'status'"
+              [content]="statusString"
+              [isFetching]="itemIsFetching"
+              [color]="statusColor"
+            ></app-item-field-inactive-status>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
+
+          <!-- ID -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="ID"
+              [content]="item?._id"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Type -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Тип"
+              [content]="getOrderTypeText()"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Locality -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Населённый пункт"
+              [content]="item?.locality?.name"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <ng-container *ngIf="item?.type === orderType.offer">
+            <h2>Вторсырьё</h2>
+
+            <!-- Offers items -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-list
+                label="Типы вторсырья"
+                [list]="getOffersList()"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-list>
+            </div>
+
+            <!-- Offers amount and amount unit -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-string
+                label="Количество"
+                [content]="getOffersAmount()"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-string>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="item?.type === orderType.service">
+            <h2>Отходы</h2>
+
+            <!-- Services items -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-string
+                label="Тип"
+                content="Вывоз мусора"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-string>
+            </div>
+
+            <!-- Services amount and amount unit -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-string
+                label="Количество"
+                [content]="getServicesAmount()"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-string>
+            </div>
+          </ng-container>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Доставка</h2>
+
+          <!-- Delivery type -->
+          <div
+            *ngIf="item?.type === orderType.offer"
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Тип доставки"
+              [content]="deliveryTypeStrings[item?.delivery._type]"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Delivery customer car number -->
+          <div
+            *ngIf="
+              item?.type === orderType.offer &&
+              item?.delivery._type === deliveryType.pickup
+            "
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Номер автомобиля заказчика"
+              [content]="item?.delivery.customerCarNumber"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Delivery address -->
+          <div
+            *ngIf="
+              item?.type === orderType.service ||
+              item?.delivery._type === deliveryType.company
+            "
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Адрес"
+              [content]="
+                item?.delivery?.addressFrom?.street &&
+                item?.delivery?.addressFrom?.house
+                  ? item?.delivery.addressFrom.street +
+                    ', ' +
+                    item?.delivery.addressFrom.house
+                  : ''
+              "
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Delivery has assistant -->
+          <div
+            *ngIf="
+              item?.type === orderType.service ||
+              item?.delivery._type === deliveryType.company
+            "
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Помошник"
+              [content]="item?.delivery.hasAssistant === true ? 'есть' : 'нет'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Контактные данные</h2>
+
+          <!-- Customer contact name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Контактное лицо"
+              [content]="item?.customer?.contactName"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Customer contact name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Контактный телефон"
+              [content]="item?.customer?.contactPhone || '' | phone"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Customer organization legal name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Юридическое название компании"
+              [content]="item?.customer?.organizationLegalName"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Customer organization actual name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Фактическое название компании"
+              [content]="item?.customer?.organizationActualName"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>
+            {{ item?.type === orderType.offer ? 'Вознаграждение' : 'Оплата' }}
+          </h2>
+
+          <!-- Payment method -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Способ оплаты"
+              [content]="paymentMethodStrings[item?.payment.method]"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Payment method data -->
+          <div
+            *ngIf="item?.type === orderType.offer"
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Данные для оплаты"
+              [content]="item?.payment.methodData"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Исполнители</h2>
+
+          <!-- Division -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'division'"
+              label="Подразделение"
+              [content]="item?.division?.name"
+              [linkArray]="['../../', 'divisions', item?.division?._id]"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="true"
+              (editClick)="setActiveField('division')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'division'"
+              (clickOutside)="
+                removeActiveField('division', item?.division?._id || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-select
+                  label="Подразделение"
+                  [control]="form.get('division')"
+                  [options]="divisionsOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('division').value === item?.division?._id
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Performers client manager -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Менеджер по работе с клиентами"
+              [content]="
+                item?.performers?.clientManager?.name
+                  ? converter.getUserInitials(
+                      item?.performers?.clientManager?.name,
+                      item?.performers?.clientManager?.surname,
+                      item?.performers?.clientManager?.patronymic
+                    )
+                  : undefined
+              "
+              [color]="
+                item?.performers?.clientManagerAccepted ? 'green' : 'yellow'
+              "
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Performers receiving manager -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Принимающий менеджер"
+              [content]="
+                item?.performers?.receivingManager?.name
+                  ? converter.getUserInitials(
+                      item?.performers?.receivingManager?.name,
+                      item?.performers?.receivingManager?.surname,
+                      item?.performers?.receivingManager?.patronymic
+                    )
+                  : undefined
+              "
+              [color]="item?.performers?.receivingManager ? 'green' : 'yellow'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Performers driver -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="
+                (item?.type === orderType.offer &&
+                  item?.delivery._type === deliveryType.company) ||
+                item?.type === orderType.service
+              "
+              label="Водитель"
+              [content]="
+                item?.performers?.driver?.name
+                  ? converter.getUserInitials(
+                      item?.performers?.driver?.name,
+                      item?.performers?.driver?.surname,
+                      item?.performers?.driver?.patronymic
+                    )
+                  : undefined
+              "
+              [color]="item?.performers?.driver ? 'green' : 'yellow'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Performers car -->
+          <div
+            *ngIf="
+              (item?.type === orderType.offer &&
+                item?.delivery._type === deliveryType.company) ||
+              item?.type === orderType.service
+            "
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Автомобиль"
+              [content]="
+                item?.performers?.car?.licensePlate
+                  ? item?.performers?.car?.licensePlate
+                  : undefined
+              "
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+
+      <div
+        class="cabinet-content__grid-item"
+        [class.cabinet-content__grid-item_inactive]="
+          item?.weighed?.paymentAmount === undefined
+        "
+      >
+        <mat-card>
+          <h2>Результаты взвешивания</h2>
+
+          <ng-container *ngIf="item?.weighed?.offers?.length > 0">
+            <!-- Weighed offers -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-list
+                [list]="getWeighedOffersList()"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-list>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="item?.weighed?.services?.length > 0">
+            <!-- Weighed services -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-list
+                [list]="getWeighedOffersList()"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-list>
+            </div>
+          </ng-container>
+
+          <!-- Weighed total amount -->
+          <div
+            class="cabinet-content__field"
+            *ngIf="item?.weighed?.paymentAmount !== undefined"
+          >
+            <app-item-field-inactive-string
+              [content]="item?.weighed.paymentAmount + 'руб.'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Комментарии</h2>
+
+          <!-- Customer comment -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Комментарий заказчика"
+              [content]="item?.customerComment"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Company comment -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Комментарий компании"
+              [content]="item?.companyComment"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Customer cancellation reason -->
+          <div
+            *ngIf="item?.customerCancellationReason"
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Причина отмены заказа клиентом"
+              [content]="item?.customerCancellationReason"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Company cancellation reason -->
+          <div
+            *ngIf="item?.companyCancellationReason"
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-string
+              label="Причина отмены заказа компанией"
+              [content]="item?.companyCancellationReason"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>История</h2>
+
+          <!-- Created At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Создано"
+              [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Updated At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Обновлено"
+              [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Status Date Accepted -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Обработано"
+              [content]="item?.statusDateAccepted | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Status Date Delivered -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Доставлено"
+              [content]="item?.statusDateDelivered | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Status Date Weighed -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Взвешено"
+              [content]="item?.statusDateWeighed | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Status Date Completed -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Завершено"
+              [content]="item?.statusDateCompleted | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal
+  [isLoading]="itemIsRemoving"
+  [isOpen]="isRemoveModalOpen"
+  [resolveButtonText]="'Оставить в архиве'"
+  [rejectButtonText]="'Удалить'"
+  (action)="onRemoveModalAction($event)"
+>
+  Полностью удалять сотрудника лучше только в том случае, если вы добавили его
+  случайно или по ошибке.
+  <br />
+  <br />
+  Все связанные записи не смогут восстановить сотрудника автоматически, даже
+  если все данные будут идентичны.
+</app-modal>

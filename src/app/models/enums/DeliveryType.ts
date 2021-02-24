@@ -14,7 +14,7 @@ export default DeliveryType;
 
 const deliveryTypeStrings: string[] = [];
 deliveryTypeStrings[DeliveryType.without] = '-';
-deliveryTypeStrings[DeliveryType.company] = 'компанией';
-deliveryTypeStrings[DeliveryType.pickup] = 'самовывоз';
+deliveryTypeStrings[DeliveryType.company] = 'Компанией';
+deliveryTypeStrings[DeliveryType.pickup] = 'Самовывоз';
 
 export { deliveryTypeStrings };

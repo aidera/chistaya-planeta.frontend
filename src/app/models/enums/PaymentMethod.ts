@@ -14,8 +14,8 @@ enum PaymentMethod {
 export default PaymentMethod;
 
 const paymentMethodStrings: string[] = [];
-paymentMethodStrings[PaymentMethod.cash] = 'наличными';
-paymentMethodStrings[PaymentMethod.nonCash] = 'безналичными';
-paymentMethodStrings[PaymentMethod.card] = 'на карту';
+paymentMethodStrings[PaymentMethod.cash] = 'Наличными';
+paymentMethodStrings[PaymentMethod.nonCash] = 'Безналичными';
+paymentMethodStrings[PaymentMethod.card] = 'На карту';
 
 export { paymentMethodStrings };

@@ -92,7 +92,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
     protected snackBar: MatSnackBar,
     private routingState: RoutingStateService,
     protected socket: SocketIoService,
-    protected converter: ConverterService,
+    public converter: ConverterService,
     protected localitiesApi: LocalitiesApiService,
     protected divisionsApi: DivisionsApiService,
     protected carsApi: CarsApiService,

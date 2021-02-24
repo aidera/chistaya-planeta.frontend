@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TextColor } from '../../../models/types/TextColor';
 
 export type ItemFieldListElement = {
-  linkArray: string[];
-  color: TextColor;
+  linkArray?: string[];
+  color?: TextColor;
   text: string;
 };
 
@@ -16,8 +16,8 @@ export class ItemFieldInactiveListComponent {
   @Input() label: string;
   @Input() list: ItemFieldListElement[];
   @Input() hint?: string;
-  @Input() moreLinkArray: string[];
-  @Input() moreLinkQueryParams: { [key: string]: string };
+  @Input() moreLinkArray?: string[];
+  @Input() moreLinkQueryParams?: { [key: string]: string };
   @Input() isFetching: boolean;
 
   @Input() useAddButton = false;

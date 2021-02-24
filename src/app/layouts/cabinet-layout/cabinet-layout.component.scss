@@ -246,7 +246,7 @@
           left: 0;
           top: 8px;
           border-radius: 50%;
-          background-color: $color-primary;
+          background-color: $text-color-primary;
         }
 
         &.red-text {
@@ -264,6 +264,15 @@
           }
           a {
             color: $yellow-color;
+          }
+        }
+
+        &.green-text {
+          &:before {
+            background-color: $green-color;
+          }
+          a {
+            color: $green-color;
           }
         }
       }

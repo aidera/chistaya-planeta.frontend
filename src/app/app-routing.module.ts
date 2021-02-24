@@ -25,6 +25,7 @@ import { EmployeeItemComponent } from './pages/cabinet/employees/employee-item/e
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 import { PricesComponent } from './pages/cabinet/prices/prices.component';
 import { OrderItemAddComponent } from './pages/cabinet/orders/order-item-add/order-item-add.component';
+import { OrderItemComponent } from './pages/cabinet/orders/order-item/order-item.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,11 @@ export const routes: Routes = [
       {
         path: 'orders/add',
         component: OrderItemAddComponent,
+        data: { useBacklink: true },
+      },
+      {
+        path: 'orders/:id',
+        component: OrderItemComponent,
         data: { useBacklink: true },
       },
       {

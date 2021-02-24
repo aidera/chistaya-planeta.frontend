@@ -11,7 +11,7 @@
       >
     </h2>
     <div class="cabinet-content__field-inactive-action">
-      <button mat-icon-button (click)="editClick.emit()">
+      <button *ngIf="useEditButton" mat-icon-button (click)="editClick.emit()">
         <span class="icon" [inlineSVG]="'../../assets/icons/pencil.svg'"></span>
       </button>
     </div>

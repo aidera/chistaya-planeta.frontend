@@ -15,3 +15,12 @@ enum Unit {
 }
 
 export default Unit;
+
+const unitStrings: string[] = [];
+unitStrings[Unit.pc] = 'шт';
+unitStrings[Unit.kg] = 'кг';
+unitStrings[Unit.cube] = 'куб';
+unitStrings[Unit.bag120] = 'мешок 120л';
+unitStrings[Unit.bag160] = 'мешок 160л';
+
+export { unitStrings };

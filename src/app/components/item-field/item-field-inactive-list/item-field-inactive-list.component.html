@@ -6,7 +6,7 @@
     <ul>
       <ng-container *ngFor="let item of list; let i = index">
         <li
-          *ngIf="i <= 2"
+          *ngIf="(moreLinkArray && i <= 2) || !moreLinkArray"
           [class.green-text]="item.color === 'green'"
           [class.yellow-text]="item.color === 'yellow'"
           [class.blue-text]="item.color === 'blue'"
@@ -20,7 +20,7 @@
       </ng-container>
     </ul>
     <a
-      *ngIf="list.length > 3"
+      *ngIf="moreLinkArray && list.length > 3"
       [routerLink]="moreLinkArray"
       [queryParams]="moreLinkQueryParams"
       >... и еще {{ list.length - 3 }}</a
