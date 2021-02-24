@@ -12,13 +12,22 @@ import { OptionType } from '../../../../models/types/OptionType';
 import { ILocality } from '../../../../models/Locality';
 import { IDivision } from '../../../../models/Division';
 import { ICar } from '../../../../models/Car';
-import orderStatusOptions from '../../../../data/orderStatusOptions';
-import orderTypeOptions from '../../../../data/orderTypeOptions';
-import deliveryTypeOptions from '../../../../data/deliveryTypeOptions';
+import {
+  orderStatusOptions,
+  orderStatusColors,
+  orderStatusStrings,
+} from '../../../../data/orderStatusData';
+import {
+  orderTypeStrings,
+  orderTypeOptions,
+} from '../../../../data/orderTypeData';
+import {
+  deliveryTypeOptions,
+  deliveryTypeStrings,
+} from '../../../../data/deliveryTypeData';
 import { IOrder } from '../../../../models/Order';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
-import OrderStatus from '../../../../models/enums/OrderStatus';
-import paymentMethodOffersOptions from '../../../../data/paymentMethodOffersOptions';
+import { paymentMethodOffersOptions } from 'src/app/data/paymentMethodData';
 
 @Component({
   selector: 'app-orders-table',
@@ -47,7 +56,7 @@ export class OrdersTableComponent
 
   public orderStatusOptions = orderStatusOptions;
   public orderTypeOptions = orderTypeOptions;
-  public orderDeliveryTypeOptions = deliveryTypeOptions;
+  public deliveryTypeOptions = deliveryTypeOptions;
   public paymentMethodOptions = paymentMethodOffersOptions;
 
   ngOnInit(): void {
@@ -689,73 +698,6 @@ export class OrdersTableComponent
         this.orders = orders;
         if (orders) {
           this.tableData = orders.map((order) => {
-            let statusText = '';
-            switch (order.status) {
-              case OrderStatus.raw:
-                statusText = `<p class="yellow-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.raw + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.refused:
-                statusText = `<p class="red-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.refused + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.cancelled:
-                statusText = `<p class="red-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.cancelled + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.processed:
-                statusText = `<p class="yellow-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.processed + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.inTransit:
-                statusText = `<p class="blue-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.inTransit + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.packed:
-                statusText = `<p class="blue-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.packed + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.delivered:
-                statusText = `<p class="blue-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.delivered + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.weighed:
-                statusText = `<p class="blue-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.weighed + ''
-                  ).text
-                }</p>`;
-                break;
-              case OrderStatus.completed:
-                statusText = `<p class="green-text">${
-                  this.orderStatusOptions.find(
-                    (el) => el.value === OrderStatus.completed + ''
-                  ).text
-                }</p>`;
-                break;
-            }
-
             return {
               id: this.highlightSearchedValue(
                 order._id,
@@ -763,10 +705,10 @@ export class OrdersTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status: statusText,
-              type:
-                orderTypeOptions.find((el) => el.value === order.type + '')
-                  ?.text || '',
+              status: `<p class="${orderStatusColors[order.status]}-text">${
+                orderStatusStrings[order.status]
+              }</p>`,
+              type: orderTypeStrings[order.type],
               deadline: formatDate(
                 order.deadline,
                 'dd.MM.yyyy - HH:mm',
@@ -818,10 +760,7 @@ export class OrdersTableComponent
                   : ''
               ),
 
-              deliveryType:
-                deliveryTypeOptions.find(
-                  (el) => el.value === order.delivery._type + ''
-                )?.text || '',
+              deliveryType: deliveryTypeStrings[order.delivery._type] || '',
               deliveryCustomerCarNumber: this.highlightSearchedValue(
                 order.delivery.customerCarNumber,
                 this.quickSearchForm

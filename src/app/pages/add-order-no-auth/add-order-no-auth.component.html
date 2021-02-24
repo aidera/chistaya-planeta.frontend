@@ -289,7 +289,7 @@
         [control]="form.get('paymentMethod')"
         fieldId="paymentMethod"
         label="Способ оплаты"
-        [options]="selectPaymentMethodRecyclableOptions"
+        [options]="selectPaymentMethodOffersOptions"
         [isRequired]="true"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>
@@ -320,7 +320,7 @@
         [control]="form.get('paymentMethod')"
         fieldId="paymentMethod"
         label="Способ оплаты"
-        [options]="selectPaymentMethodGarbageOptions"
+        [options]="selectPaymentMethodServicesOptions"
         [isRequired]="true"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-select>

@@ -15,8 +15,12 @@ import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
-import carTypeOptions from '../../../../data/carTypeOptions';
-import carStatusOptions from '../../../../data/carStatusOptions';
+import { carTypeOptions, carTypeStrings } from '../../../../data/carTypeData';
+import {
+  carStatusColors,
+  carStatusOptions,
+  carStatusStrings,
+} from '../../../../data/carStatusData';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 
 @Component({
@@ -36,12 +40,14 @@ export class CarItemComponent
   public employeesOptions$: Subscription;
   public employeesOptions: OptionType[] = [];
 
-  public carTypeOptions = carTypeOptions;
-  public carStatusOptions = carStatusOptions;
-
-  public simpleStatus = SimpleStatus;
   public carStatus = CarStatus;
+  public simpleStatus = SimpleStatus;
   public employeeRole = EmployeeRole;
+  public carStatusOptions = carStatusOptions;
+  public carStatusStrings = carStatusStrings;
+  public carStatusColors = carStatusColors;
+  public carTypeOptions = carTypeOptions;
+  public carTypeStrings = carTypeStrings;
 
   ngOnInit(): void {
     /* ------------ */
@@ -152,27 +158,6 @@ export class CarItemComponent
       this.item = car;
 
       this.initForm();
-
-      switch (car?.status) {
-        case CarStatus.active:
-          this.statusColor = 'green';
-          this.statusString = carStatusOptions.find(
-            (el) => el.value === CarStatus.active + ''
-          ).text;
-          break;
-        case CarStatus.temporaryUnavailable:
-          this.statusColor = 'yellow';
-          this.statusString = carStatusOptions.find(
-            (el) => el.value === CarStatus.temporaryUnavailable + ''
-          ).text;
-          break;
-        case CarStatus.unavailable:
-          this.statusColor = 'red';
-          this.statusString = carStatusOptions.find(
-            (el) => el.value === CarStatus.unavailable + ''
-          ).text;
-          break;
-      }
 
       if (this.form) {
         this.form.setValue({
@@ -378,13 +363,6 @@ export class CarItemComponent
     this.options.destroyLocalitiesOptions();
     this.options.destroyDivisionsOptions();
     this.options.destroyEmployeesOptions();
-  }
-
-  public getCarTypeText(): string {
-    return (
-      carTypeOptions.find((el) => el.value === (this.item?.type || '') + '')
-        ?.text || ''
-    );
   }
 
   public getDivisionsValuesArray(divisions: (IDivision | string)[]): string[] {

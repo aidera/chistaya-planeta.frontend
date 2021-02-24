@@ -1,9 +1,9 @@
 import PriceType from '../enums/PriceType';
-import RawUnit from '../enums/RawUnit';
+import Unit from '../enums/Unit';
 
 type Price = {
   type: PriceType;
-  unit?: RawUnit;
+  unit?: Unit;
   amountWithDelivery?: number;
   amountWithoutDelivery?: number;
   amount?: number;

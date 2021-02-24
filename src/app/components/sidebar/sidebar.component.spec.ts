@@ -7,7 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { SidebarComponent } from './sidebar.component';
 import { MenuLinkComponent } from '../menu-link/menu-link.component';
-import { menuLinksAll } from '../../data/menuLinks_all';
+import { menuLinksAll } from '../../data/menuLinks';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;

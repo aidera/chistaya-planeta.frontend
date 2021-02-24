@@ -11,7 +11,7 @@ import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import CarStatus from '../../../../models/enums/CarStatus';
 import { OptionType } from '../../../../models/types/OptionType';
 import { responseCodes } from '../../../../data/responseCodes';
-import employeeRoleOptions from '../../../../data/employeeRoleOptions';
+import { employeeRoleOptions } from '../../../../data/employeeRoleData';
 
 @Component({
   selector: 'app-employee-item-add',

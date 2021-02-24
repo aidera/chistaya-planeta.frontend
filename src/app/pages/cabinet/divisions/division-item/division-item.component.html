@@ -35,9 +35,9 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-status
               *ngIf="activeField !== 'status'"
-              [content]="statusString"
+              [content]="simpleStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
-              [color]="statusColor"
+              [color]="simpleStatusColors[item?.status]"
               (editClick)="setActiveField('status')"
               [useEditButton]="true"
             ></app-item-field-inactive-status>

@@ -9,12 +9,8 @@ import * as AppActions from '../../store/app/app.actions';
 import * as AppSelectors from '../../store/app/app.selectors';
 import * as OrdersActions from '../../store/orders/orders.actions';
 import * as OrdersSelectors from '../../store/orders/orders.selectors';
-import orderTypeOptions from '../../data/orderTypeOptions';
-import rawRecyclableTypeOptions from '../../data/rawRecyclableTypeOptions';
-import rawUnitOptions from '../../data/rawUnitOptions';
-import deliveryTypeOptions from '../../data/deliveryTypeOptions';
-import paymentMethodOffersOptions from '../../data/paymentMethodOffersOptions';
-import paymentMethodServicesOptions from '../../data/paymentMethodServicesOptions';
+import { orderTypeOptions } from '../../data/orderTypeData';
+import { deliveryTypeOptions } from '../../data/deliveryTypeData';
 import timeOptions from '../../data/timeOptions';
 import { tomorrow } from '../../utils/date.functions';
 import DeliveryType from '../../models/enums/DeliveryType';
@@ -22,9 +18,14 @@ import PaymentMethod from '../../models/enums/PaymentMethod';
 import OrderType from '../../models/enums/OrderType';
 import { OptionType } from '../../models/types/OptionType';
 import { ServerError } from '../../models/ServerResponse';
-import RawUnit from '../../models/enums/RawUnit';
 import { IDivisionLessInfo } from '../../models/Division';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
+import {
+  paymentMethodOffersOptions,
+  paymentMethodServicesOptions,
+} from 'src/app/data/paymentMethodData';
+import { unitOffersOptions } from '../../data/unitOptions';
+import Unit from '../../models/enums/Unit';
 
 @Component({
   selector: 'app-add-order-no-auth',
@@ -48,11 +49,11 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   public paymentMethodEnum = PaymentMethod;
 
   public selectOrderTypeOptions = orderTypeOptions;
-  public selectRawTypeOptions = rawRecyclableTypeOptions;
-  public selectRawUnitOptions = rawUnitOptions;
+  public selectRawTypeOptions = [];
+  public selectRawUnitOptions = unitOffersOptions;
   public selectDeliveryTypeOptions = deliveryTypeOptions;
-  public selectPaymentMethodRecyclableOptions = paymentMethodOffersOptions;
-  public selectPaymentMethodGarbageOptions = paymentMethodServicesOptions;
+  public selectPaymentMethodOffersOptions = paymentMethodOffersOptions;
+  public selectPaymentMethodServicesOptions = paymentMethodServicesOptions;
   public selectLocalitiesOptions: OptionType[] = [];
   public selectDivisionsOptions: OptionType[] = [];
   public selectTimeOptions = timeOptions;
@@ -135,7 +136,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
       type: new FormControl('', Validators.required),
       rawType: new FormControl('', Validators.required),
       rawAmount: new FormControl('', [Validators.required, Validators.min(1)]),
-      rawAmountUnit: new FormControl(RawUnit.kg + '', Validators.required),
+      rawAmountUnit: new FormControl(Unit.kg + '', Validators.required),
       deliveryType: new FormControl('', Validators.required),
       deliveryAddressLocality: new FormControl('', Validators.required),
       deliveryAddressStreet: new FormControl('', Validators.required),

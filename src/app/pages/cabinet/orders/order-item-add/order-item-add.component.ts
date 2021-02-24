@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import * as OrdersSelectors from '../../../../store/orders/orders.selectors';
 import * as OrdersActions from '../../../../store/orders/orders.actions';
@@ -7,17 +8,18 @@ import { ItemAddPageComponent } from '../../item-add-page.component';
 import OrderType from '../../../../models/enums/OrderType';
 import DeliveryType from '../../../../models/enums/DeliveryType';
 import PaymentMethod from '../../../../models/enums/PaymentMethod';
-import deliveryTypeOptions from '../../../../data/deliveryTypeOptions';
-import paymentMethodOffersOptions from '../../../../data/paymentMethodOffersOptions';
-import orderStatusOptions from 'src/app/data/orderStatusOptions';
-import orderTypeOptions from 'src/app/data/orderTypeOptions';
+import { deliveryTypeOptions } from '../../../../data/deliveryTypeData';
+import { orderStatusOptions } from 'src/app/data/orderStatusData';
+import { orderTypeOptions } from 'src/app/data/orderTypeData';
 import { tomorrow } from '../../../../utils/date.functions';
 import timeOptions from '../../../../data/timeOptions';
-import { Subscription } from 'rxjs';
 import { OptionType } from '../../../../models/types/OptionType';
 import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import Unit from '../../../../models/enums/Unit';
-import paymentMethodServicesOptions from '../../../../data/paymentMethodServicesOptions';
+import {
+  paymentMethodOffersOptions,
+  paymentMethodServicesOptions,
+} from '../../../../data/paymentMethodData';
 
 @Component({
   selector: 'app-order-item-add',
@@ -38,7 +40,7 @@ export class OrderItemAddComponent
 
   public orderStatusOptions = orderStatusOptions;
   public orderTypeOptions = orderTypeOptions;
-  public orderDeliveryTypeOptions = deliveryTypeOptions;
+  public deliveryTypeOptions = deliveryTypeOptions;
   public paymentMethodOffersOptions = paymentMethodOffersOptions;
   public paymentMethodServicesOptions = paymentMethodServicesOptions;
   public selectTimeOptions = timeOptions;

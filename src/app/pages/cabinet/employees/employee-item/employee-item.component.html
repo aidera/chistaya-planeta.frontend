@@ -39,9 +39,9 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-status
               *ngIf="activeField !== 'status'"
-              [content]="statusString"
+              [content]="employeeStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
-              [color]="statusColor"
+              [color]="employeeStatusColors[item?.status]"
               [useEditButton]="true"
               (editClick)="setActiveField('status')"
             ></app-item-field-inactive-status>
@@ -100,7 +100,7 @@
             <app-item-field-inactive-string
               *ngIf="activeField !== 'role'"
               label="Роль"
-              [content]="getCarRoleText()"
+              [content]="employeeRoleStrings[item?.role]"
               [isFetching]="itemIsFetching"
               [useEditButton]="true"
               (editClick)="setActiveField('role')"

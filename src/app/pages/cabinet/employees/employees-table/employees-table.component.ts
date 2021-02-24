@@ -10,10 +10,16 @@ import { IDivision } from '../../../../models/Division';
 import { ICar } from '../../../../models/Car';
 import { ILocality } from '../../../../models/Locality';
 import { OptionType } from '../../../../models/types/OptionType';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import { TablePageComponent } from '../../table-page.component';
-import employeeRoleOptions from '../../../../data/employeeRoleOptions';
-import employeeStatusOptions from '../../../../data/employeeStatusOptions';
+import {
+  employeeRoleOptions,
+  employeeRoleStrings,
+} from '../../../../data/employeeRoleData';
+import {
+  employeeStatusColors,
+  employeeStatusOptions,
+  employeeStatusStrings,
+} from '../../../../data/employeeStatusData';
 
 @Component({
   selector: 'app-employees-table',
@@ -328,31 +334,6 @@ export class EmployeesTableComponent
         this.employees = employees;
         if (employees) {
           this.tableData = employees.map((employee) => {
-            let statusText = '';
-            switch (employee.status) {
-              case EmployeeStatus.active:
-                statusText = `<p class="green-text">${
-                  this.employeeStatusOptions.find(
-                    (el) => el.value === EmployeeStatus.active + ''
-                  ).text
-                }</p>`;
-                break;
-              case EmployeeStatus.vacation:
-                statusText = `<p class="yellow-text">${
-                  this.employeeStatusOptions.find(
-                    (el) => el.value === EmployeeStatus.vacation + ''
-                  ).text
-                }</p>`;
-                break;
-              case EmployeeStatus.fired:
-                statusText = `<p class="red-text">${
-                  this.employeeStatusOptions.find(
-                    (el) => el.value === EmployeeStatus.fired + ''
-                  ).text
-                }</p>`;
-                break;
-            }
-
             return {
               id: this.highlightSearchedValue(
                 employee._id,
@@ -360,10 +341,10 @@ export class EmployeesTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status: statusText,
-              role: employeeRoleOptions.find(
-                (el) => el.value === employee.role + ''
-              ).text,
+              status: `<p class="${
+                employeeStatusColors[employee.status]
+              }-text">${employeeStatusStrings[employee.status]}</p>`,
+              role: employeeRoleStrings[employee.role],
               name: this.highlightSearchedValue(
                 employee.name,
                 this.quickSearchForm

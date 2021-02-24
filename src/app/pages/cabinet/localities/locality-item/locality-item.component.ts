@@ -10,7 +10,11 @@ import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import CarStatus from '../../../../models/enums/CarStatus';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import { responseCodes } from '../../../../data/responseCodes';
-import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import {
+  simpleStatusColors,
+  simpleStatusOptions,
+  simpleStatusStrings,
+} from '../../../../data/simpleStatusData';
 import { ItemPageComponent } from '../../item-page.component';
 
 @Component({
@@ -29,6 +33,8 @@ export class LocalityItemComponent
   public employeeStatus = EmployeeStatus;
   public carStatus = CarStatus;
   public simpleStatusOptions = simpleStatusOptions;
+  public simpleStatusStrings = simpleStatusStrings;
+  public simpleStatusColors = simpleStatusColors;
 
   ngOnInit(): void {
     /* ------------- */
@@ -101,21 +107,6 @@ export class LocalityItemComponent
         this.item = locality;
 
         this.initForm();
-
-        switch (locality?.status) {
-          case SimpleStatus.active:
-            this.statusColor = 'green';
-            this.statusString = simpleStatusOptions.find(
-              (el) => el.value === SimpleStatus.active + ''
-            ).text;
-            break;
-          case SimpleStatus.inactive:
-            this.statusColor = 'red';
-            this.statusString = simpleStatusOptions.find(
-              (el) => el.value === SimpleStatus.inactive + ''
-            ).text;
-            break;
-        }
 
         if (this.form) {
           this.form

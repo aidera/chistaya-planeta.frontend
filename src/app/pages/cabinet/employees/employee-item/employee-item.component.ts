@@ -16,8 +16,15 @@ import CarStatus from '../../../../models/enums/CarStatus';
 import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
-import employeeRoleOptions from '../../../../data/employeeRoleOptions';
-import employeeStatusOptions from '../../../../data/employeeStatusOptions';
+import {
+  employeeRoleOptions,
+  employeeRoleStrings,
+} from '../../../../data/employeeRoleData';
+import {
+  employeeStatusColors,
+  employeeStatusOptions,
+  employeeStatusStrings,
+} from '../../../../data/employeeStatusData';
 
 @Component({
   selector: 'app-employee-item',
@@ -39,7 +46,10 @@ export class EmployeeItemComponent
   public employeeRoleOptions = employeeRoleOptions.filter(
     (el) => el.value !== EmployeeRole.head + ''
   );
+  public employeeRoleStrings = employeeRoleStrings;
   public employeeStatusOptions = employeeStatusOptions;
+  public employeeStatusColors = employeeStatusColors;
+  public employeeStatusStrings = employeeStatusStrings;
 
   public simpleStatus = SimpleStatus;
   public carStatus = CarStatus;
@@ -196,27 +206,6 @@ export class EmployeeItemComponent
         this.item = employee;
 
         this.initForm();
-
-        switch (employee?.status) {
-          case EmployeeStatus.active:
-            this.statusColor = 'green';
-            this.statusString = employeeStatusOptions.find(
-              (el) => el.value === EmployeeStatus.active + ''
-            ).text;
-            break;
-          case EmployeeStatus.vacation:
-            this.statusColor = 'yellow';
-            this.statusString = employeeStatusOptions.find(
-              (el) => el.value === EmployeeStatus.vacation + ''
-            ).text;
-            break;
-          case EmployeeStatus.fired:
-            this.statusColor = 'red';
-            this.statusString = employeeStatusOptions.find(
-              (el) => el.value === EmployeeStatus.fired + ''
-            ).text;
-            break;
-        }
 
         if (this.form && employee) {
           this.form.setValue({
@@ -442,17 +431,9 @@ export class EmployeeItemComponent
     this.options.destroyCarsOptions();
   }
 
-  public getCarRoleText(): string {
+  public getCarsValuesArray(cars: (ICar | string)[]): string[] {
     return (
-      employeeRoleOptions.find(
-        (el) => el.value === (this.item?.role || '') + ''
-      )?.text || ''
-    );
-  }
-
-  public getCarsValuesArray(employees: (ICar | string)[]): string[] {
-    return (
-      (employees as ICar[])?.map((el) => {
+      (cars as ICar[])?.map((el) => {
         return el._id;
       }) || []
     );

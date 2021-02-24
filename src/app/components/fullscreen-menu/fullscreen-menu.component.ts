@@ -3,7 +3,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { menuLinksAll } from '../../data/menuLinks_all';
+import { menuLinksAll } from '../../data/menuLinks';
 import * as fromRoot from '../../store/root.reducer';
 import * as AppSelectors from '../../store/app/app.selectors';
 

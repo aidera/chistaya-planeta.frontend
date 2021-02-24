@@ -10,9 +10,3 @@ enum PriceType {
 }
 
 export default PriceType;
-
-const priceTypeStrings: string[] = [];
-priceTypeStrings[PriceType.single] = 'Единая стоимость';
-priceTypeStrings[PriceType.unit] = 'За единицу';
-
-export { priceTypeStrings };

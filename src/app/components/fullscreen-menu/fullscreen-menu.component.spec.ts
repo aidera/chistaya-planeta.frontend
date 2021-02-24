@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FullscreenMenuComponent } from './fullscreen-menu.component';
 import { MenuLinkComponent } from '../menu-link/menu-link.component';
-import { menuLinksAll } from '../../data/menuLinks_all';
+import { menuLinksAll } from '../../data/menuLinks';
 
 let store: MockStore;
 

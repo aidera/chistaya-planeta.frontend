@@ -15,11 +15,7 @@ import { IDivision } from '../../models/Division';
 import { ICar } from '../../models/Car';
 import { IEmployee } from '../../models/Employee';
 import { ModalAction } from '../../components/modal/modal.component';
-import { TextColor } from '../../models/types/TextColor';
 import { ItemFieldListElement } from '../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
-import SimpleStatus from '../../models/enums/SimpleStatus';
-import CarStatus from '../../models/enums/CarStatus';
-import EmployeeStatus from '../../models/enums/EmployeeStatus';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ConverterService } from '../../services/converter/converter.service';
 import { LocalitiesApiService } from '../../services/api/localities-api.service';
@@ -27,6 +23,8 @@ import { DivisionsApiService } from '../../services/api/divisions-api.service';
 import { CarsApiService } from '../../services/api/cars-api.service';
 import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { OptionsService } from '../../services/options/options.service';
+import { simpleStatusColors } from '../../data/simpleStatusData';
+import { carStatusColors } from '../../data/carStatusData';
 
 @Component({
   template: '',
@@ -58,9 +56,6 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   public isRemoveModalOpen = false;
 
   protected removeSnackbar: MatSnackBarRef<TextOnlySnackBar>;
-
-  public statusString: string;
-  public statusColor: TextColor;
 
   public alreadyExistId: string;
 
@@ -150,7 +145,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
       (localities as ILocality[])?.map((el) => {
         return {
           text: el.name,
-          color: el.status === SimpleStatus.active ? 'green' : 'red',
+          color: simpleStatusColors[el.status],
           linkArray: ['../../', 'localities', el._id],
         };
       }) || []
@@ -164,7 +159,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
       (divisions as IDivision[])?.map((el) => {
         return {
           text: el.name,
-          color: el.status === SimpleStatus.active ? 'green' : 'red',
+          color: simpleStatusColors[el.status],
           linkArray: ['../../', 'divisions', el._id],
         };
       }) || []
@@ -176,22 +171,9 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   ): ItemFieldListElement[] {
     return (
       (cars as ICar[])?.map((el) => {
-        let carStatusColor = 'green' as TextColor;
-        switch (el.status) {
-          case CarStatus.active:
-            carStatusColor = 'green';
-            break;
-          case CarStatus.temporaryUnavailable:
-            carStatusColor = 'yellow';
-            break;
-          case CarStatus.unavailable:
-            carStatusColor = 'red';
-            break;
-        }
-
         return {
           text: el.licensePlate,
-          color: carStatusColor,
+          color: carStatusColors[el.status],
           linkArray: ['../../', 'cars', el._id],
         };
       }) || []
@@ -203,26 +185,13 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   ): ItemFieldListElement[] {
     return (
       (employees as IEmployee[])?.map((el) => {
-        let carStatusColor = 'green' as 'green' | 'yellow' | 'red';
-        switch (el.status) {
-          case EmployeeStatus.active:
-            carStatusColor = 'green';
-            break;
-          case EmployeeStatus.vacation:
-            carStatusColor = 'yellow';
-            break;
-          case EmployeeStatus.fired:
-            carStatusColor = 'red';
-            break;
-        }
-
         return {
           text: this.converter.getUserInitials(
             el.name,
             el.surname,
             el.patronymic
           ),
-          color: carStatusColor,
+          color: carStatusColors[el.status],
           linkArray: ['../../', 'employees', el._id],
         };
       }) || []

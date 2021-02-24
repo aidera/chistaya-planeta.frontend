@@ -10,7 +10,7 @@ import SimpleStatus from '../../../../models/enums/SimpleStatus';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import { OptionType } from '../../../../models/types/OptionType';
 import { ItemAddPageComponent } from '../../item-add-page.component';
-import carTypeOptions from '../../../../data/carTypeOptions';
+import { carTypeOptions } from '../../../../data/carTypeData';
 import { responseCodes } from '../../../../data/responseCodes';
 
 @Component({

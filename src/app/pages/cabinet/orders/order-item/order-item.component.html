@@ -25,9 +25,9 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-status
               *ngIf="activeField !== 'status'"
-              [content]="statusString"
+              [content]="orderStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
-              [color]="statusColor"
+              [color]="orderStatusColors[item?.status]"
             ></app-item-field-inactive-status>
           </div>
         </mat-card>
@@ -51,7 +51,7 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
               label="Тип"
-              [content]="getOrderTypeText()"
+              [content]="orderTypeStrings[item?.type]"
               [isFetching]="itemIsFetching"
             >
             </app-item-field-inactive-string>

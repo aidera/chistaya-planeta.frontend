@@ -10,10 +10,12 @@ import { ILocality } from '../../../../models/Locality';
 import { IDivision } from '../../../../models/Division';
 import { IEmployee } from '../../../../models/Employee';
 import { OptionType } from '../../../../models/types/OptionType';
-import CarStatus from '../../../../models/enums/CarStatus';
-import CarType from '../../../../models/enums/CarType';
-import carTypeOptions from '../../../../data/carTypeOptions';
-import carStatusOptions from '../../../../data/carStatusOptions';
+import { carTypeOptions, carTypeStrings } from '../../../../data/carTypeData';
+import {
+  carStatusOptions,
+  carStatusColors,
+  carStatusStrings,
+} from '../../../../data/carStatusData';
 import { TablePageComponent } from '../../table-page.component';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
 
@@ -36,6 +38,7 @@ export class CarsTableComponent
   public employeesOptions: OptionType[] = [];
 
   public carTypeOptions = carTypeOptions;
+  public carTypeStrings = carTypeStrings;
   public carStatusOptions = carStatusOptions;
 
   ngOnInit(): void {
@@ -312,35 +315,6 @@ export class CarsTableComponent
         this.cars = cars;
         if (cars) {
           this.tableData = cars.map((car) => {
-            let statusText = '';
-            switch (car.status) {
-              case CarStatus.active:
-                statusText = `<p class="green-text">${
-                  this.carStatusOptions.find(
-                    (el) => el.value === CarStatus.active + ''
-                  ).text
-                }</p>`;
-                break;
-              case CarStatus.temporaryUnavailable:
-                statusText = `<p class="yellow-text">${
-                  this.carStatusOptions.find(
-                    (el) => el.value === CarStatus.temporaryUnavailable + ''
-                  ).text
-                }</p>`;
-                break;
-              case CarStatus.unavailable:
-                statusText = `<p class="red-text">${
-                  this.carStatusOptions.find(
-                    (el) => el.value === CarStatus.unavailable + ''
-                  ).text
-                }</p>`;
-                break;
-            }
-
-            const typeText = this.carTypeOptions.find(
-              (el) => el.value === CarType.small + ''
-            ).text;
-
             const isCorporateText = car.isCorporate
               ? 'Корпоративный'
               : 'Частный';
@@ -352,14 +326,16 @@ export class CarsTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status: statusText,
+              status: `<p class="${carStatusColors[car.status]}-text">${
+                carStatusStrings[car.status]
+              }</p>`,
               licensePlate: this.highlightSearchedValue(
                 car.licensePlate,
                 this.quickSearchForm
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              type: typeText,
+              type: carTypeStrings[car.type],
               weight: this.highlightSearchedValue(
                 String(car.weight),
                 this.quickSearchForm

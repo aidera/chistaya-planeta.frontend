@@ -35,9 +35,9 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-status
               *ngIf="activeField !== 'status'"
-              [content]="statusString"
+              [content]="carStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
-              [color]="statusColor"
+              [color]="carStatusColors[item?.status]"
               [useEditButton]="true"
               (editClick)="setActiveField('status')"
             ></app-item-field-inactive-status>
@@ -151,7 +151,7 @@
             <app-item-field-inactive-string
               *ngIf="activeField !== 'type'"
               label="Тип"
-              [content]="getCarTypeText()"
+              [content]="carTypeStrings[item?.type]"
               [isFetching]="itemIsFetching"
               [useEditButton]="true"
               (editClick)="setActiveField('type')"

@@ -13,7 +13,11 @@ import CarStatus from '../../../../models/enums/CarStatus';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
-import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import {
+  simpleStatusOptions,
+  simpleStatusStrings,
+  simpleStatusColors,
+} from '../../../../data/simpleStatusData';
 
 @Component({
   selector: 'app-division-item',
@@ -29,6 +33,8 @@ export class DivisionItemComponent
   public localitiesOptions: OptionType[] = [];
 
   public simpleStatusOptions = simpleStatusOptions;
+  public simpleStatusStrings = simpleStatusStrings;
+  public simpleStatusColors = simpleStatusColors;
 
   public simpleStatus = SimpleStatus;
   public employeeStatus = EmployeeStatus;
@@ -132,21 +138,6 @@ export class DivisionItemComponent
         this.item = division;
 
         this.initForm();
-
-        switch (division?.status) {
-          case SimpleStatus.active:
-            this.statusColor = 'green';
-            this.statusString = simpleStatusOptions.find(
-              (el) => el.value === SimpleStatus.active + ''
-            ).text;
-            break;
-          case SimpleStatus.inactive:
-            this.statusColor = 'red';
-            this.statusString = simpleStatusOptions.find(
-              (el) => el.value === SimpleStatus.inactive + ''
-            ).text;
-            break;
-        }
 
         if (this.form) {
           this.form.setValue({

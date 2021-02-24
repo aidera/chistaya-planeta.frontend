@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import OrderType from '../../models/enums/OrderType';
 import DeliveryType from '../../models/enums/DeliveryType';
-import RawUnit from '../../models/enums/RawUnit';
 import PaymentMethod from '../../models/enums/PaymentMethod';
 import { environment } from '../../../environments/environment';
 import { IOrder } from '../../models/Order';
@@ -61,7 +60,7 @@ export interface IAddOrderRequest {
 
   approximateRawOffers?: string[];
   approximateRawServices?: string[];
-  approximateRawAmountUnit?: RawUnit;
+  approximateRawAmountUnit?: Unit;
   approximateRawAmount?: number;
 
   paymentMethod?: PaymentMethod;

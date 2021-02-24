@@ -10,9 +10,12 @@ import { ILocality } from '../../../../models/Locality';
 import { ICar } from 'src/app/models/Car';
 import { IEmployee } from '../../../../models/Employee';
 import { OptionType } from '../../../../models/types/OptionType';
-import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { TablePageComponent } from '../../table-page.component';
-import simpleStatusOptions from '../../../../data/simpleStatusOptions';
+import {
+  simpleStatusColors,
+  simpleStatusOptions,
+  simpleStatusStrings,
+} from '../../../../data/simpleStatusData';
 
 @Component({
   selector: 'app-localities-table',
@@ -247,24 +250,6 @@ export class LocalitiesTableComponent
         this.localities = localities;
         if (localities) {
           this.tableData = localities.map((locality) => {
-            let statusText = '';
-            switch (locality.status) {
-              case SimpleStatus.active:
-                statusText = `<p class="green-text">${
-                  this.simpleStatusOptions.find(
-                    (el) => el.value === SimpleStatus.active + ''
-                  ).text
-                }</p>`;
-                break;
-              case SimpleStatus.inactive:
-                statusText = `<p class="red-text">${
-                  this.simpleStatusOptions.find(
-                    (el) => el.value === SimpleStatus.inactive + ''
-                  ).text
-                }</p>`;
-                break;
-            }
-
             return {
               id: this.highlightSearchedValue(
                 locality._id,
@@ -272,7 +257,9 @@ export class LocalitiesTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              status: statusText,
+              status: `<p class="${simpleStatusColors[locality.status]}-text">${
+                simpleStatusStrings[locality.status]
+              }</p>`,
               name: this.highlightSearchedValue(
                 locality.name,
                 this.quickSearchForm

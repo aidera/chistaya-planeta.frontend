@@ -15,11 +15,11 @@ import * as ServicesSelectors from '../../../store/services/services.selectors';
 import * as ServicesActions from '../../../store/services/services.actions';
 import { IService } from '../../../models/Service';
 import { IOffer } from '../../../models/Offer';
-import RawUnit from '../../../models/enums/RawUnit';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
 import PriceType from '../../../models/enums/PriceType';
 import SimpleStatus from '../../../models/enums/SimpleStatus';
 import Price from '../../../models/types/Price';
+import Unit from '../../../models/enums/Unit';
 
 @Component({
   selector: 'app-prices',
@@ -55,7 +55,7 @@ export class PricesComponent implements OnInit, OnDestroy {
   public serviceFormActiveField: string | null = null;
 
   public simpleStatus = SimpleStatus;
-  public rawUnit = RawUnit;
+  public rawUnit = Unit;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -201,26 +201,22 @@ export class PricesComponent implements OnInit, OnDestroy {
     this.offerForm = new FormGroup({
       kg: new FormGroup({
         amountWithDelivery: new FormControl(
-          offer.prices.find((el) => el.unit === RawUnit.kg).amountWithDelivery,
+          offer.prices.find((el) => el.unit === Unit.kg).amountWithDelivery,
           [Validators.required, Validators.min(0)]
         ),
         amountWithoutDelivery: new FormControl(
-          offer.prices.find(
-            (el) => el.unit === RawUnit.kg
-          ).amountWithoutDelivery,
+          offer.prices.find((el) => el.unit === Unit.kg).amountWithoutDelivery,
           [Validators.required, Validators.min(0)]
         ),
       }),
       cube: new FormGroup({
         amountWithDelivery: new FormControl(
-          offer.prices.find(
-            (el) => el.unit === RawUnit.cube
-          ).amountWithDelivery,
+          offer.prices.find((el) => el.unit === Unit.cube).amountWithDelivery,
           [Validators.required, Validators.min(0)]
         ),
         amountWithoutDelivery: new FormControl(
           offer.prices.find(
-            (el) => el.unit === RawUnit.cube
+            (el) => el.unit === Unit.cube
           ).amountWithoutDelivery,
           [Validators.required, Validators.min(0)]
         ),
@@ -231,31 +227,31 @@ export class PricesComponent implements OnInit, OnDestroy {
   private initServiceForm(offer: IOffer): void {
     this.serviceForm = new FormGroup({
       kg: new FormControl(
-        offer.prices.find((el) => el.unit === RawUnit.kg).amount,
+        offer.prices.find((el) => el.unit === Unit.kg).amount,
         [Validators.required, Validators.min(0)]
       ),
       cube: new FormControl(
-        offer.prices.find((el) => el.unit === RawUnit.cube).amount,
+        offer.prices.find((el) => el.unit === Unit.cube).amount,
         [Validators.required, Validators.min(0)]
       ),
       bag120: new FormControl(
-        offer.prices.find((el) => el.unit === RawUnit.bag120).amount,
+        offer.prices.find((el) => el.unit === Unit.bag120).amount,
         [Validators.required, Validators.min(0)]
       ),
       bag160: new FormControl(
-        offer.prices.find((el) => el.unit === RawUnit.bag160).amount,
+        offer.prices.find((el) => el.unit === Unit.bag160).amount,
         [Validators.required, Validators.min(0)]
       ),
     });
   }
 
-  public findOfferPriceByUnit(offerId: string, unit: RawUnit): Price {
+  public findOfferPriceByUnit(offerId: string, unit: Unit): Price {
     return this.offers
       .find((offer) => offer._id === offerId)
       .prices.find((price) => price.unit === unit);
   }
 
-  public findServicePriceByUnit(serviceId: string, unit: RawUnit): Price {
+  public findServicePriceByUnit(serviceId: string, unit: Unit): Price {
     return this.services
       .find((service) => service._id === serviceId)
       .prices.find((price) => price.unit === unit);
@@ -287,7 +283,7 @@ export class PricesComponent implements OnInit, OnDestroy {
           prices: [
             {
               type: PriceType.unit,
-              unit: RawUnit.kg,
+              unit: Unit.kg,
               amountWithDelivery: +this.offerForm
                 .get('kg')
                 .get('amountWithDelivery').value,
@@ -297,7 +293,7 @@ export class PricesComponent implements OnInit, OnDestroy {
             },
             {
               type: PriceType.unit,
-              unit: RawUnit.cube,
+              unit: Unit.cube,
               amountWithDelivery: +this.offerForm
                 .get('cube')
                 .get('amountWithDelivery').value,
@@ -319,22 +315,22 @@ export class PricesComponent implements OnInit, OnDestroy {
           prices: [
             {
               type: PriceType.unit,
-              unit: RawUnit.kg,
+              unit: Unit.kg,
               amount: +this.serviceForm.get('kg').value,
             },
             {
               type: PriceType.unit,
-              unit: RawUnit.cube,
+              unit: Unit.cube,
               amount: +this.serviceForm.get('cube').value,
             },
             {
               type: PriceType.unit,
-              unit: RawUnit.bag120,
+              unit: Unit.bag120,
               amount: +this.serviceForm.get('bag120').value,
             },
             {
               type: PriceType.unit,
-              unit: RawUnit.bag160,
+              unit: Unit.bag160,
               amount: +this.serviceForm.get('bag160').value,
             },
           ],

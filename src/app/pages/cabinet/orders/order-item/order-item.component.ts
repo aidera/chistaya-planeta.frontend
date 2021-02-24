@@ -14,18 +14,19 @@ import { ILocality } from '../../../../models/Locality';
 import { IDivision } from '../../../../models/Division';
 import { ICar } from '../../../../models/Car';
 import { IOrder } from '../../../../models/Order';
-import OrderStatus from '../../../../models/enums/OrderStatus';
-import orderStatusOptions from '../../../../data/orderStatusOptions';
-import orderTypeOptions from '../../../../data/orderTypeOptions';
+import {
+  orderStatusOptions,
+  orderStatusColors,
+  orderStatusStrings,
+} from '../../../../data/orderStatusData';
+import { orderTypeStrings } from '../../../../data/orderTypeData';
 import OrderType from '../../../../models/enums/OrderType';
 import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import { IOffer } from '../../../../models/Offer';
-import unitOptions from '../../../../data/unitOptions';
-import DeliveryType, {
-  deliveryTypeStrings,
-} from '../../../../models/enums/DeliveryType';
-import { paymentMethodStrings } from '../../../../models/enums/PaymentMethod';
-import { unitStrings } from '../../../../models/enums/Unit';
+import DeliveryType from '../../../../models/enums/DeliveryType';
+import { deliveryTypeStrings } from '../../../../data/deliveryTypeData';
+import { paymentMethodStrings } from '../../../../data/paymentMethodData';
+import { unitStrings } from '../../../../data/unitOptions';
 
 @Component({
   selector: 'app-order-item',
@@ -45,6 +46,9 @@ export class OrderItemComponent
   public carsOptions: OptionType[] = [];
 
   public orderStatusOptions = orderStatusOptions;
+  public orderStatusColors = orderStatusColors;
+  public orderStatusStrings = orderStatusStrings;
+  public orderTypeStrings = orderTypeStrings;
   public deliveryTypeStrings = deliveryTypeStrings;
   public paymentMethodStrings = paymentMethodStrings;
   public orderType = OrderType;
@@ -90,63 +94,6 @@ export class OrderItemComponent
         this.item = order;
 
         this.initForm();
-
-        switch (order?.status) {
-          case OrderStatus.raw:
-            this.statusColor = 'yellow';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.raw + ''
-            ).text;
-            break;
-          case OrderStatus.refused:
-            this.statusColor = 'red';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.refused + ''
-            ).text;
-            break;
-          case OrderStatus.cancelled:
-            this.statusColor = 'red';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.cancelled + ''
-            ).text;
-            break;
-          case OrderStatus.processed:
-            this.statusColor = 'yellow';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.processed + ''
-            ).text;
-            break;
-          case OrderStatus.inTransit:
-            this.statusColor = 'blue';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.inTransit + ''
-            ).text;
-            break;
-          case OrderStatus.packed:
-            this.statusColor = 'blue';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.packed + ''
-            ).text;
-            break;
-          case OrderStatus.delivered:
-            this.statusColor = 'blue';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.delivered + ''
-            ).text;
-            break;
-          case OrderStatus.weighed:
-            this.statusColor = 'blue';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.weighed + ''
-            ).text;
-            break;
-          case OrderStatus.completed:
-            this.statusColor = 'green';
-            this.statusString = orderStatusOptions.find(
-              (el) => el.value === OrderStatus.completed + ''
-            ).text;
-            break;
-        }
 
         if (this.form && order) {
           this.form.setValue({
@@ -309,19 +256,9 @@ export class OrderItemComponent
     this.options.destroyCarsOptions();
   }
 
-  public getOrderTypeText(): string {
-    return (
-      orderTypeOptions.find((el) => el.value === this.item?.type + '')?.text ||
-      ''
-    );
-  }
-
   public getOffersAmount(): string | undefined {
     if (this.item?.offers) {
-      const unit =
-        unitOptions.find(
-          (el) => el.value === this.item?.offers?.amountUnit + ''
-        )?.text || '';
+      const unit = unitStrings[this.item?.offers?.amountUnit];
       return this.item.offers.amount + ' ' + unit;
     }
     return undefined;
@@ -329,10 +266,7 @@ export class OrderItemComponent
 
   public getServicesAmount(): string | undefined {
     if (this.item?.services) {
-      const unit =
-        unitOptions.find(
-          (el) => el.value === this.item?.services?.amountUnit + ''
-        )?.text || '';
+      const unit = unitStrings[this.item?.services?.amountUnit];
       return this.item.services.amount + ' ' + unit;
     }
     return undefined;
@@ -368,6 +302,7 @@ export class OrderItemComponent
     }
     return [];
   }
+
   public getWeighedServicesList(): ItemFieldListElement[] {
     if (this.item?.weighed?.services) {
       return (this.item?.weighed?.services).map((service) => {

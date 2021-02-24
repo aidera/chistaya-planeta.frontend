@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { menuLinksMain } from '../../data/menuLinks_main';
-import { menuLinksSecondary } from '../../data/menuLinks_secondary';
+import { menuLinksMain, menuLinksSecondary } from '../../data/menuLinks';
 
 @Component({
   selector: 'app-sidebar',
