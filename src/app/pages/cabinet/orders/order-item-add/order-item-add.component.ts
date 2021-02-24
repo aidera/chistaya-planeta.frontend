@@ -125,8 +125,8 @@ export class OrderItemAddComponent
         deliveryType: new FormControl(''),
         deliveryCustomerCarNumber: new FormControl(''),
         deliveryHasAssistant: new FormControl(''),
-        deliveryAddressStreet: new FormControl(''),
-        deliveryAddressHouse: new FormControl(''),
+        deliveryAddressFromStreet: new FormControl(''),
+        deliveryAddressFromHouse: new FormControl(''),
 
         paymentMethod: new FormControl('', Validators.required),
         paymentMethodData: new FormControl(''),
@@ -320,17 +320,17 @@ export class OrderItemAddComponent
         deliveryHasAssistant:
           this.form.get('deliveryType').value === DeliveryType.company + '' ||
           this.form.get('type').value === OrderType.service + ''
-            ? this.form.get('deliveryHasAssistant').value === 'true'
+            ? this.form.get('deliveryHasAssistant').value === true
             : undefined,
-        deliveryAddressStreet:
+        deliveryAddressFromStreet:
           this.form.get('deliveryType').value === DeliveryType.company + '' ||
           this.form.get('type').value === OrderType.service + ''
-            ? this.form.get('deliveryAddressStreet').value
+            ? this.form.get('deliveryAddressFromStreet').value
             : undefined,
-        deliveryAddressHouse:
+        deliveryAddressFromHouse:
           this.form.get('deliveryType').value === DeliveryType.company + '' ||
           this.form.get('type').value === OrderType.service + ''
-            ? this.form.get('deliveryAddressHouse').value
+            ? this.form.get('deliveryAddressFromHouse').value
             : undefined,
 
         paymentMethod: +this.form.get('paymentMethod').value,
@@ -341,8 +341,6 @@ export class OrderItemAddComponent
 
         customerComment: this.form.get('customerComment').value,
       };
-
-      console.log(order);
 
       this.store.dispatch(OrdersActions.addOrderRequest({ order }));
     };
@@ -365,12 +363,16 @@ export class OrderItemAddComponent
       value === DeliveryType.company + '' &&
       this.form.get('type').value === OrderType.offer + ''
     ) {
-      this.form.get('deliveryAddressStreet').setValidators(Validators.required);
-      this.form.get('deliveryAddressHouse').setValidators(Validators.required);
+      this.form
+        .get('deliveryAddressFromStreet')
+        .setValidators(Validators.required);
+      this.form
+        .get('deliveryAddressFromHouse')
+        .setValidators(Validators.required);
       this.form.get('deliveryCustomerCarNumber').clearValidators();
     } else {
-      this.form.get('deliveryAddressStreet').clearValidators();
-      this.form.get('deliveryAddressHouse').clearValidators();
+      this.form.get('deliveryAddressFromStreet').clearValidators();
+      this.form.get('deliveryAddressFromHouse').clearValidators();
       this.form
         .get('deliveryCustomerCarNumber')
         .setValidators([Validators.required, Validators.minLength(5)]);

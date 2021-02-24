@@ -56,8 +56,8 @@ export interface IAddOrderRequest {
   deliveryType?: DeliveryType;
   deliveryCustomerCarNumber?: string;
   deliveryHasAssistant?: boolean;
-  deliveryAddressStreet?: string;
-  deliveryAddressHouse?: string;
+  deliveryAddressFromStreet?: string;
+  deliveryAddressFromHouse?: string;
 
   approximateRawOffers?: string[];
   approximateRawServices?: string[];
@@ -155,49 +155,35 @@ export class OrdersApiService {
   }
 
   add(order: IAddOrderRequest): Observable<IAddOrderResponse> {
-    console.log(order);
     const newOrder = {
       type: order.type,
       deadline: order.deadline ? order.deadline.toISOString() : undefined,
 
-      locality: order.locality || undefined,
+      locality: order.locality,
 
-      offersItems: order.offersItems || undefined,
-      offersAmountUnit: order.offersAmountUnit || undefined,
-      offersAmount: order.offersAmount || undefined,
+      offersItems: order.offersItems,
+      offersAmountUnit: order.offersAmountUnit,
+      offersAmount: order.offersAmount,
 
-      servicesItems: order.servicesItems || undefined,
-      servicesAmountUnit: order.servicesAmountUnit || undefined,
-      servicesAmount: order.servicesAmount || undefined,
+      servicesItems: order.servicesItems,
+      servicesAmountUnit: order.servicesAmountUnit,
+      servicesAmount: order.servicesAmount,
 
-      customerContactName: order.customerContactName || undefined,
-      customerContactPhone: order.customerContactPhone || undefined,
-      customerOrganizationActualName:
-        order.customerOrganizationActualName || undefined,
-      customerOrganizationLegalName:
-        order.customerOrganizationLegalName || undefined,
+      customerContactName: order.customerContactName,
+      customerContactPhone: order.customerContactPhone,
+      customerOrganizationActualName: order.customerOrganizationActualName,
+      customerOrganizationLegalName: order.customerOrganizationLegalName,
 
       deliveryType: order.deliveryType,
-      deliveryCustomerCarNumber: order.deliveryCustomerCarNumber || undefined,
+      deliveryCustomerCarNumber: order.deliveryCustomerCarNumber,
       deliveryHasAssistant: order.deliveryHasAssistant,
-      deliveryAddressHouse: order.deliveryAddressHouse || undefined,
-      deliveryAddressStreet: order.deliveryAddressStreet || undefined,
+      deliveryAddressFromHouse: order.deliveryAddressFromHouse,
+      deliveryAddressFromStreet: order.deliveryAddressFromStreet,
 
-      approximateRawOffers: order.approximateRawOffers || undefined,
-      approximateRawServices: order.approximateRawServices || undefined,
-      approximateRawAmount: order.approximateRawAmount
-        ? Number(order.approximateRawAmount)
-        : undefined,
-      approximateRawAmountUnit: order.approximateRawAmountUnit
-        ? Number(order.approximateRawAmountUnit)
-        : undefined,
+      paymentMethod: order.paymentMethod,
+      paymentMethodData: order.paymentMethodData,
 
-      paymentMethod: order.paymentMethod
-        ? Number(order.paymentMethod)
-        : undefined,
-      paymentMethodData: order.paymentMethodData || undefined,
-
-      customerComment: order.customerComment || undefined,
+      customerComment: order.customerComment,
     };
 
     return this.http.put<IAddOrderResponse>(
