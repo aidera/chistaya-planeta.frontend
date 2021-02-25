@@ -62,7 +62,6 @@ const _carsReducer = createReducer(
 
   on(CarsActions.getCarRequest, (state, payload) => ({
     ...state,
-    car: null,
     getCarIsFetching: payload.withLoading,
     getCarError: null,
   })),
@@ -74,6 +73,7 @@ const _carsReducer = createReducer(
   })),
   on(CarsActions.getCarFailure, (state, payload) => ({
     ...state,
+    car: null,
     getCarIsFetching: false,
     getCarError: payload.error,
   })),

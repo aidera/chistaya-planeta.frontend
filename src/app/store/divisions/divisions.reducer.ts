@@ -62,7 +62,6 @@ const _divisionsReducer = createReducer(
 
   on(DivisionsActions.getDivisionRequest, (state, payload) => ({
     ...state,
-    division: null,
     getDivisionIsFetching: payload.withLoading,
     getDivisionError: null,
   })),
@@ -74,6 +73,7 @@ const _divisionsReducer = createReducer(
   })),
   on(DivisionsActions.getDivisionFailure, (state, payload) => ({
     ...state,
+    division: null,
     getDivisionIsFetching: false,
     getDivisionError: payload.error,
   })),

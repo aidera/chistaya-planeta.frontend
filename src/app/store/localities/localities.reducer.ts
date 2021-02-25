@@ -75,6 +75,7 @@ const _localitiesReducer = createReducer(
     ...state,
     getLocalityIsFetching: false,
     getLocalityError: payload.error,
+    locality: null,
   })),
 
   /* ----------------------- */

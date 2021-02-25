@@ -63,7 +63,6 @@ const _ordersReducer = createReducer(
   on(OrdersActions.getOrderRequest, (state, payload) => ({
     ...state,
     getOrderIsFetching: payload.withLoading,
-    getOrderError: null,
   })),
   on(OrdersActions.getOrderSuccess, (state, payload) => ({
     ...state,
@@ -73,6 +72,7 @@ const _ordersReducer = createReducer(
   })),
   on(OrdersActions.getOrderFailure, (state, payload) => ({
     ...state,
+    order: null,
     getOrderIsFetching: false,
     getOrderError: payload.error,
   })),

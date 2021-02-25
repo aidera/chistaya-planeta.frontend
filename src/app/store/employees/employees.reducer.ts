@@ -62,7 +62,6 @@ const _employeesReducer = createReducer(
 
   on(EmployeesActions.getEmployeeRequest, (state, payload) => ({
     ...state,
-    employee: null,
     getEmployeeIsFetching: payload.withLoading,
     getEmployeeError: null,
   })),
@@ -74,6 +73,7 @@ const _employeesReducer = createReducer(
   })),
   on(EmployeesActions.getEmployeeFailure, (state, payload) => ({
     ...state,
+    employee: null,
     getEmployeeIsFetching: false,
     getEmployeeError: payload.error,
   })),
