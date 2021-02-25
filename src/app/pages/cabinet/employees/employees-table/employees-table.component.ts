@@ -190,7 +190,9 @@ export class EmployeesTableComponent
           /* Divisions */
           this.divisionsOptions$?.unsubscribe();
           this.divisionsOptions$ = this.options
-            .getDivisionsOptions({ localitiesIds: fieldValues })
+            .getDivisionsOptions({
+              localitiesIds: fieldValues.length > 0 ? fieldValues : undefined,
+            })
             .subscribe((value) => {
               this.divisionsOptions = value;
               if (value === null) {
@@ -201,7 +203,9 @@ export class EmployeesTableComponent
           /* Cars */
           this.carsOptions$?.unsubscribe();
           this.carsOptions$ = this.options
-            .getCarsOptions({ localitiesIds: fieldValues })
+            .getCarsOptions({
+              localitiesIds: fieldValues.length > 0 ? fieldValues : undefined,
+            })
             .subscribe((value) => {
               this.carsOptions = value;
               if (value === null) {
@@ -218,7 +222,9 @@ export class EmployeesTableComponent
           /* Cars */
           this.carsOptions$?.unsubscribe();
           this.carsOptions$ = this.options
-            .getCarsOptions({ divisionsIds: fieldValues })
+            .getCarsOptions({
+              divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+            })
             .subscribe((value) => {
               this.carsOptions = value;
               if (value === null) {

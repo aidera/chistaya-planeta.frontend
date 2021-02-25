@@ -154,7 +154,9 @@ export class LocalitiesTableComponent
           /* Employees */
           this.employeesOptions$?.unsubscribe();
           this.employeesOptions$ = this.options
-            .getEmployeesOptions({ divisionsIds: fieldValues })
+            .getEmployeesOptions({
+              divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+            })
             .subscribe((value) => {
               this.employeesOptions = value;
             });
@@ -162,7 +164,9 @@ export class LocalitiesTableComponent
           /* Cars */
           this.carsOptions$?.unsubscribe();
           this.carsOptions$ = this.options
-            .getCarsOptions({ divisionsIds: fieldValues })
+            .getCarsOptions({
+              divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+            })
             .subscribe((value) => {
               this.carsOptions = value;
             });
