@@ -44,6 +44,12 @@ describe('OrderItemAddComponent', () => {
             orders: {
               order: null,
             },
+            offers: {
+              offers: null,
+            },
+            services: {
+              services: null,
+            },
             app: {
               localitiesToSelect: null,
               divisionsToSelect: null,

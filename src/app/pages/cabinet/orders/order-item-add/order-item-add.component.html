@@ -322,7 +322,9 @@
       <div
         class="cabinet-content__grid-item"
         [class.cabinet-content__grid-item_inactive]="
-          form.get('type').value === ''
+          form.get('type').value === '' ||
+          (form.get('type').value === orderType.offer + '' &&
+            !approximateRemunerationCost)
         "
       >
         <mat-card>
@@ -337,6 +339,36 @@
           </h2>
 
           <div class="cabinet-content__grid-item-form-content">
+            <div
+              *ngIf="
+                approximatePaymentCost &&
+                form.get('type').value === orderType.service + ''
+              "
+            >
+              <label>Приблизительная стоимость оплаты</label>
+              <p>{{ approximatePaymentCost }}</p>
+              <a target="_blank" [routerLink]="['../../', 'prices']"
+                >Расценки</a
+              >
+              <br />
+              <br />
+            </div>
+
+            <div
+              *ngIf="
+                approximateRemunerationCost &&
+                form.get('type').value === orderType.offer + ''
+              "
+            >
+              <label>Приблизительная стоимость вознаграждения</label>
+              <p>{{ approximateRemunerationCost }}</p>
+              <a target="_blank" [routerLink]="['../../', 'prices']"
+                >Расценки</a
+              >
+              <br />
+              <br />
+            </div>
+
             <!-- Payment method -->
             <app-select
               fieldId="paymentMethod"

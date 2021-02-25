@@ -753,12 +753,16 @@ export class OrdersTableComponent
                   ? this.quickSearchForm.get('search').value
                   : ''
               ),
-              customerContactPhone: this.highlightSearchedValue(
-                order.customer.contactPhone,
-                this.quickSearchForm
-                  ? this.quickSearchForm.get('search').value
-                  : ''
-              ),
+              customerContactPhone: this.quickSearchForm?.get('search').value
+                ? this.highlightSearchedValue(
+                    order.customer.contactPhone,
+                    this.quickSearchForm
+                      ? this.quickSearchForm.get('search').value
+                      : ''
+                  )
+                : this.converter.beautifyPhoneNumber(
+                    order.customer.contactPhone
+                  ),
 
               deliveryType: deliveryTypeStrings[order.delivery._type] || '',
               deliveryCustomerCarNumber: this.highlightSearchedValue(
@@ -790,11 +794,12 @@ export class OrdersTableComponent
                   )
                 : '',
 
-              paymentMethod: paymentMethodOffersOptions.find(
-                (el) => el.value === order.payment.method + ''
-              ).text,
+              paymentMethod:
+                paymentMethodOffersOptions.find(
+                  (el) => el.value === order.payment?.method + ''
+                )?.text || '',
               paymentMethodData: this.highlightSearchedValue(
-                order.payment.methodData,
+                order.payment?.methodData,
                 this.quickSearchForm
                   ? this.quickSearchForm.get('search').value
                   : ''

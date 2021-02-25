@@ -241,34 +241,43 @@
         </mat-card>
       </div>
 
-      <div class="cabinet-content__grid-item">
+      <div
+        class="cabinet-content__grid-item"
+        [class.cabinet-content__grid-item_inactive]="
+          !(item?.payment?.method || item?.payment?.method === 0)
+        "
+      >
         <mat-card>
           <h2>
             {{ item?.type === orderType.offer ? 'Вознаграждение' : 'Оплата' }}
           </h2>
 
-          <!-- Payment method -->
-          <div class="cabinet-content__field">
-            <app-item-field-inactive-string
-              label="Способ оплаты"
-              [content]="paymentMethodStrings[item?.payment.method]"
-              [isFetching]="itemIsFetching"
-            >
-            </app-item-field-inactive-string>
-          </div>
-
-          <!-- Payment method data -->
-          <div
-            *ngIf="item?.type === orderType.offer"
-            class="cabinet-content__field"
+          <ng-container
+            *ngIf="item?.payment?.method || item?.payment?.method === 0"
           >
-            <app-item-field-inactive-string
-              label="Данные для оплаты"
-              [content]="item?.payment.methodData"
-              [isFetching]="itemIsFetching"
+            <!-- Payment method -->
+            <div class="cabinet-content__field">
+              <app-item-field-inactive-string
+                label="Способ оплаты"
+                [content]="paymentMethodStrings[item?.payment?.method]"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-string>
+            </div>
+
+            <!-- Payment method data -->
+            <div
+              *ngIf="item?.type === orderType.offer"
+              class="cabinet-content__field"
             >
-            </app-item-field-inactive-string>
-          </div>
+              <app-item-field-inactive-string
+                label="Данные для оплаты"
+                [content]="item?.payment?.methodData"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-string>
+            </div>
+          </ng-container>
         </mat-card>
       </div>
     </div>

@@ -121,8 +121,6 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
       control.markAsTouched({ onlySelf: true });
     });
 
-    console.log(this.form);
-
     if (this.form?.valid) {
       this.createRequest();
     } else {
