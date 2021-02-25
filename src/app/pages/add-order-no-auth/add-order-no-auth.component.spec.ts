@@ -25,6 +25,7 @@ import { tomorrow } from '../../utils/date.functions';
 import timeOptions from '../../data/timeOptions';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ErrorMessageComponent } from '../../components/form-controls/error-message/error-message.component';
+import { ModalComponent } from '../../components/modal/modal.component';
 
 let store: MockStore;
 // let storeDispatchSpy: jasmine.Spy;
@@ -45,6 +46,7 @@ describe('AddOrderNoAuthComponent', () => {
         AuthNotifyComponent,
         QuestionHintComponent,
         ErrorMessageComponent,
+        ModalComponent,
       ],
       imports: [
         RouterTestingModule,
@@ -64,9 +66,20 @@ describe('AddOrderNoAuthComponent', () => {
                 { value: '1', text: 'City 1' },
                 { value: '2', text: 'City 2' },
               ],
+              divisionsToSelect: null,
+              carsToSelect: null,
+              employeesToSelect: null,
+              offersToSelect: null,
+              servicesToSelect: null,
             },
             orders: {
-              addOrderLocalities: [] as ILocality[],
+              order: null,
+            },
+            offers: {
+              offers: null,
+            },
+            services: {
+              services: null,
             },
           },
         }),

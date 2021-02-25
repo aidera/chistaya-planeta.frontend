@@ -17,206 +17,187 @@
       fieldId="type"
       label="Я хочу..."
       [isRequired]="true"
-      [options]="selectOrderTypeOptions"
+      [options]="orderTypeOptions"
+      [errorMessages]="{ required: 'Обязательное поле' }"
+    ></app-select>
+
+    <app-select
+      [control]="form.get('locality')"
+      fieldId="type"
+      label="Населённый пункт"
+      [isRequired]="true"
+      [options]="localitiesOptions"
       [errorMessages]="{ required: 'Обязательное поле' }"
     ></app-select>
   </div>
 
-  <ng-container *ngIf="form.get('type').value">
-    <div class="order-block">
-      <h2>
-        {{
-          form.get('type').value === orderTypeEnum.offer + ''
-            ? 'Сырье'
-            : 'Отходы'
-        }}
-      </h2>
+  <ng-container *ngIf="form.get('type').value && form.get('locality').value">
+    <div
+      class="order-block"
+      *ngIf="form.get('type').value === orderType.offer + ''"
+    >
+      <h2>Вторсырьё</h2>
 
       <app-select
-        *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
-        [control]="form.get('rawType')"
-        fieldId="rawType"
-        label="Тип"
-        [isRequired]="true"
+        fieldId="offersItems"
+        [control]="form.get('offersItems')"
+        [options]="offersOptions"
         [isMultiple]="true"
-        [options]="selectRawTypeOptions"
-        [errorMessages]="{ required: 'Обязательное поле' }"
+        [label]="'Типы вторсырья'"
+        [isRequired]="true"
+        [errorMessages]="{
+          required: 'Обязательное поле'
+        }"
       ></app-select>
 
-      <div class="field-spacer"></div>
-
-      <div
-        class="combined-fields"
-        *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
-      >
+      <div class="combined-fields combined-fields_mobile-wrap">
+        <!-- Offers Amount -->
         <app-text-input
-          [control]="form.get('rawAmount')"
-          fieldId="rawAmount"
-          [label]="'Приблизительное количество'"
-          [isRequired]="true"
+          fieldId="offersAmount"
+          [control]="form.get('offersAmount')"
+          label="Приблизительное количество"
+          labelHint="Нужно, чтобы определить тип автомобиля"
           fieldType="number"
+          [isRequired]="true"
           [errorMessages]="{
-            required: 'Обязательное поле',
-            min: 'Не может быть меньше 1'
+            required: 'Обязательное поле'
           }"
-        ></app-text-input>
+        >
+        </app-text-input>
 
+        <!-- Offers Amount Unit -->
         <app-select
-          *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
-          [control]="form.get('rawAmountUnit')"
-          fieldId="rawAmountUnit"
-          [options]="selectRawUnitOptions"
-          [errorMessages]="{ required: 'Обязательное поле' }"
+          fieldId="offersAmountUnit"
+          label="ед."
+          [control]="form.get('offersAmountUnit')"
+          [options]="offersUnitOptions"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
         ></app-select>
       </div>
+    </div>
 
-      <app-text-input
-        *ngIf="form.get('type').value === orderTypeEnum.service + ''"
-        [control]="form.get('rawAmount')"
-        fieldId="rawAmount"
-        [label]="'Приблизительное количество, куб.'"
-        labelHint="Нужно, чтобы определить тип автомобиля"
-        [isRequired]="true"
-        fieldType="number"
-        [errorMessages]="{
-          required: 'Обязательное поле',
-          min: 'Не может быть меньше 1'
-        }"
-      ></app-text-input>
+    <div
+      class="order-block"
+      *ngIf="form.get('type').value === orderType.service + ''"
+    >
+      <h2>Отходы</h2>
+
+      <div class="combined-fields combined-fields_mobile-wrap">
+        <!-- Services Amount -->
+        <app-text-input
+          fieldId="servicesAmount"
+          [control]="form.get('servicesAmount')"
+          label="Приблизительное количество"
+          labelHint="Нужно, чтобы определить тип автомобиля"
+          fieldType="number"
+          [isRequired]="true"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
+        >
+        </app-text-input>
+
+        <!-- Services Amount Unit -->
+        <app-select
+          fieldId="servicesAmountUnit"
+          label="ед."
+          [control]="form.get('servicesAmountUnit')"
+          [options]="servicesUnitOptions"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
+        ></app-select>
+      </div>
     </div>
 
     <div class="order-block">
       <h2>
         {{
-          form.get('type').value === orderTypeEnum.offer + ''
-            ? 'Доставка'
-            : 'Вывоз'
+          form.get('type').value === orderType.offer + '' ? 'Доставка' : 'Вывоз'
         }}
       </h2>
 
+      <!-- Delivery type -->
       <app-select
-        *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
-        [control]="form.get('deliveryType')"
+        *ngIf="form.get('type').value === orderType.offer + ''"
         fieldId="deliveryType"
         label="Тип доставки"
-        [isRequired]="true"
-        [options]="selectDeliveryTypeOptions"
-        [errorMessages]="{ required: 'Обязательное поле' }"
+        [control]="form.get('deliveryType')"
+        [options]="deliveryTypeOptions"
+        [errorMessages]="{
+          required: 'Обязательное поле'
+        }"
       ></app-select>
 
-      <div class="field-spacer"></div>
-
-      <app-select
-        [control]="form.get('deliveryAddressLocality')"
-        fieldId="deliveryAddressLocality"
-        label="Населённый пункт"
-        [isRequired]="true"
-        [options]="localitiesOptions"
-        [errorMessages]="{ required: 'Обязательное поле' }"
-      ></app-select>
-
-      <ng-container
+      <!-- Delivery customer car number -->
+      <app-text-input
         *ngIf="
-          form.get('type').value === orderTypeEnum.offer + '' &&
-          form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
-          selectDivisionsOptions.length > 1
+          form.get('type').value === orderType.offer + '' &&
+          form.get('deliveryType').value === deliveryType.pickup + ''
         "
-      >
-        <div class="field-spacer"></div>
-
-        <app-select
-          [control]="form.get('division')"
-          fieldId="division"
-          label="Пункт приёма"
-          [isRequired]="true"
-          [options]="selectDivisionsOptions"
-          [errorMessages]="{ required: 'Обязательное поле' }"
-        ></app-select>
-        <!--        <small class="form-control-hint"><a>Показать на карте</a></small>-->
-        <!--        <br />-->
-      </ng-container>
+        [control]="form.get('deliveryCustomerCarNumber')"
+        fieldId="deliveryCustomerCarNumber"
+        label="Номер автомобиля"
+        [isRequired]="true"
+        [errorMessages]="{
+          required: 'Обязательное поле',
+          minlength: 'Слишком короткий номер автомобиля'
+        }"
+      ></app-text-input>
 
       <div
+        class="combined-fields combined-fields_mobile-wrap"
         *ngIf="
-          form.get('type').value === orderTypeEnum.offer + '' &&
-          form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
-          selectDivisionsOptions.length === 1
+          form.get('type').value === orderType.service + '' ||
+          (form.get('type').value === orderType.offer + '' &&
+            form.get('deliveryType').value === deliveryType.company + '')
         "
       >
-        <div class="field-spacer"></div>
-        <small>Адрес пункта приёма:</small>
-        <br />
-        <p>{{ selectDivisionsOptions[0].text }}</p>
-        <!--        <small><a>Показать на карте</a></small>-->
-      </div>
-
-      <ng-container
-        *ngIf="
-          form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
-          form.get('type').value === orderTypeEnum.service + ''
-        "
-      >
-        <div class="field-spacer"></div>
-
-        <div class="combined-fields">
-          <app-text-input
-            [control]="form.get('deliveryAddressStreet')"
-            fieldId="deliveryAddressStreet"
-            label="Улица"
-            [isRequired]="true"
-            [errorMessages]="{ required: 'Обязательное поле' }"
-          ></app-text-input>
-
-          <app-text-input
-            [control]="form.get('deliveryAddressHouse')"
-            fieldId="deliveryAddressHouse"
-            label="Дом"
-            [isRequired]="true"
-            [errorMessages]="{ required: 'Обязательное поле' }"
-          ></app-text-input>
-        </div>
-      </ng-container>
-
-      <ng-container
-        *ngIf="
-          form.get('deliveryType').value === deliveryTypeEnum.pickup + '' &&
-          form.get('type').value === orderTypeEnum.offer + ''
-        "
-      >
-        <div class="field-spacer"></div>
-
+        <!-- Delivery address street -->
         <app-text-input
-          [control]="form.get('deliveryCustomerCarNumber')"
-          fieldId="deliveryCustomerCarNumber"
-          label="Номер автомобиля"
-          labelHint="Чтобы определить ваш автомобиль в пункте приёма"
+          fieldId="deliveryAddressFromStreet"
+          [control]="form.get('deliveryAddressFromStreet')"
+          label="Улица"
           [isRequired]="true"
           [errorMessages]="{
-            required: 'Обязательное поле',
-            minlength: 'Слишком короткий номер'
+            required: 'Обязательное поле'
           }"
-        ></app-text-input>
-      </ng-container>
+        >
+        </app-text-input>
 
-      <div class="field-spacer"></div>
+        <!-- Delivery address house -->
+        <app-text-input
+          fieldId="deliveryAddressFromHouse"
+          [control]="form.get('deliveryAddressFromHouse')"
+          label="Дом"
+          [isRequired]="true"
+          [errorMessages]="{
+            required: 'Обязательное поле'
+          }"
+        >
+        </app-text-input>
+      </div>
 
-      <div class="combined-fields">
+      <!-- Deadline -->
+      <div class="combined-fields combined-fields_mobile-wrap">
         <app-date-input
-          [control]="form.get('desiredPickupDate')"
-          fieldId="desiredPickupDate"
+          [control]="form.get('deadlineDate')"
+          fieldId="deadlineDate"
           [label]="
-            form.get('deliveryType').value === deliveryTypeEnum.pickup + ''
-              ? 'Предположительная дата приезда'
+            form.get('deliveryType').value === deliveryType.pickup + ''
+              ? 'Дата приезда'
               : 'Желаемая дата вывоза'
           "
           [isRequired]="true"
-          [minDate]="desiredPickupDateMinDate"
+          [minDate]="deadlineMinDate"
           [errorMessages]="{ required: 'Обязательное поле' }"
         ></app-date-input>
 
         <app-select
-          [control]="form.get('desiredPickupTime')"
-          fieldId="desiredPickupTime"
+          [control]="form.get('deadlineTime')"
+          fieldId="deadlineTime"
           label="Время"
           [isRequired]="true"
           [options]="selectTimeOptions"
@@ -224,47 +205,51 @@
         ></app-select>
       </div>
 
+      <!-- Delivery has assistant -->
       <app-checkbox
         *ngIf="
-          form.get('deliveryType').value === deliveryTypeEnum.company + '' ||
-          form.get('type').value === orderTypeEnum.service + ''
+          form.get('deliveryType').value === deliveryType.company + '' ||
+          form.get('type').value === orderType.service + ''
         "
-        [control]="form.get('hasAssistant')"
-        fieldId="hasAssistant"
+        [control]="form.get('deliveryHasAssistant')"
+        fieldId="deliveryHasAssistant"
         label="Есть помошник?"
-        labelHint="Поставьте галочку, если на месте будет человек, котрый поможет загрузить сырье"
+        labelHint="Поставьте галочку, если на месте будет человек, котрый поможет загрузить сырье или мусор"
       ></app-checkbox>
+
+      <!-- Divisions -->
+      <ng-container
+        *ngIf="
+          form.get('type').value === orderType.offer + '' &&
+          form.get('deliveryType').value === deliveryType.pickup + ''
+        "
+      >
+        <div class="field-spacer"></div>
+
+        <small>Пункты приёма:</small>
+        <br />
+        <p *ngFor="let division of divisionsOptions">
+          {{ division.text }}
+        </p>
+      </ng-container>
     </div>
 
     <div class="order-block">
-      <h2>Заказчик</h2>
+      <h2>Контактные данные</h2>
 
+      <!-- Customer contact name -->
       <app-text-input
-        [control]="form.get('customerOrganizationLegalName')"
-        fieldId="customerOrganizationLegalName"
-        label="Юридическое наиманование организации"
-      ></app-text-input>
-
-      <div class="field-spacer"></div>
-
-      <app-text-input
-        [control]="form.get('customerOrganizationActualName')"
-        fieldId="customerOrganizationActualName"
-        label="Фактическое наиманование организации"
-      ></app-text-input>
-
-      <div class="field-spacer"></div>
-
-      <app-text-input
-        [control]="form.get('customerContactName')"
         fieldId="customerContactName"
+        [control]="form.get('customerContactName')"
         label="Контактное лицо"
         [isRequired]="true"
-        [errorMessages]="{ required: 'Обязательное поле' }"
-      ></app-text-input>
+        [errorMessages]="{
+          required: 'Обязательное поле'
+        }"
+      >
+      </app-text-input>
 
-      <div class="field-spacer"></div>
-
+      <!-- Customer contact phone -->
       <app-text-input
         [control]="form.get('customerContactPhone')"
         fieldId="customerContactPhone"
@@ -277,62 +262,112 @@
           minlength: 'Слишком короткий номер телефона'
         }"
       ></app-text-input>
+
+      <!-- Customer organization legal name -->
+      <app-text-input
+        fieldId="customerOrganizationLegalName"
+        [control]="form.get('customerOrganizationLegalName')"
+        label="Юридическое наименование организации"
+      >
+      </app-text-input>
+
+      <!-- Customer organization actual name -->
+      <app-text-input
+        fieldId="customerOrganizationActualName"
+        [control]="form.get('customerOrganizationActualName')"
+        label="Фактическое наименование организации"
+      >
+      </app-text-input>
     </div>
 
     <div
+      *ngIf="
+        form.get('type').value === orderType.service + '' ||
+        (form.get('type').value === orderType.offer + '' &&
+          approximateRemunerationCost)
+      "
       class="order-block"
-      *ngIf="form.get('type').value === orderTypeEnum.offer + ''"
     >
-      <h2>Вознаграждение</h2>
+      <h2>
+        {{
+          form.get('type').value === orderType.offer + ''
+            ? 'Вознаграждение'
+            : form.get('type').value === orderType.service + ''
+            ? 'Оплата'
+            : 'Оплата / вознаграждение'
+        }}
+      </h2>
 
+      <div
+        *ngIf="
+          approximatePaymentCost &&
+          form.get('type').value === orderType.service + ''
+        "
+      >
+        <label>Приблизительная стоимость оплаты</label>
+        <p>{{ approximatePaymentCost }}</p>
+        <a (click)="isPricesModalOpen = true">Расценки</a>
+        <br />
+        <br />
+      </div>
+
+      <div
+        *ngIf="
+          approximateRemunerationCost &&
+          form.get('type').value === orderType.offer + ''
+        "
+      >
+        <label>Приблизительная стоимость вознаграждения</label>
+        <p>{{ approximateRemunerationCost }}</p>
+        <a (click)="isPricesModalOpen = true">Расценки</a>
+        <br />
+        <br />
+      </div>
+
+      <!-- Payment method -->
       <app-select
-        [control]="form.get('paymentMethod')"
         fieldId="paymentMethod"
-        label="Способ оплаты"
-        [options]="selectPaymentMethodOffersOptions"
+        [control]="form.get('paymentMethod')"
+        [options]="
+          form.get('type').value === orderType.offer + ''
+            ? paymentMethodOffersOptions
+            : paymentMethodServicesOptions
+        "
+        [label]="'Способ оплаты'"
         [isRequired]="true"
-        [errorMessages]="{ required: 'Обязательное поле' }"
+        [errorMessages]="{
+          required: 'Обязательное поле'
+        }"
       ></app-select>
 
-      <div class="field-spacer"></div>
-
+      <!-- Payment method data -->
       <app-textarea
         *ngIf="
-          form.get('paymentMethod').value === paymentMethodEnum.card + '' ||
-          form.get('paymentMethod').value === paymentMethodEnum.nonCash + ''
+          form.get('type').value === orderType.offer + '' &&
+          form.get('paymentMethod').value !== paymentMethod.cash + '' &&
+          form.get('paymentMethod').value !== ''
         "
-        [control]="form.get('paymentMethodData')"
         fieldId="paymentMethodData"
-        label="Информация для платежа"
-        labelHint="Номер карты или данные счёта, по которым мы сможем отправить вознаграждение"
+        [control]="form.get('paymentMethodData')"
+        label="Данные для платежа"
+        labelHint="Данные, с помощью которых мы сможем отправить вознаграждение на Ваш счёт"
         [isRequired]="true"
-        [errorMessages]="{ required: 'Обязательное поле' }"
-      ></app-textarea>
-    </div>
-
-    <div
-      class="order-block"
-      *ngIf="form.get('type').value === orderTypeEnum.service + ''"
-    >
-      <h2>Оплата</h2>
-
-      <app-select
-        [control]="form.get('paymentMethod')"
-        fieldId="paymentMethod"
-        label="Способ оплаты"
-        [options]="selectPaymentMethodServicesOptions"
-        [isRequired]="true"
-        [errorMessages]="{ required: 'Обязательное поле' }"
-      ></app-select>
+        [errorMessages]="{
+          required: 'Обязательное поле'
+        }"
+      >
+      </app-textarea>
     </div>
 
     <div class="order-block">
       <h2>Комментарий</h2>
 
+      <!-- Customer comment -->
       <app-textarea
-        [control]="form.get('comment')"
-        fieldId="comment"
-      ></app-textarea>
+        fieldId="customerComment"
+        [control]="form.get('customerComment')"
+      >
+      </app-textarea>
     </div>
   </ng-container>
 
@@ -346,7 +381,7 @@
     Отправить
   </button>
 
-  <p class="server-error" *ngIf="serverError !== null">
+  <p class="server-error" *ngIf="serverError">
     <br />Ошибка сервера. Попробуйте оставить заявку позже или свяжитесь с нами
     по телефону.
   </p>
@@ -356,3 +391,123 @@
 
   <app-auth-notify></app-auth-notify>
 </form>
+
+<app-modal
+  [isOpen]="isPricesModalOpen"
+  title="Расценки"
+  resolveButtonText="Закрыть"
+  (action)="isPricesModalOpen = false"
+>
+  <div class="price-modal">
+    <h2>Предложения</h2>
+
+    <div class="price-element" *ngFor="let offer of offers">
+      <div class="price-element__header">
+        <h3>{{ offer.name }}</h3>
+      </div>
+
+      <div class="price-element__inactive">
+        <div class="price-element__content">
+          <div class="price-element__content-greed">
+            <div class="price-element__content-column">
+              <h4>с нашей доставкой</h4>
+
+              <div class="price-element__content-column-description">
+                <div>
+                  {{
+                    findOfferPriceByUnit(offer._id, unit.kg)
+                      .amountWithDelivery <= 0
+                      ? 'бесплатно (кг)'
+                      : findOfferPriceByUnit(offer._id, unit.kg)
+                          .amountWithDelivery + ' руб./кг'
+                  }}
+                </div>
+                <div>
+                  {{
+                    findOfferPriceByUnit(offer._id, unit.cube)
+                      .amountWithDelivery <= 0
+                      ? 'бесплатно (куб)'
+                      : findOfferPriceByUnit(offer._id, unit.cube)
+                          .amountWithDelivery + ' руб./куб'
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="price-element__content-column">
+              <h4>без доставки</h4>
+              <div class="price-element__content-column-description">
+                <div>
+                  {{
+                    findOfferPriceByUnit(offer._id, unit.kg)
+                      .amountWithoutDelivery <= 0
+                      ? 'бесплатно (кг)'
+                      : findOfferPriceByUnit(offer._id, unit.kg)
+                          .amountWithoutDelivery + ' руб./кг'
+                  }}
+                </div>
+                <div>
+                  {{
+                    findOfferPriceByUnit(offer._id, unit.cube)
+                      .amountWithoutDelivery <= 0
+                      ? 'бесплатно (куб)'
+                      : findOfferPriceByUnit(offer._id, unit.cube)
+                          .amountWithoutDelivery + ' руб./куб'
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br /><br />
+
+    <h2>Услуги</h2>
+
+    <div class="price-element" *ngFor="let service of services">
+      <div class="price-element__header">
+        <h3>{{ service.name }}</h3>
+      </div>
+
+      <div class="price-element__inactive">
+        <div class="price-element__content">
+          <div class="price-element__content-column-description">
+            <div>
+              {{
+                findServicePriceByUnit(service._id, unit.kg).amount <= 0
+                  ? 'бесплатно (кг)'
+                  : findServicePriceByUnit(service._id, unit.kg).amount +
+                    ' руб./кг'
+              }}
+            </div>
+            <div>
+              {{
+                findServicePriceByUnit(service._id, unit.cube).amount <= 0
+                  ? 'бесплатно (куб)'
+                  : findServicePriceByUnit(service._id, unit.cube).amount +
+                    ' руб./куб'
+              }}
+            </div>
+            <div>
+              {{
+                findServicePriceByUnit(service._id, unit.bag120).amount <= 0
+                  ? 'бесплатно (мешок 120л)'
+                  : findServicePriceByUnit(service._id, unit.bag120).amount +
+                    ' руб./мешок 120л'
+              }}
+            </div>
+            <div>
+              {{
+                findServicePriceByUnit(service._id, unit.bag160).amount <= 0
+                  ? 'бесплатно (мешок 160л)'
+                  : findServicePriceByUnit(service._id, unit.bag160).amount +
+                    ' руб./мешок 160л'
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>

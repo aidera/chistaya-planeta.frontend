@@ -123,7 +123,7 @@
 
       <div class="cabinet-content__grid-item">
         <mat-card>
-          <h2>Доставка</h2>
+          <h2>{{ item?.type === orderType.offer ? 'Доставка' : 'Вывоз' }}</h2>
 
           <!-- Delivery type -->
           <div

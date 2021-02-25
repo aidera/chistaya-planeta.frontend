@@ -147,7 +147,13 @@
         "
       >
         <mat-card>
-          <h2>Доставка</h2>
+          <h2>
+            {{
+              form.get('type').value === orderType.offer + ''
+                ? 'Доставка'
+                : 'Вывоз'
+            }}
+          </h2>
 
           <div class="cabinet-content__grid-item-form-content">
             <!-- Delivery type -->

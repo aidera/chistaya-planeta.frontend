@@ -167,22 +167,42 @@ export class OrderItemAddComponent
       this.form.get('type').valueChanges.subscribe((value) => {
         this.form.get('offersItems').clearValidators();
         this.form.get('offersItems').setErrors(null);
+        this.form.get('offersItems').setValue([]);
         this.form.get('offersAmountUnit').clearValidators();
         this.form.get('offersAmountUnit').setErrors(null);
+        this.form.get('offersAmountUnit').setValue('');
         this.form.get('offersAmount').clearValidators();
         this.form.get('offersAmount').setErrors(null);
+        this.form.get('offersAmount').setValue('');
 
         this.form.get('servicesAmountUnit').clearValidators();
         this.form.get('servicesAmountUnit').setErrors(null);
+        this.form.get('servicesAmountUnit').setValue('');
         this.form.get('servicesAmount').clearValidators();
         this.form.get('servicesAmount').setErrors(null);
+        this.form.get('servicesAmount').setValue('');
 
         this.form.get('deliveryType').clearValidators();
         this.form.get('deliveryType').setErrors(null);
+        this.form.get('deliveryType').setValue('');
         this.form.get('deliveryCustomerCarNumber').clearValidators();
         this.form.get('deliveryCustomerCarNumber').setErrors(null);
+        this.form.get('deliveryCustomerCarNumber').setValue('');
+        this.form.get('deliveryHasAssistant').clearValidators();
+        this.form.get('deliveryHasAssistant').setErrors(null);
+        this.form.get('deliveryAddressFromStreet').clearValidators();
+        this.form.get('deliveryAddressFromStreet').setErrors(null);
+        this.form.get('deliveryAddressFromStreet').setValue('');
+        this.form.get('deliveryAddressFromHouse').clearValidators();
+        this.form.get('deliveryAddressFromHouse').setErrors(null);
+        this.form.get('deliveryAddressFromHouse').setValue('');
+
+        this.form.get('paymentMethod').clearValidators();
+        this.form.get('paymentMethod').setErrors(null);
+        this.form.get('paymentMethod').setValue('');
         this.form.get('paymentMethodData').clearValidators();
         this.form.get('paymentMethodData').setErrors(null);
+        this.form.get('paymentMethodData').setValue('');
 
         if (value === OrderType.offer + '') {
           this.form.get('offersItems').setValidators(Validators.required);
@@ -197,13 +217,10 @@ export class OrderItemAddComponent
             .get('servicesAmountUnit')
             .setValidators(Validators.required);
           this.form.get('servicesAmount').setValidators(Validators.required);
+          this.form.get('paymentMethod').setValidators(Validators.required);
         }
 
-        this.form.get('paymentMethod').setValue('');
-
-        this.deliveryTypeValidatorsChange();
-        this.offersApproximatePaymentCostChange();
-        this.servicesApproximateRemunerationCostChange();
+        this.approximateCostChange();
       });
 
       /* --- Смена валидаторов на "Тип доставки" --- */
@@ -212,8 +229,47 @@ export class OrderItemAddComponent
       /* Если тип доставки выбран "Самовывоз", то поля с городом, адресом, улицей,
       домом и помошником убираются, но появляется номер автомобиля заказчика */
       this.form.get('deliveryType').valueChanges.subscribe((value) => {
-        this.deliveryTypeValidatorsChange();
-        this.offersApproximatePaymentCostChange();
+        const orderType = this.form.get('type').value;
+        const deliveryType = this.form.get('deliveryType').value;
+
+        this.form.get('deliveryCustomerCarNumber').clearValidators();
+        this.form.get('deliveryCustomerCarNumber').setErrors(null);
+        this.form.get('deliveryCustomerCarNumber').setValue('');
+        this.form.get('deliveryHasAssistant').clearValidators();
+        this.form.get('deliveryHasAssistant').setErrors(null);
+        this.form.get('deliveryAddressFromStreet').clearValidators();
+        this.form.get('deliveryAddressFromStreet').setErrors(null);
+        this.form.get('deliveryAddressFromStreet').setValue('');
+        this.form.get('deliveryAddressFromHouse').clearValidators();
+        this.form.get('deliveryAddressFromHouse').setErrors(null);
+        this.form.get('deliveryAddressFromHouse').setValue('');
+
+        if (orderType === OrderType.offer + '') {
+          if (deliveryType === DeliveryType.company + '') {
+            this.form
+              .get('deliveryAddressFromStreet')
+              .setValidators(Validators.required);
+            this.form
+              .get('deliveryAddressFromHouse')
+              .setValidators(Validators.required);
+          }
+          if (deliveryType === DeliveryType.pickup + '') {
+            this.form
+              .get('deliveryCustomerCarNumber')
+              .setValidators([Validators.required, Validators.minLength(5)]);
+          }
+        }
+
+        if (orderType === OrderType.service + '') {
+          this.form
+            .get('deliveryAddressFromStreet')
+            .setValidators(Validators.required);
+          this.form
+            .get('deliveryAddressFromHouse')
+            .setValidators(Validators.required);
+        }
+
+        this.approximateCostChange();
       });
 
       /* --- Смена валидаторов на "Тип оплаты" --- */
@@ -239,20 +295,20 @@ export class OrderItemAddComponent
       /* Если стоимость вознаграждения/оплаты не равна 0,
       то неободимо сделать обязательное указание способа оплаты */
       this.form.get('offersItems').valueChanges.subscribe((_) => {
-        this.offersApproximatePaymentCostChange();
+        this.approximateCostChange();
       });
       this.form.get('offersAmountUnit').valueChanges.subscribe((_) => {
-        this.offersApproximatePaymentCostChange();
+        this.approximateCostChange();
       });
       this.form.get('offersAmount').valueChanges.subscribe((_) => {
-        this.offersApproximatePaymentCostChange();
+        this.approximateCostChange();
       });
 
       this.form.get('servicesAmountUnit').valueChanges.subscribe((_) => {
-        this.servicesApproximateRemunerationCostChange();
+        this.approximateCostChange();
       });
       this.form.get('servicesAmount').valueChanges.subscribe((_) => {
-        this.servicesApproximateRemunerationCostChange();
+        this.approximateCostChange();
       });
     };
 
@@ -409,7 +465,11 @@ export class OrderItemAddComponent
     this.offers$ = this.store
       .select(OffersSelectors.selectOffers)
       .subscribe((value) => {
-        this.offers = value;
+        const filtered = value;
+        filtered?.filter((el) => {
+          return el.status === SimpleStatus.active;
+        });
+        this.offers = filtered;
       });
 
     /* -------- */
@@ -422,7 +482,11 @@ export class OrderItemAddComponent
     this.services$ = this.store
       .select(ServicesSelectors.selectServices)
       .subscribe((value) => {
-        this.services = value;
+        const filtered = value;
+        filtered?.filter((el) => {
+          return el.status === SimpleStatus.active;
+        });
+        this.services = filtered;
       });
 
     /* --------------------------- */
@@ -447,33 +511,8 @@ export class OrderItemAddComponent
     this.socket.get()?.off('services');
   }
 
-  private deliveryTypeValidatorsChange(): void {
-    const deliveryType = this.form.get('deliveryType').value;
-    this.form.get('deliveryAddressFromStreet').clearValidators();
-    this.form.get('deliveryAddressFromStreet').setErrors(null);
-    this.form.get('deliveryAddressFromHouse').clearValidators();
-    this.form.get('deliveryAddressFromHouse').setErrors(null);
-    this.form.get('deliveryCustomerCarNumber').clearValidators();
-    this.form.get('deliveryCustomerCarNumber').setErrors(null);
-
-    if (
-      deliveryType === DeliveryType.company + '' &&
-      this.form.get('type').value === OrderType.offer + ''
-    ) {
-      this.form
-        .get('deliveryAddressFromStreet')
-        .setValidators(Validators.required);
-      this.form
-        .get('deliveryAddressFromHouse')
-        .setValidators(Validators.required);
-    } else {
-      this.form
-        .get('deliveryCustomerCarNumber')
-        .setValidators([Validators.required, Validators.minLength(5)]);
-    }
-  }
-
-  public offersApproximatePaymentCostChange(): void {
+  public approximateCostChange(): void {
+    const orderType = this.form.get('type').value;
     const offersItems = this.form.get('offersItems').value;
     const offersUnit = +this.form.get('offersAmountUnit').value;
     const offersAmount = +this.form.get('offersAmount').value;
@@ -487,79 +526,93 @@ export class OrderItemAddComponent
     let priceFrom = 0;
     let priceTo = 0;
 
-    offersItems.forEach((offer, i) => {
-      const offerPrices = this.offers?.find((el) => el._id === offer).prices;
+    if (orderType === OrderType.offer + '') {
+      this.approximatePaymentCost = undefined;
+      offersItems.forEach((offer, i) => {
+        const offerPrices = this.offers?.find((el) => el._id === offer).prices;
 
-      offerPrices?.forEach((price) => {
-        if (price.unit === offersUnit) {
-          if (hasDelivery === true) {
-            if (price.amountWithDelivery > priceTo) {
-              priceTo = price.amountWithDelivery;
-            }
-            if (
-              price.amountWithDelivery <= priceFrom ||
-              offersItems.length === 1
-            ) {
-              priceFrom = price.amountWithDelivery;
-            }
-            if (i === 0) {
-              priceTo = price.amountWithDelivery;
-              priceFrom = price.amountWithDelivery;
-            }
-          } else if (hasDelivery === false) {
-            if (price.amountWithoutDelivery > priceTo) {
-              priceTo = price.amountWithoutDelivery;
-            }
-            if (
-              price.amountWithoutDelivery <= priceFrom ||
-              offersItems.length === 1
-            ) {
-              priceFrom = price.amountWithoutDelivery;
-            }
-            if (i === 0) {
-              priceTo = price.amountWithoutDelivery;
-              priceFrom = price.amountWithoutDelivery;
+        offerPrices?.forEach((price) => {
+          if (price.unit === offersUnit) {
+            if (hasDelivery === true) {
+              if (price.amountWithDelivery > priceTo) {
+                priceTo = price.amountWithDelivery;
+              }
+              if (
+                price.amountWithDelivery <= priceFrom ||
+                offersItems.length === 1
+              ) {
+                priceFrom = price.amountWithDelivery;
+              }
+              if (i === 0) {
+                priceTo = price.amountWithDelivery;
+                priceFrom = price.amountWithDelivery;
+              }
+            } else if (hasDelivery === false) {
+              if (price.amountWithoutDelivery > priceTo) {
+                priceTo = price.amountWithoutDelivery;
+              }
+              if (
+                price.amountWithoutDelivery <= priceFrom ||
+                offersItems.length === 1
+              ) {
+                priceFrom = price.amountWithoutDelivery;
+              }
+              if (i === 0) {
+                priceTo = price.amountWithoutDelivery;
+                priceFrom = price.amountWithoutDelivery;
+              }
             }
           }
+        });
+      });
+
+      if (priceFrom === 0 && priceTo === 0) {
+        this.approximateRemunerationCost = undefined;
+        this.form.get('paymentMethod').clearValidators();
+        this.form.get('paymentMethod').setErrors(null);
+      } else if (priceFrom === priceTo) {
+        this.approximateRemunerationCost = `${priceFrom * offersAmount} руб.`;
+        this.form.get('paymentMethod').setValidators(Validators.required);
+        this.form.get('paymentMethod').updateValueAndValidity();
+      } else if (priceFrom === 0) {
+        this.approximateRemunerationCost = `до ${priceTo * offersAmount} руб.`;
+        this.form.get('paymentMethod').setValidators(Validators.required);
+        this.form.get('paymentMethod').updateValueAndValidity();
+      } else {
+        this.form.get('paymentMethod').setValidators(Validators.required);
+        this.form.get('paymentMethod').updateValueAndValidity();
+        this.approximateRemunerationCost = `от ${
+          priceFrom * offersAmount
+        } руб. до ${priceTo * offersAmount} руб.`;
+      }
+    } else if (orderType === OrderType.service + '') {
+      this.approximateRemunerationCost = undefined;
+      this.form.get('paymentMethod').setValidators(Validators.required);
+      this.form.get('paymentMethod').updateValueAndValidity();
+
+      const service = this.services?.[0];
+      const serviceUnit = +this.form.get('servicesAmountUnit').value;
+      const serviceAmount = +this.form.get('servicesAmount').value;
+      const servicePrices = service?.prices;
+
+      let finalPrice = 0;
+
+      servicePrices?.forEach((price) => {
+        if (price.unit === serviceUnit) {
+          finalPrice = price.amount;
         }
       });
-    });
 
-    if (priceFrom === 0 && priceTo === 0) {
-      this.approximateRemunerationCost = undefined;
-      this.form.get('paymentMethod').clearValidators();
-    } else if (priceFrom === priceTo) {
-      this.approximateRemunerationCost = `${priceFrom * offersAmount} руб.`;
-      this.form.get('paymentMethod').setValidators(Validators.required);
-    } else if (priceFrom === 0) {
-      this.approximateRemunerationCost = `до ${priceTo * offersAmount} руб.`;
-      this.form.get('paymentMethod').setValidators(Validators.required);
-    } else {
-      this.approximateRemunerationCost = `от ${
-        priceFrom * offersAmount
-      } руб. до ${priceTo * offersAmount} руб.`;
-      this.form.get('paymentMethod').setValidators(Validators.required);
-    }
-  }
-
-  public servicesApproximateRemunerationCostChange(): void {
-    const service = this.services?.[0];
-    const serviceUnit = +this.form.get('servicesAmountUnit').value;
-    const serviceAmount = +this.form.get('servicesAmount').value;
-    const servicePrices = service?.prices;
-
-    let finalPrice = 0;
-
-    servicePrices?.forEach((price) => {
-      if (price.unit === serviceUnit) {
-        finalPrice = price.amount;
+      if (finalPrice === 0) {
+        this.approximatePaymentCost = undefined;
+      } else {
+        this.approximatePaymentCost = `${finalPrice * serviceAmount} руб.`;
       }
-    });
-
-    if (finalPrice === 0) {
-      this.approximatePaymentCost = undefined;
     } else {
-      this.approximatePaymentCost = `${finalPrice * serviceAmount} руб.`;
+      this.form.get('paymentMethod').clearValidators();
+      this.form.get('paymentMethod').setErrors(null);
+      this.approximatePaymentCost = undefined;
+      this.approximateRemunerationCost = undefined;
     }
   }
 }
