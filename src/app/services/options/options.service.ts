@@ -18,7 +18,6 @@ import { DivisionsApiService } from '../api/divisions-api.service';
 import { CarsApiService } from '../api/cars-api.service';
 import { EmployeesApiService } from '../api/employees-api.service';
 import { OffersApiService } from '../api/offers-api.service';
-import { ServicesApiService } from '../api/services-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,18 +31,17 @@ export class OptionsService {
     protected divisionsApi: DivisionsApiService,
     protected carsApi: CarsApiService,
     protected employeesApi: EmployeesApiService,
-    protected offersApi: OffersApiService,
-    protected servicesApi: ServicesApiService
+    protected offersApi: OffersApiService
   ) {}
 
   /* ---------- */
   /* Localities */
-
   /* ---------- */
 
   public initLocalitiesOptions(): void {
+    this.requestLocalitiesOptions();
     this.socket.get()?.on('localities', (_) => {
-      this.store.dispatch(AppActions.getLocalitiesToSelectRequest());
+      this.requestLocalitiesOptions();
     });
   }
 
@@ -94,12 +92,12 @@ export class OptionsService {
 
   /* ---------- */
   /* Divisions */
-
   /* ---------- */
 
   public initDivisionsOptions(): void {
+    this.requestDivisionsOptions();
     this.socket.get()?.on('divisions', (_) => {
-      this.store.dispatch(AppActions.getDivisionsToSelectRequest());
+      this.requestDivisionsOptions();
     });
   }
 
@@ -165,12 +163,12 @@ export class OptionsService {
 
   /* ---- */
   /* Cars */
-
   /* ---- */
 
   public initCarsOptions(): void {
+    this.requestCarsOptions();
     this.socket.get()?.on('cars', (_) => {
-      this.store.dispatch(AppActions.getCarsToSelectRequest());
+      this.requestCarsOptions();
     });
   }
 
@@ -235,12 +233,12 @@ export class OptionsService {
 
   /* --------- */
   /* Employees */
-
   /* --------- */
 
   public initEmployeesOptions(): void {
+    this.requestEmployeesOptions();
     this.socket.get()?.on('employees', (_) => {
-      this.store.dispatch(AppActions.getEmployeesToSelectRequest());
+      this.requestEmployeesOptions();
     });
   }
 
@@ -323,8 +321,9 @@ export class OptionsService {
   /* ------ */
 
   public initOffersOptions(): void {
+    this.requestOffersOptions();
     this.socket.get()?.on('offers', (_) => {
-      this.store.dispatch(AppActions.getOffersToSelectRequest());
+      this.requestOffersOptions();
     });
   }
 
@@ -378,8 +377,9 @@ export class OptionsService {
   /* -------- */
 
   public initServicesOptions(): void {
+    this.requestServicesOptions();
     this.socket.get()?.on('services', (_) => {
-      this.store.dispatch(AppActions.getServicesToSelectRequest());
+      this.requestServicesOptions();
     });
   }
 
