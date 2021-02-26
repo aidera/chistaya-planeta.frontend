@@ -38,6 +38,7 @@ export const rootReducer: ActionReducerMap<State> = {
 export function clearState(reducer): any {
   return (state, action) => {
     if (action.type === LOGOUT) {
+      localStorage.removeItem('token');
       state = undefined;
     }
     return reducer(state, action);

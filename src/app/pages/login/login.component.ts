@@ -40,7 +40,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       .select(UsersSelectors.selectIsLoginSucceed)
       .subscribe((status) => {
         if (status === true) {
-          this.router.navigate(['/order-succeed']);
+          if (this.isEmployee) {
+            this.router.navigate(['/e', 'cabinet']);
+          } else {
+            this.router.navigate(['/cabinet']);
+          }
         }
       });
 

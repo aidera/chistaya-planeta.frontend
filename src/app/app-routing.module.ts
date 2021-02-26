@@ -26,12 +26,17 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
 import { PricesComponent } from './pages/cabinet/prices/prices.component';
 import { OrderItemAddComponent } from './pages/cabinet/orders/order-item-add/order-item-add.component';
 import { OrderItemComponent } from './pages/cabinet/orders/order-item/order-item.component';
+import { IsEmployeeGuard } from './services/auth/is-employee.guard';
+import { IsNotAuthGuard } from './services/auth/is-not-auth.guard';
+import { IsClientGuard } from './services/auth/is-client.guard';
 
 export const routes: Routes = [
   {
     path: 'e/cabinet',
     component: CabinetLayoutComponent,
     data: { isEmployee: true },
+    canActivate: [IsEmployeeGuard],
+    canActivateChild: [IsEmployeeGuard],
     children: [
       { path: 'orders', component: OrdersTableComponent },
       { path: 'orders/add', component: OrderItemAddComponent },
@@ -58,13 +63,19 @@ export const routes: Routes = [
     data: { isEmployee: true },
     children: [
       { path: '', redirectTo: '/e/login', pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
+      {
+        path: 'login',
+        canActivate: [IsNotAuthGuard],
+        component: LoginComponent,
+      },
     ],
   },
   {
     path: 'cabinet',
     component: CabinetLayoutComponent,
     data: { isEmployee: false },
+    canActivate: [IsClientGuard],
+    canActivateChild: [IsClientGuard],
     children: [
       { path: 'orders', component: OrdersTableComponent },
       { path: 'order', component: OrdersTableComponent },
@@ -75,11 +86,27 @@ export const routes: Routes = [
     component: SimpleLayoutComponent,
     children: [
       { path: '', redirectTo: '/order', pathMatch: 'full' },
-      { path: 'order', component: AddOrderNoAuthComponent },
+      {
+        path: 'order',
+        canActivate: [IsNotAuthGuard],
+        component: AddOrderNoAuthComponent,
+      },
       { path: 'order-succeed', component: OrderSucceedComponent },
-      { path: 'login', component: LoginComponent },
-      { path: 'sign-up', component: SignUpComponent },
-      { path: 'restore-password', component: RestorePasswordComponent },
+      {
+        path: 'login',
+        canActivate: [IsNotAuthGuard],
+        component: LoginComponent,
+      },
+      {
+        path: 'sign-up',
+        canActivate: [IsNotAuthGuard],
+        component: SignUpComponent,
+      },
+      {
+        path: 'restore-password',
+        canActivate: [IsNotAuthGuard],
+        component: RestorePasswordComponent,
+      },
       { path: 'not-found', component: NotFoundComponent },
       { path: '**', component: NotFoundComponent },
     ],

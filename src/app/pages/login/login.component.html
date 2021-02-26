@@ -21,7 +21,8 @@
       minlength: 'Пароль должен содержать не менее 6 символов'
     }"
   ></app-text-input>
-  <small *ngIf="!isEmployee" class="form-control-hint"
+
+  <small *ngIf="!isEmployee" class="form-control-hint restore-password-hint"
     ><a [routerLink]="['/restore-password']">Забыли пароль?</a></small
   >
 

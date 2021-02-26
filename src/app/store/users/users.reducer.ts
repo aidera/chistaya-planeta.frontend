@@ -18,6 +18,10 @@ export type UsersState = typeof usersInitialState;
 const _usersReducer = createReducer(
   usersInitialState,
 
+  /* ------------- */
+  /* --- Login --- */
+  /* ------------- */
+
   on(UsersActions.loginRequest, (state) => ({
     ...state,
     isLoggingIn: true,
@@ -39,11 +43,41 @@ const _usersReducer = createReducer(
     isLoggingIn: false,
     isLoginSucceed: false,
     serverError: { ...payload.error },
+    type: UserType.unauthorized,
+    user: null,
   })),
 
   on(UsersActions.loginSuccessRefresher, (state, payload) => ({
     ...state,
     isLoginSucceed: false,
+  })),
+
+  /* ---------------- */
+  /* --- Get user --- */
+  /* ---------------- */
+
+  on(UsersActions.getUserRequest, (state) => ({
+    ...state,
+    isLoggingIn: true,
+    isLoginSucceed: false,
+    serverError: null,
+  })),
+
+  on(UsersActions.getUserSuccess, (state, payload) => ({
+    ...state,
+    isLoggingIn: false,
+    isLoginSucceed: true,
+    type: payload.userType,
+    user: payload.user,
+    serverError: null,
+  })),
+
+  on(UsersActions.getUserFailure, (state, payload) => ({
+    ...state,
+    isLoggingIn: false,
+    isLoginSucceed: false,
+    serverError: payload.error,
+    type: UserType.unauthorized,
   }))
 );
 

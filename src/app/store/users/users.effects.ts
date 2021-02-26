@@ -23,6 +23,7 @@ export class UsersEffects {
           .pipe(
             map((resData) => {
               if (resData && resData.user) {
+                localStorage.setItem('token', resData.token);
                 return UsersActions.loginSuccess({
                   userType: action.userType,
                   user: resData.user,
@@ -40,6 +41,34 @@ export class UsersEffects {
               );
             })
           );
+      })
+    )
+  );
+
+  getUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.getUserRequest),
+      switchMap((action) => {
+        return this.usersApi.getUser().pipe(
+          map((resData) => {
+            if (resData && resData.user) {
+              return UsersActions.getUserSuccess({
+                user: resData.user,
+                userType: resData.type,
+              });
+            }
+            return UsersActions.getUserFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              UsersActions.getUserFailure({
+                error: errorRes.error,
+              })
+            );
+          })
+        );
       })
     )
   );

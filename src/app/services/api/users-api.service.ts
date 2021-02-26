@@ -20,6 +20,11 @@ export interface ILoginResponse extends ServerResponse {
   user?: IEmployee | IClient;
 }
 
+export interface IGetUser extends ServerResponse {
+  user?: IEmployee | IClient;
+  type?: UserType;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -33,5 +38,9 @@ export class UsersApiService {
       `${environment.serverURL}/${this.path}/login`,
       credentials
     );
+  }
+
+  getUser(): Observable<IGetUser> {
+    return this.http.get<IGetUser>(`${environment.serverURL}/${this.path}/`);
   }
 }

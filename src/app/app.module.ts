@@ -67,6 +67,18 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
 import { PricesComponent } from './pages/cabinet/prices/prices.component';
 import { OrderItemAddComponent } from './pages/cabinet/orders/order-item-add/order-item-add.component';
 import { OrderItemComponent } from './pages/cabinet/orders/order-item/order-item.component';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
+import { IsAuthGuard } from './services/auth/is-auth.guard';
+import { IsEmployeeGuard } from './services/auth/is-employee.guard';
+import { IsNotAuthGuard } from './services/auth/is-not-auth.guard';
+import { IsClientGuard } from './services/auth/is-client.guard';
+import { IsRoleAdminGuard } from './services/auth/is-role-admin.guard';
+import { IsRoleClientManagerGuard } from './services/auth/is-role-client-manager.guard';
+import { IsRoleClientManagerOrDriverGuard } from './services/auth/is-role-client-manager-or-driver.guard';
+import { IsRoleClientManagerOrReceivingManagerGuard } from './services/auth/is-role-client-manager-or-receiving-manager.guard';
+import { IsRoleDriverGuard } from './services/auth/is-role-driver.guard';
+import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
+import { IsRoleReceivingManagerGuard } from './services/auth/is-role-receiving-manager.guard';
 
 @NgModule({
   declarations: [
@@ -138,11 +150,23 @@ import { OrderItemComponent } from './pages/cabinet/orders/order-item/order-item
     ClickOutsideModule,
   ],
   providers: [
+    IsAuthGuard,
+    IsNotAuthGuard,
+    IsEmployeeGuard,
+    IsClientGuard,
+    IsRoleAdminGuard,
+    IsRoleClientManagerGuard,
+    IsRoleClientManagerOrDriverGuard,
+    IsRoleClientManagerOrReceivingManagerGuard,
+    IsRoleDriverGuard,
+    IsRoleHeadGuard,
+    IsRoleReceivingManagerGuard,
     {
       provide: MatPaginatorIntl,
       useValue: getPaginatorIntl(),
     },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

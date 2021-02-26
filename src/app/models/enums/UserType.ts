@@ -5,6 +5,7 @@
  */
 
 export enum UserType {
+  unauthorized,
   client,
   employee,
 }
