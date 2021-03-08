@@ -12,6 +12,14 @@ export const usersInitialState = {
   isLoggingIn: false,
   isLoginSucceed: false,
   serverError: null as ServerError | null,
+
+  updateUserIsFetching: false,
+  updateUserSucceed: false,
+  updateUserError: null as ServerError | null,
+
+  updateUsersPasswordIsFetching: false,
+  updateUsersPasswordSucceed: false,
+  updateUsersPasswordError: null as ServerError | null,
 };
 export type UsersState = typeof usersInitialState;
 
@@ -47,7 +55,7 @@ const _usersReducer = createReducer(
     user: null,
   })),
 
-  on(UsersActions.loginSuccessRefresher, (state, payload) => ({
+  on(UsersActions.loginSuccessRefresher, (state) => ({
     ...state,
     isLoginSucceed: false,
   })),
@@ -78,6 +86,65 @@ const _usersReducer = createReducer(
     isLoginSucceed: false,
     serverError: payload.error,
     type: UserType.unauthorized,
+  })),
+
+  /* ------------------- */
+  /* --- Update user --- */
+  /* ------------------- */
+
+  on(UsersActions.updateUserRequest, (state) => ({
+    ...state,
+    updateUserIsFetching: true,
+    updateUserError: null,
+  })),
+  on(UsersActions.updateUserSuccess, (state, payload) => ({
+    ...state,
+    user: payload.user,
+    updateUserIsFetching: false,
+    updateUserError: null,
+    updateUserSucceed: true,
+  })),
+  on(UsersActions.updateUserFailure, (state, payload) => ({
+    ...state,
+    updateUserIsFetching: false,
+    updateUserError: payload.error,
+  })),
+  on(UsersActions.refreshUpdateUserSucceed, (state) => ({
+    ...state,
+    updateUserSucceed: false,
+  })),
+  on(UsersActions.refreshUpdateUserFailure, (state) => ({
+    ...state,
+    updateUserError: null,
+  })),
+
+  /* ------------------------------ */
+  /* --- Update user's password --- */
+  /* ------------------------------ */
+
+  on(UsersActions.updateUsersPasswordRequest, (state) => ({
+    ...state,
+    updateUsersPasswordIsFetching: true,
+    updateUsersPasswordError: null,
+  })),
+  on(UsersActions.updateUsersPasswordSuccess, (state) => ({
+    ...state,
+    updateUsersPasswordIsFetching: false,
+    updateUsersPasswordError: null,
+    updateUsersPasswordSucceed: true,
+  })),
+  on(UsersActions.updateUsersPasswordFailure, (state, payload) => ({
+    ...state,
+    updateUsersPasswordIsFetching: false,
+    updateUsersPasswordError: payload.error,
+  })),
+  on(UsersActions.refreshUpdateUsersPasswordSucceed, (state) => ({
+    ...state,
+    updateUsersPasswordSucceed: false,
+  })),
+  on(UsersActions.refreshUpdateUsersPasswordFailure, (state) => ({
+    ...state,
+    updateUsersPasswordError: null,
   }))
 );
 

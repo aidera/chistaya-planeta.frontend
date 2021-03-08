@@ -79,6 +79,7 @@ import { IsRoleClientManagerOrReceivingManagerGuard } from './services/auth/is-r
 import { IsRoleDriverGuard } from './services/auth/is-role-driver.guard';
 import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
 import { IsRoleReceivingManagerGuard } from './services/auth/is-role-receiving-manager.guard';
+import { ProfileComponent } from './pages/cabinet/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -135,6 +136,7 @@ import { IsRoleReceivingManagerGuard } from './services/auth/is-role-receiving-m
     PricesComponent,
     OrderItemAddComponent,
     OrderItemComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

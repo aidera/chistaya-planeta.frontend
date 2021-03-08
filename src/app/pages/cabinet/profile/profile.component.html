@@ -1,0 +1,328 @@
+<div class="cabinet-header">
+  <h1>Профиль</h1>
+  <div class="cabinet-header__actions">
+    <button
+      [disabled]="userIsUpdating"
+      mat-button
+      color="warn"
+      (click)="logout()"
+    >
+      Выйти
+    </button>
+  </div>
+</div>
+
+<div class="cabinet-content">
+  <div class="cabinet-content__grid">
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <!-- Name-->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'name'"
+              label="Имя"
+              [content]="user?.name"
+              [isFetching]="false"
+              [useEditButton]="true"
+              (editClick)="setActiveField('name')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'name'"
+              (clickOutside)="removeActiveField('name', user?.name || '')"
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
+                <app-text-input
+                  label="Имя"
+                  [control]="updateForm.get('name')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateUser()"
+                [disable]="
+                  userIsUpdating || updateForm.get('name').value === user?.name
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Surname -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'surname'"
+              label="Фамилия"
+              [content]="user?.surname"
+              [isFetching]="false"
+              [useEditButton]="true"
+              (editClick)="setActiveField('surname')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'surname'"
+              (clickOutside)="removeActiveField('surname', user?.surname || '')"
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
+                <app-text-input
+                  label="Фамилия"
+                  [control]="updateForm.get('surname')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле'
+                  }"
+                ></app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateUser()"
+                [disable]="
+                  userIsUpdating ||
+                  updateForm.get('surname').value === user?.surname
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Patronymic -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'patronymic'"
+              label="Отчество"
+              [content]="user?.patronymic"
+              [isFetching]="false"
+              [useEditButton]="true"
+              (editClick)="setActiveField('patronymic')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'patronymic'"
+              (clickOutside)="
+                removeActiveField('patronymic', user?.patronymic || '')
+              "
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
+                <app-text-input
+                  label="Отчество"
+                  [control]="updateForm.get('patronymic')"
+                ></app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateUser()"
+                [disable]="
+                  userIsUpdating ||
+                  updateForm.get('patronymic').value === user?.patronymic
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'email'"
+              label="Email"
+              [content]="user?.email"
+              [isFetching]="false"
+              [useEditButton]="true"
+              (editClick)="setActiveField('email')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'email'"
+              (clickOutside)="removeActiveField('email', user?.email || '')"
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
+                <app-text-input
+                  label="Email"
+                  [control]="updateForm.get('email')"
+                  [errorMessages]="{
+                    required: 'Обязательное поле',
+                    email: 'Некорректный email',
+                    alreadyExists: 'Такой email уже занят'
+                  }"
+                >
+                </app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateUser()"
+                [disable]="
+                  userIsUpdating ||
+                  updateForm.get('email').value === user?.email
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'phone'"
+              label="Телефон"
+              [content]="user?.phone | mask: '+0 (000) 000-00-00'"
+              [isFetching]="false"
+              [useEditButton]="true"
+              (editClick)="setActiveField('phone')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'phone'"
+              (clickOutside)="
+                removeActiveField('phone', user?.phone.substr(2) || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="updateForm" (ngSubmit)="updateUser()">
+                <app-text-input
+                  label="Телефон"
+                  [control]="updateForm.get('phone')"
+                  mask="(000) 000-00-00"
+                  prefix="+7 "
+                  [errorMessages]="{
+                    required: 'Обязательное поле',
+                    minlength: 'Слишком короткий номер телефона',
+                    alreadyExists: 'Такой телефон уже занят'
+                  }"
+                >
+                </app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateUser()"
+                [disable]="
+                  userIsUpdating ||
+                  '+7' + updateForm.get('phone').value === user?.phone
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="cabinet-content__field">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="isChangePasswordModalOpen = true"
+            >
+              Сменить пароль
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div
+      *ngIf="userType === userTypeEnum.employee"
+      class="cabinet-content__grid-column"
+    >
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <!-- Role-->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Роль"
+              [content]="employeeRoleStrings[user?.role]"
+              [isFetching]="false"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Locality-->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Населённый пункт"
+              [content]="user?.locality?.name"
+              [linkArray]="['../', 'localities', user?.locality?._id]"
+              [isFetching]="false"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Division -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Поразделение"
+              [content]="user?.division?.name"
+              [linkArray]="['../', 'divisions', user?.division?._id]"
+              [isFetching]="false"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Cars-->
+          <div
+            *ngIf="user?.role === employeeRole.driver"
+            class="cabinet-content__field"
+          >
+            <app-item-field-inactive-list
+              label="Автомобили"
+              [list]="getItemCarsFieldListElements(user?.cars || [])"
+              [isFetching]="false"
+            >
+            </app-item-field-inactive-list>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal
+  [isOpen]="isChangePasswordModalOpen"
+  [isLoading]="!changePasswordForm.valid || usersPasswordIsUpdating"
+  [resolveButtonText]="'Сохранить'"
+  [title]="'Сменить пароль'"
+  (action)="onChangePasswordModalAction($event)"
+>
+  <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <app-text-input
+      label="Новый пароль"
+      [control]="changePasswordForm.get('password')"
+      fieldType="password"
+      [errorMessages]="{
+        required: 'Обязательное поле',
+        minlength: 'Минимальная длина - 6 символов'
+      }"
+    >
+    </app-text-input>
+
+    <app-text-input
+      label="Повторите пароль"
+      [control]="changePasswordForm.get('repeatPassword')"
+      fieldType="password"
+      [errorMessages]="{
+        required: 'Обязательное поле',
+        minlength: 'Минимальная длина - 6 символов'
+      }"
+    >
+    </app-text-input>
+
+    <button [style]="{ display: 'hidden' }" type="submit"></button>
+  </form>
+</app-modal>

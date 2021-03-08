@@ -29,6 +29,7 @@ import { OrderItemComponent } from './pages/cabinet/orders/order-item/order-item
 import { IsEmployeeGuard } from './services/auth/is-employee.guard';
 import { IsNotAuthGuard } from './services/auth/is-not-auth.guard';
 import { IsClientGuard } from './services/auth/is-client.guard';
+import { ProfileComponent } from './pages/cabinet/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -54,6 +55,7 @@ export const routes: Routes = [
       { path: 'employees/add', component: EmployeeItemAddComponent },
       { path: 'employees/:id', component: EmployeeItemComponent },
       { path: 'prices', component: PricesComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: '**', component: ItemNotFoundComponent },
     ],
   },

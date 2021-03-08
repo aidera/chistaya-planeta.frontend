@@ -20,9 +20,13 @@ export interface ILoginResponse extends ServerResponse {
   user?: IEmployee | IClient;
 }
 
-export interface IGetUser extends ServerResponse {
+export interface IGetUserResponse extends ServerResponse {
   user?: IEmployee | IClient;
   type?: UserType;
+}
+
+export interface IUpdateUserResponse extends ServerResponse {
+  updatedUser?: IEmployee | IClient;
 }
 
 @Injectable({
@@ -40,7 +44,29 @@ export class UsersApiService {
     );
   }
 
-  getUser(): Observable<IGetUser> {
-    return this.http.get<IGetUser>(`${environment.serverURL}/${this.path}/`);
+  getUser(): Observable<IGetUserResponse> {
+    return this.http.get<IGetUserResponse>(
+      `${environment.serverURL}/${this.path}/`
+    );
+  }
+
+  updateUser(fields: {
+    name?: string;
+    surname?: string;
+    patronymic?: string;
+    phone?: string;
+    email?: string;
+  }): Observable<IUpdateUserResponse> {
+    return this.http.patch<IUpdateUserResponse>(
+      `${environment.serverURL}/${this.path}/`,
+      { ...fields }
+    );
+  }
+
+  changeUserPassword(password: string): Observable<ServerResponse> {
+    return this.http.patch<ServerResponse>(
+      `${environment.serverURL}/${this.path}/password`,
+      { password }
+    );
   }
 }

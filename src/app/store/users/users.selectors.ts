@@ -5,6 +5,10 @@ import { UsersState } from './users.reducer';
 
 export const selectAll = (state: State) => state.users;
 
+/* ------------------------ */
+/* --- Login / Get User --- */
+/* ------------------------ */
+
 export const selectUserType = createSelector(
   selectAll,
   (state: UsersState) => state.type
@@ -28,4 +32,38 @@ export const selectIsLoginSucceed = createSelector(
 export const selectServerError = createSelector(
   selectAll,
   (state: UsersState) => state.serverError
+);
+
+/* ------------------- */
+/* --- Update user --- */
+/* ------------------- */
+
+export const selectUpdateUserIsFetching = createSelector(
+  selectAll,
+  (state: UsersState) => state.updateUserIsFetching
+);
+export const selectUpdateUserSucceed = createSelector(
+  selectAll,
+  (state: UsersState) => state.updateUserSucceed
+);
+export const selectUpdateUserError = createSelector(
+  selectAll,
+  (state: UsersState) => state.updateUserError
+);
+
+/* ------------------------------ */
+/* --- Update user's password --- */
+/* ------------------------------ */
+
+export const selectUpdateUsersPasswordIsFetching = createSelector(
+  selectAll,
+  (state: UsersState) => state.updateUsersPasswordIsFetching
+);
+export const selectUpdateUsersPasswordSucceed = createSelector(
+  selectAll,
+  (state: UsersState) => state.updateUsersPasswordSucceed
+);
+export const selectUpdateUsersPasswordError = createSelector(
+  selectAll,
+  (state: UsersState) => state.updateUsersPasswordError
 );

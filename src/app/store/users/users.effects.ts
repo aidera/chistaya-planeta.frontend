@@ -48,7 +48,7 @@ export class UsersEffects {
   getUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UsersActions.getUserRequest),
-      switchMap((action) => {
+      switchMap(() => {
         return this.usersApi.getUser().pipe(
           map((resData) => {
             if (resData && resData.user) {
@@ -64,6 +64,66 @@ export class UsersEffects {
           catchError((errorRes) => {
             return of(
               UsersActions.getUserFailure({
+                error: errorRes.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  updateUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.updateUserRequest),
+      switchMap((action) => {
+        return this.usersApi
+          .updateUser({
+            name: action.name,
+            surname: action.surname,
+            patronymic: action.patronymic,
+            phone: action.phone,
+            email: action.email,
+          })
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedUser) {
+                return UsersActions.updateUserSuccess({
+                  user: resData.updatedUser,
+                });
+              }
+              return UsersActions.updateUserFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                UsersActions.updateUserFailure({
+                  error: errorRes.error,
+                })
+              );
+            })
+          );
+      })
+    )
+  );
+
+  updateUsersPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.updateUsersPasswordRequest),
+      switchMap((action) => {
+        return this.usersApi.changeUserPassword(action.password).pipe(
+          map((resData) => {
+            if (resData && resData.message) {
+              return UsersActions.updateUsersPasswordSuccess();
+            }
+            return UsersActions.updateUsersPasswordFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              UsersActions.updateUsersPasswordFailure({
                 error: errorRes.error,
               })
             );
