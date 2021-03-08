@@ -20,6 +20,7 @@ export const responseCodes = {
   userNotFound: 'USER_NOT_FOUND',
   emailOrPasswordIsNotCorrect: 'EMAIL_OR_PASSWORD_IS_NOT_CORRECT',
   unauthenticated: 'UNAUTHENTICATED',
+  authorizationPeriodExpired: 'AUTHORIZATION_PERIOD_EXPIRED',
   invalidToken: 'INVALID_TOKEN',
   noSuchKey: 'NO_SUCH_KEY',
   shouldBeMoreThan0: 'SHOULD_BE_MORE_THAN_0',

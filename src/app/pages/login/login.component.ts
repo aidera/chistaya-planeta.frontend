@@ -72,6 +72,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             case responseCodes.invalidEmail:
               this.serverError = 'Некорректный e-mail';
               break;
+            case responseCodes.authorizationPeriodExpired:
+              this.serverError = 'Истек срок авторизации';
+              break;
             default:
               this.serverError =
                 'Ошибка сервера. Попробуйте авторизироваться позже.';
