@@ -1,0 +1,100 @@
+<div class="cabinet-header">
+  <h1>Мои задачи</h1>
+</div>
+
+<div class="cabinet-content">
+  <div class="loading" *ngIf="tasksAreFetching">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!tasksAreFetching">
+    <div class="tasks__container" *ngIf="tasksWithRawStatus?.length > 0">
+      <h2 class="yellow-text">Необработанные</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksWithRawStatus">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name">{{
+              task.customer.contactName
+            }}</span>
+            <span class="tasks__order-phone">{{
+              task.customer.contactPhone | phone
+            }}</span>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksWithInProgressStatus?.length > 0">
+      <h2 class="blue-text">В работе</h2>
+
+      <div class="tasks__orders">
+        <div
+          class="tasks__order"
+          *ngFor="let task of tasksWithInProgressStatus"
+        >
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-status">{{
+              orderStatusStrings[task.status]
+            }}</span>
+            <span class="tasks__order-name">{{
+              task.customer.contactName
+            }}</span>
+            <span class="tasks__order-phone">{{
+              task.customer.contactPhone | phone
+            }}</span>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksWithCompletedStatus?.length > 0">
+      <h2 class="green-text">Недавно завершённые</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksWithCompletedStatus">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name">{{
+              task.customer.contactName
+            }}</span>
+            <span class="tasks__order-phone">{{
+              task.customer.contactPhone | phone
+            }}</span>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksWithRefusedStatus?.length > 0">
+      <h2 class="red-text">Недавно отклонённые</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksWithRefusedStatus">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-status">{{
+              orderStatusStrings[task.status]
+            }}</span>
+            <span class="tasks__order-name">{{
+              task.customer.contactName
+            }}</span>
+            <span class="tasks__order-phone">{{
+              task.customer.contactPhone | phone
+            }}</span>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

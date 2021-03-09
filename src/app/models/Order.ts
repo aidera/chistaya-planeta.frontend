@@ -93,4 +93,22 @@ export interface IOrder {
   statusDateDelivered?: Date;
   statusDateWeighed?: Date;
   statusDateCompleted?: Date;
+  statusDateRefused?: Date;
+}
+
+export interface IOrderLessInfo {
+  _id: string;
+  status: OrderStatus;
+  type: OrderType;
+  deadline: Date;
+
+  locality?: ILocality | string;
+  division?: IDivision | string;
+
+  customer: {
+    organizationLegalName?: string;
+    organizationActualName?: string;
+    contactName: string;
+    contactPhone: string;
+  };
 }

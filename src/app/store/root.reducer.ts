@@ -9,6 +9,7 @@ import * as fromCars from './cars/cars.reducer';
 import * as fromEmployees from './employees/employees.reducer';
 import * as fromOffers from './offers/offers.reducer';
 import * as fromServices from './services/services.reducer';
+import * as fromTasks from './tasks/tasks.reducer';
 import { LOGOUT } from './users/users.actions';
 
 export interface State {
@@ -21,6 +22,7 @@ export interface State {
   employees: fromEmployees.EmployeesState;
   offers: fromOffers.OffersState;
   services: fromServices.ServicesState;
+  tasks: fromTasks.TasksState;
 }
 
 export const rootReducer: ActionReducerMap<State> = {
@@ -33,6 +35,7 @@ export const rootReducer: ActionReducerMap<State> = {
   employees: fromEmployees.employeesReducer,
   offers: fromOffers.offersReducer,
   services: fromServices.servicesReducer,
+  tasks: fromTasks.tasksReducer,
 };
 
 export function clearState(reducer): any {

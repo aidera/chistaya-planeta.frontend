@@ -7,6 +7,7 @@ import { CarsEffects } from './cars/cars.effects';
 import { EmployeesEffects } from './employees/employees.effects';
 import { OffersEffects } from './offers/offers.effects';
 import { ServicesEffects } from './services/services.effects';
+import { TasksEffects } from './tasks/tasks.effects';
 
 export const rootEffects = [
   AppEffects,
@@ -18,4 +19,5 @@ export const rootEffects = [
   EmployeesEffects,
   OffersEffects,
   ServicesEffects,
+  TasksEffects,
 ];

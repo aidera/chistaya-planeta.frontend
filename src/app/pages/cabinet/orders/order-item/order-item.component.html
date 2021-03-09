@@ -577,6 +577,16 @@
             >
             </app-item-field-inactive-string>
           </div>
+
+          <!-- Status Date Refused -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Завершено"
+              [content]="item?.statusDateRefused | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
         </mat-card>
       </div>
     </div>

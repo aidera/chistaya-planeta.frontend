@@ -2,6 +2,11 @@ import { MenuLink } from '../models/types/MenuLink';
 
 export const menuLinksMain: MenuLink[] = [
   {
+    title: 'Задачи',
+    iconPath: 'assets/icons/to-do.svg',
+    link: 'tasks',
+  },
+  {
     title: 'Заявки',
     iconPath: 'assets/icons/order.svg',
     link: 'orders',

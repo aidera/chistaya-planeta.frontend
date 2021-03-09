@@ -286,6 +286,20 @@
           [control]="advancedSearchForm.get('statusDateCompletedTo')"
           label="до:"
         ></app-date-time-input>
+
+        <br />
+        <h3>Дата отмены/отказа</h3>
+        <br />
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateRefusedFrom')"
+          label="от:"
+        ></app-date-time-input>
+
+        <app-date-time-input
+          [control]="advancedSearchForm.get('statusDateRefusedTo')"
+          label="до:"
+        ></app-date-time-input>
       </app-accordion>
     </div>
     <div class="cabinet-content__links">

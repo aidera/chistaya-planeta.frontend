@@ -30,6 +30,7 @@ import { IsEmployeeGuard } from './services/auth/is-employee.guard';
 import { IsNotAuthGuard } from './services/auth/is-not-auth.guard';
 import { IsClientGuard } from './services/auth/is-client.guard';
 import { ProfileComponent } from './pages/cabinet/profile/profile.component';
+import { TasksComponent } from './pages/cabinet/tasks/tasks.component';
 
 export const routes: Routes = [
   {
@@ -39,6 +40,7 @@ export const routes: Routes = [
     canActivate: [IsEmployeeGuard],
     canActivateChild: [IsEmployeeGuard],
     children: [
+      { path: '', redirectTo: '/e/cabinet/tasks', pathMatch: 'full' },
       { path: 'orders', component: OrdersTableComponent },
       { path: 'orders/add', component: OrderItemAddComponent },
       { path: 'orders/:id', component: OrderItemComponent },
@@ -56,6 +58,7 @@ export const routes: Routes = [
       { path: 'employees/:id', component: EmployeeItemComponent },
       { path: 'prices', component: PricesComponent },
       { path: 'profile', component: ProfileComponent },
+      { path: 'tasks', component: TasksComponent },
       { path: '**', component: ItemNotFoundComponent },
     ],
   },

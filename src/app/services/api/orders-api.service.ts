@@ -7,7 +7,7 @@ import OrderType from '../../models/enums/OrderType';
 import DeliveryType from '../../models/enums/DeliveryType';
 import PaymentMethod from '../../models/enums/PaymentMethod';
 import { environment } from '../../../environments/environment';
-import { IOrder } from '../../models/Order';
+import { IOrder, IOrderLessInfo } from '../../models/Order';
 import ServerResponse from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import OrderStatus from '../../models/enums/OrderStatus';
@@ -31,6 +31,10 @@ export interface IGetOrdersResponse extends ServerResponse {
   totalPagesCount: number;
   currentPage: number;
   perPage: number;
+}
+
+export interface IGetAllOrdersLessInfoResponse extends ServerResponse {
+  orders?: IOrderLessInfo[];
 }
 
 export interface IAddOrderRequest {
@@ -80,6 +84,12 @@ export class OrdersApiService {
   private path = 'orders';
 
   constructor(private http: HttpClient, private api: ApiService) {}
+
+  getAllLessInfo(): Observable<IGetAllOrdersLessInfoResponse> {
+    return this.http.get<IGetAllOrdersLessInfoResponse>(
+      `${environment.serverURL}/${this.path}/all-less-info`
+    );
+  }
 
   get(request: GetRouteParamsType): Observable<IGetOrdersResponse> {
     const params = this.api.createGetRouteParams(request);

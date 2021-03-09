@@ -80,6 +80,7 @@ import { IsRoleDriverGuard } from './services/auth/is-role-driver.guard';
 import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
 import { IsRoleReceivingManagerGuard } from './services/auth/is-role-receiving-manager.guard';
 import { ProfileComponent } from './pages/cabinet/profile/profile.component';
+import { TasksComponent } from './pages/cabinet/tasks/tasks.component';
 
 @NgModule({
   declarations: [
@@ -137,6 +138,7 @@ import { ProfileComponent } from './pages/cabinet/profile/profile.component';
     OrderItemAddComponent,
     OrderItemComponent,
     ProfileComponent,
+    TasksComponent,
   ],
   imports: [
     BrowserModule,

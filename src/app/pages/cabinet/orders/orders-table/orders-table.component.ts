@@ -228,6 +228,11 @@ export class OrdersTableComponent
         title: 'Дата завершения',
         isSorting: true,
       },
+      {
+        key: 'statusDateRefused',
+        title: 'Дата отмены/отказа',
+        isSorting: true,
+      },
     ];
 
     this.columnsCanBeDisplayed = this.tableColumns.map((column) => {
@@ -294,6 +299,8 @@ export class OrdersTableComponent
         statusDateWeighedTo: new FormControl(''),
         statusDateCompletedFrom: new FormControl(''),
         statusDateCompletedTo: new FormControl(''),
+        statusDateRefusedFrom: new FormControl(''),
+        statusDateRefusedTo: new FormControl(''),
       });
     };
 
@@ -663,6 +670,10 @@ export class OrdersTableComponent
           this.advancedSearchForm.get('statusDateCompletedFrom').value,
           this.advancedSearchForm.get('statusDateCompletedTo').value
         ),
+        statusDateRefused: this.converter.getServerFromToDateInISOStringArray(
+          this.advancedSearchForm.get('statusDateRefusedFrom').value,
+          this.advancedSearchForm.get('statusDateRefusedTo').value
+        ),
       };
     };
 
@@ -926,6 +937,13 @@ export class OrdersTableComponent
               statusDateCompleted: order.statusDateCompleted
                 ? formatDate(
                     order.statusDateCompleted,
+                    'dd.MM.yyyy - HH:mm',
+                    this.locale
+                  )
+                : '',
+              statusDateRefused: order.statusDateRefused
+                ? formatDate(
+                    order.statusDateRefused,
                     'dd.MM.yyyy - HH:mm',
                     this.locale
                   )
