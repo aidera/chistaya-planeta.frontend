@@ -30,4 +30,5 @@ export const responseCodes = {
   notExist: 'NOT_EXIST',
   shouldBeDifferent: 'SHOULD_BE_DIFFERENT',
   found: 'FOUND',
+  noPermission: 'NO_PERMISSION',
 };
