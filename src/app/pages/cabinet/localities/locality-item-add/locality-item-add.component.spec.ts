@@ -44,6 +44,10 @@ describe('LocalityItemAddComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

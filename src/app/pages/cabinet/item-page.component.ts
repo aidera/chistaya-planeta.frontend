@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as fromRoot from '../../store/root.reducer';
+import * as UsersSelectors from '../../store/users/users.selectors';
 import { ILocality } from '../../models/Locality';
 import { IDivision } from '../../models/Division';
 import { ICar } from '../../models/Car';
@@ -25,6 +26,10 @@ import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { OptionsService } from '../../services/options/options.service';
 import { simpleStatusColors } from '../../data/simpleStatusData';
 import { carStatusColors } from '../../data/carStatusData';
+import IClient from '../../models/Client';
+import { UserType } from '../../models/enums/UserType';
+import EmployeeRole from '../../models/enums/EmployeeRole';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   template: '',
@@ -36,6 +41,11 @@ export class ItemPageComponent implements OnInit, OnDestroy {
 
   public itemId: string;
 
+  protected user$: Subscription;
+  public userEmployee: IEmployee;
+  public userClient: IClient;
+  protected userType$: Subscription;
+  public userType: UserType;
   protected item$: Subscription;
   public item: any;
   protected getItemError$: Subscription;
@@ -79,6 +89,12 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   /* ---------------- */
   protected createRequest: () => void;
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public userTypeEnum = UserType;
+  public employeeRole = EmployeeRole;
+
   constructor(
     protected store: Store<fromRoot.State>,
     protected route: ActivatedRoute,
@@ -94,6 +110,23 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.user$ = this.store
+      .select(UsersSelectors.selectUserType)
+      .pipe(
+        switchMap((userType) => {
+          this.userType = userType;
+          return this.store.select(UsersSelectors.selectUser);
+        })
+      )
+      .subscribe((user) => {
+        if (this.userType === UserType.employee) {
+          this.userEmployee = user as IEmployee;
+        }
+        if (this.userType === UserType.client) {
+          this.userClient = user as IClient;
+        }
+      });
+
     /* --------------------------- */
     /* Url query params activation */
     /* --------------------------- */
@@ -105,6 +138,8 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.user$?.unsubscribe?.();
+    this.userType$?.unsubscribe?.();
     this.item$?.unsubscribe?.();
     this.getItemError$?.unsubscribe?.();
     this.itemIsFetching$?.unsubscribe?.();

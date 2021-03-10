@@ -7,7 +7,34 @@
     <mat-spinner diameter="50"></mat-spinner>
   </div>
 
-  <ng-container *ngIf="!tasksAreFetching">
+  <ng-container
+    *ngIf="
+      !tasksAreFetching &&
+      (user?.role === employeeRole.clientManager ||
+        user?.role === employeeRole.admin ||
+        user?.role === employeeRole.head)
+    "
+  >
+    <div class="tasks__container" *ngIf="tasksNew?.length > 0">
+      <h2 class="yellow-text">Новые</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksNew">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name">{{
+              task.customer.contactName
+            }}</span>
+            <span class="tasks__order-phone">{{
+              task.customer.contactPhone | phone
+            }}</span>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
     <div class="tasks__container" *ngIf="tasksWithRawStatus?.length > 0">
       <h2 class="yellow-text">Необработанные</h2>
 

@@ -58,6 +58,10 @@ describe('OrderItemAddComponent', () => {
               offersToSelect: null,
               servicesToSelect: null,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

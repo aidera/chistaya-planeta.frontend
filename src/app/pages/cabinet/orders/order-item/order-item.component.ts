@@ -15,8 +15,8 @@ import { IDivision } from '../../../../models/Division';
 import { ICar } from '../../../../models/Car';
 import { IOrder } from '../../../../models/Order';
 import {
-  orderStatusOptions,
   orderStatusColors,
+  orderStatusOptions,
   orderStatusStrings,
 } from '../../../../data/orderStatusData';
 import { orderTypeStrings } from '../../../../data/orderTypeData';
@@ -27,6 +27,7 @@ import DeliveryType from '../../../../models/enums/DeliveryType';
 import { deliveryTypeStrings } from '../../../../data/deliveryTypeData';
 import { paymentMethodStrings } from '../../../../data/paymentMethodData';
 import { unitStrings } from '../../../../data/unitOptions';
+import EmployeeRole from '../../../../models/enums/EmployeeRole';
 
 @Component({
   selector: 'app-order-item',
@@ -318,5 +319,25 @@ export class OrderItemComponent
       });
     }
     return [];
+  }
+
+  public takeToWork(): void {
+    if (this.userEmployee?.role === EmployeeRole.clientManager) {
+      this.store.dispatch(
+        OrdersActions.acceptOrderClientManagerRequest({ id: this.item._id })
+      );
+    }
+
+    if (this.userEmployee?.role === EmployeeRole.driver) {
+      this.store.dispatch(
+        OrdersActions.acceptOrderDriverRequest({ id: this.item._id })
+      );
+    }
+
+    if (this.userEmployee?.role === EmployeeRole.receivingManager) {
+      this.store.dispatch(
+        OrdersActions.acceptOrderReceivingManagerRequest({ id: this.item._id })
+      );
+    }
   }
 }

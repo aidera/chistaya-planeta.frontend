@@ -47,6 +47,10 @@ describe('CarsTableComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

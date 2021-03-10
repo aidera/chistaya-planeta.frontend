@@ -13,6 +13,8 @@ import { IOrderLessInfo } from '../../../models/Order';
 import OrderStatus from '../../../models/enums/OrderStatus';
 import { orderStatusStrings } from '../../../data/orderStatusData';
 import { orderTypeStrings } from '../../../data/orderTypeData';
+import { switchMap } from 'rxjs/operators';
+import EmployeeRole from '../../../models/enums/EmployeeRole';
 
 @Component({
   selector: 'app-tasks',
@@ -20,19 +22,20 @@ import { orderTypeStrings } from '../../../data/orderTypeData';
   styleUrls: ['./tasks.component.scss'],
 })
 export class TasksComponent implements OnInit, OnDestroy {
-  private user$: Subscription;
-  private user: IEmployee;
+  public user: IEmployee;
 
   private tasks$: Subscription;
   private tasks: IOrderLessInfo[];
   private tasksAreFetching$: Subscription;
   public tasksAreFetching: boolean;
 
+  public tasksNew: IOrderLessInfo[];
   public tasksWithRawStatus: IOrderLessInfo[];
   public tasksWithInProgressStatus: IOrderLessInfo[];
   public tasksWithCompletedStatus: IOrderLessInfo[];
   public tasksWithRefusedStatus: IOrderLessInfo[];
 
+  public employeeRole = EmployeeRole;
   public orderTypeStrings = orderTypeStrings;
   public orderStatusStrings = orderStatusStrings;
 
@@ -44,17 +47,18 @@ export class TasksComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(TasksActions.getTasksRequest());
 
-    this.user$ = this.store
-      .select(UsersSelectors.selectUser)
-      .subscribe((user) => {
-        this.user = user as IEmployee;
-      });
-
     this.tasks$ = this.store
-      .select(TasksSelectors.selectTasks)
+      .select(UsersSelectors.selectUser)
+      .pipe(
+        switchMap((user) => {
+          this.user = user as IEmployee;
+          return this.store.select(TasksSelectors.selectTasks);
+        })
+      )
       .subscribe((tasks) => {
         this.tasks = tasks;
 
+        this.tasksNew = this.getTasksNew();
         this.tasksWithRawStatus = this.getTasksWithRawStatus();
         this.tasksWithInProgressStatus = this.getTasksWithInProgressStatus();
         this.tasksWithCompletedStatus = this.getTasksWithCompletedStatus();
@@ -93,7 +97,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.user$?.unsubscribe?.();
     this.tasks$?.unsubscribe?.();
     this.tasksAreFetching$?.unsubscribe?.();
 
@@ -101,10 +104,39 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.socket.get()?.off('orders');
   }
 
-  public getTasksWithRawStatus(): IOrderLessInfo[] {
+  public getTasksNew(): IOrderLessInfo[] {
+    const employeeRole = this.user?.role;
     let tasksCopy = this.tasks;
     if (tasksCopy) {
-      tasksCopy = tasksCopy.filter((task) => task.status === OrderStatus.raw);
+      if (
+        employeeRole === EmployeeRole.clientManager ||
+        employeeRole === EmployeeRole.admin ||
+        employeeRole === EmployeeRole.head
+      ) {
+        tasksCopy = tasksCopy.filter(
+          (task) =>
+            task.status === OrderStatus.raw && !task.performers.clientManager
+        );
+      } else {
+        tasksCopy = [];
+      }
+      return tasksCopy;
+    }
+    return [];
+  }
+
+  public getTasksWithRawStatus(): IOrderLessInfo[] {
+    const employeeRole = this.user?.role;
+    let tasksCopy = this.tasks;
+    if (tasksCopy) {
+      if (employeeRole === EmployeeRole.clientManager) {
+        tasksCopy = tasksCopy.filter(
+          (task) =>
+            task.status === OrderStatus.raw && task.performers.clientManager
+        );
+      } else {
+        tasksCopy = tasksCopy.filter((task) => task.status === OrderStatus.raw);
+      }
       return tasksCopy;
     }
     return [];

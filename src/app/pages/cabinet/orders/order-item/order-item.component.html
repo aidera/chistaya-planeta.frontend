@@ -1,7 +1,27 @@
 <!-- Header -->
 <div class="cabinet-header">
   <h1>Заявка</h1>
-  <div class="cabinet-header__actions"></div>
+  <div class="cabinet-header__actions">
+    <button
+      *ngIf="
+        (userEmployee?.role === employeeRole.clientManager &&
+          item?.performers.clientManagerAccepted === false &&
+          userEmployee?.locality?._id === item?.locality._id) ||
+        (userEmployee?.role === employeeRole.driver &&
+          item?.performers.driverAccepted === false &&
+          item?.performers.driver._id === userEmployee?._id) ||
+        (userEmployee?.role === employeeRole.receivingManager &&
+          item?.performers.receivingManagerAccepted === false &&
+          item?.performers.receivingManager._id === userEmployee?._id)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-raised-button
+      color="primary"
+      (click)="takeToWork()"
+    >
+      Взять в работу
+    </button>
+  </div>
 </div>
 
 <!-- Content -->

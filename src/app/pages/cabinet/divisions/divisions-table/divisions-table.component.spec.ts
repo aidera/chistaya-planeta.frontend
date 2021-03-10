@@ -49,6 +49,10 @@ describe('DivisionsTableComponent', () => {
             divisions: {
               divisions: [],
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

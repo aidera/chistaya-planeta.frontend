@@ -111,4 +111,14 @@ export interface IOrderLessInfo {
     contactName: string;
     contactPhone: string;
   };
+
+  performers: {
+    clientManager?: string;
+    clientManagerAccepted?: boolean;
+    receivingManager?: string;
+    receivingManagerAccepted?: boolean;
+    driver?: string;
+    driverAccepted?: boolean;
+    car?: string;
+  };
 }

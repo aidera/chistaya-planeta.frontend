@@ -78,6 +78,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             case responseCodes.noPermission:
               this.serverError = 'Нет доступа. Аккаунт заблокирован.';
               break;
+            case responseCodes.unauthenticated:
+              this.serverError = 'Истек срок авторизации';
+              break;
             default:
               this.serverError =
                 'Ошибка сервера. Попробуйте авторизироваться позже.';

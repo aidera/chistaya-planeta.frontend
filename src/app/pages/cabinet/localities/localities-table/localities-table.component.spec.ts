@@ -47,6 +47,10 @@ describe('LocalitiesTableComponent', () => {
             localities: {
               localities: [],
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

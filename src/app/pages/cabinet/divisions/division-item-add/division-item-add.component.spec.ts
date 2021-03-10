@@ -44,6 +44,10 @@ describe('DivisionItemAddComponent', () => {
             divisions: {
               division: null,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],
