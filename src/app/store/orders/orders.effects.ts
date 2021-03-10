@@ -270,6 +270,104 @@ export class OrdersEffects {
     )
   );
 
+  processOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.processOrderRequest),
+      switchMap((action) => {
+        return this.ordersApi
+          .process({
+            id: action.id,
+            division: action.division,
+            driver: action.driver,
+            car: action.car,
+            comment: action.comment,
+            deadline: action.deadline,
+          })
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedOrder) {
+                return OrdersActions.updateOrderSuccess({
+                  order: resData.updatedOrder,
+                });
+              }
+              return OrdersActions.updateOrderFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                OrdersActions.updateOrderFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
+      })
+    )
+  );
+
+  refuseOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.refuseOrderRequest),
+      switchMap((action) => {
+        return this.ordersApi
+          .refuse({
+            id: action.id,
+          })
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedOrder) {
+                return OrdersActions.updateOrderSuccess({
+                  order: resData.updatedOrder,
+                });
+              }
+              return OrdersActions.updateOrderFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                OrdersActions.updateOrderFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
+      })
+    )
+  );
+
+  cancelOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.cancelOrderRequest),
+      switchMap((action) => {
+        return this.ordersApi
+          .cancel({
+            id: action.id,
+          })
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedOrder) {
+                return OrdersActions.updateOrderSuccess({
+                  order: resData.updatedOrder,
+                });
+              }
+              return OrdersActions.updateOrderFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                OrdersActions.updateOrderFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
+      })
+    )
+  );
+
   addOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrdersActions.addOrderRequest),

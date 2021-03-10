@@ -46,6 +46,8 @@ export class ItemPageComponent implements OnInit, OnDestroy {
   public userClient: IClient;
   protected userType$: Subscription;
   public userType: UserType;
+  public userInitCallback: () => void;
+
   protected item$: Subscription;
   public item: any;
   protected getItemError$: Subscription;
@@ -125,6 +127,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
         if (this.userType === UserType.client) {
           this.userClient = user as IClient;
         }
+        this.userInitCallback?.();
       });
 
     /* --------------------------- */

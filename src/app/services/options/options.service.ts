@@ -179,10 +179,12 @@ export class OptionsService {
   public getCarsOptions({
     localitiesIds,
     divisionsIds,
+    driversIds,
     statuses,
   }: {
     localitiesIds?: string[];
     divisionsIds?: string[];
+    driversIds?: string[];
     statuses?: CarStatus[];
   }): Observable<OptionType[] | null> {
     return this.store.select(AppSelectors.selectCarsToSelect).pipe(
@@ -209,6 +211,12 @@ export class OptionsService {
         if (divisionsIds !== undefined) {
           carsToSelect = carsToSelect?.filter((el) => {
             return divisionsIds.some((ai) => el.divisions.includes(ai));
+          });
+        }
+
+        if (driversIds !== undefined) {
+          carsToSelect = carsToSelect?.filter((el) => {
+            return driversIds.some((ai) => el.drivers.includes(ai));
           });
         }
 

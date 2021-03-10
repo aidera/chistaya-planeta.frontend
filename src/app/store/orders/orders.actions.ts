@@ -47,6 +47,9 @@ export const ASSIGN_ORDER_DRIVER_REQUEST =
   '[orders] assign - order driver - request';
 export const ACCEPT_ORDER_DRIVER_REQUEST =
   '[orders] accept - order driver - request';
+export const PROCESS_ORDER_REQUEST = '[orders] process - order - request';
+export const REFUSE_ORDER_REQUEST = '[orders] refuse - order - request';
+export const CANCEL_ORDER_REQUEST = '[orders] cancel - order - request';
 
 /* ----------------- */
 /* --- Add Order --- */
@@ -158,6 +161,25 @@ export const assignOrderDriverRequest = createAction(
 export const acceptOrderDriverRequest = createAction(
   ACCEPT_ORDER_DRIVER_REQUEST,
   props<{ id: string }>()
+);
+export const processOrderRequest = createAction(
+  PROCESS_ORDER_REQUEST,
+  props<{
+    id: string;
+    division?: string;
+    driver?: string;
+    car?: string;
+    comment?: string;
+    deadline?: Date;
+  }>()
+);
+export const refuseOrderRequest = createAction(
+  REFUSE_ORDER_REQUEST,
+  props<{ id: string; reason?: string }>()
+);
+export const cancelOrderRequest = createAction(
+  CANCEL_ORDER_REQUEST,
+  props<{ id: string; reason?: string }>()
 );
 
 /* ----------------- */

@@ -24,4 +24,5 @@ export interface ICarLessInfo {
   licensePlate: string;
   locality: string;
   divisions: string[];
+  drivers: string[];
 }

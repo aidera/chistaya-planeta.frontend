@@ -14,7 +14,7 @@ export interface IOrder {
   _id: string;
   status: OrderStatus;
   type: OrderType;
-  deadline: Date;
+  deadline: string;
 
   scheduledOrder?: string;
   client?: string;
@@ -87,13 +87,13 @@ export interface IOrder {
   customerCancellationReason?: string;
   companyCancellationReason?: string;
 
-  createdAt?: Date;
-  updatedAt?: Date;
-  statusDateAccepted?: Date;
-  statusDateDelivered?: Date;
-  statusDateWeighed?: Date;
-  statusDateCompleted?: Date;
-  statusDateRefused?: Date;
+  createdAt?: string;
+  updatedAt?: string;
+  statusDateAccepted?: string;
+  statusDateDelivered?: string;
+  statusDateWeighed?: string;
+  statusDateCompleted?: string;
+  statusDateRefused?: string;
 }
 
 export interface IOrderLessInfo {

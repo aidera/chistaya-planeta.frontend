@@ -163,6 +163,53 @@ export class OrdersApiService {
     );
   }
 
+  process(fields: {
+    id: string;
+    division?: string;
+    driver?: string;
+    car?: string;
+    comment?: string;
+    deadline: Date;
+  }): Observable<IUpdateOrderResponse> {
+    const stringedDeadline = fields.deadline
+      ? fields.deadline.toISOString()
+      : undefined;
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/process/${fields.id}`,
+      {
+        division: fields.division,
+        driver: fields.driver,
+        car: fields.car,
+        comment: fields.comment,
+        deadline: stringedDeadline,
+      }
+    );
+  }
+
+  refuse(fields: {
+    id: string;
+    reason?: string;
+  }): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/refuse/${fields.id}`,
+      {
+        reason: fields.reason,
+      }
+    );
+  }
+
+  cancel(fields: {
+    id: string;
+    reason?: string;
+  }): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/cancel/${fields.id}`,
+      {
+        reason: fields.reason,
+      }
+    );
+  }
+
   add(order: IAddOrderRequest): Observable<IAddOrderResponse> {
     const newOrder = {
       type: order.type,

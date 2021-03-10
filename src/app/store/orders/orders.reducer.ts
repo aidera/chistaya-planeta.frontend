@@ -137,6 +137,21 @@ const _ordersReducer = createReducer(
     updateOrderIsFetching: true,
     updateOrderError: null,
   })),
+  on(OrdersActions.processOrderRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
+  on(OrdersActions.refuseOrderRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
+  on(OrdersActions.cancelOrderRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
 
   /* ----------------- */
   /* --- Add Order --- */

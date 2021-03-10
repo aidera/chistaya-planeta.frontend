@@ -21,6 +21,23 @@
     >
       Взять в работу
     </button>
+
+    <button
+      *ngIf="
+        (userEmployee?.role === employeeRole.clientManager &&
+          item?.status === orderStatus.raw &&
+          item?.performers.clientManager) ||
+        ((userEmployee?.role === employeeRole.admin ||
+          userEmployee?.role === employeeRole.head) &&
+          item?.status === orderStatus.raw)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-raised-button
+      color="primary"
+      (click)="isProcessFormModalOpen = true"
+    >
+      Обработать заявку
+    </button>
   </div>
 </div>
 
@@ -538,6 +555,16 @@
         <mat-card>
           <h2>История</h2>
 
+          <!-- Deadline -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Дедлайн"
+              [content]="item?.deadline | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
           <!-- Created At -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
@@ -620,10 +647,117 @@
   [rejectButtonText]="'Удалить'"
   (action)="onRemoveModalAction($event)"
 >
-  Полностью удалять сотрудника лучше только в том случае, если вы добавили его
+  Полностью удалять заявку лучше только в том случае, если вы добавили его
   случайно или по ошибке.
   <br />
   <br />
   Все связанные записи не смогут восстановить сотрудника автоматически, даже
   если все данные будут идентичны.
+</app-modal>
+
+<app-modal
+  *ngIf="processForm"
+  [isLoading]="itemIsUpdating"
+  [isOpen]="isProcessFormModalOpen"
+  [resolveButtonText]="'Обработать'"
+  title="Обработать заявку"
+  (action)="onProcessOrderModalAction($event)"
+>
+  <form
+    *ngIf="processForm"
+    [formGroup]="processForm"
+    (ngSubmit)="processOrder()"
+  >
+    <!-- Division -->
+    <app-select
+      fieldId="division"
+      *ngIf="
+        (this.item?.type === orderType.offer &&
+          this.item?.delivery._type === deliveryType.company) ||
+        this.item?.type === orderType.service
+      "
+      [control]="processForm?.get('division')"
+      [options]="processDivisionsOptions"
+      [label]="'Подразделение'"
+      [isRequired]="true"
+      [errorMessages]="{
+        required: 'Обязательное поле'
+      }"
+    ></app-select>
+
+    <!-- Driver -->
+    <app-select
+      fieldId="driver"
+      *ngIf="
+        (this.item?.type === orderType.offer &&
+          this.item?.delivery._type === deliveryType.company) ||
+        this.item?.type === orderType.service
+      "
+      [control]="processForm?.get('driver')"
+      [options]="processDriversOptions"
+      [label]="'Водитель'"
+      [isRequired]="true"
+      [errorMessages]="{
+        required: 'Обязательное поле'
+      }"
+    ></app-select>
+
+    <!-- Cars -->
+    <app-select
+      fieldId="car"
+      *ngIf="
+        (this.item?.type === orderType.offer &&
+          this.item?.delivery._type === deliveryType.company) ||
+        this.item?.type === orderType.service
+      "
+      [control]="processForm?.get('car')"
+      [options]="processCarsOptions"
+      [label]="'Автомобиль'"
+      [isRequired]="true"
+      [errorMessages]="{
+        required: 'Обязательное поле'
+      }"
+    ></app-select>
+
+    <!-- Deadline -->
+    <div class="combined-fields combined-fields_mobile-wrap">
+      <app-date-input
+        *ngIf="
+          (this.item?.type === orderType.offer &&
+            this.item?.delivery._type === deliveryType.company) ||
+          this.item?.type === orderType.service
+        "
+        [control]="processForm?.get('deadlineDate')"
+        fieldId="deadlineDate"
+        [label]="'Дата'"
+        [isRequired]="true"
+        [minDate]="processFormDeadlineMinDate"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-date-input>
+
+      <app-select
+        *ngIf="
+          (this.item?.type === orderType.offer &&
+            this.item?.delivery._type === deliveryType.company) ||
+          this.item?.type === orderType.service
+        "
+        [control]="processForm?.get('deadlineTime')"
+        fieldId="deadlineTime"
+        label="Время"
+        [isRequired]="true"
+        [options]="timeOptions"
+        [errorMessages]="{ required: 'Обязательное поле' }"
+      ></app-select>
+    </div>
+
+    <!-- Comment -->
+    <app-textarea
+      fieldId="comment"
+      *ngIf="processForm?.get('comment')"
+      [control]="processForm?.get('comment')"
+      [label]="'Комментарий сотрудника'"
+    ></app-textarea>
+
+    <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>
+  </form>
 </app-modal>
