@@ -100,7 +100,7 @@ export interface IOrderLessInfo {
   _id: string;
   status: OrderStatus;
   type: OrderType;
-  deadline: Date;
+  deadline: string;
 
   locality?: ILocality | string;
   division?: IDivision | string;

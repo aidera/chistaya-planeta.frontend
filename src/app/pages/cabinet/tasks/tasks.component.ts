@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { switchMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import * as fromRoot from '../../../store/root.reducer';
 import * as TasksSelectors from '../../../store/tasks/tasks.selectors';
@@ -7,13 +9,11 @@ import * as TasksActions from '../../../store/tasks/tasks.actions';
 import * as UsersSelectors from '../../../store/users/users.selectors';
 import * as UsersActions from '../../../store/users/users.actions';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
-import { Subscription } from 'rxjs';
 import { IEmployee } from '../../../models/Employee';
 import { IOrderLessInfo } from '../../../models/Order';
 import OrderStatus from '../../../models/enums/OrderStatus';
 import { orderStatusStrings } from '../../../data/orderStatusData';
 import { orderTypeStrings } from '../../../data/orderTypeData';
-import { switchMap } from 'rxjs/operators';
 import EmployeeRole from '../../../models/enums/EmployeeRole';
 
 @Component({
@@ -34,6 +34,8 @@ export class TasksComponent implements OnInit, OnDestroy {
   public tasksWithInProgressStatus: IOrderLessInfo[];
   public tasksWithCompletedStatus: IOrderLessInfo[];
   public tasksWithRefusedStatus: IOrderLessInfo[];
+
+  public dateNow = new Date();
 
   public employeeRole = EmployeeRole;
   public orderTypeStrings = orderTypeStrings;
@@ -181,5 +183,9 @@ export class TasksComponent implements OnInit, OnDestroy {
       return tasksCopy;
     }
     return [];
+  }
+
+  public getDate(stringedDate: string): Date {
+    return new Date(stringedDate);
   }
 }
