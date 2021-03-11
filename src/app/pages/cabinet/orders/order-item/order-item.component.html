@@ -38,6 +38,25 @@
     >
       Обработать заявку
     </button>
+
+    <button
+      *ngIf="
+        ((userEmployee?.role === employeeRole.clientManager &&
+          item?.performers.clientManager) ||
+          userEmployee?.role === employeeRole.admin ||
+            userEmployee?.role === employeeRole.head ||
+          userClient) &&
+        item?.status !== orderStatus.cancelled &&
+          item?.status !== orderStatus.refused &&
+          item?.status !== orderStatus.completed
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-button
+      color="warn"
+      (click)="isRefuseFormModalOpen = true"
+    >
+      Отменить заявку
+    </button>
   </div>
 </div>
 
@@ -756,6 +775,27 @@
       *ngIf="processForm?.get('comment')"
       [control]="processForm?.get('comment')"
       [label]="'Комментарий сотрудника'"
+    ></app-textarea>
+
+    <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>
+  </form>
+</app-modal>
+
+<app-modal
+  *ngIf="refuseForm"
+  [isLoading]="itemIsUpdating"
+  [isOpen]="isRefuseFormModalOpen"
+  [resolveButtonText]="'Отменить'"
+  title="Отменить заявку"
+  (action)="onRefuseOrderModalAction($event)"
+>
+  <form *ngIf="refuseForm" [formGroup]="refuseForm" (ngSubmit)="refuseOrder()">
+    <!-- Reason -->
+    <app-textarea
+      fieldId="reason"
+      *ngIf="refuseForm?.get('reason')"
+      [control]="refuseForm?.get('reason')"
+      [label]="'Причина отмены'"
     ></app-textarea>
 
     <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>

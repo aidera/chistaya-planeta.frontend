@@ -4,8 +4,8 @@ import OrderStatus from '../models/enums/OrderStatus';
 
 export const orderStatusStrings: string[] = [];
 orderStatusStrings[OrderStatus.raw] = 'Необработано';
-orderStatusStrings[OrderStatus.refused] = 'Отказ';
-orderStatusStrings[OrderStatus.cancelled] = 'Отменено';
+orderStatusStrings[OrderStatus.refused] = 'Отменено клиентом';
+orderStatusStrings[OrderStatus.cancelled] = 'Отменено сотрудником';
 orderStatusStrings[OrderStatus.processed] = 'Обработано';
 orderStatusStrings[OrderStatus.inTransit] = 'В пути';
 orderStatusStrings[OrderStatus.packed] = 'Погружено';

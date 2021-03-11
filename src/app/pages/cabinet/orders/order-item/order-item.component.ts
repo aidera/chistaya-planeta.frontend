@@ -63,6 +63,9 @@ export class OrderItemComponent
   public isProcessFormModalOpen = false;
   public timeOptions = timeOptions;
 
+  public refuseForm: FormGroup;
+  public isRefuseFormModalOpen = false;
+
   public orderStatusOptions = orderStatusOptions;
   public orderStatusColors = orderStatusColors;
   public orderStatusStrings = orderStatusStrings;
@@ -84,6 +87,8 @@ export class OrderItemComponent
     /* ------------- */
     /* Form settings */
     /* ------------- */
+
+    /* --- Main form --- */
     this.initForm = () => {
       this.form = new FormGroup({
         status: new FormControl(''),
@@ -94,6 +99,7 @@ export class OrderItemComponent
       });
     };
 
+    /* --- Process form --- */
     this.processForm = new FormGroup({
       division: new FormControl('', Validators.required),
       driver: new FormControl('', Validators.required),
@@ -128,6 +134,11 @@ export class OrderItemComponent
         .subscribe((value) => {
           this.processCarsOptions = value;
         });
+    });
+
+    /* --- Refuse/cancel form --- */
+    this.refuseForm = new FormGroup({
+      reason: new FormControl(''),
     });
 
     /* ---------------- */
@@ -236,6 +247,7 @@ export class OrderItemComponent
         if (status === true) {
           this.activeField = null;
           this.isProcessFormModalOpen = false;
+          this.isRefuseFormModalOpen = false;
 
           this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
             duration: 2000,
@@ -329,6 +341,10 @@ export class OrderItemComponent
     this.divisionsOptions$?.unsubscribe?.();
     this.driversOptions$?.unsubscribe?.();
     this.carsOptions$?.unsubscribe?.();
+
+    this.processDivisionsOptions$?.unsubscribe?.();
+    this.processDriversOptions$?.unsubscribe?.();
+    this.processCarsOptions$?.unsubscribe?.();
 
     this.options.destroyDivisionsOptions();
     this.options.destroyEmployeesOptions();
@@ -486,8 +502,6 @@ export class OrderItemComponent
     const deadline = deadlineDate;
     deadline.setHours(deadlineHours, deadlineMinutes);
 
-    console.log(this.processForm);
-
     if (this.processForm.valid) {
       if (
         (this.item?.type === OrderType.offer &&
@@ -509,6 +523,45 @@ export class OrderItemComponent
           OrdersActions.processOrderRequest({
             id: this.item._id,
             comment: this.processForm?.get('comment').value,
+          })
+        );
+      }
+    }
+  }
+
+  public onRefuseOrderModalAction(action: ModalAction): void {
+    switch (action) {
+      case 'cancel':
+        this.isRefuseFormModalOpen = false;
+        break;
+      case 'reject':
+        this.isRefuseFormModalOpen = false;
+        break;
+      case 'resolve':
+        this.refuseOrder();
+        break;
+    }
+  }
+
+  public refuseOrder(): void {
+    Object.keys(this.refuseForm?.controls).forEach((field) => {
+      const control = this.refuseForm.get(field);
+      control.markAsTouched({ onlySelf: true });
+    });
+
+    if (this.refuseForm.valid) {
+      if (this.userEmployee) {
+        this.store.dispatch(
+          OrdersActions.cancelOrderRequest({
+            id: this.item._id,
+            reason: this.refuseForm?.get('reason').value,
+          })
+        );
+      } else {
+        this.store.dispatch(
+          OrdersActions.refuseOrderRequest({
+            id: this.item._id,
+            reason: this.refuseForm?.get('reason').value,
           })
         );
       }
