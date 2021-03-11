@@ -44,11 +44,11 @@
         ((userEmployee?.role === employeeRole.clientManager &&
           item?.performers.clientManager) ||
           userEmployee?.role === employeeRole.admin ||
-            userEmployee?.role === employeeRole.head ||
+          userEmployee?.role === employeeRole.head ||
           userClient) &&
         item?.status !== orderStatus.cancelled &&
-          item?.status !== orderStatus.refused &&
-          item?.status !== orderStatus.completed
+        item?.status !== orderStatus.refused &&
+        item?.status !== orderStatus.completed
       "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
@@ -561,7 +561,7 @@
             class="cabinet-content__field"
           >
             <app-item-field-inactive-string
-              label="Причина отмены заказа компанией"
+              label="Причина отмены заказа сотрудником"
               [content]="item?.companyCancellationReason"
               [isFetching]="itemIsFetching"
             >

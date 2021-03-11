@@ -313,6 +313,7 @@ export class OrdersEffects {
         return this.ordersApi
           .refuse({
             id: action.id,
+            reason: action.reason,
           })
           .pipe(
             map((resData) => {
@@ -344,6 +345,7 @@ export class OrdersEffects {
         return this.ordersApi
           .cancel({
             id: action.id,
+            reason: action.reason,
           })
           .pipe(
             map((resData) => {

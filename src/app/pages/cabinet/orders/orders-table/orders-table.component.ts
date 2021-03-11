@@ -194,7 +194,7 @@ export class OrdersTableComponent
       },
       {
         key: 'companyCancellationReason',
-        title: 'Причина отмены компанией',
+        title: 'Причина отмены сотрудником',
         isSorting: true,
       },
 
