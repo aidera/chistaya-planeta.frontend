@@ -71,13 +71,11 @@ export interface IOrder {
       item: IOffer | string;
       amountUnit: Unit;
       amount: number;
-      paymentAmount: number;
     }[];
     services: {
       item: IService | string;
       amountUnit: Unit;
       amount: number;
-      paymentAmount: number;
     }[];
     paymentAmount: number;
   };

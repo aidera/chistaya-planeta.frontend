@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
@@ -366,6 +366,49 @@ export class OrdersEffects {
               );
             })
           );
+      })
+    )
+  );
+
+  weighOrderOffers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.weighOrderRequest),
+      switchMap((action) => {
+        let request: Observable<any>;
+
+        if (action.services) {
+          request = this.ordersApi.weighServices({
+            id: action.id,
+            services: action.services,
+          });
+        }
+
+        if (action.offers) {
+          request = this.ordersApi.weighOffers({
+            id: action.id,
+            offers: action.offers,
+          });
+        }
+
+        return request.pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
       })
     )
   );

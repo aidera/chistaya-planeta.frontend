@@ -152,6 +152,11 @@ const _ordersReducer = createReducer(
     updateOrderIsFetching: true,
     updateOrderError: null,
   })),
+  on(OrdersActions.weighOrderRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
 
   /* ----------------- */
   /* --- Add Order --- */

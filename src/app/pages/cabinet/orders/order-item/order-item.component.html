@@ -26,7 +26,7 @@
       *ngIf="
         (userEmployee?.role === employeeRole.clientManager &&
           item?.status === orderStatus.raw &&
-          item?.performers.clientManager) ||
+          item?.performers.clientManager?._id === userEmployee._id) ||
         ((userEmployee?.role === employeeRole.admin ||
           userEmployee?.role === employeeRole.head) &&
           item?.status === orderStatus.raw)
@@ -37,6 +37,28 @@
       (click)="isProcessFormModalOpen = true"
     >
       Обработать заявку
+    </button>
+
+    <button
+      *ngIf="
+        (item?.status === orderStatus.processed ||
+          item?.status === orderStatus.inTransit ||
+          item?.status === orderStatus.packed ||
+          item?.status === orderStatus.delivered ||
+          item?.status === orderStatus.weighed) &&
+        ((userEmployee?.role === employeeRole.clientManager &&
+          item?.performers.clientManager?._id === userEmployee._id) ||
+          (userEmployee?.role === employeeRole.receivingManager &&
+            item?.performers.receivingManager?._id === userEmployee._id) ||
+          userEmployee?.role === employeeRole.admin ||
+            userEmployee?.role === employeeRole.head)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-raised-button
+      color="primary"
+      (click)="goToWeighPage()"
+    >
+      Взвесить
     </button>
 
     <button
@@ -497,7 +519,7 @@
             <!-- Weighed services -->
             <div class="cabinet-content__field">
               <app-item-field-inactive-list
-                [list]="getWeighedOffersList()"
+                [list]="getWeighedServicesList()"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-list>
@@ -510,7 +532,7 @@
             *ngIf="item?.weighed?.paymentAmount !== undefined"
           >
             <app-item-field-inactive-string
-              [content]="item?.weighed.paymentAmount + 'руб.'"
+              [content]="'Итого: ' + item?.weighed.paymentAmount + ' руб.'"
               [isFetching]="itemIsFetching"
             >
             </app-item-field-inactive-string>

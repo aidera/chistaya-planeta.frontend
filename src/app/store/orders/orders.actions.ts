@@ -6,6 +6,8 @@ import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { PaginationType } from '../../models/types/PaginationType';
 import { IOrder } from 'src/app/models/Order';
 import OrderStatus from '../../models/enums/OrderStatus';
+import { IServiceToWeigh } from '../../models/Service';
+import { IOfferToWeigh } from '../../models/Offer';
 
 /* ------------------ */
 /* --- Get Orders --- */
@@ -50,6 +52,7 @@ export const ACCEPT_ORDER_DRIVER_REQUEST =
 export const PROCESS_ORDER_REQUEST = '[orders] process - order - request';
 export const REFUSE_ORDER_REQUEST = '[orders] refuse - order - request';
 export const CANCEL_ORDER_REQUEST = '[orders] cancel - order - request';
+export const WEIGH_ORDER_REQUEST = '[orders] weigh - order - request';
 
 /* ----------------- */
 /* --- Add Order --- */
@@ -180,6 +183,14 @@ export const refuseOrderRequest = createAction(
 export const cancelOrderRequest = createAction(
   CANCEL_ORDER_REQUEST,
   props<{ id: string; reason?: string }>()
+);
+export const weighOrderRequest = createAction(
+  WEIGH_ORDER_REQUEST,
+  props<{
+    id: string;
+    services?: IServiceToWeigh[];
+    offers?: IOfferToWeigh[];
+  }>()
 );
 
 /* ----------------- */

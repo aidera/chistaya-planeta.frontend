@@ -388,10 +388,7 @@ export class OrderItemComponent
             ' - ' +
             offer.amount +
             ' ' +
-            unitStrings[offer.amountUnit] +
-            ' (' +
-            offer.paymentAmount +
-            ' руб.)',
+            unitStrings[offer.amountUnit],
         };
       });
     }
@@ -402,13 +399,7 @@ export class OrderItemComponent
     if (this.item?.weighed?.services) {
       return (this.item?.weighed?.services).map((service) => {
         return {
-          text:
-            service.amount +
-            ' ' +
-            unitStrings[service.amountUnit] +
-            ' (' +
-            service.paymentAmount +
-            ' руб.)',
+          text: service.amount + ' ' + unitStrings[service.amountUnit],
         };
       });
     }
@@ -565,6 +556,14 @@ export class OrderItemComponent
           })
         );
       }
+    }
+  }
+
+  public goToWeighPage(): void {
+    if (this.item) {
+      this.router.navigate(['../', 'weigh', this.item._id], {
+        relativeTo: this.route,
+      });
     }
   }
 }

@@ -1,0 +1,204 @@
+<!-- Header -->
+<div class="cabinet-header">
+  <h1>Данные взвешивания</h1>
+</div>
+
+<!-- Content -->
+<div class="cabinet-content">
+  <!-- Error -->
+  <app-item-not-found
+    *ngIf="(getOrderError || !order) && !orderIsFetching"
+    title="Заявка исчезла"
+    description="К сожалению, этой заявки мы не нашли... Возможно, оно уже сдала вторсырьё :)"
+  ></app-item-not-found>
+
+  <!-- Content grid -->
+  <div
+    *ngIf="!getOrderError && !updateOrderError"
+    class="cabinet-content__grid"
+  >
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <!-- Offers form -->
+          <form
+            *ngIf="order?.type === orderType.offer"
+            [formGroup]="form"
+            (ngSubmit)="weighOrder()"
+          >
+            <div
+              class="cabinet-content__field"
+              *ngFor="
+                let control of form.get('offers')['controls'];
+                let idx = index
+              "
+            >
+              <div class="cabinet-content__field-header">
+                <h3>Позиция {{ idx + 1 }}</h3>
+                <button
+                  *ngIf="form.get('offers')['controls'].length > 1"
+                  mat-icon-button
+                  (click)="removeWeighOffersFormPosition(idx)"
+                >
+                  <span
+                    class="icon"
+                    [inlineSVG]="'../../assets/icons/cross.svg'"
+                  ></span>
+                </button>
+              </div>
+
+              <app-select
+                label="Тип"
+                [control]="form.get('offers')['controls'][idx].get('id')"
+                [options]="offersOptions"
+                [errorMessages]="{ required: 'Обязательное поле' }"
+              ></app-select>
+
+              <div class="combined-fields">
+                <app-text-input
+                  label="Количество"
+                  [control]="form.get('offers')['controls'][idx].get('amount')"
+                  fieldType="number"
+                  [errorMessages]="{ required: 'Обязательное поле' }"
+                ></app-text-input>
+                <app-select
+                  label="Единица"
+                  [control]="form.get('offers')['controls'][idx].get('unit')"
+                  [options]="unitOffersOptions"
+                  [errorMessages]="{ required: 'Обязательное поле' }"
+                ></app-select>
+              </div>
+            </div>
+
+            <div class="cabinet-content__grid-item-actions">
+              <a (click)="addWeighOffersFormPosition()">Добавить позицию</a>
+              <button
+                [disabled]="orderIsFetching || orderIsUpdating"
+                mat-raised-button
+                color="primary"
+                type="submit"
+              >
+                Сохранить
+              </button>
+            </div>
+          </form>
+
+          <!-- Services form -->
+          <form
+            *ngIf="order?.type === orderType.service"
+            [formGroup]="form"
+            (ngSubmit)="weighOrder()"
+          >
+            <div class="cabinet-content__field">
+              <div class="combined-fields">
+                <app-text-input
+                  label="Количество"
+                  [control]="form.get('services').get('amount')"
+                  fieldType="number"
+                  [errorMessages]="{ required: 'Обязательное поле' }"
+                ></app-text-input>
+                <app-select
+                  label="Единица"
+                  [control]="form.get('services').get('unit')"
+                  [options]="unitServicesOptions"
+                  [errorMessages]="{ required: 'Обязательное поле' }"
+                ></app-select>
+              </div>
+            </div>
+
+            <div class="cabinet-content__grid-item-actions">
+              <button
+                [disabled]="orderIsFetching || orderIsUpdating"
+                mat-raised-button
+                color="primary"
+                type="submit"
+              >
+                Сохранить
+              </button>
+            </div>
+          </form>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card class="total-block">
+          <div class="total-block__content">
+            <h2>Основная информация</h2>
+            <ul *ngIf="order">
+              <li>Тип заявки: {{ orderTypeStrings[order.type] }}</li>
+              <li *ngIf="order.type === orderType.offer">
+                Доставка: {{ deliveryTypeStrings[order.delivery._type] }}
+              </li>
+              <li>Имя заказчика: {{ order.customer.contactName }}</li>
+              <li>
+                Телефон заказчика: {{ order.customer.contactPhone | phone }}
+              </li>
+              <li><a [routerLink]="['../../', orderId]">Подробнее</a></li>
+            </ul>
+            <ul *ngIf="!order">
+              <li>
+                Тип заявки:
+                <app-skeleton width="100px"></app-skeleton>
+              </li>
+              <li>
+                Доставка:
+                <app-skeleton width="100px"></app-skeleton>
+              </li>
+              <li>
+                Имя заказчика:
+                <app-skeleton width="100px"></app-skeleton>
+              </li>
+              <li>
+                Телефон заказчика:
+                <app-skeleton width="100px"></app-skeleton>
+              </li>
+            </ul>
+
+            <ng-container *ngIf="order?.type === orderType.offer">
+              <br /><br />
+
+              <h2>Количество</h2>
+              <ul>
+                <li
+                  *ngFor="
+                    let control of form.get('offers')['controls'];
+                    let idx = index
+                  "
+                >
+                  {{ idx + 1 }}.
+                  {{
+                    getOfferNameFromId(control.get('id').value) || 'Не выбрано'
+                  }}
+                  - {{ control.get('amount').value || 0 }}
+                  {{
+                    control.get('unit').value
+                      ? unitStrings[control.get('unit').value]
+                      : ''
+                  }}
+                  ({{
+                    getOfferCost(
+                      control.get('id').value,
+                      control.get('unit').value,
+                      control.get('amount').value
+                    )
+                  }}
+                  руб.)
+                </li>
+              </ul>
+            </ng-container>
+          </div>
+
+          <div class="total-block__content">
+            <div>
+              <h2>К оплате</h2>
+              <p>{{ paymentSum }} руб.</p>
+            </div>
+            <a [routerLink]="['../../../', 'prices']">Все расценки</a>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

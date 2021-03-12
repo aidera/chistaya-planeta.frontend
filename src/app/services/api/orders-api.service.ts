@@ -12,6 +12,8 @@ import ServerResponse from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import OrderStatus from '../../models/enums/OrderStatus';
 import Unit from '../../models/enums/Unit';
+import { IOfferToWeigh } from '../../models/Offer';
+import { IServiceToWeigh } from '../../models/Service';
 
 export interface IGetOneOrderResponse extends ServerResponse {
   order?: IOrder;
@@ -206,6 +208,30 @@ export class OrdersApiService {
       `${environment.serverURL}/${this.path}/cancel/${fields.id}`,
       {
         reason: fields.reason,
+      }
+    );
+  }
+
+  weighOffers(fields: {
+    id: string;
+    offers: IOfferToWeigh[];
+  }): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/weigh-offers/${fields.id}`,
+      {
+        offers: fields.offers,
+      }
+    );
+  }
+
+  weighServices(fields: {
+    id: string;
+    services: IServiceToWeigh[];
+  }): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/weigh-services/${fields.id}`,
+      {
+        services: fields.services,
       }
     );
   }

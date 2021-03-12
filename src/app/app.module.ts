@@ -81,6 +81,7 @@ import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
 import { IsRoleReceivingManagerGuard } from './services/auth/is-role-receiving-manager.guard';
 import { ProfileComponent } from './pages/cabinet/profile/profile.component';
 import { TasksComponent } from './pages/cabinet/tasks/tasks.component';
+import { OrderItemWeighComponent } from './pages/cabinet/orders/order-item-weigh/order-item-weigh.component';
 
 @NgModule({
   declarations: [
@@ -139,6 +140,7 @@ import { TasksComponent } from './pages/cabinet/tasks/tasks.component';
     OrderItemComponent,
     ProfileComponent,
     TasksComponent,
+    OrderItemWeighComponent,
   ],
   imports: [
     BrowserModule,

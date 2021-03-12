@@ -310,6 +310,13 @@
     padding-top: 22px;
   }
 
+  .cabinet-content__field-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+  }
+
   .cabinet-content__backlink {
     display: inline-block;
     margin-bottom: 16px;

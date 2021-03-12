@@ -1,5 +1,6 @@
 import { SimpleStatus } from './enums/SimpleStatus';
 import Price from './types/Price';
+import Unit from './enums/Unit';
 
 export interface IOffer {
   _id: string;
@@ -16,4 +17,10 @@ export interface IOfferLessInfo {
   name: string;
   status: SimpleStatus;
   prices: Price[];
+}
+
+export interface IOfferToWeigh {
+  id: string;
+  amount: number;
+  unit: Unit;
 }

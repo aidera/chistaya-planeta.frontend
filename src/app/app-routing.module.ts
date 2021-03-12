@@ -31,6 +31,7 @@ import { IsNotAuthGuard } from './services/auth/is-not-auth.guard';
 import { IsClientGuard } from './services/auth/is-client.guard';
 import { ProfileComponent } from './pages/cabinet/profile/profile.component';
 import { TasksComponent } from './pages/cabinet/tasks/tasks.component';
+import { OrderItemWeighComponent } from './pages/cabinet/orders/order-item-weigh/order-item-weigh.component';
 
 export const routes: Routes = [
   {
@@ -41,24 +42,34 @@ export const routes: Routes = [
     canActivateChild: [IsEmployeeGuard],
     children: [
       { path: '', redirectTo: '/e/cabinet/tasks', pathMatch: 'full' },
+
       { path: 'orders', component: OrdersTableComponent },
       { path: 'orders/add', component: OrderItemAddComponent },
+      { path: 'orders/weigh/:id', component: OrderItemWeighComponent },
       { path: 'orders/:id', component: OrderItemComponent },
+
       { path: 'localities', component: LocalitiesTableComponent },
       { path: 'localities/add', component: LocalityItemAddComponent },
       { path: 'localities/:id', component: LocalityItemComponent },
+
       { path: 'divisions', component: DivisionsTableComponent },
       { path: 'divisions/add', component: DivisionItemAddComponent },
       { path: 'divisions/:id', component: DivisionItemComponent },
+
       { path: 'cars', component: CarsTableComponent },
       { path: 'cars/add', component: CarItemAddComponent },
       { path: 'cars/:id', component: CarItemComponent },
+
       { path: 'employees', component: EmployeesTableComponent },
       { path: 'employees/add', component: EmployeeItemAddComponent },
       { path: 'employees/:id', component: EmployeeItemComponent },
+
       { path: 'prices', component: PricesComponent },
+
       { path: 'profile', component: ProfileComponent },
+
       { path: 'tasks', component: TasksComponent },
+
       { path: '**', component: ItemNotFoundComponent },
     ],
   },
