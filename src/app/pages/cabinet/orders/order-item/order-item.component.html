@@ -41,6 +41,34 @@
 
     <button
       *ngIf="
+        item?.status === orderStatus.processed &&
+        userEmployee?.role === employeeRole.driver &&
+          item?.performers.driver._id === userEmployee?._id
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-raised-button
+      color="primary"
+      (click)="setOrderInTransit()"
+    >
+      Статус: в пути
+    </button>
+
+    <button
+      *ngIf="
+        item?.status === orderStatus.inTransit &&
+        userEmployee?.role === employeeRole.driver &&
+          item?.performers.driver._id === userEmployee?._id
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-raised-button
+      color="primary"
+      (click)="setOrderDelivered()"
+    >
+      Статус: доставлено
+    </button>
+
+    <button
+      *ngIf="
         (item?.status === orderStatus.processed ||
           item?.status === orderStatus.inTransit ||
           item?.status === orderStatus.packed ||

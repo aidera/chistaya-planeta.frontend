@@ -682,4 +682,24 @@ export class OrderItemComponent
       }
     }
   }
+
+  public setOrderInTransit(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.setOrderInTransit({
+          id: this.item._id,
+        })
+      );
+    }
+  }
+
+  public setOrderDelivered(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.setOrderDelivered({
+          id: this.item._id,
+        })
+      );
+    }
+  }
 }
