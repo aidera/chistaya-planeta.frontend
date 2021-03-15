@@ -152,7 +152,22 @@ const _ordersReducer = createReducer(
     updateOrderIsFetching: true,
     updateOrderError: null,
   })),
+  on(OrdersActions.setOrderInTransit, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
+  on(OrdersActions.setOrderDelivered, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
   on(OrdersActions.weighOrderRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
+  on(OrdersActions.completeOrderRequest, (state) => ({
     ...state,
     updateOrderIsFetching: true,
     updateOrderError: null,

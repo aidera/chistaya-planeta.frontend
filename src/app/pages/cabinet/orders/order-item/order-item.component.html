@@ -44,14 +44,13 @@
         (item?.status === orderStatus.processed ||
           item?.status === orderStatus.inTransit ||
           item?.status === orderStatus.packed ||
-          item?.status === orderStatus.delivered ||
-          item?.status === orderStatus.weighed) &&
+          item?.status === orderStatus.delivered) &&
         ((userEmployee?.role === employeeRole.clientManager &&
           item?.performers.clientManager?._id === userEmployee._id) ||
           (userEmployee?.role === employeeRole.receivingManager &&
             item?.performers.receivingManager?._id === userEmployee._id) ||
           userEmployee?.role === employeeRole.admin ||
-            userEmployee?.role === employeeRole.head)
+          userEmployee?.role === employeeRole.head)
       "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-raised-button
@@ -59,6 +58,22 @@
       (click)="goToWeighPage()"
     >
       Взвесить
+    </button>
+
+    <button
+      *ngIf="
+        item?.status === orderStatus.weighed &&
+        ((userEmployee?.role === employeeRole.clientManager &&
+          item?.performers.clientManager?._id === userEmployee._id) ||
+          userEmployee?.role === employeeRole.admin ||
+          userEmployee?.role === employeeRole.head)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-raised-button
+      color="primary"
+      (click)="isCompleteFormModalOpen = true"
+    >
+      Завершить
     </button>
 
     <button
@@ -77,7 +92,7 @@
       color="warn"
       (click)="isRefuseFormModalOpen = true"
     >
-      Отменить заявку
+      Отменить
     </button>
   </div>
 </div>
@@ -819,6 +834,55 @@
       [control]="refuseForm?.get('reason')"
       [label]="'Причина отмены'"
     ></app-textarea>
+
+    <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>
+  </form>
+</app-modal>
+
+<app-modal
+  *ngIf="completeForm"
+  [isLoading]="itemIsUpdating"
+  [isOpen]="isCompleteFormModalOpen"
+  [resolveButtonText]="'Завершить'"
+  title="Завершить заявку"
+  (action)="onCompleteOrderModalAction($event)"
+>
+  <form
+    *ngIf="completeForm"
+    [formGroup]="completeForm"
+    (ngSubmit)="completeOrder()"
+  >
+    <ul *ngIf="item?.type === orderType.offer">
+      <li *ngFor="let control of item.weighed.offers; let idx = index">
+        {{ idx + 1 }}.
+        {{ item.weighed.offers[idx].item?.name || '' }}
+        - {{ item.weighed.offers[idx].amount || 0 }}
+        {{ unitStrings[item.weighed.offers[idx].amountUnit || 0] }}
+        ({{
+          getOfferCost(
+            item.weighed.offers[idx].item?._id,
+            item.weighed.offers[idx].amountUnit,
+            item.weighed.offers[idx].amount
+          )
+        }}
+        руб.)
+      </li>
+    </ul>
+
+    <br />
+    <!-- Final sum -->
+    <app-text-input
+      fieldId="finalSum"
+      *ngIf="completeForm?.get('finalSum')"
+      [control]="completeForm?.get('finalSum')"
+      [label]="'Сумма оплаты, руб.'"
+      fieldType="number"
+    ></app-text-input>
+
+    <small
+      >Нажимая кнопку "Завершить", убедитесь, что была произведена
+      оплата.</small
+    >
 
     <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>
   </form>

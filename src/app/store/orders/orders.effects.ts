@@ -370,6 +370,60 @@ export class OrdersEffects {
     )
   );
 
+  setOrderInTransit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.setOrderInTransit),
+      switchMap((action) => {
+        return this.ordersApi.setInTransit(action.id).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  setOrderDelivered$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.setOrderInTransit),
+      switchMap((action) => {
+        return this.ordersApi.setDelivered(action.id).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
   weighOrderOffers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrdersActions.weighOrderRequest),
@@ -391,6 +445,33 @@ export class OrdersEffects {
         }
 
         return request.pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  completeOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.completeOrderRequest),
+      switchMap((action) => {
+        return this.ordersApi.complete(action.id, action.finalSum).pipe(
           map((resData) => {
             if (resData && resData.updatedOrder) {
               return OrdersActions.updateOrderSuccess({

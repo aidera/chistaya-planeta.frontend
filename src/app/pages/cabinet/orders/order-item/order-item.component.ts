@@ -33,6 +33,12 @@ import { tomorrow } from '../../../../utils/date.functions';
 import { ModalAction } from '../../../../components/modal/modal.component';
 import timeOptions from '../../../../data/timeOptions';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import * as OffersActions from '../../../../store/offers/offers.actions';
+import * as OffersSelectors from '../../../../store/offers/offers.selectors';
+import * as ServicesActions from '../../../../store/services/services.actions';
+import * as ServicesSelectors from '../../../../store/services/services.selectors';
+import { IService } from '../../../../models/Service';
+import Unit from '../../../../models/enums/Unit';
 
 @Component({
   selector: 'app-order-item',
@@ -43,6 +49,11 @@ export class OrderItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
   public item: IOrder;
+
+  public offers$: Subscription;
+  public offers: IOffer[];
+  public services$: Subscription;
+  public services: IService[];
 
   public divisionsOptions$: Subscription;
   public divisionsOptions: OptionType[] = [];
@@ -66,12 +77,16 @@ export class OrderItemComponent
   public refuseForm: FormGroup;
   public isRefuseFormModalOpen = false;
 
+  public completeForm: FormGroup;
+  public isCompleteFormModalOpen = false;
+
   public orderStatusOptions = orderStatusOptions;
   public orderStatusColors = orderStatusColors;
   public orderStatusStrings = orderStatusStrings;
   public orderTypeStrings = orderTypeStrings;
   public deliveryTypeStrings = deliveryTypeStrings;
   public paymentMethodStrings = paymentMethodStrings;
+  public unitStrings = unitStrings;
   public orderType = OrderType;
   public orderStatus = OrderStatus;
   public deliveryType = DeliveryType;
@@ -141,6 +156,11 @@ export class OrderItemComponent
       reason: new FormControl(''),
     });
 
+    /* --- Complete form --- */
+    this.completeForm = new FormGroup({
+      finalSum: new FormControl('', Validators.required),
+    });
+
     /* ---------------- */
     /* Request settings */
     /* ---------------- */
@@ -170,6 +190,12 @@ export class OrderItemComponent
             division: (order.division as IDivision)?._id || '',
             driver: (order.performers.driver as IEmployee)?._id || '',
             car: (order.performers.car as ICar)?._id || '',
+          });
+        }
+
+        if (this.completeForm && order) {
+          this.completeForm.setValue({
+            finalSum: order.weighed.paymentAmount || '',
           });
         }
 
@@ -248,6 +274,7 @@ export class OrderItemComponent
           this.activeField = null;
           this.isProcessFormModalOpen = false;
           this.isRefuseFormModalOpen = false;
+          this.isCompleteFormModalOpen = false;
 
           this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
             duration: 2000,
@@ -319,6 +346,26 @@ export class OrderItemComponent
       }
     });
 
+    this.store.dispatch(OffersActions.getOffersRequest());
+    this.offers$ = this.store
+      .select(OffersSelectors.selectOffers)
+      .subscribe((offers) => {
+        this.offers = offers;
+      });
+    this.socket.get()?.on('offers', () => {
+      this.store.dispatch(OffersActions.getOffersRequest());
+    });
+
+    this.store.dispatch(ServicesActions.getServicesRequest());
+    this.services$ = this.store
+      .select(ServicesSelectors.selectServices)
+      .subscribe((services) => {
+        this.services = services;
+      });
+    this.socket.get()?.on('services', () => {
+      this.store.dispatch(ServicesActions.getServicesRequest());
+    });
+
     /* --------------- */
     /* After user init */
     /* --------------- */
@@ -337,6 +384,11 @@ export class OrderItemComponent
     super.ngOnDestroy();
 
     this.socket.get()?.off('orders');
+
+    this.offers$?.unsubscribe?.();
+    this.socket.get()?.off('offers');
+    this.services$?.unsubscribe?.();
+    this.socket.get()?.off('services');
 
     this.divisionsOptions$?.unsubscribe?.();
     this.driversOptions$?.unsubscribe?.();
@@ -564,6 +616,70 @@ export class OrderItemComponent
       this.router.navigate(['../', 'weigh', this.item._id], {
         relativeTo: this.route,
       });
+    }
+  }
+
+  public getOfferCost(id: string, unit: Unit, amount: number): number {
+    if (this.item && this.offers) {
+      const targetOffer = this.offers.find((offer) => offer._id === id)?.prices;
+      const targetOfferPrice = targetOffer?.find(
+        (price) => price.unit === +unit
+      );
+      if (this.item.delivery._type === DeliveryType.company) {
+        return targetOfferPrice
+          ? targetOfferPrice?.amountWithDelivery * amount
+          : 0;
+      } else {
+        return targetOfferPrice
+          ? targetOfferPrice?.amountWithoutDelivery * amount
+          : 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  public getServiceCost(unit: Unit, amount: number): number {
+    if (this.item && this.services) {
+      const targetService = this.services[0].prices;
+      const targetServicePrice = targetService?.find(
+        (price) => price.unit === +unit
+      );
+      return targetServicePrice ? targetServicePrice?.amount * amount : 0;
+    } else {
+      return 0;
+    }
+  }
+
+  public onCompleteOrderModalAction(action: ModalAction): void {
+    switch (action) {
+      case 'cancel':
+        this.isCompleteFormModalOpen = false;
+        break;
+      case 'reject':
+        this.isCompleteFormModalOpen = false;
+        break;
+      case 'resolve':
+        this.completeOrder();
+        break;
+    }
+  }
+
+  public completeOrder(): void {
+    Object.keys(this.completeForm?.controls).forEach((field) => {
+      const control = this.completeForm.get(field);
+      control.markAsTouched({ onlySelf: true });
+    });
+
+    if (this.completeForm.valid) {
+      if (this.userEmployee) {
+        this.store.dispatch(
+          OrdersActions.completeOrderRequest({
+            id: this.item._id,
+            finalSum: +this.completeForm.get('finalSum').value,
+          })
+        );
+      }
     }
   }
 }

@@ -212,6 +212,20 @@ export class OrdersApiService {
     );
   }
 
+  setInTransit(id: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/set-in-transit/${id}`,
+      {}
+    );
+  }
+
+  setDelivered(id: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/set-delivered/${id}`,
+      {}
+    );
+  }
+
   weighOffers(fields: {
     id: string;
     offers: IOfferToWeigh[];
@@ -233,6 +247,13 @@ export class OrdersApiService {
       {
         services: fields.services,
       }
+    );
+  }
+
+  complete(id: string, finalSum?: number): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/complete/${id}`,
+      { finalSum }
     );
   }
 

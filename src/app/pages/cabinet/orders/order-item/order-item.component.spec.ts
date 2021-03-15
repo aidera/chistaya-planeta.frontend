@@ -64,6 +64,12 @@ describe('OrderItemComponent', () => {
               user: null,
               type: null,
             },
+            offers: {
+              offers: null,
+            },
+            services: {
+              services: null,
+            },
           },
         }),
       ],

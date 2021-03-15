@@ -52,7 +52,12 @@ export const ACCEPT_ORDER_DRIVER_REQUEST =
 export const PROCESS_ORDER_REQUEST = '[orders] process - order - request';
 export const REFUSE_ORDER_REQUEST = '[orders] refuse - order - request';
 export const CANCEL_ORDER_REQUEST = '[orders] cancel - order - request';
+export const SET_ORDER_IN_TRANSIT_REQUEST =
+  '[orders] set - order in transit - request';
+export const SET_ORDER_DELIVERED_REQUEST =
+  '[orders] set - order delivered - request';
 export const WEIGH_ORDER_REQUEST = '[orders] weigh - order - request';
+export const COMPLETE_ORDER_REQUEST = '[orders] complete - order - request';
 
 /* ----------------- */
 /* --- Add Order --- */
@@ -184,12 +189,31 @@ export const cancelOrderRequest = createAction(
   CANCEL_ORDER_REQUEST,
   props<{ id: string; reason?: string }>()
 );
+export const setOrderInTransit = createAction(
+  SET_ORDER_IN_TRANSIT_REQUEST,
+  props<{
+    id: string;
+  }>()
+);
+export const setOrderDelivered = createAction(
+  SET_ORDER_DELIVERED_REQUEST,
+  props<{
+    id: string;
+  }>()
+);
 export const weighOrderRequest = createAction(
   WEIGH_ORDER_REQUEST,
   props<{
     id: string;
     services?: IServiceToWeigh[];
     offers?: IOfferToWeigh[];
+  }>()
+);
+export const completeOrderRequest = createAction(
+  COMPLETE_ORDER_REQUEST,
+  props<{
+    id: string;
+    finalSum?: number;
   }>()
 );
 
