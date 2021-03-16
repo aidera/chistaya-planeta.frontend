@@ -4,5 +4,6 @@ export type MenuLink = {
   title: string;
   link: string;
   iconPath: string;
-  role?: EmployeeRole[];
+  employeesCanSee?: EmployeeRole[];
+  clientCanSee?: boolean;
 };

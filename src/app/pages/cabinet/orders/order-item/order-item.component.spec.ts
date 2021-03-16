@@ -19,6 +19,8 @@ import { ItemNotFoundComponent } from '../../../../components/item-not-found/ite
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { OptionsService } from '../../../../services/options/options.service';
 import { PhonePipe } from '../../../../pipes/phone.pipe';
+import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
+import { TextareaComponent } from '../../../../components/form-controls/textarea/textarea.component';
 
 describe('OrderItemComponent', () => {
   let component: OrderItemComponent;
@@ -37,6 +39,8 @@ describe('OrderItemComponent', () => {
         ItemFieldSaveButtonComponent,
         ItemNotFoundComponent,
         PhonePipe,
+        TextInputComponent,
+        TextareaComponent,
       ],
       imports: [
         BrowserAnimationsModule,

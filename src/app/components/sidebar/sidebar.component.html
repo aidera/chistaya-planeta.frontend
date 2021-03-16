@@ -1,7 +1,9 @@
 <div class="sidebar">
   <div class="sidebar__company">
     <img src="../../../assets/images/logo.png" alt='Логотип "Чистая планета"' />
-    <p class="employee-definer" *ngIf="isEmployee">Личный кабинет сотрудника</p>
+    <p class="employee-definer" *ngIf="userType === userTypeEnum.employee">
+      Личный кабинет сотрудника
+    </p>
     <h3>Чистая планета</h3>
     <strong>сохраним природу детям</strong>
   </div>
@@ -10,14 +12,20 @@
       <app-menu-link
         *ngFor="let menuLink of menuLinksMain"
         [menuLink]="menuLink"
-        [isEmployee]="isEmployee"
+        [isEmployee]="userType === userTypeEnum.employee"
+        [employeeRole]="
+          userType === userTypeEnum.employee ? user?.role : undefined
+        "
       ></app-menu-link>
     </div>
     <div class="sidebar__secondary-menu-links">
       <app-menu-link
         *ngFor="let menuLink of menuLinksSecondary"
         [menuLink]="menuLink"
-        [isEmployee]="isEmployee"
+        [isEmployee]="userType === userTypeEnum.employee"
+        [employeeRole]="
+          userType === userTypeEnum.employee ? user?.role : undefined
+        "
       ></app-menu-link>
     </div>
   </nav>

@@ -1,6 +1,12 @@
 <div
   class="menu-link"
   routerLinkActive="active"
+  *ngIf="
+    (isEmployee &&
+      employeeRole !== undefined &&
+      menuLink.employeesCanSee.includes(employeeRole)) ||
+    (isEmployee === false && menuLink.clientCanSee === true)
+  "
   [routerLink]="
     isEmployee ? ['/e', 'cabinet', menuLink.link] : ['cabinet', menuLink.link]
   "

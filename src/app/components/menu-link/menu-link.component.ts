@@ -6,6 +6,7 @@ import * as fromRoot from '../../store/root.reducer';
 import * as AppSelectors from '../../store/app/app.selectors';
 import * as AppActions from '../../store/app/app.actions';
 import { MenuLink } from '../../models/types/MenuLink';
+import EmployeeRole from '../../models/enums/EmployeeRole';
 
 @Component({
   selector: 'app-menu-link',
@@ -15,6 +16,7 @@ import { MenuLink } from '../../models/types/MenuLink';
 export class MenuLinkComponent implements OnInit, OnDestroy {
   @Input() menuLink: MenuLink;
   @Input() isEmployee: boolean;
+  @Input() employeeRole?: EmployeeRole;
 
   public isFullscreenMenuOpen = false;
   public isFullscreenMenuOpen$: Subscription;

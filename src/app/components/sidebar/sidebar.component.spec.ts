@@ -27,6 +27,10 @@ describe('SidebarComponent', () => {
             app: {
               isFullscreenMenuOpen: false,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

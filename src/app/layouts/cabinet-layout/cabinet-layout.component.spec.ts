@@ -36,6 +36,10 @@ describe('CabinetLayoutComponent', () => {
             app: {
               isFullscreenMenuOpen: false,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

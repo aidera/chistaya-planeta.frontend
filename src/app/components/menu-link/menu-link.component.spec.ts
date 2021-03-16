@@ -5,8 +5,9 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
-import { MenuLinkComponent } from './menu-link.component';
 import * as AppActions from '../../store/app/app.actions';
+import { MenuLinkComponent } from './menu-link.component';
+import EmployeeRole from '../../models/enums/EmployeeRole';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;
@@ -39,10 +40,20 @@ describe('MenuLinkComponent', () => {
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(MenuLinkComponent);
     component = fixture.componentInstance;
+    component.isEmployee = true;
+    component.employeeRole = EmployeeRole.head;
     component.menuLink = {
       link: 'test-link',
       iconPath: 'assets/icons/calendar.svg',
       title: 'Test title',
+      clientCanSee: true,
+      employeesCanSee: [
+        EmployeeRole.head,
+        EmployeeRole.admin,
+        EmployeeRole.clientManager,
+        EmployeeRole.driver,
+        EmployeeRole.receivingManager,
+      ],
     };
     fixture.detectChanges();
   });
