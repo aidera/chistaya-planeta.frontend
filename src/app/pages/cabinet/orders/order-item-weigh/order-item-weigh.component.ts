@@ -191,6 +191,9 @@ export class OrderItemWeighComponent implements OnInit, OnDestroy {
           });
 
           this.store.dispatch(OrdersActions.refreshUpdateOrderSucceed());
+          this.router.navigate(['../../', this.orderId], {
+            relativeTo: this.route,
+          });
         }
       });
 

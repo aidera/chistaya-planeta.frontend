@@ -57,8 +57,12 @@ export class OrderItemComponent
 
   public divisionsOptions$: Subscription;
   public divisionsOptions: OptionType[] = [];
+  public clientManagersOptions$: Subscription;
+  public clientManagersOptions: OptionType[] = [];
   public driversOptions$: Subscription;
   public driversOptions: OptionType[] = [];
+  public receivingManagersOptions$: Subscription;
+  public receivingManagersOptions: OptionType[] = [];
   public carsOptions$: Subscription;
   public carsOptions: OptionType[] = [];
 
@@ -109,6 +113,8 @@ export class OrderItemComponent
         status: new FormControl(''),
         companyComment: new FormControl(''),
         division: new FormControl(''),
+        clientManager: new FormControl(''),
+        receivingManager: new FormControl(''),
         driver: new FormControl(''),
         car: new FormControl(''),
       });
@@ -116,11 +122,11 @@ export class OrderItemComponent
 
     /* --- Process form --- */
     this.processForm = new FormGroup({
-      division: new FormControl('', Validators.required),
-      driver: new FormControl('', Validators.required),
-      car: new FormControl('', Validators.required),
-      deadlineDate: new FormControl('', Validators.required),
-      deadlineTime: new FormControl('', Validators.required),
+      division: new FormControl(''),
+      driver: new FormControl(''),
+      car: new FormControl(''),
+      deadlineDate: new FormControl(''),
+      deadlineTime: new FormControl(''),
       comment: new FormControl(''),
     });
 
@@ -188,6 +194,10 @@ export class OrderItemComponent
             status: String(order.status) || '',
             companyComment: String(order.companyComment) || '',
             division: (order.division as IDivision)?._id || '',
+            clientManager:
+              (order.performers.clientManager as IEmployee)?._id || '',
+            receivingManager:
+              (order.performers.receivingManager as IEmployee)?._id || '',
             driver: (order.performers.driver as IEmployee)?._id || '',
             car: (order.performers.car as ICar)?._id || '',
           });
@@ -216,6 +226,48 @@ export class OrderItemComponent
             this.divisionsOptions = value;
           });
 
+        /* Client Managers */
+        this.clientManagersOptions$?.unsubscribe();
+        this.clientManagersOptions$ = this.options
+          .getEmployeesOptions({
+            statuses: [EmployeeStatus.active],
+            roles: [EmployeeRole.clientManager],
+            localitiesIds: (order?.locality as ILocality)?._id
+              ? [(order?.locality as ILocality)?._id]
+              : undefined,
+          })
+          .subscribe((value) => {
+            this.clientManagersOptions = value;
+          });
+
+        /* Receiving Managers */
+        this.driversOptions$?.unsubscribe();
+        this.driversOptions$ = this.options
+          .getEmployeesOptions({
+            statuses: [EmployeeStatus.active],
+            roles: [EmployeeRole.driver],
+            divisionsIds: (order?.division as IDivision)?._id
+              ? [(order?.division as IDivision)?._id]
+              : undefined,
+          })
+          .subscribe((value) => {
+            this.driversOptions = value;
+          });
+
+        /* Receiving Managers */
+        this.receivingManagersOptions$?.unsubscribe();
+        this.receivingManagersOptions$ = this.options
+          .getEmployeesOptions({
+            statuses: [EmployeeStatus.active],
+            roles: [EmployeeRole.receivingManager],
+            divisionsIds: (order?.division as IDivision)?._id
+              ? [(order?.division as IDivision)?._id]
+              : undefined,
+          })
+          .subscribe((value) => {
+            this.receivingManagersOptions = value;
+          });
+
         /* Cars */
         this.carsOptions$?.unsubscribe();
         this.carsOptions$ = this.options
@@ -223,6 +275,9 @@ export class OrderItemComponent
             statuses: [CarStatus.active, CarStatus.temporaryUnavailable],
             divisionsIds: (order?.division as IDivision)?._id
               ? [(order?.division as IDivision)?._id]
+              : undefined,
+            driversIds: (order?.performers?.driver as IEmployee)?._id
+              ? [(order?.performers.driver as IEmployee)?._id]
               : undefined,
           })
           .subscribe((value) => {
@@ -391,7 +446,9 @@ export class OrderItemComponent
     this.socket.get()?.off('services');
 
     this.divisionsOptions$?.unsubscribe?.();
+    this.clientManagersOptions$?.unsubscribe?.();
     this.driversOptions$?.unsubscribe?.();
+    this.receivingManagersOptions$?.unsubscribe?.();
     this.carsOptions$?.unsubscribe?.();
 
     this.processDivisionsOptions$?.unsubscribe?.();
@@ -537,20 +594,22 @@ export class OrderItemComponent
       control.markAsTouched({ onlySelf: true });
     });
 
-    const deadlineDate = new Date(this.processForm.get('deadlineDate').value);
-    const deadlineTime = this.processForm.get('deadlineTime').value;
-    const deadlineHours = deadlineTime.split(':')[0];
-    const deadlineMinutes = deadlineTime.split(':')[1];
-
-    const deadline = deadlineDate;
-    deadline.setHours(deadlineHours, deadlineMinutes);
-
     if (this.processForm.valid) {
       if (
         (this.item?.type === OrderType.offer &&
           this.item?.delivery._type === DeliveryType.company) ||
         this.item?.type === OrderType.service
       ) {
+        const deadlineDate = new Date(
+          this.processForm.get('deadlineDate').value
+        );
+        const deadlineTime = this.processForm.get('deadlineTime').value;
+        const deadlineHours = deadlineTime.split(':')[0];
+        const deadlineMinutes = deadlineTime.split(':')[1];
+
+        const deadline = deadlineDate;
+        deadline.setHours(deadlineHours, deadlineMinutes);
+
         this.store.dispatch(
           OrdersActions.processOrderRequest({
             id: this.item._id,
@@ -698,6 +757,72 @@ export class OrderItemComponent
       this.store.dispatch(
         OrdersActions.setOrderDelivered({
           id: this.item._id,
+        })
+      );
+    }
+  }
+
+  public updateCompanyComment(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.updateOrderCompanyCommentRequest({
+          id: this.item._id,
+          comment: this.form.get('companyComment').value,
+        })
+      );
+    }
+  }
+
+  public setOrderDivision(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.setOrderDivisionRequest({
+          id: this.item._id,
+          division: this.form.get('division').value,
+        })
+      );
+    }
+  }
+
+  public setClientManager(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.assignOrderClientManagerRequest({
+          id: this.item._id,
+          manager: this.form.get('clientManager').value,
+        })
+      );
+    }
+  }
+
+  public setReceivingManager(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.assignOrderReceivingManagerRequest({
+          id: this.item._id,
+          manager: this.form.get('receivingManager').value,
+        })
+      );
+    }
+  }
+
+  public setDriver(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.assignOrderDriverRequest({
+          id: this.item._id,
+          driver: this.form.get('driver').value,
+        })
+      );
+    }
+  }
+
+  public setCar(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.setOrderCarRequest({
+          id: this.item._id,
+          car: this.form.get('car').value,
         })
       );
     }

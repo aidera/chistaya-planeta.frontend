@@ -12,6 +12,10 @@
     description="К сожалению, этой заявки мы не нашли... Возможно, оно уже сдала вторсырьё :)"
   ></app-item-not-found>
 
+  <a [routerLink]="['../../', orderId]" class="cabinet-content__backlink"
+    >&#8592; Заявка</a
+  >
+
   <!-- Content grid -->
   <div
     *ngIf="!getOrderError && !updateOrderError"

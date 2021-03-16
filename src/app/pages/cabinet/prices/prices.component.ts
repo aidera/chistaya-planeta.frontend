@@ -20,6 +20,12 @@ import PriceType from '../../../models/enums/PriceType';
 import SimpleStatus from '../../../models/enums/SimpleStatus';
 import Price from '../../../models/types/Price';
 import Unit from '../../../models/enums/Unit';
+import { IEmployee } from '../../../models/Employee';
+import IClient from '../../../models/Client';
+import { UserType } from '../../../models/enums/UserType';
+import EmployeeRole from '../../../models/enums/EmployeeRole';
+import * as UsersSelectors from '../../../store/users/users.selectors';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-prices',
@@ -27,6 +33,12 @@ import Unit from '../../../models/enums/Unit';
   styleUrls: ['./prices.component.scss'],
 })
 export class PricesComponent implements OnInit, OnDestroy {
+  protected user$: Subscription;
+  public userEmployee: IEmployee;
+  public userClient: IClient;
+  protected userType$: Subscription;
+  public userType: UserType;
+
   private offers$: Subscription;
   public offers: IOffer[];
   private offersAreFetching$: Subscription;
@@ -56,6 +68,8 @@ export class PricesComponent implements OnInit, OnDestroy {
 
   public simpleStatus = SimpleStatus;
   public unit = Unit;
+  public userTypeEnum = UserType;
+  public employeeRole = EmployeeRole;
 
   constructor(
     protected store: Store<fromRoot.State>,
@@ -64,6 +78,23 @@ export class PricesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.user$ = this.store
+      .select(UsersSelectors.selectUserType)
+      .pipe(
+        switchMap((userType) => {
+          this.userType = userType;
+          return this.store.select(UsersSelectors.selectUser);
+        })
+      )
+      .subscribe((user) => {
+        if (this.userType === UserType.employee) {
+          this.userEmployee = user as IEmployee;
+        }
+        if (this.userType === UserType.client) {
+          this.userClient = user as IClient;
+        }
+      });
+
     this.offers$ = this.store
       .select(OffersSelectors.selectOffers)
       .subscribe((offers) => {
@@ -182,6 +213,9 @@ export class PricesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.user$?.unsubscribe?.();
+    this.userType$?.unsubscribe?.();
+
     this.offers$?.unsubscribe();
     this.offersAreFetching$?.unsubscribe();
     this.offersAreUpdating$?.unsubscribe();

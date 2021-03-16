@@ -117,6 +117,23 @@ export class OrdersApiService {
     );
   }
 
+  updateCompanyComment(
+    id: string,
+    comment: string
+  ): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/update-company-comment/${id}`,
+      { comment }
+    );
+  }
+
+  setDivision(id: string, division: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/set-division/${id}`,
+      { division }
+    );
+  }
+
   assignClientManager(
     id: string,
     manager: string
@@ -162,6 +179,13 @@ export class OrdersApiService {
     return this.http.patch<IUpdateOrderResponse>(
       `${environment.serverURL}/${this.path}/accept-driver/${id}`,
       {}
+    );
+  }
+
+  setCar(id: string, car: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/set-car/${id}`,
+      { car }
     );
   }
 

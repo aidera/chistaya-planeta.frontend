@@ -38,7 +38,11 @@
               [content]="simpleStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
               [color]="simpleStatusColors[item?.status]"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('status')"
             ></app-item-field-inactive-status>
 
@@ -98,7 +102,11 @@
               label="Название"
               [content]="item?.name"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('name')"
             >
             </app-item-field-inactive-string>
@@ -151,7 +159,11 @@
                 filter__localities: item?._id || '',
                 page: 1 + ''
               }"
-              [useAddButton]="true"
+              [useAddButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               [addLinkArray]="['../../', 'divisions', 'add']"
               [addLinkQueryParams]="{ locality: item?._id || '' }"
             >
@@ -159,7 +171,15 @@
           </div>
 
           <!-- Cars -->
-          <div class="cabinet-content__field">
+          <div
+            *ngIf="
+              userType === userTypeEnum.employee &&
+              (userEmployee?.role === employeeRole.head ||
+                userEmployee?.role === employeeRole.admin ||
+                userEmployee?.role === employeeRole.clientManager)
+            "
+            class="cabinet-content__field"
+          >
             <app-item-field-inactive-list
               label="Автомобили"
               [list]="getItemCarsFieldListElements(item?.cars || [])"
@@ -169,7 +189,11 @@
                 filter__localities: item?._id || '',
                 page: 1 + ''
               }"
-              [useAddButton]="true"
+              [useAddButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               [addLinkArray]="['../../', 'cars', 'add']"
               [addLinkQueryParams]="{ locality: item?._id || '' }"
             >
@@ -177,7 +201,15 @@
           </div>
 
           <!-- Employees -->
-          <div class="cabinet-content__field">
+          <div
+            *ngIf="
+              userType === userTypeEnum.employee &&
+              (userEmployee?.role === employeeRole.head ||
+                userEmployee?.role === employeeRole.admin ||
+                userEmployee?.role === employeeRole.clientManager)
+            "
+            class="cabinet-content__field"
+          >
             <app-item-field-inactive-list
               label="Сотрудники"
               [list]="getItemEmployeesFieldListElements(item?.employees || [])"
@@ -187,7 +219,11 @@
                 filter__localities: item?._id || '',
                 page: 1 + ''
               }"
-              [useAddButton]="true"
+              [useAddButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               [addLinkArray]="['../../', 'employees', 'add']"
               [addLinkQueryParams]="{ locality: item?._id || '' }"
             >

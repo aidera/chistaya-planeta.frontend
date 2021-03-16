@@ -107,6 +107,16 @@ const _ordersReducer = createReducer(
     updateOrderIsFetching: true,
     updateOrderError: null,
   })),
+  on(OrdersActions.updateOrderCompanyCommentRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
+  on(OrdersActions.setOrderDivisionRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
   on(OrdersActions.assignOrderClientManagerRequest, (state) => ({
     ...state,
     updateOrderIsFetching: true,
@@ -133,6 +143,11 @@ const _ordersReducer = createReducer(
     updateOrderError: null,
   })),
   on(OrdersActions.acceptOrderDriverRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
+  on(OrdersActions.setOrderCarRequest, (state) => ({
     ...state,
     updateOrderIsFetching: true,
     updateOrderError: null,

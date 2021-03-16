@@ -26,7 +26,8 @@
       *ngIf="
         (userEmployee?.role === employeeRole.clientManager &&
           item?.status === orderStatus.raw &&
-          item?.performers.clientManager?._id === userEmployee._id) ||
+          item?.performers.clientManager?._id === userEmployee._id &&
+          item?.performers.clientManagerAccepted === true) ||
         ((userEmployee?.role === employeeRole.admin ||
           userEmployee?.role === employeeRole.head) &&
           item?.status === orderStatus.raw)
@@ -36,14 +37,15 @@
       color="primary"
       (click)="isProcessFormModalOpen = true"
     >
-      Обработать заявку
+      Обработать
     </button>
 
     <button
       *ngIf="
         item?.status === orderStatus.processed &&
         userEmployee?.role === employeeRole.driver &&
-          item?.performers.driver._id === userEmployee?._id
+        item?.performers.driver._id === userEmployee?._id &&
+        item?.performers.driverAccepted === true
       "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-raised-button
@@ -57,7 +59,8 @@
       *ngIf="
         item?.status === orderStatus.inTransit &&
         userEmployee?.role === employeeRole.driver &&
-          item?.performers.driver._id === userEmployee?._id
+        item?.performers.driver._id === userEmployee?._id &&
+        item?.performers.driverAccepted === true
       "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-raised-button
@@ -183,6 +186,7 @@
             <app-item-field-inactive-string
               label="Населённый пункт"
               [content]="item?.locality?.name"
+              [linkArray]="['../../', 'localities', item?.locality?._id]"
               [isFetching]="itemIsFetching"
             >
             </app-item-field-inactive-string>
@@ -398,6 +402,18 @@
               >
               </app-item-field-inactive-string>
             </div>
+
+            <!-- Weighed total amount -->
+            <div
+              class="cabinet-content__field"
+              *ngIf="item?.weighed?.paymentAmount !== undefined"
+            >
+              <app-item-field-inactive-string
+                [content]="'Итого: ' + item?.weighed.paymentAmount + ' руб.'"
+                [isFetching]="itemIsFetching"
+              >
+              </app-item-field-inactive-string>
+            </div>
           </ng-container>
         </mat-card>
       </div>
@@ -416,7 +432,15 @@
               [content]="item?.division?.name"
               [linkArray]="['../../', 'divisions', item?.division?._id]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin ||
+                  userEmployee?.role === employeeRole.clientManager) &&
+                item?.status !== orderStatus.refused &&
+                  item?.status !== orderStatus.cancelled &&
+                  item?.status !== orderStatus.completed
+              "
               (editClick)="setActiveField('division')"
             >
             </app-item-field-inactive-string>
@@ -433,7 +457,7 @@
               [excludeBeforeClick]="true"
               class="cabinet-content__field-active"
             >
-              <form [formGroup]="form" (ngSubmit)="update()">
+              <form [formGroup]="form" (ngSubmit)="setOrderDivision()">
                 <app-select
                   label="Подразделение"
                   [control]="form.get('division')"
@@ -442,7 +466,7 @@
               </form>
 
               <app-item-field-save-button
-                (update)="update()"
+                (update)="setOrderDivision()"
                 [disable]="
                   itemIsUpdating ||
                   form.get('division').value === item?.division?._id
@@ -454,6 +478,7 @@
           <!-- Performers client manager -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
+              *ngIf="activeField !== 'clientManager'"
               label="Менеджер по работе с клиентами"
               [content]="
                 item?.performers?.clientManager?.name
@@ -467,14 +492,67 @@
               [color]="
                 item?.performers?.clientManagerAccepted ? 'green' : 'yellow'
               "
+              [linkArray]="
+                item?.performers?.clientManager
+                  ? [
+                      '../../',
+                      'employees',
+                      item?.performers?.clientManager?._id
+                    ]
+                  : undefined
+              "
               [isFetching]="itemIsFetching"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin) &&
+                item?.status !== orderStatus.refused &&
+                  item?.status !== orderStatus.cancelled &&
+                  item?.status !== orderStatus.completed
+              "
+              (editClick)="setActiveField('clientManager')"
             >
             </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'clientManager'"
+              (clickOutside)="
+                removeActiveField(
+                  'clientManager',
+                  item?.performers?.clientManager?._id || ''
+                )
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="setClientManager()">
+                <app-select
+                  label="Менеджер по работе с клиентами"
+                  [control]="form.get('clientManager')"
+                  [options]="clientManagersOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="setClientManager()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('clientManager').value ===
+                    item?.performers?.clientManager?._id ||
+                  form.get('clientManager').value === ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
 
           <!-- Performers receiving manager -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
+              *ngIf="activeField !== 'receivingManager'"
               label="Принимающий менеджер"
               [content]="
                 item?.performers?.receivingManager?.name
@@ -485,19 +563,77 @@
                     )
                   : undefined
               "
-              [color]="item?.performers?.receivingManager ? 'green' : 'yellow'"
+              [color]="
+                item?.performers?.receivingManager &&
+                item?.performers?.receivingManagerAccepted
+                  ? 'green'
+                  : 'yellow'
+              "
+              [linkArray]="
+                item?.performers?.receivingManager
+                  ? [
+                      '../../',
+                      'employees',
+                      item?.performers?.receivingManager?._id
+                    ]
+                  : undefined
+              "
               [isFetching]="itemIsFetching"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin) &&
+                item?.status !== orderStatus.refused &&
+                  item?.status !== orderStatus.cancelled &&
+                  item?.status !== orderStatus.completed
+              "
+              (editClick)="setActiveField('receivingManager')"
             >
             </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'receivingManager'"
+              (clickOutside)="
+                removeActiveField(
+                  'receivingManager',
+                  item?.performers?.receivingManager?._id || ''
+                )
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="setReceivingManager()">
+                <app-select
+                  label="Принимающий менеджер"
+                  [control]="form.get('receivingManager')"
+                  [options]="receivingManagersOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="setReceivingManager()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('receivingManager').value ===
+                    item?.performers?.receivingManager?._id ||
+                  form.get('receivingManager').value === ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
 
           <!-- Performers driver -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
               *ngIf="
-                (item?.type === orderType.offer &&
+                activeField !== 'driver' &&
+                ((item?.type === orderType.offer &&
                   item?.delivery._type === deliveryType.company) ||
-                item?.type === orderType.service
+                  item?.type === orderType.service)
               "
               label="Водитель"
               [content]="
@@ -509,31 +645,124 @@
                     )
                   : undefined
               "
-              [color]="item?.performers?.driver ? 'green' : 'yellow'"
+              [color]="
+                item?.performers?.driver && item?.performers?.driverAccepted
+                  ? 'green'
+                  : 'yellow'
+              "
+              [linkArray]="
+                item?.performers?.driver
+                  ? ['../../', 'employees', item?.performers?.driver?._id]
+                  : undefined
+              "
               [isFetching]="itemIsFetching"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin ||
+                  userEmployee?.role === employeeRole.clientManager) &&
+                item?.status !== orderStatus.refused &&
+                  item?.status !== orderStatus.cancelled &&
+                  item?.status !== orderStatus.completed
+              "
+              (editClick)="setActiveField('driver')"
             >
             </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'driver'"
+              (clickOutside)="
+                removeActiveField('driver', item?.performers?.driver?._id || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="setDriver()">
+                <app-select
+                  label="Водитель"
+                  [control]="form.get('driver')"
+                  [options]="driversOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="setDriver()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('driver').value === item?.performers?.driver?._id ||
+                  form.get('driver').value === ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
 
           <!-- Performers car -->
-          <div
-            *ngIf="
-              (item?.type === orderType.offer &&
-                item?.delivery._type === deliveryType.company) ||
-              item?.type === orderType.service
-            "
-            class="cabinet-content__field"
-          >
+          <div class="cabinet-content__field">
             <app-item-field-inactive-string
+              *ngIf="
+                activeField !== 'car' &&
+                ((item?.type === orderType.offer &&
+                  item?.delivery._type === deliveryType.company) ||
+                  item?.type === orderType.service)
+              "
               label="Автомобиль"
               [content]="
                 item?.performers?.car?.licensePlate
                   ? item?.performers?.car?.licensePlate
                   : undefined
               "
+              [linkArray]="
+                item?.performers?.car
+                  ? ['../../', 'cars', item?.performers?.car?._id]
+                  : undefined
+              "
               [isFetching]="itemIsFetching"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin ||
+                  userEmployee?.role === employeeRole.clientManager) &&
+                item?.status !== orderStatus.refused &&
+                  item?.status !== orderStatus.cancelled &&
+                  item?.status !== orderStatus.completed
+              "
+              (editClick)="setActiveField('car')"
             >
             </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'car'"
+              (clickOutside)="
+                removeActiveField('car', item?.performers?.car?._id || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="setCar()">
+                <app-select
+                  label="Автомобиль"
+                  [control]="form.get('car')"
+                  [options]="carsOptions"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="setCar()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('car').value === item?.performers?.car?._id ||
+                  form.get('car').value === ''
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
         </mat-card>
       </div>
@@ -545,7 +774,15 @@
         "
       >
         <mat-card>
-          <h2>Результаты взвешивания</h2>
+          <div class="cabinet-content__header">
+            <h2>Результаты взвешивания</h2>
+            <button mat-icon-button [routerLink]="['../', 'weigh', item?._id]">
+              <span
+                class="icon"
+                [inlineSVG]="'../../assets/icons/pencil.svg'"
+              ></span>
+            </button>
+          </div>
 
           <ng-container *ngIf="item?.weighed?.offers?.length > 0">
             <!-- Weighed offers -->
@@ -598,13 +835,41 @@
           </div>
 
           <!-- Company comment -->
-          <div class="cabinet-content__field">
+          <div class="cabinet-content__field" *ngIf="userEmployee">
             <app-item-field-inactive-string
+              *ngIf="activeField !== 'companyComment'"
               label="Комментарий компании"
               [content]="item?.companyComment"
               [isFetching]="itemIsFetching"
+              [useEditButton]="userType === userTypeEnum.employee"
+              (editClick)="setActiveField('companyComment')"
             >
             </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'companyComment'"
+              (clickOutside)="
+                removeActiveField('companyComment', item?.companyComment || '')
+              "
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="updateCompanyComment()">
+                <app-textarea
+                  label="Комментарий компании"
+                  [control]="form.get('companyComment')"
+                >
+                </app-textarea>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateCompanyComment()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('companyComment').value === item?.companyComment
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
 
           <!-- Customer cancellation reason -->
@@ -712,7 +977,7 @@
           <!-- Status Date Refused -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
-              label="Завершено"
+              label="Отменено"
               [content]="item?.statusDateRefused | date: 'dd.MM.yyyy - HH:mm'"
               [isFetching]="itemIsFetching"
             >

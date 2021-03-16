@@ -21,7 +21,12 @@
 
               <div class="price-element__inactive-actions">
                 <button
-                  *ngIf="offerFormActiveField !== offer._id"
+                  *ngIf="
+                    offerFormActiveField !== offer._id &&
+                    userType === userTypeEnum.employee &&
+                    (userEmployee?.role === employeeRole.head ||
+                      userEmployee?.role === employeeRole.admin)
+                  "
                   mat-icon-button
                   (click)="setOffersFormActiveField(offer._id)"
                 >
@@ -32,7 +37,12 @@
                 </button>
 
                 <button
-                  *ngIf="offer.status === simpleStatus.active"
+                  *ngIf="
+                    offer.status === simpleStatus.active &&
+                    userType === userTypeEnum.employee &&
+                    (userEmployee?.role === employeeRole.head ||
+                      userEmployee?.role === employeeRole.admin)
+                  "
                   mat-icon-button
                   color="warn"
                   (click)="updateOfferStatus(offer._id, simpleStatus.inactive)"
@@ -44,7 +54,12 @@
                 </button>
 
                 <button
-                  *ngIf="offer.status !== simpleStatus.active"
+                  *ngIf="
+                    offer.status !== simpleStatus.active &&
+                    userType === userTypeEnum.employee &&
+                    (userEmployee?.role === employeeRole.head ||
+                      userEmployee?.role === employeeRole.admin)
+                  "
                   mat-icon-button
                   color="primary"
                   (click)="updateOfferStatus(offer._id, simpleStatus.active)"
@@ -229,7 +244,12 @@
 
               <div class="price-element__inactive-actions">
                 <button
-                  *ngIf="serviceFormActiveField !== service._id"
+                  *ngIf="
+                    serviceFormActiveField !== service._id &&
+                    userType === userTypeEnum.employee &&
+                    (userEmployee?.role === employeeRole.head ||
+                      userEmployee?.role === employeeRole.admin)
+                  "
                   mat-icon-button
                   (click)="setServicesFormActiveField(service._id)"
                 >
@@ -240,7 +260,12 @@
                 </button>
 
                 <button
-                  *ngIf="service.status === simpleStatus.active"
+                  *ngIf="
+                    service.status === simpleStatus.active &&
+                    userType === userTypeEnum.employee &&
+                    (userEmployee?.role === employeeRole.head ||
+                      userEmployee?.role === employeeRole.admin)
+                  "
                   mat-icon-button
                   color="warn"
                   (click)="
@@ -254,7 +279,12 @@
                 </button>
 
                 <button
-                  *ngIf="service.status !== simpleStatus.active"
+                  *ngIf="
+                    service.status !== simpleStatus.active &&
+                    userType === userTypeEnum.employee &&
+                    (userEmployee?.role === employeeRole.head ||
+                      userEmployee?.role === employeeRole.admin)
+                  "
                   mat-icon-button
                   color="primary"
                   (click)="

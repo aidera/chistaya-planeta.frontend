@@ -38,7 +38,11 @@
               [content]="carStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
               [color]="carStatusColors[item?.status]"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('status')"
             ></app-item-field-inactive-status>
 
@@ -98,7 +102,11 @@
               label="Номер"
               [content]="item?.licensePlate"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('licensePlate')"
             >
             </app-item-field-inactive-string>
@@ -153,7 +161,11 @@
               label="Тип"
               [content]="carTypeStrings[item?.type]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('type')"
             >
             </app-item-field-inactive-string>
@@ -204,7 +216,11 @@
                   : undefined
               "
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('isCorporate')"
             >
             </app-item-field-inactive-string>
@@ -253,7 +269,11 @@
               label="Вес, т"
               [content]="item?.weight.toString()"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('weight')"
             >
             </app-item-field-inactive-string>
@@ -305,7 +325,11 @@
               [content]="item?.locality?.name"
               [linkArray]="['../../', 'localities', item?.locality?._id]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('locality')"
             >
             </app-item-field-inactive-string>
@@ -352,7 +376,11 @@
                 filter__cars: item?._id || '',
                 page: 1 + ''
               }"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('divisions')"
             >
             </app-item-field-inactive-list>
@@ -416,7 +444,11 @@
                 filter__cars: item?._id || '',
                 page: 1 + ''
               }"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('drivers')"
             >
             </app-item-field-inactive-list>

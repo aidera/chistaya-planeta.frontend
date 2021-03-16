@@ -37,6 +37,10 @@ export const REFRESH_UPDATE_ORDER_FAILURE =
 /* Other updates */
 export const UPDATE_ORDER_STATUS_REQUEST =
   '[orders] update - order status - request';
+export const UPDATE_ORDER_COMPANY_COMMENT_REQUEST =
+  '[orders] update - order company comment - request';
+export const SET_ORDER_DIVISION_REQUEST =
+  '[orders] set - order division - request';
 export const ASSIGN_ORDER_CLIENT_MANAGER_REQUEST =
   '[orders] assign - order client manager - request';
 export const ACCEPT_ORDER_CLIENT_MANAGER_REQUEST =
@@ -49,6 +53,7 @@ export const ASSIGN_ORDER_DRIVER_REQUEST =
   '[orders] assign - order driver - request';
 export const ACCEPT_ORDER_DRIVER_REQUEST =
   '[orders] accept - order driver - request';
+export const SET_ORDER_CAR_REQUEST = '[orders] set - order car - request';
 export const PROCESS_ORDER_REQUEST = '[orders] process - order - request';
 export const REFUSE_ORDER_REQUEST = '[orders] refuse - order - request';
 export const CANCEL_ORDER_REQUEST = '[orders] cancel - order - request';
@@ -146,6 +151,14 @@ export const updateOrderStatusRequest = createAction(
   UPDATE_ORDER_STATUS_REQUEST,
   props<{ id: string; status: OrderStatus }>()
 );
+export const updateOrderCompanyCommentRequest = createAction(
+  UPDATE_ORDER_COMPANY_COMMENT_REQUEST,
+  props<{ id: string; comment: string }>()
+);
+export const setOrderDivisionRequest = createAction(
+  SET_ORDER_DIVISION_REQUEST,
+  props<{ id: string; division: string }>()
+);
 export const assignOrderClientManagerRequest = createAction(
   ASSIGN_ORDER_CLIENT_MANAGER_REQUEST,
   props<{ id: string; manager: string }>()
@@ -169,6 +182,10 @@ export const assignOrderDriverRequest = createAction(
 export const acceptOrderDriverRequest = createAction(
   ACCEPT_ORDER_DRIVER_REQUEST,
   props<{ id: string }>()
+);
+export const setOrderCarRequest = createAction(
+  SET_ORDER_CAR_REQUEST,
+  props<{ id: string; car: string }>()
 );
 export const processOrderRequest = createAction(
   PROCESS_ORDER_REQUEST,

@@ -33,6 +33,10 @@ describe('PricesComponent', () => {
             services: {
               services: null,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

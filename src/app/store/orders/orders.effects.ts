@@ -104,6 +104,62 @@ export class OrdersEffects {
     )
   );
 
+  updateOrderCompanyComment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.updateOrderCompanyCommentRequest),
+      switchMap((action) => {
+        return this.ordersApi
+          .updateCompanyComment(action.id, action.comment)
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedOrder) {
+                return OrdersActions.updateOrderSuccess({
+                  order: resData.updatedOrder,
+                });
+              }
+              return OrdersActions.updateOrderFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                OrdersActions.updateOrderFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
+      })
+    )
+  );
+
+  setOrderDivision$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.setOrderDivisionRequest),
+      switchMap((action) => {
+        return this.ordersApi.setDivision(action.id, action.division).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
   assignOrderClientManager$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrdersActions.assignOrderClientManagerRequest),
@@ -248,6 +304,33 @@ export class OrdersEffects {
       ofType(OrdersActions.acceptOrderDriverRequest),
       switchMap((action) => {
         return this.ordersApi.acceptDriver(action.id).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
+  setOrderCar$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.setOrderCarRequest),
+      switchMap((action) => {
+        return this.ordersApi.setCar(action.id, action.car).pipe(
           map((resData) => {
             if (resData && resData.updatedOrder) {
               return OrdersActions.updateOrderSuccess({

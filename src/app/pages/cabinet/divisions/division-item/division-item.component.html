@@ -39,7 +39,11 @@
               [isFetching]="itemIsFetching"
               [color]="simpleStatusColors[item?.status]"
               (editClick)="setActiveField('status')"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
             ></app-item-field-inactive-status>
 
             <div
@@ -98,7 +102,11 @@
               label="Название"
               [content]="item?.name"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('name')"
             >
             </app-item-field-inactive-string>
@@ -141,7 +149,15 @@
           </div>
 
           <!-- Cars -->
-          <div class="cabinet-content__field">
+          <div
+            *ngIf="
+              userType === userTypeEnum.employee &&
+              (userEmployee?.role === employeeRole.head ||
+                userEmployee?.role === employeeRole.admin ||
+                userEmployee?.role === employeeRole.clientManager)
+            "
+            class="cabinet-content__field"
+          >
             <app-item-field-inactive-list
               label="Автомобили"
               [list]="getItemCarsFieldListElements(item?.cars || [])"
@@ -151,7 +167,11 @@
                 filter__divisions: item?._id || '',
                 page: 1 + ''
               }"
-              [useAddButton]="true"
+              [useAddButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               [addLinkArray]="['../../', 'cars', 'add']"
               [addLinkQueryParams]="{
                 locality: item?.locality?._id || '',
@@ -162,7 +182,15 @@
           </div>
 
           <!-- Employees -->
-          <div class="cabinet-content__field">
+          <div
+            *ngIf="
+              userType === userTypeEnum.employee &&
+              (userEmployee?.role === employeeRole.head ||
+                userEmployee?.role === employeeRole.admin ||
+                userEmployee?.role === employeeRole.clientManager)
+            "
+            class="cabinet-content__field"
+          >
             <app-item-field-inactive-list
               label="Сотрудники"
               [list]="getItemEmployeesFieldListElements(item?.employees || [])"
@@ -172,7 +200,11 @@
                 filter__divisions: item?._id || '',
                 page: 1 + ''
               }"
-              [useAddButton]="true"
+              [useAddButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               [addLinkArray]="['../../', 'employees', 'add']"
               [addLinkQueryParams]="{
                 locality: item?.locality?._id || '',
@@ -190,7 +222,7 @@
         <mat-card>
           <h2>Местоположение</h2>
 
-          <!-- Locality -->
+          <!-- `Locality -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
               *ngIf="activeField !== 'locality'"
@@ -198,7 +230,11 @@
               [content]="item?.locality?.name"
               [linkArray]="['../../', 'localities', item?.locality?._id]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('locality')"
             >
             </app-item-field-inactive-string>
@@ -240,7 +276,11 @@
               label="Улица"
               [content]="item?.street"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('street')"
             >
             </app-item-field-inactive-string>
@@ -281,7 +321,11 @@
               label="Дом"
               [content]="item?.house"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('house')"
             >
             </app-item-field-inactive-string>

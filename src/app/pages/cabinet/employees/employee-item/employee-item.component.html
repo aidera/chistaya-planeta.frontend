@@ -42,7 +42,11 @@
               [content]="employeeStatusStrings[item?.status]"
               [isFetching]="itemIsFetching"
               [color]="employeeStatusColors[item?.status]"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('status')"
             ></app-item-field-inactive-status>
 
@@ -102,7 +106,11 @@
               label="Роль"
               [content]="employeeRoleStrings[item?.role]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('role')"
             >
             </app-item-field-inactive-string>
@@ -153,7 +161,11 @@
               label="Имя"
               [content]="item?.name"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('name')"
             >
             </app-item-field-inactive-string>
@@ -195,7 +207,11 @@
               label="Фамилия"
               [content]="item?.surname"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('surname')"
             >
             </app-item-field-inactive-string>
@@ -237,7 +253,11 @@
               label="Отчество"
               [content]="item?.patronymic"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('patronymic')"
             >
             </app-item-field-inactive-string>
@@ -285,7 +305,11 @@
               label="Email"
               [content]="item?.email"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('email')"
             >
             </app-item-field-inactive-string>
@@ -342,7 +366,11 @@
               label="Телефон"
               [content]="item?.phone | mask: '+0 (000) 000-00-00'"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('phone')"
             >
             </app-item-field-inactive-string>
@@ -406,7 +434,11 @@
               [content]="item?.locality?.name"
               [linkArray]="['../../', 'localities', item?.locality?._id]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('locality')"
             >
             </app-item-field-inactive-string>
@@ -449,7 +481,11 @@
               [content]="item?.division?.name"
               [linkArray]="['../../', 'divisions', item?.division?._id]"
               [isFetching]="itemIsFetching"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('division')"
             >
             </app-item-field-inactive-string>
@@ -515,7 +551,11 @@
                 filter__employees: item?._id || '',
                 page: 1 + ''
               }"
-              [useEditButton]="true"
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin)
+              "
               (editClick)="setActiveField('cars')"
             >
             </app-item-field-inactive-list>
