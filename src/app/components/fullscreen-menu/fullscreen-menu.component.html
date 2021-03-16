@@ -1,7 +1,9 @@
 <div class="fullscreen-menu" *ngIf="isFullscreenMenuOpen" [@fullscreen-menu]>
   <div class="fullscreen-menu__company">
     <img src="../../../assets/images/logo.png" alt='Логотип "Чистая планета"' />
-    <p class="employee-definer" *ngIf="isEmployee">Личный кабинет сотрудника</p>
+    <p class="employee-definer" *ngIf="userType === userTypeEnum.employee">
+      Личный кабинет сотрудника
+    </p>
     <h3>Чистая планета</h3>
     <strong>сохраним природу детям</strong>
   </div>
@@ -9,7 +11,10 @@
     <app-menu-link
       *ngFor="let menuItem of menuLinks"
       [menuLink]="menuItem"
-      [isEmployee]="isEmployee"
+      [isEmployee]="userType === userTypeEnum.employee"
+      [employeeRole]="
+        userType === userTypeEnum.employee ? user?.role : undefined
+      "
     ></app-menu-link>
   </nav>
 </div>

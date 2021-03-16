@@ -31,6 +31,10 @@ describe('FullscreenMenuComponent', () => {
             app: {
               isFullscreenMenuOpen: false,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

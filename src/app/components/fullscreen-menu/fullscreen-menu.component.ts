@@ -6,6 +6,10 @@ import { Store } from '@ngrx/store';
 import { menuLinksAll } from '../../data/menuLinks';
 import * as fromRoot from '../../store/root.reducer';
 import * as AppSelectors from '../../store/app/app.selectors';
+import { IEmployee } from '../../models/Employee';
+import IClient from '../../models/Client';
+import { UserType } from '../../models/enums/UserType';
+import * as UsersSelectors from '../../store/users/users.selectors';
 
 @Component({
   selector: 'app-fullscreen-menu',
@@ -28,15 +32,32 @@ import * as AppSelectors from '../../store/app/app.selectors';
   ],
 })
 export class FullscreenMenuComponent implements OnInit, OnDestroy {
-  @Input() isEmployee: boolean;
+  protected user$: Subscription;
+  protected userType$: Subscription;
+  public user: IEmployee | IClient;
+  public userType: UserType;
+
   public menuLinks = menuLinksAll;
 
   public isFullscreenMenuOpen = false;
   public isFullscreenMenuOpen$: Subscription;
 
+  public userTypeEnum = UserType;
+
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
+    this.user$ = this.store
+      .select(UsersSelectors.selectUser)
+      .subscribe((user) => {
+        this.user = user;
+      });
+    this.userType$ = this.store
+      .select(UsersSelectors.selectUserType)
+      .subscribe((type) => {
+        this.userType = type;
+      });
+
     this.isFullscreenMenuOpen$ = this.store
       .select(AppSelectors.selectIsFullScreenMenuOpen)
       .subscribe((status) => {
@@ -50,6 +71,8 @@ export class FullscreenMenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.user$?.unsubscribe?.();
+    this.userType$?.unsubscribe?.();
     this.isFullscreenMenuOpen$?.unsubscribe();
   }
 }
