@@ -2,7 +2,7 @@ import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import {
@@ -26,11 +26,24 @@ import { removeURLParameter } from '../../utils/removeUrlParameter';
 import { ConverterService } from '../../services/converter/converter.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { OptionsService } from '../../services/options/options.service';
+import { IEmployee } from '../../models/Employee';
+import IClient from '../../models/Client';
+import { UserType } from '../../models/enums/UserType';
+import * as UsersSelectors from '../../store/users/users.selectors';
+import EmployeeRole from '../../models/enums/EmployeeRole';
 
 @Component({
   template: '',
 })
 export class TablePageComponent implements OnInit, OnDestroy {
+  /* ------------- */
+  /* User settings */
+  /* --------------*/
+  protected user$: Subscription;
+  public userEmployee: IEmployee;
+  public userClient: IClient;
+  public userType: UserType;
+
   /* ------------------- */
   /* Main items settings */
   /* ------------------- */
@@ -69,6 +82,12 @@ export class TablePageComponent implements OnInit, OnDestroy {
   ) => any;
   protected getItemsSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public userTypeEnum = UserType;
+  public employeeRole = EmployeeRole;
+
   constructor(
     protected store: Store<fromRoot.State>,
     @Inject(LOCALE_ID) protected locale: string,
@@ -82,6 +101,26 @@ export class TablePageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    /* ----------------- */
+    /* Get user settings */
+    /* ----------------- */
+    this.user$ = this.store
+      .select(UsersSelectors.selectUserType)
+      .pipe(
+        switchMap((userType) => {
+          this.userType = userType;
+          return this.store.select(UsersSelectors.selectUser);
+        })
+      )
+      .subscribe((user) => {
+        if (this.userType === UserType.employee) {
+          this.userEmployee = user as IEmployee;
+        }
+        if (this.userType === UserType.client) {
+          this.userClient = user as IClient;
+        }
+      });
+
     /* ------------------------------ */
     /* Initializing forms and request */
     /* ------------------------------ */
@@ -180,6 +219,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.user$?.unsubscribe?.();
     this.isFetching$?.unsubscribe?.();
     this.getItemsError$?.unsubscribe?.();
     this.pagination$?.unsubscribe?.();

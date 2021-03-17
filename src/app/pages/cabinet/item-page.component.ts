@@ -35,18 +35,19 @@ import { switchMap } from 'rxjs/operators';
   template: '',
 })
 export class ItemPageComponent implements OnInit, OnDestroy {
-  /* ------------------ */
-  /* Main item settings */
-  /* ------------------ */
-
-  public itemId: string;
-
+  /* ------------- */
+  /* User settings */
+  /* --------------*/
   protected user$: Subscription;
   public userEmployee: IEmployee;
   public userClient: IClient;
-  protected userType$: Subscription;
   public userType: UserType;
   public userInitCallback: () => void;
+
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
+  public itemId: string;
 
   protected item$: Subscription;
   public item: any;
@@ -142,7 +143,6 @@ export class ItemPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.user$?.unsubscribe?.();
-    this.userType$?.unsubscribe?.();
     this.item$?.unsubscribe?.();
     this.getItemError$?.unsubscribe?.();
     this.itemIsFetching$?.unsubscribe?.();

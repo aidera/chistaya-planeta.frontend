@@ -3,7 +3,13 @@
   <h1>Автомобиль{{ item ? ': ' + item.licensePlate : '' }}</h1>
   <div class="cabinet-header__actions">
     <button
-      *ngIf="item && item.status === carStatus.unavailable"
+      *ngIf="
+        item &&
+        item.status === carStatus.unavailable &&
+        userEmployee &&
+        (userEmployee.role === employeeRole.head ||
+          userEmployee.role === employeeRole.admin)
+      "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
       color="warn"

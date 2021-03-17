@@ -3,7 +3,12 @@
   <h1>Населённый пункт{{ item ? ': ' + item.name : '' }}</h1>
   <div class="cabinet-header__actions">
     <button
-      *ngIf="item && item.status === simpleStatus.inactive"
+      *ngIf="
+        item &&
+        item.status === simpleStatus.inactive &&
+        userEmployee &&
+        userEmployee.role === employeeRole.head
+      "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
       color="warn"

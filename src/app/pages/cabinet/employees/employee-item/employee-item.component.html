@@ -7,7 +7,15 @@
   </h1>
   <div class="cabinet-header__actions">
     <button
-      *ngIf="item && item.status === employeeStatus.fired"
+      *ngIf="
+        item &&
+        item.status === employeeStatus.fired &&
+        item.role !== employeeRole.head &&
+        item.role !== employeeRole.admin &&
+        userEmployee &&
+        (userEmployee.role === employeeRole.head ||
+          userEmployee.role === employeeRole.admin)
+      "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
       color="warn"

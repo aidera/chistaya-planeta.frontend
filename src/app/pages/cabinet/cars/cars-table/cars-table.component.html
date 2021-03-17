@@ -1,7 +1,16 @@
 <div class="cabinet-header">
   <h1>Автомобили</h1>
   <div class="cabinet-header__actions">
-    <button mat-raised-button color="primary" [routerLink]="['add']">
+    <button
+      *ngIf="
+        userEmployee &&
+        (userEmployee.role === employeeRole.head ||
+          userEmployee.role === employeeRole.admin)
+      "
+      mat-raised-button
+      color="primary"
+      [routerLink]="['add']"
+    >
       Добавить новый
     </button>
   </div>

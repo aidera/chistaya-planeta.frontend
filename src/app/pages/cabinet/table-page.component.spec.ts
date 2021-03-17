@@ -34,6 +34,10 @@ describe('TablePageComponent', () => {
               carsToSelect: null,
               employeesToSelect: null,
             },
+            users: {
+              user: null,
+              type: null,
+            },
           },
         }),
       ],

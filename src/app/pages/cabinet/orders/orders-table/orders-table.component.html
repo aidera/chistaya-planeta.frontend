@@ -1,7 +1,19 @@
 <div class="cabinet-header">
   <h1>Заявки</h1>
   <div class="cabinet-header__actions">
-    <button mat-raised-button color="primary" [routerLink]="['add']">
+    <button
+      *ngIf="
+        (userEmployee &&
+          (userEmployee.role === employeeRole.head ||
+            userEmployee.role === employeeRole.admin ||
+            userEmployee.role === employeeRole.clientManager ||
+            userEmployee.role === employeeRole.receivingManager)) ||
+        userClient
+      "
+      mat-raised-button
+      color="primary"
+      [routerLink]="['add']"
+    >
       Добавить новую
     </button>
   </div>
