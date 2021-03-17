@@ -801,11 +801,11 @@
           <ng-container *ngIf="item?.weighed?.services?.length > 0">
             <!-- Weighed services -->
             <div class="cabinet-content__field">
-              <app-item-field-inactive-list
-                [list]="getWeighedServicesList()"
+              <app-item-field-inactive-string
+                [content]="getWeighedServicesList()[0]?.text"
                 [isFetching]="itemIsFetching"
               >
-              </app-item-field-inactive-list>
+              </app-item-field-inactive-string>
             </div>
           </ng-container>
 

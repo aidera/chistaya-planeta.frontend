@@ -491,13 +491,25 @@ export class OrderItemComponent
   public getWeighedOffersList(): ItemFieldListElement[] {
     if (this.item?.weighed?.offers) {
       return (this.item?.weighed?.offers).map((offer) => {
+        const allPrices = this.offers
+          .find((el) => el._id === (offer.item as IOffer)?._id)
+          ?.prices.find((el) => el.unit === offer.amountUnit);
+        const price =
+          this.item.delivery._type === DeliveryType.company ||
+          this.item.type === OrderType.service
+            ? allPrices.amountWithDelivery
+            : allPrices.amountWithoutDelivery;
+
         return {
           text:
             (offer.item as IOffer)?.name +
             ' - ' +
             offer.amount +
             ' ' +
-            unitStrings[offer.amountUnit],
+            unitStrings[offer.amountUnit] +
+            ' (' +
+            price * offer.amount +
+            ' руб.)',
         };
       });
     }
