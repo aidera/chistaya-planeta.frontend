@@ -5,6 +5,7 @@ import {
   MatSnackBarRef,
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
+import { NavigationEnd, Router } from '@angular/router';
 
 import { SocketIoService } from './services/socket-io/socket-io.service';
 
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private socketIoService: SocketIoService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    protected router: Router
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +38,13 @@ export class AppComponent implements OnInit, OnDestroy {
           panelClass: 'error',
         }
       );
+    });
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0);
     });
   }
 

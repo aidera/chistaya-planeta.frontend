@@ -8,7 +8,7 @@ import { MaterialModule } from './modules/material/material.module';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, MaterialModule],
+      imports: [RouterTestingModule, MaterialModule, RouterTestingModule],
       declarations: [AppComponent],
       providers: [
         provideMockStore({
