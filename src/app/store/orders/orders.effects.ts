@@ -482,7 +482,7 @@ export class OrdersEffects {
 
   setOrderDelivered$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrdersActions.setOrderInTransit),
+      ofType(OrdersActions.setOrderDelivered),
       switchMap((action) => {
         return this.ordersApi.setDelivered(action.id).pipe(
           map((resData) => {

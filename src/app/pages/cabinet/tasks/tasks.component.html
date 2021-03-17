@@ -145,4 +145,112 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="!tasksAreFetching && user?.role === employeeRole.driver">
+    <div class="tasks__container" *ngIf="tasksNew?.length > 0">
+      <h2 class="yellow-text">Новые</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksNew">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksToDelivery?.length > 0">
+      <h2 class="yellow-text">Взятые в работу</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksToDelivery">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksWithInTransitStatus?.length > 0">
+      <h2 class="blue-text">В пути</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksWithInTransitStatus">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksWithDeliveredStatus?.length > 0">
+      <h2 class="blue-text">Доставлено</h2>
+
+      <div class="tasks__orders">
+        <div
+          class="tasks__order"
+          *ngFor="let task of tasksWithInProgressStatus"
+        >
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-status">{{
+              orderStatusStrings[task.status]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>

@@ -32,6 +32,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   public tasksNew: IOrderLessInfo[];
   public tasksWithRawStatus: IOrderLessInfo[];
   public tasksWithInProgressStatus: IOrderLessInfo[];
+  public tasksToDelivery: IOrderLessInfo[];
+  public tasksWithInTransitStatus: IOrderLessInfo[];
+  public tasksWithDeliveredStatus: IOrderLessInfo[];
   public tasksWithCompletedStatus: IOrderLessInfo[];
   public tasksWithRefusedStatus: IOrderLessInfo[];
 
@@ -63,6 +66,9 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.tasksNew = this.getTasksNew();
         this.tasksWithRawStatus = this.getTasksWithRawStatus();
         this.tasksWithInProgressStatus = this.getTasksWithInProgressStatus();
+        this.tasksToDelivery = this.getTasksToDelivery();
+        this.tasksWithInTransitStatus = this.getTasksInTransitStatus();
+        this.tasksWithDeliveredStatus = this.getTasksWithDeliveredStatus();
         this.tasksWithCompletedStatus = this.getTasksWithCompletedStatus();
         this.tasksWithRefusedStatus = this.getTasksWithRefusedStatus();
       });
@@ -119,6 +125,12 @@ export class TasksComponent implements OnInit, OnDestroy {
           (task) =>
             task.status === OrderStatus.raw && !task.performers.clientManager
         );
+      } else if (employeeRole === EmployeeRole.driver) {
+        tasksCopy = tasksCopy.filter(
+          (task) =>
+            task.status === OrderStatus.processed &&
+            !task.performers.driverAccepted
+        );
       } else {
         tasksCopy = [];
       }
@@ -154,6 +166,41 @@ export class TasksComponent implements OnInit, OnDestroy {
           task.status === OrderStatus.packed ||
           task.status === OrderStatus.delivered ||
           task.status === OrderStatus.weighed
+      );
+      return tasksCopy;
+    }
+    return [];
+  }
+
+  public getTasksToDelivery(): IOrderLessInfo[] {
+    let tasksCopy = this.tasks;
+    if (tasksCopy) {
+      tasksCopy = tasksCopy.filter(
+        (task) =>
+          task.status === OrderStatus.processed &&
+          task.performers.driverAccepted
+      );
+      return tasksCopy;
+    }
+    return [];
+  }
+
+  public getTasksInTransitStatus(): IOrderLessInfo[] {
+    let tasksCopy = this.tasks;
+    if (tasksCopy) {
+      tasksCopy = tasksCopy.filter(
+        (task) => task.status === OrderStatus.inTransit
+      );
+      return tasksCopy;
+    }
+    return [];
+  }
+
+  public getTasksWithDeliveredStatus(): IOrderLessInfo[] {
+    let tasksCopy = this.tasks;
+    if (tasksCopy) {
+      tasksCopy = tasksCopy.filter(
+        (task) => task.status === OrderStatus.delivered
       );
       return tasksCopy;
     }
