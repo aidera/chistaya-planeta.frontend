@@ -492,13 +492,13 @@ export class OrderItemComponent
     if (this.item?.weighed?.offers) {
       return (this.item?.weighed?.offers).map((offer) => {
         const allPrices = this.offers
-          .find((el) => el._id === (offer.item as IOffer)?._id)
+          ?.find((el) => el._id === (offer.item as IOffer)?._id)
           ?.prices.find((el) => el.unit === offer.amountUnit);
         const price =
           this.item.delivery._type === DeliveryType.company ||
           this.item.type === OrderType.service
-            ? allPrices.amountWithDelivery
-            : allPrices.amountWithoutDelivery;
+            ? allPrices?.amountWithDelivery
+            : allPrices?.amountWithoutDelivery;
 
         return {
           text:

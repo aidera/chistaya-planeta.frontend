@@ -9,10 +9,10 @@
           userEmployee?.locality?._id === item?.locality._id) ||
         (userEmployee?.role === employeeRole.driver &&
           item?.performers.driverAccepted === false &&
-          item?.performers.driver._id === userEmployee?._id) ||
+          item?.performers.driver?._id === userEmployee?._id) ||
         (userEmployee?.role === employeeRole.receivingManager &&
           item?.performers.receivingManagerAccepted === false &&
-          item?.performers.receivingManager._id === userEmployee?._id)
+          item?.performers.receivingManager?._id === userEmployee?._id)
       "
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-raised-button
@@ -72,14 +72,14 @@
 
     <button
       *ngIf="
-        (item?.status === orderStatus.processed ||
+        (item?.status === orderStatus.raw ||
+          item?.status === orderStatus.processed ||
           item?.status === orderStatus.inTransit ||
           item?.status === orderStatus.packed ||
           item?.status === orderStatus.delivered) &&
         ((userEmployee?.role === employeeRole.clientManager &&
           item?.performers.clientManager?._id === userEmployee._id) ||
-          (userEmployee?.role === employeeRole.receivingManager &&
-            item?.performers.receivingManager?._id === userEmployee._id) ||
+          userEmployee?.role === employeeRole.receivingManager ||
           userEmployee?.role === employeeRole.admin ||
           userEmployee?.role === employeeRole.head)
       "

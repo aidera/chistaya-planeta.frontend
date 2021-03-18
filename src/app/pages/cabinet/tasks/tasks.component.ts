@@ -15,6 +15,7 @@ import OrderStatus from '../../../models/enums/OrderStatus';
 import { orderStatusStrings } from '../../../data/orderStatusData';
 import { orderTypeStrings } from '../../../data/orderTypeData';
 import EmployeeRole from '../../../models/enums/EmployeeRole';
+import { IDivision } from '../../../models/Division';
 
 @Component({
   selector: 'app-tasks',
@@ -35,6 +36,8 @@ export class TasksComponent implements OnInit, OnDestroy {
   public tasksToDelivery: IOrderLessInfo[];
   public tasksWithInTransitStatus: IOrderLessInfo[];
   public tasksWithDeliveredStatus: IOrderLessInfo[];
+  public tasksWithDeliveredStatusAndCurrentDivision: IOrderLessInfo[];
+  public tasksWithWeighedStatus: IOrderLessInfo[];
   public tasksWithCompletedStatus: IOrderLessInfo[];
   public tasksWithRefusedStatus: IOrderLessInfo[];
 
@@ -69,6 +72,8 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.tasksToDelivery = this.getTasksToDelivery();
         this.tasksWithInTransitStatus = this.getTasksInTransitStatus();
         this.tasksWithDeliveredStatus = this.getTasksWithDeliveredStatus();
+        this.tasksWithDeliveredStatusAndCurrentDivision = this.getTasksWithDeliveredStatusAndCurrentDivision();
+        this.tasksWithWeighedStatus = this.getTasksWithWeighedStatus();
         this.tasksWithCompletedStatus = this.getTasksWithCompletedStatus();
         this.tasksWithRefusedStatus = this.getTasksWithRefusedStatus();
       });
@@ -130,6 +135,16 @@ export class TasksComponent implements OnInit, OnDestroy {
           (task) =>
             task.status === OrderStatus.processed &&
             !task.performers.driverAccepted
+        );
+      } else if (employeeRole === EmployeeRole.receivingManager) {
+        tasksCopy = tasksCopy.filter(
+          (task) =>
+            task.status !== OrderStatus.delivered &&
+            task.status !== OrderStatus.completed &&
+            task.status !== OrderStatus.cancelled &&
+            task.status !== OrderStatus.refused &&
+            task.status !== OrderStatus.weighed &&
+            task.status !== OrderStatus.packed
         );
       } else {
         tasksCopy = [];
@@ -202,6 +217,34 @@ export class TasksComponent implements OnInit, OnDestroy {
       tasksCopy = tasksCopy.filter(
         (task) => task.status === OrderStatus.delivered
       );
+      return tasksCopy;
+    }
+    return [];
+  }
+
+  public getTasksWithDeliveredStatusAndCurrentDivision(): IOrderLessInfo[] {
+    let tasksCopy = this.tasks;
+    if (tasksCopy) {
+      tasksCopy = tasksCopy.filter((task) => {
+        return (
+          task.status === OrderStatus.delivered &&
+          task.division === (this.user?.division as IDivision)?._id
+        );
+      });
+      return tasksCopy;
+    }
+    return [];
+  }
+
+  public getTasksWithWeighedStatus(): IOrderLessInfo[] {
+    let tasksCopy = this.tasks;
+    if (tasksCopy) {
+      tasksCopy = tasksCopy.filter((task) => {
+        return (
+          task.status === OrderStatus.weighed &&
+          task.performers.receivingManager === this.user?._id
+        );
+      });
       return tasksCopy;
     }
     return [];

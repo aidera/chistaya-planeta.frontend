@@ -10,6 +10,38 @@
   <ng-container
     *ngIf="
       !tasksAreFetching &&
+      (((user?.role === employeeRole.clientManager ||
+        user?.role === employeeRole.admin ||
+        user?.role === employeeRole.head) &&
+        tasksNew.length === 0 &&
+        tasksWithRawStatus.length === 0 &&
+        tasksWithInProgressStatus.length === 0) ||
+        (user?.role === employeeRole.driver &&
+          tasksNew.length === 0 &&
+          tasksToDelivery.length === 0 &&
+          tasksWithInTransitStatus.length === 0) ||
+        (user?.role === employeeRole.receivingManager &&
+          tasksNew.length === 0 &&
+          tasksWithDeliveredStatusAndCurrentDivision.length === 0))
+    "
+  >
+    <mat-card class="no-tasks">
+      <div
+        class="icon"
+        [inlineSVG]="'../../assets/icons/happy-earth.svg'"
+      ></div>
+      <div class="content">
+        <h2>Задачи выполнены!</h2>
+        <p>Вы молодец! С каждой выполненной задачей мы делаем мир чище :)</p>
+      </div>
+    </mat-card>
+
+    <br /><br />
+  </ng-container>
+
+  <ng-container
+    *ngIf="
+      !tasksAreFetching &&
       (user?.role === employeeRole.clientManager ||
         user?.role === employeeRole.admin ||
         user?.role === employeeRole.head)
@@ -236,6 +268,91 @@
             }}</span>
             <span class="tasks__order-status">{{
               orderStatusStrings[task.status]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container
+    *ngIf="!tasksAreFetching && user?.role === employeeRole.receivingManager"
+  >
+    <div class="tasks__container" *ngIf="tasksNew?.length > 0">
+      <h2 class="yellow-text">Возможные</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksNew">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tasks__container"
+      *ngIf="tasksWithDeliveredStatusAndCurrentDivision?.length > 0"
+    >
+      <h2 class="blue-text">Доставленные</h2>
+
+      <div class="tasks__orders">
+        <div
+          class="tasks__order"
+          *ngFor="let task of tasksWithDeliveredStatusAndCurrentDivision"
+        >
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
+            }}</span>
+            <span class="tasks__order-name"
+              >Имя: {{ task.customer.contactName }}</span
+            >
+            <span class="tasks__order-phone"
+              >Телефон: {{ task.customer.contactPhone | phone }}</span
+            >
+            <span
+              class="tasks__order-deadline"
+              [class.red-text]="getDate(task.deadline) <= dateNow"
+              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks__container" *ngIf="tasksWithWeighedStatus?.length > 0">
+      <h2 class="green-text">Взвешенные</h2>
+
+      <div class="tasks__orders">
+        <div class="tasks__order" *ngFor="let task of tasksWithWeighedStatus">
+          <mat-card [routerLink]="['../', 'orders', task._id]">
+            <span class="tasks__order-type">{{
+              orderTypeStrings[task.type]
             }}</span>
             <span class="tasks__order-name"
               >Имя: {{ task.customer.contactName }}</span

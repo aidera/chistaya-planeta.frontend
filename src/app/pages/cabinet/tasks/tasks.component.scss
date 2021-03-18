@@ -10,6 +10,7 @@
 
 .tasks__container {
   margin-bottom: 64px;
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -34,24 +35,68 @@
     transition: $transition-1;
     cursor: pointer;
     box-shadow: $small-shadow;
+
     &:hover {
       box-shadow: $big-shadow;
     }
+
     span {
       display: block;
       margin-bottom: 8px;
+
       &:last-child {
         margin-bottom: 0;
       }
     }
+
     .tasks__order-type {
       margin-bottom: 16px;
       text-transform: uppercase;
       font-weight: bold;
     }
+
     .tasks__order-status {
       margin-bottom: 16px;
       font-style: italic;
+    }
+  }
+}
+
+.no-tasks {
+  padding: 24px;
+  padding-top: 64px;
+  padding-bottom: 64px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  @media (max-width: $bp-md) {
+    flex-direction: column;
+  }
+
+  .icon {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+  }
+
+  .content {
+    margin-left: 40px;
+    @media (max-width: $bp-md) {
+      margin-left: 0;
+    }
+
+    h2 {
+      @media (max-width: $bp-md) {
+        margin-top: 48px;
+      }
+    }
+
+    p {
+      margin-top: 8px;
+      max-width: 450px;
     }
   }
 }
