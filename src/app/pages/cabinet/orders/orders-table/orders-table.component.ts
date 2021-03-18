@@ -66,6 +66,11 @@ export class OrdersTableComponent
 
     this.tableColumns = [
       {
+        key: 'id',
+        title: 'Идентификатор',
+        isSorting: true,
+      },
+      {
         key: 'status',
         title: 'Статус',
         isSorting: true,
@@ -242,6 +247,21 @@ export class OrdersTableComponent
     this.displayedColumns = this.tableColumns.map((column) => {
       return column.key;
     });
+
+    this.userInitCallback = () => {
+      if (this.userEmployee) {
+        if (
+          this.userEmployee.role !== EmployeeRole.admin &&
+          this.userEmployee.role !== EmployeeRole.head
+        ) {
+          this.columnsCanBeDisplayed = this.columnsCanBeDisplayed.filter(
+            (column) => {
+              return column !== 'locality';
+            }
+          );
+        }
+      }
+    };
 
     /* ---------------------- */
     /* --- Forms settings --- */

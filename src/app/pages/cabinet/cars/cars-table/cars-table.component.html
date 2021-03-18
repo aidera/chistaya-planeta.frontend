@@ -79,6 +79,10 @@
 
       <app-accordion title="Компания" [isOpenInitial]="false">
         <app-select
+          *ngIf="
+            userEmployee?.role === employeeRole.head ||
+            userEmployee?.role === employeeRole.admin
+          "
           [control]="advancedSearchForm.get('localities')"
           label="Населённые пункты:"
           [options]="localitiesOptions"

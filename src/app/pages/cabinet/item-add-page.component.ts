@@ -17,11 +17,25 @@ import { DivisionsApiService } from '../../services/api/divisions-api.service';
 import { CarsApiService } from '../../services/api/cars-api.service';
 import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { OptionsService } from '../../services/options/options.service';
+import { IEmployee } from '../../models/Employee';
+import IClient from '../../models/Client';
+import { UserType } from '../../models/enums/UserType';
+import * as UsersSelectors from '../../store/users/users.selectors';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   template: '',
 })
 export class ItemAddPageComponent implements OnInit, OnDestroy {
+  /* ------------- */
+  /* User settings */
+  /* --------------*/
+  protected user$: Subscription;
+  public userEmployee: IEmployee;
+  public userClient: IClient;
+  public userType: UserType;
+  public userInitCallback: () => void;
+
   /* ------------------ */
   /* Main item settings */
   /* ------------------ */
@@ -68,6 +82,24 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.user$ = this.store
+      .select(UsersSelectors.selectUserType)
+      .pipe(
+        switchMap((userType) => {
+          this.userType = userType;
+          return this.store.select(UsersSelectors.selectUser);
+        })
+      )
+      .subscribe((user) => {
+        if (this.userType === UserType.employee) {
+          this.userEmployee = user as IEmployee;
+        }
+        if (this.userType === UserType.client) {
+          this.userClient = user as IClient;
+        }
+        this.userInitCallback?.();
+      });
+
     /* --------------------------- */
     /* Url query params activation */
     /* --------------------------- */
@@ -87,6 +119,7 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.user$?.unsubscribe?.();
     this.isFetching$?.unsubscribe?.();
     this.serverError$?.unsubscribe?.();
     this.addingSucceed$?.unsubscribe?.();

@@ -86,7 +86,9 @@
       [disabled]="itemIsFetching || itemIsUpdating"
       mat-button
       [class.mat-raised-button]="
-        userEmployee?.role === employeeRole.receivingManager
+        userEmployee?.role === employeeRole.receivingManager ||
+        userEmployee?.role === employeeRole.admin ||
+        userEmployee?.role === employeeRole.head
       "
       color="primary"
       (click)="goToWeighPage()"

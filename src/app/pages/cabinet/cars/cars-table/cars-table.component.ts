@@ -112,6 +112,21 @@ export class CarsTableComponent
       return column.key;
     });
 
+    this.userInitCallback = () => {
+      if (this.userEmployee) {
+        if (
+          this.userEmployee.role !== EmployeeRole.admin &&
+          this.userEmployee.role !== EmployeeRole.head
+        ) {
+          this.columnsCanBeDisplayed = this.columnsCanBeDisplayed.filter(
+            (column) => {
+              return column !== 'locality';
+            }
+          );
+        }
+      }
+    };
+
     /* ---------------------- */
     /* --- Forms settings --- */
     /* ---------------------- */
@@ -156,19 +171,60 @@ export class CarsTableComponent
 
       /* Divisions */
       this.divisionsOptions$?.unsubscribe();
-      this.divisionsOptions$ = this.options
-        .getDivisionsOptions({})
-        .subscribe((value) => {
-          this.divisionsOptions = value;
-        });
+      if (
+        this.userEmployee &&
+        (this.userEmployee.role === EmployeeRole.head ||
+          this.userEmployee.role === EmployeeRole.admin)
+      ) {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({})
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+          });
+      } else if (this.userEmployee) {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({
+            localitiesIds: [(this.userEmployee.locality as ILocality)._id],
+          })
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+          });
+      } else {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({})
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+          });
+      }
 
       /* Employees */
       this.employeesOptions$?.unsubscribe();
-      this.employeesOptions$ = this.options
-        .getEmployeesOptions({})
-        .subscribe((value) => {
-          this.employeesOptions = value;
-        });
+      if (
+        this.userEmployee &&
+        (this.userEmployee.role === EmployeeRole.head ||
+          this.userEmployee.role === EmployeeRole.admin)
+      ) {
+        this.employeesOptions$ = this.options
+          .getEmployeesOptions({ roles: [EmployeeRole.driver] })
+          .subscribe((value) => {
+            this.employeesOptions = value;
+          });
+      } else if (this.userEmployee) {
+        this.employeesOptions$ = this.options
+          .getEmployeesOptions({
+            localitiesIds: [(this.userEmployee.locality as ILocality)._id],
+            roles: [EmployeeRole.driver],
+          })
+          .subscribe((value) => {
+            this.employeesOptions = value;
+          });
+      } else {
+        this.employeesOptions$ = this.options
+          .getEmployeesOptions({ roles: [EmployeeRole.driver] })
+          .subscribe((value) => {
+            this.employeesOptions = value;
+          });
+      }
 
       this.advancedSearchForm
         ?.get('localities')
@@ -205,17 +261,48 @@ export class CarsTableComponent
 
           /* Employees */
           this.employeesOptions$?.unsubscribe();
-          this.employeesOptions$ = this.options
-            .getEmployeesOptions({
-              divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
-              roles: [EmployeeRole.driver],
-            })
-            .subscribe((value) => {
-              this.employeesOptions = value;
-              if (value === null) {
-                this.options.initEmployeesOptions();
-              }
-            });
+          if (
+            this.userEmployee &&
+            (this.userEmployee.role === EmployeeRole.head ||
+              this.userEmployee.role === EmployeeRole.admin)
+          ) {
+            this.employeesOptions$ = this.options
+              .getEmployeesOptions({
+                divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+                roles: [EmployeeRole.driver],
+              })
+              .subscribe((value) => {
+                this.employeesOptions = value;
+                if (value === null) {
+                  this.options.initEmployeesOptions();
+                }
+              });
+          } else if (this.userEmployee) {
+            this.employeesOptions$ = this.options
+              .getEmployeesOptions({
+                localitiesIds: [(this.userEmployee.locality as ILocality)._id],
+                divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+                roles: [EmployeeRole.driver],
+              })
+              .subscribe((value) => {
+                this.employeesOptions = value;
+                if (value === null) {
+                  this.options.initEmployeesOptions();
+                }
+              });
+          } else {
+            this.employeesOptions$ = this.options
+              .getEmployeesOptions({
+                divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+                roles: [EmployeeRole.driver],
+              })
+              .subscribe((value) => {
+                this.employeesOptions = value;
+                if (value === null) {
+                  this.options.initEmployeesOptions();
+                }
+              });
+          }
         });
     };
 

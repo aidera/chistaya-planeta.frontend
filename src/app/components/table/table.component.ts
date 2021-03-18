@@ -34,11 +34,15 @@ export class TableComponent implements OnInit {
   @Output() itemClick = new EventEmitter<number>();
 
   public displayForm: FormGroup;
+  public columnsDataCanBeDisplayed: TableColumnType[];
 
   ngOnInit(): void {
     if (this.displayedColumns === undefined) {
       this.displayedColumns = this.columnsCanBeDisplayed;
     }
+    this.columnsDataCanBeDisplayed = this.columnsData.filter((el) => {
+      return this.columnsCanBeDisplayed.includes(el.key);
+    });
     this.initDisplayForm();
   }
 

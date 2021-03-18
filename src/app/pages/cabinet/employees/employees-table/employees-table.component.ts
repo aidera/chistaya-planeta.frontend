@@ -20,6 +20,7 @@ import {
   employeeStatusOptions,
   employeeStatusStrings,
 } from '../../../../data/employeeStatusData';
+import EmployeeRole from '../../../../models/enums/EmployeeRole';
 
 @Component({
   selector: 'app-employees-table',
@@ -123,6 +124,21 @@ export class EmployeesTableComponent
       return column.key;
     });
 
+    this.userInitCallback = () => {
+      if (this.userEmployee) {
+        if (
+          this.userEmployee.role !== EmployeeRole.admin &&
+          this.userEmployee.role !== EmployeeRole.head
+        ) {
+          this.columnsCanBeDisplayed = this.columnsCanBeDisplayed.filter(
+            (column) => {
+              return column !== 'locality';
+            }
+          );
+        }
+      }
+    };
+
     /* ---------------------- */
     /* --- Forms settings --- */
     /* ---------------------- */
@@ -169,17 +185,59 @@ export class EmployeesTableComponent
 
       /* Divisions */
       this.divisionsOptions$?.unsubscribe();
-      this.divisionsOptions$ = this.options
-        .getDivisionsOptions({})
-        .subscribe((value) => {
-          this.divisionsOptions = value;
-        });
+      if (
+        this.userEmployee &&
+        (this.userEmployee.role === EmployeeRole.head ||
+          this.userEmployee.role === EmployeeRole.admin)
+      ) {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({})
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+          });
+      } else if (this.userEmployee) {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({
+            localitiesIds: [(this.userEmployee.locality as ILocality)._id],
+          })
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+          });
+      } else {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({})
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+          });
+      }
 
       /* Cars */
       this.carsOptions$?.unsubscribe();
-      this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
-        this.carsOptions = value;
-      });
+      if (
+        this.userEmployee &&
+        (this.userEmployee.role === EmployeeRole.head ||
+          this.userEmployee.role === EmployeeRole.admin)
+      ) {
+        this.carsOptions$ = this.options
+          .getCarsOptions({})
+          .subscribe((value) => {
+            this.carsOptions = value;
+          });
+      } else if (this.userEmployee) {
+        this.carsOptions$ = this.options
+          .getCarsOptions({
+            localitiesIds: [(this.userEmployee.locality as ILocality)._id],
+          })
+          .subscribe((value) => {
+            this.carsOptions = value;
+          });
+      } else {
+        this.carsOptions$ = this.options
+          .getCarsOptions({})
+          .subscribe((value) => {
+            this.carsOptions = value;
+          });
+      }
 
       this.advancedSearchForm
         ?.get('localities')
@@ -221,16 +279,45 @@ export class EmployeesTableComponent
 
           /* Cars */
           this.carsOptions$?.unsubscribe();
-          this.carsOptions$ = this.options
-            .getCarsOptions({
-              divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
-            })
-            .subscribe((value) => {
-              this.carsOptions = value;
-              if (value === null) {
-                this.options.initCarsOptions();
-              }
-            });
+          if (
+            this.userEmployee &&
+            (this.userEmployee.role === EmployeeRole.head ||
+              this.userEmployee.role === EmployeeRole.admin)
+          ) {
+            this.carsOptions$ = this.options
+              .getCarsOptions({
+                divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+              })
+              .subscribe((value) => {
+                this.carsOptions = value;
+                if (value === null) {
+                  this.options.initCarsOptions();
+                }
+              });
+          } else if (this.userEmployee) {
+            this.carsOptions$ = this.options
+              .getCarsOptions({
+                localitiesIds: [(this.userEmployee.locality as ILocality)._id],
+                divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+              })
+              .subscribe((value) => {
+                this.carsOptions = value;
+                if (value === null) {
+                  this.options.initCarsOptions();
+                }
+              });
+          } else {
+            this.carsOptions$ = this.options
+              .getCarsOptions({
+                divisionsIds: fieldValues.length > 0 ? fieldValues : undefined,
+              })
+              .subscribe((value) => {
+                this.carsOptions = value;
+                if (value === null) {
+                  this.options.initCarsOptions();
+                }
+              });
+          }
         });
     };
 

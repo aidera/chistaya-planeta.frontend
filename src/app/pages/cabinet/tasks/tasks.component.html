@@ -32,7 +32,9 @@
       ></div>
       <div class="content">
         <h2>Задачи выполнены!</h2>
-        <p>Вы молодец! С каждой выполненной задачей мы делаем мир чище :)</p>
+        <p>
+          Вы молодец! С каждой выполненной задачей мы делаем планету чище :)
+        </p>
       </div>
     </mat-card>
 
@@ -266,18 +268,13 @@
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
-            <span class="tasks__order-status">{{
-              orderStatusStrings[task.status]
-            }}</span>
             <span class="tasks__order-name"
               >Имя: {{ task.customer.contactName }}</span
             >
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
+            <span class="tasks__order-deadline"
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
@@ -304,9 +301,7 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
+            <span class="tasks__order-deadline"
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
@@ -318,7 +313,7 @@
       class="tasks__container"
       *ngIf="tasksWithDeliveredStatusAndCurrentDivision?.length > 0"
     >
-      <h2 class="blue-text">Доставленные</h2>
+      <h2 class="blue-text">Доставлено</h2>
 
       <div class="tasks__orders">
         <div
@@ -335,9 +330,7 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
+            <span class="tasks__order-deadline"
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
@@ -360,9 +353,7 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
+            <span class="tasks__order-deadline"
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>

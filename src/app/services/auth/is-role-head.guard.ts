@@ -28,7 +28,12 @@ export class IsRoleHeadGuard implements CanActivate, CanActivateChild {
       filter((user) => user !== null),
       take(1),
       map((user) => {
-        return (user as IEmployee)?.role === EmployeeRole.head;
+        if ((user as IEmployee)?.role === EmployeeRole.head) {
+          return true;
+        } else {
+          this.router.navigate(['/e', 'cabinet']);
+          return false;
+        }
       })
     );
   }

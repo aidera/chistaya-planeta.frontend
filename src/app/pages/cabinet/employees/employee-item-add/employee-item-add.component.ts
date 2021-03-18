@@ -36,6 +36,24 @@ export class EmployeeItemAddComponent
   public alreadyExistId2: string;
 
   ngOnInit(): void {
+    this.userInitCallback = () => {
+      switch (this.userEmployee?.role) {
+        case EmployeeRole.head:
+          this.employeeRoleOptions = employeeRoleOptions.filter(
+            (el) => el.value !== EmployeeRole.head + ''
+          );
+          break;
+        case EmployeeRole.admin:
+          this.employeeRoleOptions = employeeRoleOptions.filter(
+            (el) =>
+              el.value !== EmployeeRole.head + '' &&
+              el.value !== EmployeeRole.admin + ''
+          );
+          break;
+        default:
+          this.employeeRoleOptions = [];
+      }
+    };
     /* ------------ */
     /* Options init */
     /* ------------ */

@@ -35,6 +35,7 @@ import { OrderItemWeighComponent } from './pages/cabinet/orders/order-item-weigh
 import { IsRoleAdminGuard } from './services/auth/is-role-admin.guard';
 import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
 import { IsRoleClientManagerOrReceivingManagerGuard } from './services/auth/is-role-client-manager-or-receiving-manager.guard';
+import { IsRoleClientManagerGuard } from './services/auth/is-role-client-manager.guard';
 
 export const routes: Routes = [
   {
@@ -55,7 +56,11 @@ export const routes: Routes = [
       { path: 'orders/weigh/:id', component: OrderItemWeighComponent },
       { path: 'orders/:id', component: OrderItemComponent },
 
-      { path: 'localities', component: LocalitiesTableComponent },
+      {
+        path: 'localities',
+        component: LocalitiesTableComponent,
+        canActivate: [IsRoleAdminGuard],
+      },
       {
         path: 'localities/add',
         component: LocalityItemAddComponent,
@@ -63,7 +68,11 @@ export const routes: Routes = [
       },
       { path: 'localities/:id', component: LocalityItemComponent },
 
-      { path: 'divisions', component: DivisionsTableComponent },
+      {
+        path: 'divisions',
+        component: DivisionsTableComponent,
+        canActivate: [IsRoleAdminGuard],
+      },
       {
         path: 'divisions/add',
         component: DivisionItemAddComponent,
@@ -71,7 +80,11 @@ export const routes: Routes = [
       },
       { path: 'divisions/:id', component: DivisionItemComponent },
 
-      { path: 'cars', component: CarsTableComponent },
+      {
+        path: 'cars',
+        component: CarsTableComponent,
+        canActivate: [IsRoleClientManagerGuard],
+      },
       {
         path: 'cars/add',
         component: CarItemAddComponent,
@@ -79,7 +92,11 @@ export const routes: Routes = [
       },
       { path: 'cars/:id', component: CarItemComponent },
 
-      { path: 'employees', component: EmployeesTableComponent },
+      {
+        path: 'employees',
+        component: EmployeesTableComponent,
+        canActivate: [IsRoleClientManagerGuard],
+      },
       {
         path: 'employees/add',
         component: EmployeeItemAddComponent,

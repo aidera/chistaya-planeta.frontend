@@ -28,11 +28,16 @@ export class IsRoleDriverGuard implements CanActivate, CanActivateChild {
       filter((user) => user !== null),
       take(1),
       map((user) => {
-        return (
+        if (
           (user as IEmployee)?.role === EmployeeRole.head ||
           (user as IEmployee)?.role === EmployeeRole.admin ||
           (user as IEmployee)?.role === EmployeeRole.driver
-        );
+        ) {
+          return true;
+        } else {
+          this.router.navigate(['/e', 'cabinet']);
+          return false;
+        }
       })
     );
   }

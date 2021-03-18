@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private socketIoService: SocketIoService,
     private snackBar: MatSnackBar,
-    protected router: Router
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +42,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      if (
+        evt.url.includes('?') &&
+        evt.url.split('?')[0] === window.location.pathname
+      ) {
         return;
       }
       window.scrollTo(0, 0);

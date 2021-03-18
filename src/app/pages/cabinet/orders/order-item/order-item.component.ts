@@ -191,8 +191,8 @@ export class OrderItemComponent
 
         if (this.form && order) {
           this.form.setValue({
-            status: String(order.status) || '',
-            companyComment: String(order.companyComment) || '',
+            status: order.status || '',
+            companyComment: order.companyComment || '',
             division: (order.division as IDivision)?._id || '',
             clientManager:
               (order.performers.clientManager as IEmployee)?._id || '',

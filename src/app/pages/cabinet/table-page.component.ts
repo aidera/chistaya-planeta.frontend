@@ -43,6 +43,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
   public userEmployee: IEmployee;
   public userClient: IClient;
   public userType: UserType;
+  public userInitCallback: () => void;
 
   /* ------------------- */
   /* Main items settings */
@@ -119,6 +120,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
         if (this.userType === UserType.client) {
           this.userClient = user as IClient;
         }
+        this.userInitCallback?.();
       });
 
     /* ------------------------------ */
