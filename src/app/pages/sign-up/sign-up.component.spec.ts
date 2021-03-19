@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { SignUpComponent } from './sign-up.component';
 import { TextInputComponent } from '../../components/form-controls/text-input/text-input.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;
@@ -23,6 +24,20 @@ describe('SignUpComponent', () => {
         InlineSVGModule.forRoot(),
         NgxMaskModule.forRoot(),
         HttpClientModule,
+      ],
+      providers: [
+        provideMockStore({
+          initialState: {
+            users: {
+              isLoginSucceed: false,
+              isLoggingIn: false,
+              user: null,
+              type: null,
+              serverError: null,
+              isRegistering: false,
+            },
+          },
+        }),
       ],
     }).compileComponents();
   }));

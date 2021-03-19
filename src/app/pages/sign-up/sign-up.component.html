@@ -51,6 +51,7 @@
     }"
   ></app-text-input>
 
+  <br />
   <small
     *ngIf="
       form.get('password').touched &&
@@ -65,7 +66,13 @@
   <br />
   <br />
 
-  <button type="submit" mat-raised-button color="primary" class="submit-button">
+  <button
+    [disabled]="isFetching"
+    type="submit"
+    mat-raised-button
+    color="primary"
+    class="submit-button"
+  >
     Зарегистрироваться
   </button>
 

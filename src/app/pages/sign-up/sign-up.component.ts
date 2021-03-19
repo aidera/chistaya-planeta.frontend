@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+
+import * as fromRoot from '../../store/root.reducer';
+import * as UsersSelectors from '../../store/users/users.selectors';
+import * as UsersActions from '../../store/users/users.actions';
+import { responseCodes } from '../../data/responseCodes';
 
 @Component({
   selector: 'app-sign-up',
@@ -9,7 +17,70 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class SignUpComponent implements OnInit {
   public form: FormGroup;
 
+  private client$: Subscription;
+  private isFetching$: Subscription;
+  public isFetching: boolean;
+  private serverError$: Subscription;
+  public serverError: string | null;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store<fromRoot.State>
+  ) {}
+
   ngOnInit(): void {
+    this.client$ = this.store
+      .select(UsersSelectors.selectUser)
+      .subscribe((user) => {
+        if (user) {
+          this.router.navigate(['/cabinet']);
+        }
+      });
+
+    this.isFetching$ = this.store
+      .select(UsersSelectors.selectIsRegistering)
+      .subscribe((status) => {
+        this.isFetching = status;
+      });
+
+    this.serverError$ = this.store
+      .select(UsersSelectors.selectRegisterServerError)
+      .subscribe((error) => {
+        if (error) {
+          let errorCode: string;
+          if (error.code === responseCodes.validationFailed) {
+            errorCode = error.errors[0].msg;
+          } else {
+            errorCode = error.code;
+          }
+
+          switch (errorCode) {
+            case responseCodes.emailOrPasswordIsNotCorrect:
+              this.serverError = 'Неправильный e-mail или пароль';
+              break;
+            case responseCodes.invalidEmail:
+              this.serverError = 'Некорректный e-mail';
+              break;
+            case responseCodes.authorizationPeriodExpired:
+              this.serverError = 'Истек срок авторизации';
+              break;
+            case responseCodes.alreadyExists:
+              this.serverError = 'Данный email уже зарегистрирован';
+              break;
+            case responseCodes.validationFailed:
+              this.serverError = 'Данные некорректны';
+              break;
+            default:
+              this.serverError =
+                'Ошибка сервера. Попробуйте зарегистрироваться позже.';
+              break;
+          }
+        } else {
+          this.serverError = null;
+        }
+      });
+
     this.formInit();
   }
 
@@ -53,11 +124,14 @@ export class SignUpComponent implements OnInit {
     });
 
     if (this.form.valid) {
-      console.log('form is valid');
+      this.store.dispatch(
+        UsersActions.registerClientRequest({
+          name: this.form.get('name').value,
+          email: this.form.get('email').value,
+          phone: '+7' + this.form.get('phone').value,
+          password: this.form.get('password').value,
+        })
+      );
     }
-
-    console.log('Form submitted: ', this.form);
-    const formData = { ...this.form.value };
-    console.log('Form Data:', formData);
   }
 }

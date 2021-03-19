@@ -133,8 +133,16 @@ export const routes: Routes = [
     canActivate: [IsClientGuard],
     canActivateChild: [IsClientGuard],
     children: [
+      { path: '', redirectTo: '/cabinet/orders', pathMatch: 'full' },
       { path: 'orders', component: OrdersTableComponent },
-      { path: 'order', component: OrdersTableComponent },
+      {
+        path: 'orders/add',
+        component: OrderItemAddComponent,
+      },
+      { path: 'orders/:id', component: OrderItemComponent },
+      { path: 'prices', component: PricesComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: '**', component: ItemNotFoundComponent },
     ],
   },
   {

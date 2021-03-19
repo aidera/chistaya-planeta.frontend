@@ -24,7 +24,7 @@ export class IsClientGuard implements CanActivate, CanActivateChild {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     if (!localStorage.getItem('token')) {
-      this.router.navigate(['/e', 'login']);
+      this.router.navigate(['/login']);
       return false;
     }
 

@@ -20,6 +20,9 @@ export const usersInitialState = {
   updateUsersPasswordIsFetching: false,
   updateUsersPasswordSucceed: false,
   updateUsersPasswordError: null as ServerError | null,
+
+  isRegistering: false,
+  registerServerError: null as ServerError | null,
 };
 export type UsersState = typeof usersInitialState;
 
@@ -145,6 +148,37 @@ const _usersReducer = createReducer(
   on(UsersActions.refreshUpdateUsersPasswordFailure, (state) => ({
     ...state,
     updateUsersPasswordError: null,
+  })),
+
+  /* ----------------------- */
+  /* --- Register Client --- */
+  /* ----------------------- */
+
+  on(UsersActions.registerClientRequest, (state) => ({
+    ...state,
+    isRegistering: true,
+    registerServerError: null,
+  })),
+
+  on(UsersActions.registerClientSuccess, (state, payload) => ({
+    ...state,
+    isRegistering: false,
+    isLoggingIn: false,
+    isLoginSucceed: true,
+    type: UserType.client,
+    user: payload.client,
+    registerServerError: null,
+    serverError: null,
+  })),
+
+  on(UsersActions.registerClientFailure, (state, payload) => ({
+    ...state,
+    isRegistering: false,
+    isLoggingIn: false,
+    isLoginSucceed: false,
+    registerServerError: { ...payload.error },
+    type: UserType.unauthorized,
+    user: null,
   }))
 );
 

@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import * as UsersActions from './users.actions';
 import { UsersApiService } from '../../services/api/users-api.service';
+import IClient from '../../models/Client';
 
 @Injectable()
 export class UsersEffects {
@@ -51,6 +52,7 @@ export class UsersEffects {
       switchMap(() => {
         return this.usersApi.getUser().pipe(
           map((resData) => {
+            console.log(resData);
             if (resData && resData.user) {
               return UsersActions.getUserSuccess({
                 user: resData.user,
@@ -129,6 +131,41 @@ export class UsersEffects {
             );
           })
         );
+      })
+    )
+  );
+
+  registerClient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.registerClientRequest),
+      switchMap((action) => {
+        return this.usersApi
+          .registerClient({
+            name: action.name,
+            phone: action.phone,
+            email: action.email,
+            password: action.password,
+          })
+          .pipe(
+            map((resData) => {
+              if (resData && resData.user) {
+                localStorage.setItem('token', resData.token);
+                return UsersActions.registerClientSuccess({
+                  client: resData.user,
+                });
+              }
+              return UsersActions.registerClientFailure({
+                error: resData.error,
+              });
+            }),
+            catchError((errorRes) => {
+              return of(
+                UsersActions.registerClientFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
       })
     )
   );

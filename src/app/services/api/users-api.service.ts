@@ -29,6 +29,12 @@ export interface IUpdateUserResponse extends ServerResponse {
   updatedUser?: IEmployee | IClient;
 }
 
+export interface IRegisterClientResponse extends ServerResponse {
+  token?: string;
+  expiresIn?: number;
+  user?: IClient;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -67,6 +73,18 @@ export class UsersApiService {
     return this.http.patch<ServerResponse>(
       `${environment.serverURL}/${this.path}/password`,
       { password }
+    );
+  }
+
+  registerClient(fields: {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+  }): Observable<IRegisterClientResponse> {
+    return this.http.post<IRegisterClientResponse>(
+      `${environment.serverURL}/${this.path}/register-client`,
+      fields
     );
   }
 }

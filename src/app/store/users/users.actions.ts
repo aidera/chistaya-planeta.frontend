@@ -50,6 +50,14 @@ export const REFRESH_UPDATE_USERS_PASSWORD_SUCCESS =
 export const REFRESH_UPDATE_USERS_PASSWORD_FAILURE =
   '[users] refresh - update users password failure';
 
+/* ----------------------- */
+/* --- Register Client --- */
+/* ----------------------- */
+
+export const REGISTER_CLIENT_REQUEST = '[users] register - client - request';
+export const REGISTER_CLIENT_SUCCESS = '[users] register - client - success';
+export const REGISTER_CLIENT_FAILURE = '[users] register - client - failure';
+
 /* ------------- */
 /* --- Login --- */
 /* ------------- */
@@ -152,4 +160,30 @@ export const refreshUpdateUsersPasswordSucceed = createAction(
 );
 export const refreshUpdateUsersPasswordFailure = createAction(
   REFRESH_UPDATE_USERS_PASSWORD_FAILURE
+);
+
+/* ----------------------- */
+/* --- Register Client --- */
+/* ----------------------- */
+
+export const registerClientRequest = createAction(
+  REGISTER_CLIENT_REQUEST,
+  props<{
+    name: string;
+    phone: string;
+    email: string;
+    password: string;
+  }>()
+);
+
+export const registerClientSuccess = createAction(
+  REGISTER_CLIENT_SUCCESS,
+  props<{
+    client: IClient;
+  }>()
+);
+
+export const registerClientFailure = createAction(
+  REGISTER_CLIENT_FAILURE,
+  props<{ error: ServerError }>()
 );

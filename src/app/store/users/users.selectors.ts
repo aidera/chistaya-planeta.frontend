@@ -67,3 +67,17 @@ export const selectUpdateUsersPasswordError = createSelector(
   selectAll,
   (state: UsersState) => state.updateUsersPasswordError
 );
+
+/* ---------------- */
+/* --- Register --- */
+/* ---------------- */
+
+export const selectIsRegistering = createSelector(
+  selectAll,
+  (state: UsersState) => state.isRegistering
+);
+
+export const selectRegisterServerError = createSelector(
+  selectAll,
+  (state: UsersState) => state.registerServerError
+);

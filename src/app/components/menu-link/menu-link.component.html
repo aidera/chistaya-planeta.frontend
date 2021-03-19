@@ -8,7 +8,7 @@
     (isEmployee === false && menuLink.clientCanSee === true)
   "
   [routerLink]="
-    isEmployee ? ['/e', 'cabinet', menuLink.link] : ['cabinet', menuLink.link]
+    isEmployee ? ['/e', 'cabinet', menuLink.link] : ['/cabinet', menuLink.link]
   "
   (click)="closeFullscreenMenu()"
 >
