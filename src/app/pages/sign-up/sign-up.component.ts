@@ -8,6 +8,8 @@ import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
 import * as UsersActions from '../../store/users/users.actions';
 import { responseCodes } from '../../data/responseCodes';
+import { debounceTime, take } from 'rxjs/operators';
+import { ClientsApiService } from '../../services/api/clients-api.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -26,7 +28,8 @@ export class SignUpComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<fromRoot.State>
+    private store: Store<fromRoot.State>,
+    private clientsApi: ClientsApiService
   ) {}
 
   ngOnInit(): void {
@@ -106,6 +109,23 @@ export class SignUpComponent implements OnInit {
         validators: this.confirmPasswordValidation.bind(this),
       }
     );
+
+    this.form
+      .get('email')
+      .valueChanges.pipe(debounceTime(500))
+      .subscribe((value) => {
+        if (value !== '') {
+          this.clientsApi
+            .checkEmail(this.form.get('email').value)
+            .pipe(take(1))
+            .subscribe((response) => {
+              if (response?.responseCode === responseCodes.found) {
+                this.form.get('email').markAsTouched();
+                this.form.get('email').setErrors({ alreadyExists: true });
+              }
+            });
+        }
+      });
   }
 
   confirmPasswordValidation(
