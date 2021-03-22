@@ -176,6 +176,21 @@
             </app-item-field-inactive-string>
           </div>
 
+          <!-- Client ID -->
+          <div *ngIf="userEmployee" class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Клиент"
+              [content]="item?.client?.name"
+              [isFetching]="itemIsFetching"
+              [linkArray]="
+                userEmployee.role !== employeeRole.driver
+                  ? ['../../', 'clients', item?.client?._id]
+                  : undefined
+              "
+            >
+            </app-item-field-inactive-string>
+          </div>
+
           <!-- Type -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string

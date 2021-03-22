@@ -126,8 +126,14 @@ export class OrderItemAddComponent
         servicesAmountUnit: new FormControl(''),
         servicesAmount: new FormControl(''),
 
-        customerContactName: new FormControl('', Validators.required),
-        customerContactPhone: new FormControl('', Validators.required),
+        customerContactName: new FormControl(
+          this.userClient ? this.userClient.name : '',
+          Validators.required
+        ),
+        customerContactPhone: new FormControl(
+          this.userClient ? this.userClient.phone.substr(2) : '',
+          Validators.required
+        ),
         customerOrganizationLegalName: new FormControl(''),
         customerOrganizationActualName: new FormControl(''),
 

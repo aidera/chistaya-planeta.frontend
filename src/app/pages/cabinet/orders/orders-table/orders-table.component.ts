@@ -28,6 +28,7 @@ import {
 import { IOrder } from '../../../../models/Order';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
 import { paymentMethodOffersOptions } from 'src/app/data/paymentMethodData';
+import IClient from '../../../../models/Client';
 
 @Component({
   selector: 'app-orders-table',
@@ -791,7 +792,7 @@ export class OrdersTableComponent
                 : '',
               client: order.client
                 ? this.highlightSearchedValue(
-                    order.client,
+                    (order.client as IClient)._id,
                     this.quickSearchForm
                       ? this.quickSearchForm.get('search').value
                       : ''

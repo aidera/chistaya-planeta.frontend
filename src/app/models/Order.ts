@@ -9,6 +9,7 @@ import { IService } from './Service';
 import { ILocality } from './Locality';
 import { IEmployee } from './Employee';
 import { ICar } from './Car';
+import IClient from './Client';
 
 export interface IOrder {
   _id: string;
@@ -17,7 +18,7 @@ export interface IOrder {
   deadline: string;
 
   scheduledOrder?: string;
-  client?: string;
+  client?: IClient | string;
 
   locality?: ILocality | string;
   division?: IDivision | string;
