@@ -4,6 +4,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as OrdersActions from '../../../../store/orders/orders.actions';
 import * as OrdersSelectors from '../../../../store/orders/orders.selectors';
+import * as OffersActions from '../../../../store/offers/offers.actions';
+import * as OffersSelectors from '../../../../store/offers/offers.selectors';
+import * as ServicesActions from '../../../../store/services/services.actions';
+import * as ServicesSelectors from '../../../../store/services/services.selectors';
 import { ItemPageComponent } from '../../item-page.component';
 import { IEmployee } from '../../../../models/Employee';
 import { OptionType } from '../../../../models/types/OptionType';
@@ -33,10 +37,6 @@ import { tomorrow } from '../../../../utils/date.functions';
 import { ModalAction } from '../../../../components/modal/modal.component';
 import timeOptions from '../../../../data/timeOptions';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
-import * as OffersActions from '../../../../store/offers/offers.actions';
-import * as OffersSelectors from '../../../../store/offers/offers.selectors';
-import * as ServicesActions from '../../../../store/services/services.actions';
-import * as ServicesSelectors from '../../../../store/services/services.selectors';
 import { IService } from '../../../../models/Service';
 import Unit from '../../../../models/enums/Unit';
 
@@ -671,7 +671,8 @@ export class OrderItemComponent
             reason: this.refuseForm?.get('reason').value,
           })
         );
-      } else {
+      }
+      if (this.userClient) {
         this.store.dispatch(
           OrdersActions.refuseOrderRequest({
             id: this.item._id,

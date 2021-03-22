@@ -632,14 +632,16 @@
           </div>
 
           <!-- Performers driver -->
-          <div class="cabinet-content__field">
+          <div
+            *ngIf="
+              (item?.type === orderType.offer &&
+                item?.delivery._type === deliveryType.company) ||
+              item?.type === orderType.service
+            "
+            class="cabinet-content__field"
+          >
             <app-item-field-inactive-string
-              *ngIf="
-                activeField !== 'driver' &&
-                ((item?.type === orderType.offer &&
-                  item?.delivery._type === deliveryType.company) ||
-                  item?.type === orderType.service)
-              "
+              *ngIf="activeField !== 'driver'"
               label="Водитель"
               [content]="
                 item?.performers?.driver?.name
@@ -706,14 +708,16 @@
           </div>
 
           <!-- Performers car -->
-          <div class="cabinet-content__field">
+          <div
+            *ngIf="
+              (item?.type === orderType.offer &&
+                item?.delivery._type === deliveryType.company) ||
+              item?.type === orderType.service
+            "
+            class="cabinet-content__field"
+          >
             <app-item-field-inactive-string
-              *ngIf="
-                activeField !== 'car' &&
-                ((item?.type === orderType.offer &&
-                  item?.delivery._type === deliveryType.company) ||
-                  item?.type === orderType.service)
-              "
+              *ngIf="activeField !== 'car'"
               label="Автомобиль"
               [content]="
                 item?.performers?.car?.licensePlate
@@ -781,7 +785,18 @@
         <mat-card>
           <div class="cabinet-content__header">
             <h2>Результаты взвешивания</h2>
-            <button mat-icon-button [routerLink]="['../', 'weigh', item?._id]">
+            <button
+              *ngIf="
+                item?.weighed?.paymentAmount !== undefined &&
+                item?.status !== orderStatus.refused &&
+                item?.status !== orderStatus.cancelled &&
+                item?.status !== orderStatus.completed &&
+                userEmployee &&
+                userEmployee?.role !== employeeRole.driver
+              "
+              mat-icon-button
+              [routerLink]="['../', 'weigh', item?._id]"
+            >
               <span
                 class="icon"
                 [inlineSVG]="'../../assets/icons/pencil.svg'"
@@ -1130,7 +1145,7 @@
       fieldId="reason"
       *ngIf="refuseForm?.get('reason')"
       [control]="refuseForm?.get('reason')"
-      [label]="'Причина отмены'"
+      [label]="'Пожалуйста, опишите причину отмены'"
     ></app-textarea>
 
     <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>

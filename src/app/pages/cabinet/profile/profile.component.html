@@ -17,6 +17,16 @@
     <div class="cabinet-content__grid-column">
       <div class="cabinet-content__grid-item">
         <mat-card>
+          <!-- ID-->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Идентификатор"
+              [content]="user?._id"
+              [isFetching]="false"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
           <!-- Name-->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
