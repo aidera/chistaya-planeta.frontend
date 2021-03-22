@@ -8,7 +8,7 @@ import {
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, take } from 'rxjs/operators';
+import { debounceTime, switchMap, take } from 'rxjs/operators';
 
 import * as fromRoot from '../../../store/root.reducer';
 import * as UsersSelectors from '../../../store/users/users.selectors';
@@ -26,6 +26,7 @@ import EmployeeRole from '../../../models/enums/EmployeeRole';
 import { responseCodes } from '../../../data/responseCodes';
 import { EmployeesApiService } from '../../../services/api/employees-api.service';
 import { ModalAction } from '../../../components/modal/modal.component';
+import { ClientsApiService } from '../../../services/api/clients-api.service';
 
 @Component({
   selector: 'app-profile',
@@ -33,10 +34,10 @@ import { ModalAction } from '../../../components/modal/modal.component';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  private userType$: Subscription;
   public userType: UserType;
   private user$: Subscription;
-  public user: IEmployee | IClient;
+  public userEmployee: IEmployee;
+  public userClient: IClient;
 
   private userIsUpdating$: Subscription;
   public userIsUpdating: boolean;
@@ -65,26 +66,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
     private socket: SocketIoService,
-    private employeesApi: EmployeesApiService
+    private employeesApi: EmployeesApiService,
+    private clientsApi: ClientsApiService
   ) {}
 
   ngOnInit(): void {
     this.initChangePasswordForm();
 
-    this.userType$ = this.store
-      .select(UsersSelectors.selectUserType)
-      .subscribe((userType) => {
-        this.userType = userType;
-        this.setUpdateFormValues();
-        this.setSockets();
-      });
-
+    /* ----------------- */
+    /* Get user settings */
+    /* ----------------- */
     this.user$ = this.store
-      .select(UsersSelectors.selectUser)
+      .select(UsersSelectors.selectUserType)
+      .pipe(
+        switchMap((userType) => {
+          this.userType = userType;
+          return this.store.select(UsersSelectors.selectUser);
+        })
+      )
       .subscribe((user) => {
-        this.user = user;
+        if (this.userType === UserType.employee) {
+          this.userEmployee = user as IEmployee;
+        }
+        if (this.userType === UserType.client) {
+          this.userClient = user as IClient;
+        }
         this.setUpdateFormValues();
-        this.setSockets();
       });
 
     this.userIsUpdating$ = this.store
@@ -184,7 +191,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.userType$?.unsubscribe();
     this.user$?.unsubscribe();
 
     this.userIsUpdating$?.unsubscribe();
@@ -200,74 +206,103 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private setUpdateFormValues(): void {
-    if (this.userType && this.user) {
-      if (this.userType === UserType.employee) {
-        const user = this.user as IEmployee;
-        this.updateForm = new FormGroup({
-          name: new FormControl(user.name || '', Validators.required),
-          surname: new FormControl(user.surname || '', Validators.required),
-          patronymic: new FormControl(user.patronymic || ''),
-          phone: new FormControl(
-            user.phone.substr(2) || '',
-            Validators.required
-          ),
-          email: new FormControl(user.email || '', Validators.required),
+    if (this.userEmployee) {
+      this.updateForm = new FormGroup({
+        name: new FormControl(
+          this.userEmployee.name || '',
+          Validators.required
+        ),
+        surname: new FormControl(
+          this.userEmployee.surname || '',
+          Validators.required
+        ),
+        patronymic: new FormControl(this.userEmployee.patronymic || ''),
+        phone: new FormControl(
+          this.userEmployee.phone.substr(2) || '',
+          Validators.required
+        ),
+        email: new FormControl(
+          this.userEmployee.email || '',
+          Validators.required
+        ),
+      });
+
+      this.updateForm
+        .get('email')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value !== '') {
+            this.employeesApi
+              .checkEmail(this.updateForm.get('email').value)
+              .pipe(take(1))
+              .subscribe((response) => {
+                if (response?.responseCode === responseCodes.found) {
+                  if (this.userEmployee?._id !== response.id) {
+                    this.updateForm.get('email').markAsTouched();
+                    this.updateForm
+                      .get('email')
+                      .setErrors({ alreadyExists: true });
+                  }
+                }
+              });
+          }
         });
 
-        this.updateForm
-          .get('email')
-          .valueChanges.pipe(debounceTime(500))
-          .subscribe((value) => {
-            if (value !== '') {
-              this.employeesApi
-                .checkEmail(this.updateForm.get('email').value)
-                .pipe(take(1))
-                .subscribe((response) => {
-                  if (response?.responseCode === responseCodes.found) {
-                    if (this.user?._id !== response.id) {
-                      this.updateForm.get('email').markAsTouched();
-                      this.updateForm
-                        .get('email')
-                        .setErrors({ alreadyExists: true });
-                    }
+      this.updateForm
+        .get('phone')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value !== '') {
+            this.employeesApi
+              .checkPhone('+7' + this.updateForm.get('phone').value)
+              .pipe(take(1))
+              .subscribe((response) => {
+                if (response?.responseCode === responseCodes.found) {
+                  if (this.userEmployee?._id !== response.id) {
+                    this.updateForm.get('phone').markAsTouched();
+                    this.updateForm
+                      .get('phone')
+                      .setErrors({ alreadyExists: true });
                   }
-                });
-            }
-          });
-
-        this.updateForm
-          .get('phone')
-          .valueChanges.pipe(debounceTime(500))
-          .subscribe((value) => {
-            if (value !== '') {
-              this.employeesApi
-                .checkPhone('+7' + this.updateForm.get('phone').value)
-                .pipe(take(1))
-                .subscribe((response) => {
-                  if (response?.responseCode === responseCodes.found) {
-                    if (this.user?._id !== response.id) {
-                      this.updateForm.get('phone').markAsTouched();
-                      this.updateForm
-                        .get('phone')
-                        .setErrors({ alreadyExists: true });
-                    }
-                  }
-                });
-            }
-          });
-      }
-
-      if (this.userType === UserType.client) {
-        const user = this.user as IClient;
-        this.updateForm = new FormGroup({
-          name: new FormControl(user.name || '', Validators.required),
-          phone: new FormControl(
-            user.phone.substr(2) || '',
-            Validators.required
-          ),
-          email: new FormControl(user.email || '', Validators.required),
+                }
+              });
+          }
         });
-      }
+    }
+
+    if (this.userClient) {
+      this.updateForm = new FormGroup({
+        name: new FormControl(this.userClient.name || '', Validators.required),
+        phone: new FormControl(
+          this.userClient.phone.substr(2) || '',
+          Validators.required
+        ),
+        email: new FormControl(
+          this.userClient.email || '',
+          Validators.required
+        ),
+      });
+
+      this.updateForm
+        .get('email')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value !== '') {
+            this.clientsApi
+              .checkEmail(this.updateForm.get('email').value)
+              .pipe(take(1))
+              .subscribe((response) => {
+                if (response?.responseCode === responseCodes.found) {
+                  if (this.userClient?._id !== response.id) {
+                    this.updateForm.get('email').markAsTouched();
+                    this.updateForm
+                      .get('email')
+                      .setErrors({ alreadyExists: true });
+                  }
+                }
+              });
+          }
+        });
     }
   }
 
@@ -300,23 +335,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       repeatPassword: '',
     });
     this.changePasswordForm?.markAsUntouched();
-  }
-
-  private setSockets(): void {
-    if (this.userType && this.user) {
-      this.socket
-        .get()
-        ?.on(
-          this.userType === UserType.employee ? 'employees' : 'client',
-          (data) => {
-            if (data.action === 'update' && data.id) {
-              if (this.user?._id === data.id) {
-                this.store.dispatch(UsersActions.getUserRequest());
-              }
-            }
-          }
-        );
-    }
   }
 
   public setActiveField(fieldName: string): void {
@@ -358,7 +376,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       !this.userIsUpdating &&
       this.updateForm.get(this.activeField).valid
     ) {
-      if (this.userType === UserType.employee) {
+      if (this.userEmployee) {
         this.store.dispatch(
           UsersActions.updateUserRequest({
             name:
@@ -372,6 +390,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
             patronymic:
               this.activeField === 'patronymic'
                 ? this.updateForm.get('patronymic').value
+                : undefined,
+            email:
+              this.activeField === 'email'
+                ? this.updateForm.get('email').value
+                : undefined,
+            phone:
+              this.activeField === 'phone'
+                ? '+7' + this.updateForm.get('phone').value
+                : undefined,
+          })
+        );
+      }
+      if (this.userClient) {
+        this.store.dispatch(
+          UsersActions.updateUserRequest({
+            name:
+              this.activeField === 'name'
+                ? this.updateForm.get('name').value
                 : undefined,
             email:
               this.activeField === 'email'
