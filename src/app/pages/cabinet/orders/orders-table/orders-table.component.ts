@@ -261,6 +261,41 @@ export class OrdersTableComponent
           );
         }
       }
+      if (this.userClient) {
+        this.columnsCanBeDisplayed = this.columnsCanBeDisplayed.filter(
+          (column) => {
+            return (
+              column !== 'id' &&
+              column !== 'deadline' &&
+              column !== 'customerOrganizationLegalName' &&
+              column !== 'customerOrganizationActualName' &&
+              column !== 'customerContactName' &&
+              column !== 'customerContactPhone' &&
+              column !== 'deliveryType' &&
+              column !== 'deliveryCustomerCarNumber' &&
+              column !== 'deliveryHasAssistant' &&
+              column !== 'deliveryAddressFromStreet' &&
+              column !== 'deliveryAddressFromHouse' &&
+              column !== 'paymentMethod' &&
+              column !== 'paymentMethodData' &&
+              column !== 'performersClientManager' &&
+              column !== 'performersReceivingManager' &&
+              column !== 'performersDriver' &&
+              column !== 'performersCar' &&
+              column !== 'performersCar' &&
+              column !== 'customerComment' &&
+              column !== 'companyComment' &&
+              column !== 'customerCancellationReason' &&
+              column !== 'companyCancellationReason' &&
+              column !== 'updatedAt' &&
+              column !== 'statusDateAccepted' &&
+              column !== 'statusDateDelivered' &&
+              column !== 'statusDateWeighed' &&
+              column !== 'statusDateRefused'
+            );
+          }
+        );
+      }
     };
 
     /* ---------------------- */

@@ -8,7 +8,10 @@
     <div class="cabinet-content__grid-column">
       <div class="cabinet-content__grid-item">
         <mat-card>
-          <h2>Предложения</h2>
+          <div class="cabinet-content__item-header">
+            <h2>Предложения</h2>
+            <small>Компания делает вознаграждение клиенту</small>
+          </div>
 
           <div class="price-element" *ngFor="let offer of offers">
             <div class="price-element__header">
@@ -231,7 +234,10 @@
     <div class="cabinet-content__grid-column">
       <div class="cabinet-content__grid-item">
         <mat-card>
-          <h2>Услуги</h2>
+          <div class="cabinet-content__item-header">
+            <h2>Услуги</h2>
+            <small>Клиент делает вознаграждение компании</small>
+          </div>
 
           <div class="price-element" *ngFor="let service of services">
             <div class="price-element__header">

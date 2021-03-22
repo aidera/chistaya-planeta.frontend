@@ -52,7 +52,6 @@ export class UsersEffects {
       switchMap(() => {
         return this.usersApi.getUser().pipe(
           map((resData) => {
-            console.log(resData);
             if (resData && resData.user) {
               return UsersActions.getUserSuccess({
                 user: resData.user,
