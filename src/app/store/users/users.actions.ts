@@ -58,6 +58,21 @@ export const REGISTER_CLIENT_REQUEST = '[users] register - client - request';
 export const REGISTER_CLIENT_SUCCESS = '[users] register - client - success';
 export const REGISTER_CLIENT_FAILURE = '[users] register - client - failure';
 
+/* ------------------------------- */
+/* --- Reset clients' password --- */
+/* ------------------------------- */
+
+export const RESET_CLIENTS_PASSWORD_REQUEST =
+  '[users] reset - clients password - request';
+export const RESET_CLIENTS_PASSWORD_SUCCESS =
+  '[users] reset - clients password - success';
+export const RESET_CLIENTS_PASSWORD_FAILURE =
+  '[users] reset - clients password - failure';
+export const REFRESH_RESET_CLIENTS_PASSWORD_SUCCESS =
+  '[users] reset - clients users password success';
+export const REFRESH_RESET_CLIENTS_PASSWORD_FAILURE =
+  '[users] reset - clients users password failure';
+
 /* ------------- */
 /* --- Login --- */
 /* ------------- */
@@ -186,4 +201,28 @@ export const registerClientSuccess = createAction(
 export const registerClientFailure = createAction(
   REGISTER_CLIENT_FAILURE,
   props<{ error: ServerError }>()
+);
+
+/* ------------------------------- */
+/* --- Reset clients' password --- */
+/* ------------------------------- */
+
+export const resetClientsPasswordRequest = createAction(
+  RESET_CLIENTS_PASSWORD_REQUEST,
+  props<{
+    email: string;
+  }>()
+);
+export const resetClientsPasswordSuccess = createAction(
+  RESET_CLIENTS_PASSWORD_SUCCESS
+);
+export const resetClientsPasswordFailure = createAction(
+  RESET_CLIENTS_PASSWORD_FAILURE,
+  props<{ error: ServerError }>()
+);
+export const refreshResetClientsPasswordSucceed = createAction(
+  REFRESH_RESET_CLIENTS_PASSWORD_SUCCESS
+);
+export const refreshResetClientsPasswordFailure = createAction(
+  REFRESH_RESET_CLIENTS_PASSWORD_FAILURE
 );

@@ -168,4 +168,29 @@ export class UsersEffects {
       })
     )
   );
+
+  resetClientsPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.resetClientsPasswordRequest),
+      switchMap((action) => {
+        return this.usersApi.resetClientsPassword(action.email).pipe(
+          map((resData) => {
+            if (resData && resData.message) {
+              return UsersActions.resetClientsPasswordSuccess();
+            }
+            return UsersActions.resetClientsPasswordFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              UsersActions.resetClientsPasswordFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
 }

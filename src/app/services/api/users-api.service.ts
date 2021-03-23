@@ -29,6 +29,10 @@ export interface IUpdateUserResponse extends ServerResponse {
   updatedUser?: IEmployee | IClient;
 }
 
+export interface IResetPasswordResponse extends ServerResponse {
+  updatedUserId?: string;
+}
+
 export interface IRegisterClientResponse extends ServerResponse {
   token?: string;
   expiresIn?: number;
@@ -85,6 +89,13 @@ export class UsersApiService {
     return this.http.post<IRegisterClientResponse>(
       `${environment.serverURL}/${this.path}/register-client`,
       fields
+    );
+  }
+
+  resetClientsPassword(email: string): Observable<IResetPasswordResponse> {
+    return this.http.post<IResetPasswordResponse>(
+      `${environment.serverURL}/${this.path}/reset-client-password`,
+      { email }
     );
   }
 }

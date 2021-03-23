@@ -81,3 +81,20 @@ export const selectRegisterServerError = createSelector(
   selectAll,
   (state: UsersState) => state.registerServerError
 );
+
+/* ------------------------------- */
+/* --- Reset clients' password --- */
+/* ------------------------------- */
+
+export const selectResetClientsPasswordIsFetching = createSelector(
+  selectAll,
+  (state: UsersState) => state.resetClientsPasswordIsFetching
+);
+export const selectResetClientsPasswordSucceed = createSelector(
+  selectAll,
+  (state: UsersState) => state.resetClientsPasswordSucceed
+);
+export const selectResetClientsPasswordError = createSelector(
+  selectAll,
+  (state: UsersState) => state.resetClientsPasswordError
+);
