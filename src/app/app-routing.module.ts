@@ -36,6 +36,7 @@ import { IsRoleAdminGuard } from './services/auth/is-role-admin.guard';
 import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
 import { IsRoleClientManagerOrReceivingManagerGuard } from './services/auth/is-role-client-manager-or-receiving-manager.guard';
 import { IsRoleClientManagerGuard } from './services/auth/is-role-client-manager.guard';
+import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/clients-table.component';
 
 export const routes: Routes = [
   {
@@ -55,6 +56,12 @@ export const routes: Routes = [
       },
       { path: 'orders/weigh/:id', component: OrderItemWeighComponent },
       { path: 'orders/:id', component: OrderItemComponent },
+
+      {
+        path: 'clients',
+        component: ClientsTableComponent,
+        canActivate: [IsRoleClientManagerOrReceivingManagerGuard],
+      },
 
       {
         path: 'localities',

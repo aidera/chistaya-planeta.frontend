@@ -1,6 +1,6 @@
 import ClientStatus from './enums/ClientStatus';
 
-interface IClient {
+export interface IClient {
   _id: string;
   status: ClientStatus;
   phone: string;
@@ -10,5 +10,3 @@ interface IClient {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export default IClient;

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -6,10 +6,10 @@ import { Store } from '@ngrx/store';
 import { menuLinksAll } from '../../data/menuLinks';
 import * as fromRoot from '../../store/root.reducer';
 import * as AppSelectors from '../../store/app/app.selectors';
-import { IEmployee } from '../../models/Employee';
-import IClient from '../../models/Client';
-import { UserType } from '../../models/enums/UserType';
 import * as UsersSelectors from '../../store/users/users.selectors';
+import { IEmployee } from '../../models/Employee';
+import { IClient } from '../../models/Client';
+import { UserType } from '../../models/enums/UserType';
 
 @Component({
   selector: 'app-fullscreen-menu',

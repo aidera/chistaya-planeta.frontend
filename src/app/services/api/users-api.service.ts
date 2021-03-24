@@ -6,7 +6,7 @@ import ServerResponse from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { UserType } from '../../models/enums/UserType';
 import { IEmployee } from '../../models/Employee';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 
 export interface ILoginRequest extends ServerResponse {
   type: UserType;

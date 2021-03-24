@@ -28,7 +28,7 @@ import {
 import { IOrder } from '../../../../models/Order';
 import EmployeeRole from '../../../../models/enums/EmployeeRole';
 import { paymentMethodOffersOptions } from 'src/app/data/paymentMethodData';
-import IClient from '../../../../models/Client';
+import { IClient } from '../../../../models/Client';
 
 @Component({
   selector: 'app-orders-table',

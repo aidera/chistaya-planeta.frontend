@@ -5,7 +5,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import * as UsersActions from './users.actions';
 import { UsersApiService } from '../../services/api/users-api.service';
-import IClient from '../../models/Client';
 
 @Injectable()
 export class UsersEffects {

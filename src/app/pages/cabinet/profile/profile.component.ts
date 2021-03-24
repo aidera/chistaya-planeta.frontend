@@ -14,7 +14,7 @@ import * as fromRoot from '../../../store/root.reducer';
 import * as UsersSelectors from '../../../store/users/users.selectors';
 import * as UsersActions from '../../../store/users/users.actions';
 import { IEmployee } from '../../../models/Employee';
-import IClient from '../../../models/Client';
+import { IClient } from '../../../models/Client';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
 import SimpleStatus from '../../../models/enums/SimpleStatus';
 import { UserType } from '../../../models/enums/UserType';

@@ -8,8 +8,10 @@ import {
 } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { switchMap } from 'rxjs/operators';
 
 import * as fromRoot from '../../store/root.reducer';
+import * as UsersSelectors from '../../store/users/users.selectors';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ConverterService } from '../../services/converter/converter.service';
 import { LocalitiesApiService } from '../../services/api/localities-api.service';
@@ -18,10 +20,8 @@ import { CarsApiService } from '../../services/api/cars-api.service';
 import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { OptionsService } from '../../services/options/options.service';
 import { IEmployee } from '../../models/Employee';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
-import * as UsersSelectors from '../../store/users/users.selectors';
-import { switchMap } from 'rxjs/operators';
 
 @Component({
   template: '',

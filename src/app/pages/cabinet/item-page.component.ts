@@ -26,7 +26,7 @@ import { EmployeesApiService } from '../../services/api/employees-api.service';
 import { OptionsService } from '../../services/options/options.service';
 import { simpleStatusColors } from '../../data/simpleStatusData';
 import { carStatusColors } from '../../data/carStatusData';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
 import EmployeeRole from '../../models/enums/EmployeeRole';
 import { switchMap } from 'rxjs/operators';

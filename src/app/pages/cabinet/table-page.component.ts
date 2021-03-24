@@ -12,6 +12,7 @@ import {
 } from '@angular/material/snack-bar';
 
 import * as fromRoot from '../../store/root.reducer';
+import * as UsersSelectors from '../../store/users/users.selectors';
 import { PaginationType } from '../../models/types/PaginationType';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ServerFilterRequest } from '../../models/types/ServerFilterRequest';
@@ -27,9 +28,8 @@ import { ConverterService } from '../../services/converter/converter.service';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { OptionsService } from '../../services/options/options.service';
 import { IEmployee } from '../../models/Employee';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
-import * as UsersSelectors from '../../store/users/users.selectors';
 import EmployeeRole from '../../models/enums/EmployeeRole';
 
 @Component({

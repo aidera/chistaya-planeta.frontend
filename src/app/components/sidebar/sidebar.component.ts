@@ -6,7 +6,7 @@ import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
 import { menuLinksMain, menuLinksSecondary } from '../../data/menuLinks';
 import { IEmployee } from '../../models/Employee';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
 
 @Component({

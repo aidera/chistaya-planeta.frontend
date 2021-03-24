@@ -9,7 +9,7 @@ import { IService } from './Service';
 import { ILocality } from './Locality';
 import { IEmployee } from './Employee';
 import { ICar } from './Car';
-import IClient from './Client';
+import { IClient } from './Client';
 
 export interface IOrder {
   _id: string;

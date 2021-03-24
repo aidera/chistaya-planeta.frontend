@@ -3,7 +3,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import * as UsersActions from './users.actions';
 import { UserType } from '../../models/enums/UserType';
 import { IEmployee } from '../../models/Employee';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 import { ServerError } from '../../models/ServerResponse';
 
 export const usersInitialState = {

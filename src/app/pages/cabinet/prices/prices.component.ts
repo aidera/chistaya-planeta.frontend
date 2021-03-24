@@ -21,7 +21,7 @@ import SimpleStatus from '../../../models/enums/SimpleStatus';
 import Price from '../../../models/types/Price';
 import Unit from '../../../models/enums/Unit';
 import { IEmployee } from '../../../models/Employee';
-import IClient from '../../../models/Client';
+import { IClient } from '../../../models/Client';
 import { UserType } from '../../../models/enums/UserType';
 import EmployeeRole from '../../../models/enums/EmployeeRole';
 import * as UsersSelectors from '../../../store/users/users.selectors';

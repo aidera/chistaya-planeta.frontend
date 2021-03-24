@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { ServerError } from '../../models/ServerResponse';
 import { IEmployee } from '../../models/Employee';
 import { UserType } from '../../models/enums/UserType';
-import IClient from '../../models/Client';
+import { IClient } from '../../models/Client';
 
 /* ------------- */
 /* --- Login --- */
