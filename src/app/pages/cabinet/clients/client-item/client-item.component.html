@@ -1,0 +1,172 @@
+<!-- Header -->
+<div class="cabinet-header">
+  <h1>Клиент{{ item ? ': ' + item.name : '' }}</h1>
+  <div class="cabinet-header__actions">
+    <button
+      *ngIf="
+        item &&
+        item.status === clientStatus.active &&
+        userEmployee &&
+        (userEmployee.role === employeeRole.head ||
+          userEmployee.role === employeeRole.admin)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-button
+      color="warn"
+      (click)="isUpdateStatusModalOpen = true"
+    >
+      Заблокировать
+    </button>
+
+    <button
+      *ngIf="
+        item &&
+        item.status === clientStatus.blocked &&
+        userEmployee &&
+        (userEmployee.role === employeeRole.head ||
+          userEmployee.role === employeeRole.admin)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-button
+      color="primary"
+      (click)="activateClient()"
+    >
+      Разблокировать
+    </button>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="cabinet-content">
+  <!-- Error -->
+  <app-item-not-found
+    *ngIf="(getItemError || !item) && !itemIsFetching"
+    title="Клиент исчез"
+    description="К сожалению, этого клиента мы не нашли... Возможно, он ушёл сдавать вторсырьё :)"
+  ></app-item-not-found>
+
+  <!-- Content grid -->
+  <div
+    *ngIf="!getItemError && !updateItemError && !removeItemError"
+    class="cabinet-content__grid"
+  >
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <!-- Status -->
+        <mat-card class="cabinet-content__status-card">
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-status
+              [content]="clientStatusStrings[item?.status]"
+              [isFetching]="itemIsFetching"
+              [color]="clientStatusColors[item?.status]"
+            ></app-item-field-inactive-status>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
+
+          <!-- ID -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="ID"
+              [content]="item?._id"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Name -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Название"
+              [content]="item?.name"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Email -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Email"
+              [content]="item?.email"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Phone -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Телефон"
+              [content]="item ? converter.beautifyPhoneNumber(item.phone) : ''"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Block Reason -->
+          <div class="cabinet-content__field" *ngIf="item?.blockReason">
+            <app-item-field-inactive-string
+              label="Причина блокировки"
+              [content]="item?.blockReason"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>История</h2>
+
+          <!-- Created At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Создано"
+              [content]="item?.createdAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+
+          <!-- Updated At -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Обновлено"
+              [content]="item?.updatedAt | date: 'dd.MM.yyyy - HH:mm'"
+              [isFetching]="itemIsFetching"
+            >
+            </app-item-field-inactive-string>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-modal
+  [isLoading]="itemIsUpdating"
+  [isOpen]="isUpdateStatusModalOpen"
+  [title]="'Вы уверенны?'"
+  [rejectButtonText]="'Заблокировать'"
+  (action)="onUpdateStatusModalAction($event)"
+>
+  <form [formGroup]="updateStatusForm" (ngSubmit)="blockClient()">
+    <!-- Reason -->
+    <app-textarea
+      fieldId="reason"
+      [control]="updateStatusForm?.get('blockReason')"
+      [label]="'Пожалуйста, опишите причину блокировки'"
+    ></app-textarea>
+
+    <button type="submit" [ngStyle]="{ display: 'hidden' }"></button>
+  </form>
+</app-modal>

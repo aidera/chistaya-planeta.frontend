@@ -84,25 +84,27 @@ export class ClientsEffects {
     this.actions$.pipe(
       ofType(ClientsActions.updateClientStatusRequest),
       switchMap((action) => {
-        return this.clientsApi.updateStatus(action.id, action.status).pipe(
-          map((resData) => {
-            if (resData && resData.updatedClient) {
-              return ClientsActions.updateClientSuccess({
-                client: resData.updatedClient,
+        return this.clientsApi
+          .updateStatus(action.id, action.status, action.blockReason)
+          .pipe(
+            map((resData) => {
+              if (resData && resData.updatedClient) {
+                return ClientsActions.updateClientSuccess({
+                  client: resData.updatedClient,
+                });
+              }
+              return ClientsActions.updateClientFailure({
+                error: resData.error,
               });
-            }
-            return ClientsActions.updateClientFailure({
-              error: resData.error,
-            });
-          }),
-          catchError((errorRes) => {
-            return of(
-              ClientsActions.updateClientFailure({
-                error: errorRes.error.error,
-              })
-            );
-          })
-        );
+            }),
+            catchError((errorRes) => {
+              return of(
+                ClientsActions.updateClientFailure({
+                  error: errorRes.error.error,
+                })
+              );
+            })
+          );
       })
     )
   );

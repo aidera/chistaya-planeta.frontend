@@ -84,6 +84,7 @@ export const updateClientStatusRequest = createAction(
   props<{
     id: string;
     status: ClientStatus;
+    blockReason?: string;
   }>()
 );
 

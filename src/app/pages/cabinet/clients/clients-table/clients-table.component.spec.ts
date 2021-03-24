@@ -1,4 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { ClientsTableComponent } from './clients-table.component';
 import { TablePageComponent } from '../../table-page.component';
@@ -10,14 +17,7 @@ import { CheckboxComponent } from '../../../../components/form-controls/checkbox
 import { ErrorMessageComponent } from '../../../../components/form-controls/error-message/error-message.component';
 import { OptionsService } from '../../../../services/options/options.service';
 import { ConverterService } from '../../../../services/converter/converter.service';
-import { provideMockStore } from '@ngrx/store/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../../../modules/material/material.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientModule } from '@angular/common/http';
-import { InlineSVGModule } from 'ng-inline-svg';
-import { NgxMaskModule } from 'ngx-mask';
 
 describe('ClientsTableComponent', () => {
   let component: ClientsTableComponent;

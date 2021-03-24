@@ -37,6 +37,7 @@ import { IsRoleHeadGuard } from './services/auth/is-role-head.guard';
 import { IsRoleClientManagerOrReceivingManagerGuard } from './services/auth/is-role-client-manager-or-receiving-manager.guard';
 import { IsRoleClientManagerGuard } from './services/auth/is-role-client-manager.guard';
 import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/clients-table.component';
+import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-item.component';
 
 export const routes: Routes = [
   {
@@ -60,6 +61,11 @@ export const routes: Routes = [
       {
         path: 'clients',
         component: ClientsTableComponent,
+        canActivate: [IsRoleClientManagerOrReceivingManagerGuard],
+      },
+      {
+        path: 'clients/:id',
+        component: ClientItemComponent,
         canActivate: [IsRoleClientManagerOrReceivingManagerGuard],
       },
 

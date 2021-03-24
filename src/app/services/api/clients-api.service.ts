@@ -60,11 +60,12 @@ export class ClientsApiService {
 
   updateStatus(
     id: string,
-    status: ClientStatus
+    status: ClientStatus,
+    blockReason?: string
   ): Observable<IUpdateClientResponse> {
     return this.http.patch<IUpdateClientResponse>(
       `${environment.serverURL}/${this.path}/update-status/${id}`,
-      { status }
+      { status, blockReason }
     );
   }
 }

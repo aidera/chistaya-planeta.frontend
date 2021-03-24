@@ -83,6 +83,7 @@ import { ProfileComponent } from './pages/cabinet/profile/profile.component';
 import { TasksComponent } from './pages/cabinet/tasks/tasks.component';
 import { OrderItemWeighComponent } from './pages/cabinet/orders/order-item-weigh/order-item-weigh.component';
 import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/clients-table.component';
+import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-item.component';
 
 @NgModule({
   declarations: [
@@ -143,6 +144,7 @@ import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/cli
     TasksComponent,
     OrderItemWeighComponent,
     ClientsTableComponent,
+    ClientItemComponent,
   ],
   imports: [
     BrowserModule,
