@@ -30,6 +30,8 @@ import { IOffer } from '../../../../models/Offer';
 import { IService } from '../../../../models/Service';
 import { debounceTime, take } from 'rxjs/operators';
 import { responseCodes } from '../../../../data/responseCodes';
+import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { ILocality } from '../../../../models/Locality';
 
 @Component({
   selector: 'app-order-item-add',
@@ -67,6 +69,7 @@ export class OrderItemAddComponent
   public orderType = OrderType;
   public deliveryType = DeliveryType;
   public paymentMethod = PaymentMethod;
+  public employeeRole = EmployeeRole;
 
   public deadlineMinDate = tomorrow;
 
@@ -153,6 +156,15 @@ export class OrderItemAddComponent
         customerComment: new FormControl(''),
         companyComment: new FormControl(''),
       });
+
+      if (
+        this.userEmployee &&
+        this.userEmployee.role === EmployeeRole.receivingManager
+      ) {
+        this.form
+          ?.get('locality')
+          .setValue((this.userEmployee.locality as ILocality)?._id);
+      }
 
       this.form
         .get('client')
@@ -516,6 +528,17 @@ export class OrderItemAddComponent
         });
         this.services = filtered;
       });
+
+    this.userInitCallback = () => {
+      if (
+        this.userEmployee &&
+        this.userEmployee.role === EmployeeRole.receivingManager
+      ) {
+        this.form
+          ?.get('locality')
+          .setValue((this.userEmployee.locality as ILocality)?._id);
+      }
+    };
 
     /* --------------------------- */
     /* --- Parent class ngInit --- */
