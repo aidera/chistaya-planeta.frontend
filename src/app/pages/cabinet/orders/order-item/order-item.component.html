@@ -193,6 +193,9 @@
                   : undefined
               "
               [useEditButton]="
+                item?.status !== orderStatus.refused &&
+                item?.status !== orderStatus.cancelled &&
+                item?.status !== orderStatus.completed &&
                 userType === userTypeEnum.employee &&
                 userEmployee?.role !== employeeRole.driver
               "
@@ -983,11 +986,65 @@
           <!-- Deadline -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
+              *ngIf="activeField !== 'deadline'"
               label="Дедлайн"
               [content]="item?.deadline | date: 'dd.MM.yyyy - HH:mm'"
               [isFetching]="itemIsFetching"
+              [useEditButton]="
+                item?.status !== orderStatus.refused &&
+                item?.status !== orderStatus.cancelled &&
+                item?.status !== orderStatus.completed &&
+                item?.status !== orderStatus.raw &&
+                userType === userTypeEnum.employee &&
+                (userEmployee?.role === employeeRole.head ||
+                  userEmployee?.role === employeeRole.admin ||
+                  userEmployee?.role === employeeRole.clientManager)
+              "
+              (editClick)="setActiveField('deadline')"
             >
             </app-item-field-inactive-string>
+            <div
+              *ngIf="activeField === 'deadline'"
+              (clickOutside)="
+                removeActiveField('deadline', item?.deadline || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form
+                class="combined-fields"
+                *ngIf="form"
+                [formGroup]="form"
+                (ngSubmit)="updateDeadline()"
+              >
+                <app-date-input
+                  [control]="form?.get('deadlineDate')"
+                  fieldId="deadlineDate"
+                  [label]="'Дата'"
+                  [isRequired]="true"
+                  [minDate]="deadlineMinDate"
+                  [errorMessages]="{ required: 'Обязательное поле' }"
+                ></app-date-input>
+
+                <app-select
+                  [control]="form?.get('deadlineTime')"
+                  fieldId="deadlineTime"
+                  label="Время"
+                  [isRequired]="true"
+                  [options]="timeOptions"
+                  [errorMessages]="{ required: 'Обязательное поле' }"
+                ></app-select>
+              </form>
+
+              <app-item-field-save-button
+                (update)="updateDeadline()"
+                [disable]="itemIsUpdating"
+              ></app-item-field-save-button>
+            </div>
           </div>
 
           <!-- Created At -->
@@ -1156,7 +1213,7 @@
         fieldId="deadlineDate"
         [label]="'Дата'"
         [isRequired]="true"
-        [minDate]="processFormDeadlineMinDate"
+        [minDate]="deadlineMinDate"
         [errorMessages]="{ required: 'Обязательное поле' }"
       ></app-date-input>
 

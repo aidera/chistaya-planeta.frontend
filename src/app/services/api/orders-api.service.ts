@@ -128,6 +128,13 @@ export class OrdersApiService {
     );
   }
 
+  updateDeadline(id: string, deadline: Date): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/update-deadline/${id}`,
+      { deadline: deadline.toISOString() }
+    );
+  }
+
   setDivision(id: string, division: string): Observable<IUpdateOrderResponse> {
     return this.http.patch<IUpdateOrderResponse>(
       `${environment.serverURL}/${this.path}/set-division/${id}`,

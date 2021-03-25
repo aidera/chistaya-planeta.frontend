@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, take } from 'rxjs/operators';
 
 import * as OrdersActions from '../../../../store/orders/orders.actions';
 import * as OrdersSelectors from '../../../../store/orders/orders.selectors';
@@ -40,7 +41,6 @@ import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import { IService } from '../../../../models/Service';
 import Unit from '../../../../models/enums/Unit';
 import { IClient } from '../../../../models/Client';
-import { debounceTime, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-item',
@@ -76,8 +76,8 @@ export class OrderItemComponent
   public processCarsOptions: OptionType[] = [];
 
   public processForm: FormGroup;
-  public processFormDeadlineMinDate = tomorrow;
   public isProcessFormModalOpen = false;
+  public deadlineMinDate = tomorrow;
   public timeOptions = timeOptions;
 
   public refuseForm: FormGroup;
@@ -113,13 +113,15 @@ export class OrderItemComponent
     this.initForm = () => {
       this.form = new FormGroup({
         client: new FormControl(''),
-        status: new FormControl(''),
+        status: new FormControl('', Validators.required),
         companyComment: new FormControl(''),
         division: new FormControl(''),
         clientManager: new FormControl(''),
         receivingManager: new FormControl(''),
         driver: new FormControl(''),
         car: new FormControl(''),
+        deadlineDate: new FormControl('', Validators.required),
+        deadlineTime: new FormControl('', Validators.required),
       });
 
       this.form
@@ -210,6 +212,10 @@ export class OrderItemComponent
         this.refreshProcessForm();
 
         if (this.form && order) {
+          const deadlineDate = new Date(Date.parse(this.item.deadline));
+          const deadlineHours = deadlineDate.getHours();
+          const deadlineMinutes = deadlineDate.getMinutes() || '00';
+
           this.form.setValue({
             status: order.status || '',
             client: (order.client as IClient)?._id || '',
@@ -221,6 +227,8 @@ export class OrderItemComponent
               (order.performers.receivingManager as IEmployee)?._id || '',
             driver: (order.performers.driver as IEmployee)?._id || '',
             car: (order.performers.car as ICar)?._id || '',
+            deadlineDate,
+            deadlineTime: deadlineHours + ':' + deadlineMinutes,
           });
         }
 
@@ -581,7 +589,7 @@ export class OrderItemComponent
     if (this.item) {
       const deadlineDate = new Date(Date.parse(this.item.deadline));
       const deadlineHours = deadlineDate.getHours();
-      const deadlineMinutes = deadlineDate.getMinutes();
+      const deadlineMinutes = deadlineDate.getMinutes() || '00';
 
       this.processForm.setValue({
         division: (this.item.division as IDivision)?._id || '',
@@ -877,6 +885,25 @@ export class OrderItemComponent
         OrdersActions.setOrderClientRequest({
           id: this.item._id,
           client: this.form.get('client').value,
+        })
+      );
+    }
+  }
+
+  public updateDeadline(): void {
+    if (this.userEmployee) {
+      const deadlineDate = new Date(this.form.get('deadlineDate').value);
+      const deadlineTime = this.form.get('deadlineTime').value;
+      const deadlineHours = deadlineTime.split(':')[0];
+      const deadlineMinutes = deadlineTime.split(':')[1];
+
+      const deadline = deadlineDate;
+      deadline.setHours(deadlineHours, deadlineMinutes);
+
+      this.store.dispatch(
+        OrdersActions.updateOrderDeadlineRequest({
+          id: this.item._id,
+          deadline,
         })
       );
     }

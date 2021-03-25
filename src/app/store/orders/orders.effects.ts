@@ -133,6 +133,33 @@ export class OrdersEffects {
     )
   );
 
+  updateOrderDeadline$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.updateOrderDeadlineRequest),
+      switchMap((action) => {
+        return this.ordersApi.updateDeadline(action.id, action.deadline).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
   setOrderDivision$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrdersActions.setOrderDivisionRequest),

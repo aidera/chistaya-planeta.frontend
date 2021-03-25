@@ -112,6 +112,11 @@ const _ordersReducer = createReducer(
     updateOrderIsFetching: true,
     updateOrderError: null,
   })),
+  on(OrdersActions.updateOrderDeadlineRequest, (state) => ({
+    ...state,
+    updateOrderIsFetching: true,
+    updateOrderError: null,
+  })),
   on(OrdersActions.setOrderDivisionRequest, (state) => ({
     ...state,
     updateOrderIsFetching: true,

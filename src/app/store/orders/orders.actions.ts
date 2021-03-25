@@ -39,6 +39,8 @@ export const UPDATE_ORDER_STATUS_REQUEST =
   '[orders] update - order status - request';
 export const UPDATE_ORDER_COMPANY_COMMENT_REQUEST =
   '[orders] update - order company comment - request';
+export const UPDATE_ORDER_DEADLINE_REQUEST =
+  '[orders] update - order deadline - request';
 export const SET_ORDER_DIVISION_REQUEST =
   '[orders] set - order division - request';
 export const ASSIGN_ORDER_CLIENT_MANAGER_REQUEST =
@@ -155,6 +157,10 @@ export const updateOrderStatusRequest = createAction(
 export const updateOrderCompanyCommentRequest = createAction(
   UPDATE_ORDER_COMPANY_COMMENT_REQUEST,
   props<{ id: string; comment: string }>()
+);
+export const updateOrderDeadlineRequest = createAction(
+  UPDATE_ORDER_DEADLINE_REQUEST,
+  props<{ id: string; deadline: Date }>()
 );
 export const setOrderDivisionRequest = createAction(
   SET_ORDER_DIVISION_REQUEST,

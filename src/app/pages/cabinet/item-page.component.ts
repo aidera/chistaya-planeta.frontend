@@ -164,7 +164,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
     if (this.activeField === fieldName) {
       this.activeField = null;
 
-      this.form?.get(fieldName).setValue(controlValue);
+      this.form?.get(fieldName)?.setValue(controlValue);
     }
   }
 
