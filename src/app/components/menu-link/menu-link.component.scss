@@ -8,6 +8,8 @@
   display: flex;
   justify-content: center;
   position: relative;
+  color: $text-color-primary;
+  text-decoration: none;
 
   &.active {
     color: $color-primary;

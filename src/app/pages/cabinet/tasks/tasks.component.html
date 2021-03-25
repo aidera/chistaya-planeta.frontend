@@ -53,8 +53,12 @@
       <h2 class="yellow-text">Новые</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksNew">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksNew"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -70,7 +74,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -78,8 +82,12 @@
       <h2 class="yellow-text">Необработанные</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksWithRawStatus">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksWithRawStatus"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -95,7 +103,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -103,11 +111,12 @@
       <h2 class="blue-text">В работе</h2>
 
       <div class="tasks__orders">
-        <div
+        <a
           class="tasks__order"
           *ngFor="let task of tasksWithInProgressStatus"
+          [routerLink]="['../', 'orders', task._id]"
         >
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -126,7 +135,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -134,8 +143,12 @@
       <h2 class="green-text">Недавно завершённые</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksWithCompletedStatus">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksWithCompletedStatus"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -149,7 +162,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -157,8 +170,12 @@
       <h2 class="red-text">Недавно отменённые</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksWithRefusedStatus">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksWithRefusedStatus"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -175,7 +192,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
   </ng-container>
@@ -185,8 +202,12 @@
       <h2 class="yellow-text">Новые</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksNew">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksNew"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -202,7 +223,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -210,8 +231,12 @@
       <h2 class="yellow-text">Взятые в работу</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksToDelivery">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksToDelivery"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -227,7 +252,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -235,8 +260,12 @@
       <h2 class="blue-text">В пути</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksWithInTransitStatus">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksWithInTransitStatus"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -252,7 +281,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -260,11 +289,12 @@
       <h2 class="blue-text">Доставлено</h2>
 
       <div class="tasks__orders">
-        <div
+        <a
           class="tasks__order"
-          *ngFor="let task of tasksWithInProgressStatus"
+          *ngFor="let task of tasksWithDeliveredStatus"
+          [routerLink]="['../', 'orders', task._id]"
         >
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -278,7 +308,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
   </ng-container>
@@ -290,8 +320,12 @@
       <h2 class="yellow-text">Возможные</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksNew">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksNew"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -305,7 +339,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -316,11 +350,12 @@
       <h2 class="blue-text">Доставлено</h2>
 
       <div class="tasks__orders">
-        <div
+        <a
           class="tasks__order"
           *ngFor="let task of tasksWithDeliveredStatusAndCurrentDivision"
+          [routerLink]="['../', 'orders', task._id]"
         >
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -334,7 +369,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -342,8 +377,12 @@
       <h2 class="green-text">Взвешенные</h2>
 
       <div class="tasks__orders">
-        <div class="tasks__order" *ngFor="let task of tasksWithWeighedStatus">
-          <mat-card [routerLink]="['../', 'orders', task._id]">
+        <a
+          class="tasks__order"
+          *ngFor="let task of tasksWithWeighedStatus"
+          [routerLink]="['../', 'orders', task._id]"
+        >
+          <mat-card>
             <span class="tasks__order-type">{{
               orderTypeStrings[task.type]
             }}</span>
@@ -357,7 +396,7 @@
               >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
             >
           </mat-card>
-        </div>
+        </a>
       </div>
     </div>
   </ng-container>

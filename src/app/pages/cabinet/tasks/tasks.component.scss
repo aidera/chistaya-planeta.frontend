@@ -31,6 +31,10 @@
     grid-template-columns: 1fr;
   }
 
+  .tasks__order {
+    text-decoration: none;
+  }
+
   .mat-card {
     transition: $transition-1;
     cursor: pointer;
