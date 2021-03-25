@@ -44,6 +44,7 @@ export interface IAddOrderRequest {
   deadline: Date;
 
   locality: string;
+  client?: string;
 
   offersItems?: string[];
   offersAmountUnit?: Unit;
@@ -189,6 +190,13 @@ export class OrdersApiService {
     );
   }
 
+  setClient(id: string, client: string): Observable<IUpdateOrderResponse> {
+    return this.http.patch<IUpdateOrderResponse>(
+      `${environment.serverURL}/${this.path}/set-client/${id}`,
+      { client }
+    );
+  }
+
   process(fields: {
     id: string;
     division?: string;
@@ -287,6 +295,7 @@ export class OrdersApiService {
       deadline: order.deadline ? order.deadline.toISOString() : undefined,
 
       locality: order.locality,
+      client: order.client,
 
       offersItems: order.offersItems,
       offersAmountUnit: order.offersAmountUnit,

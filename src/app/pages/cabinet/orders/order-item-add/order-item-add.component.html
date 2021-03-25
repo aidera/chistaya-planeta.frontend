@@ -280,6 +280,18 @@
           <h2>Контактные данные</h2>
 
           <div class="cabinet-content__grid-item-form-content">
+            <!-- Client ID -->
+            <app-text-input
+              *ngIf="userEmployee"
+              fieldId="client"
+              [control]="form.get('client')"
+              label="Идентификатор клиента"
+              [errorMessages]="{
+                notExists: 'Нет такого клиента'
+              }"
+            >
+            </app-text-input>
+
             <!-- Customer contact name -->
             <app-text-input
               fieldId="customerContactName"

@@ -54,6 +54,7 @@ export const ASSIGN_ORDER_DRIVER_REQUEST =
 export const ACCEPT_ORDER_DRIVER_REQUEST =
   '[orders] accept - order driver - request';
 export const SET_ORDER_CAR_REQUEST = '[orders] set - order car - request';
+export const SET_ORDER_CLIENT_REQUEST = '[orders] set - order client - request';
 export const PROCESS_ORDER_REQUEST = '[orders] process - order - request';
 export const REFUSE_ORDER_REQUEST = '[orders] refuse - order - request';
 export const CANCEL_ORDER_REQUEST = '[orders] cancel - order - request';
@@ -186,6 +187,10 @@ export const acceptOrderDriverRequest = createAction(
 export const setOrderCarRequest = createAction(
   SET_ORDER_CAR_REQUEST,
   props<{ id: string; car: string }>()
+);
+export const setOrderClientRequest = createAction(
+  SET_ORDER_CLIENT_REQUEST,
+  props<{ id: string; client: string }>()
 );
 export const processOrderRequest = createAction(
   PROCESS_ORDER_REQUEST,

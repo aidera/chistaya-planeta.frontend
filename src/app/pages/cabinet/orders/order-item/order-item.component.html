@@ -179,16 +179,57 @@
           <!-- Client ID -->
           <div *ngIf="userEmployee" class="cabinet-content__field">
             <app-item-field-inactive-string
+              *ngIf="activeField !== 'client'"
               label="Клиент"
-              [content]="item?.client?.name"
+              [content]="
+                item?.client
+                  ? item.client.name + ' (' + item.client._id + ')'
+                  : ''
+              "
               [isFetching]="itemIsFetching"
               [linkArray]="
                 userEmployee.role !== employeeRole.driver
                   ? ['../../', 'clients', item?.client?._id]
                   : undefined
               "
+              [useEditButton]="
+                userType === userTypeEnum.employee &&
+                userEmployee?.role !== employeeRole.driver
+              "
+              (editClick)="setActiveField('client')"
             >
             </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'client'"
+              (clickOutside)="
+                removeActiveField('client', item?.client?._id || '')
+              "
+              [delayClickOutsideInit]="true"
+              [exclude]="
+                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
+              "
+              [excludeBeforeClick]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="setClient()">
+                <app-text-input
+                  label="ID клиента"
+                  [control]="form.get('client')"
+                  [errorMessages]="{
+                    notExists: 'Нет такого клиента'
+                  }"
+                ></app-text-input>
+              </form>
+
+              <app-item-field-save-button
+                (update)="setClient()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('client').value === (item?.client?._id || '')
+                "
+              ></app-item-field-save-button>
+            </div>
           </div>
 
           <!-- Type -->

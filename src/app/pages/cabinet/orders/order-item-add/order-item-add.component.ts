@@ -28,6 +28,8 @@ import {
 } from '../../../../data/unitOptions';
 import { IOffer } from '../../../../models/Offer';
 import { IService } from '../../../../models/Service';
+import { debounceTime, take } from 'rxjs/operators';
+import { responseCodes } from '../../../../data/responseCodes';
 
 @Component({
   selector: 'app-order-item-add',
@@ -119,6 +121,8 @@ export class OrderItemAddComponent
         locality: new FormControl('', Validators.required),
         division: new FormControl(''),
 
+        client: new FormControl(''),
+
         offersItems: new FormControl([]),
         offersAmountUnit: new FormControl(''),
         offersAmount: new FormControl(''),
@@ -149,6 +153,23 @@ export class OrderItemAddComponent
         customerComment: new FormControl(''),
         companyComment: new FormControl(''),
       });
+
+      this.form
+        .get('client')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value !== '') {
+            this.clientsApi
+              .checkId(this.form.get('client').value)
+              .pipe(take(1))
+              .subscribe((response) => {
+                if (response?.responseCode !== responseCodes.found) {
+                  this.form.get('client').markAsTouched();
+                  this.form.get('client').setErrors({ notExists: true });
+                }
+              });
+          }
+        });
 
       this.form.get('locality').valueChanges.subscribe((fieldValue) => {
         this.form.get('division').setValue('');
@@ -346,9 +367,8 @@ export class OrderItemAddComponent
       .select(OrdersSelectors.selectAddOrderError)
       .subscribe((error) => {
         if (error) {
-          if (error.foundedItem) {
-            this.form.get('name').setErrors({ alreadyExists: true });
-            this.alreadyExistId = error.foundedItem._id;
+          if (error.description.includes('client')) {
+            this.form.get('client').setErrors({ notExists: true });
           } else {
             this.addSnackbar = this.snackBar.open(
               'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
@@ -382,6 +402,8 @@ export class OrderItemAddComponent
         deadline,
 
         locality: this.form.get('locality').value,
+
+        client: this.form.get('client').value || undefined,
 
         offersItems:
           this.form.get('type').value === OrderType.offer + ''

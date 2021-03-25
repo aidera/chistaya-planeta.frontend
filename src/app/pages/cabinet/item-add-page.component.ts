@@ -22,6 +22,7 @@ import { OptionsService } from '../../services/options/options.service';
 import { IEmployee } from '../../models/Employee';
 import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
+import { ClientsApiService } from '../../services/api/clients-api.service';
 
 @Component({
   template: '',
@@ -78,6 +79,7 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
     protected divisionsApi: DivisionsApiService,
     protected carsApi: CarsApiService,
     protected employeesApi: EmployeesApiService,
+    protected clientsApi: ClientsApiService,
     protected options: OptionsService
   ) {}
 

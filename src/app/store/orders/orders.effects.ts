@@ -353,6 +353,33 @@ export class OrdersEffects {
     )
   );
 
+  setOrderClient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrdersActions.setOrderClientRequest),
+      switchMap((action) => {
+        return this.ordersApi.setClient(action.id, action.client).pipe(
+          map((resData) => {
+            if (resData && resData.updatedOrder) {
+              return OrdersActions.updateOrderSuccess({
+                order: resData.updatedOrder,
+              });
+            }
+            return OrdersActions.updateOrderFailure({
+              error: resData.error,
+            });
+          }),
+          catchError((errorRes) => {
+            return of(
+              OrdersActions.updateOrderFailure({
+                error: errorRes.error.error,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
   processOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrdersActions.processOrderRequest),

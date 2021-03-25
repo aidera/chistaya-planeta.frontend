@@ -44,6 +44,12 @@ export class ClientsApiService {
     );
   }
 
+  checkId(id: string): Observable<ICheckClientResponse> {
+    return this.http.get<ICheckClientResponse>(
+      `${environment.serverURL}/${this.path}/check-id/${id}`
+    );
+  }
+
   get(request: GetRouteParamsType): Observable<IGetClientsResponse> {
     const params = this.api.createGetRouteParams(request);
     return this.http.get<IGetClientsResponse>(

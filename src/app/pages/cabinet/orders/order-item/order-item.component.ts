@@ -39,6 +39,8 @@ import timeOptions from '../../../../data/timeOptions';
 import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 import { IService } from '../../../../models/Service';
 import Unit from '../../../../models/enums/Unit';
+import { IClient } from '../../../../models/Client';
+import { debounceTime, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-item',
@@ -110,6 +112,7 @@ export class OrderItemComponent
     /* --- Main form --- */
     this.initForm = () => {
       this.form = new FormGroup({
+        client: new FormControl(''),
         status: new FormControl(''),
         companyComment: new FormControl(''),
         division: new FormControl(''),
@@ -118,6 +121,23 @@ export class OrderItemComponent
         driver: new FormControl(''),
         car: new FormControl(''),
       });
+
+      this.form
+        .get('client')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value !== '') {
+            this.clientsApi
+              .checkId(this.form.get('client').value)
+              .pipe(take(1))
+              .subscribe((response) => {
+                if (response?.responseCode !== responseCodes.found) {
+                  this.form.get('client').markAsTouched();
+                  this.form.get('client').setErrors({ notExists: true });
+                }
+              });
+          }
+        });
     };
 
     /* --- Process form --- */
@@ -192,6 +212,7 @@ export class OrderItemComponent
         if (this.form && order) {
           this.form.setValue({
             status: order.status || '',
+            client: (order.client as IClient)?._id || '',
             companyComment: order.companyComment || '',
             division: (order.division as IDivision)?._id || '',
             clientManager:
@@ -355,7 +376,16 @@ export class OrderItemComponent
               );
             }
           } else if (error.code === responseCodes.notFound) {
-            if (error.description.includes('locality')) {
+            if (error.description.includes('client')) {
+              this.updateSnackbar = this.snackBar.open(
+                'Ошибка. Клиент не найден',
+                'Скрыть',
+                {
+                  duration: 2000,
+                  panelClass: 'error',
+                }
+              );
+            } else if (error.description.includes('locality')) {
               this.updateSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
@@ -836,6 +866,17 @@ export class OrderItemComponent
         OrdersActions.setOrderCarRequest({
           id: this.item._id,
           car: this.form.get('car').value,
+        })
+      );
+    }
+  }
+
+  public setClient(): void {
+    if (this.userEmployee) {
+      this.store.dispatch(
+        OrdersActions.setOrderClientRequest({
+          id: this.item._id,
+          client: this.form.get('client').value,
         })
       );
     }

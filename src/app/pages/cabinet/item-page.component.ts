@@ -30,6 +30,7 @@ import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
 import EmployeeRole from '../../models/enums/EmployeeRole';
 import { switchMap } from 'rxjs/operators';
+import { ClientsApiService } from '../../services/api/clients-api.service';
 
 @Component({
   template: '',
@@ -109,6 +110,7 @@ export class ItemPageComponent implements OnInit, OnDestroy {
     protected divisionsApi: DivisionsApiService,
     protected carsApi: CarsApiService,
     protected employeesApi: EmployeesApiService,
+    protected clientsApi: ClientsApiService,
     public options: OptionsService
   ) {}
 
