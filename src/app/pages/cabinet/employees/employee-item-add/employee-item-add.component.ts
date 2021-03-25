@@ -97,7 +97,7 @@ export class EmployeeItemAddComponent
         .get('email')
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
-          if (value !== '') {
+          if (value !== '' && value.includes('@')) {
             this.employeesApi
               .checkEmail(this.form.get('email').value)
               .pipe(take(1))

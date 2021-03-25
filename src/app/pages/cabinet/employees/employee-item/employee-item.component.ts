@@ -88,7 +88,11 @@ export class EmployeeItemComponent
         .get('email')
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
-          if (value !== '') {
+          if (
+            value !== '' &&
+            value.includes('@') &&
+            this.activeField === 'email'
+          ) {
             this.employeesApi
               .checkEmail(this.form.get('email').value)
               .pipe(take(1))
@@ -112,7 +116,7 @@ export class EmployeeItemComponent
         .get('phone')
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
-          if (value !== '') {
+          if (value !== '' && this.activeField === 'phone') {
             this.employeesApi
               .checkPhone('+7' + this.form.get('phone').value)
               .pipe(take(1))

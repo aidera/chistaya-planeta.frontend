@@ -114,7 +114,7 @@ export class SignUpComponent implements OnInit {
       .get('email')
       .valueChanges.pipe(debounceTime(500))
       .subscribe((value) => {
-        if (value !== '') {
+        if (value !== '' && value.includes('@')) {
           this.clientsApi
             .checkEmail(this.form.get('email').value)
             .pipe(take(1))

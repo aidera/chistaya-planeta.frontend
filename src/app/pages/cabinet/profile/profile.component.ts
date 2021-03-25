@@ -231,7 +231,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         .get('email')
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
-          if (value !== '') {
+          if (
+            value !== '' &&
+            value.includes('@') &&
+            this.activeField === 'email'
+          ) {
             this.employeesApi
               .checkEmail(this.updateForm.get('email').value)
               .pipe(take(1))
@@ -287,7 +291,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         .get('email')
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
-          if (value !== '') {
+          if (value !== '' && value.includes('@')) {
             this.clientsApi
               .checkEmail(this.updateForm.get('email').value)
               .pipe(take(1))

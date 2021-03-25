@@ -126,7 +126,7 @@ export class OrderItemComponent
         .get('client')
         .valueChanges.pipe(debounceTime(500))
         .subscribe((value) => {
-          if (value !== '') {
+          if (value !== '' && this.activeField === 'client') {
             this.clientsApi
               .checkId(this.form.get('client').value)
               .pipe(take(1))
