@@ -22,14 +22,18 @@
 
 .cabinet-layout__content {
   padding-top: 92px;
-  padding-bottom: 60px;
   padding-left: 300px;
   width: 100%;
   display: flex;
   justify-content: center;
   min-height: 100vh;
+  flex-direction: column;
   @media (max-width: $bp-lg) {
     padding-left: 0;
+  }
+
+  .router {
+    padding-bottom: 60px;
   }
 
   .container {
