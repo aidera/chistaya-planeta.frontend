@@ -9,6 +9,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { MobileHeaderComponent } from '../../components/mobile-header/mobile-header.component';
 import { FullscreenMenuComponent } from '../../components/fullscreen-menu/fullscreen-menu.component';
 import { MenuLinkComponent } from '../../components/menu-link/menu-link.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 let store: MockStore;
 
@@ -24,6 +25,7 @@ describe('CabinetLayoutComponent', () => {
         MobileHeaderComponent,
         FullscreenMenuComponent,
         MenuLinkComponent,
+        FooterComponent,
       ],
       imports: [
         RouterTestingModule,

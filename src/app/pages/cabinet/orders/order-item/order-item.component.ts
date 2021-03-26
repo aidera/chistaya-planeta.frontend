@@ -908,4 +908,17 @@ export class OrderItemComponent
       );
     }
   }
+
+  getOfferItemsArrayString(): string {
+    if (this.item?.offers) {
+      return JSON.stringify(
+        (this.item.offers.items as IOffer[])
+          .map((el) => {
+            return el._id;
+          })
+          .concat()
+      );
+    }
+    return '';
+  }
 }

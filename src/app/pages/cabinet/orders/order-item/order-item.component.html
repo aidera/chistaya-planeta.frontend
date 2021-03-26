@@ -114,6 +114,44 @@
 
     <button
       *ngIf="
+        item &&
+        (userEmployee?.role === employeeRole.clientManager ||
+          userEmployee?.role === employeeRole.receivingManager ||
+          userEmployee?.role === employeeRole.admin ||
+          userEmployee?.role === employeeRole.head ||
+          userClient)
+      "
+      [disabled]="itemIsFetching || itemIsUpdating"
+      mat-button
+      color="primary"
+      [routerLink]="['../', 'add']"
+      [queryParams]="{
+        type: item.type,
+        locality: item.locality._id,
+        client: userEmployee ? item.client?._id || '' : '',
+        offersItems: getOfferItemsArrayString(),
+        offersAmountUnit: item.offers.amountUnit,
+        offersAmount: item.offers.amount,
+        servicesAmountUnit: item.services.amountUnit,
+        servicesAmount: item.services.amount,
+        customerContactName: item.customer.contactName,
+        customerContactPhone: item.customer.contactPhone,
+        customerOrganizationLegalName: item.customer.organizationLegalName,
+        customerOrganizationActualName: item.customer.organizationActualName,
+        deliveryType: item.delivery._type,
+        deliveryCustomerCarNumber: item.delivery.customerCarNumber,
+        deliveryHasAssistant: item.delivery.hasAssistant,
+        deliveryAddressFromStreet: item.delivery.addressFrom?.street || '',
+        deliveryAddressFromHouse: item.delivery.addressFrom?.house || '',
+        paymentMethod: item.payment.method,
+        paymentMethodData: item.payment.methodData
+      }"
+    >
+      Повторить
+    </button>
+
+    <button
+      *ngIf="
         ((userEmployee?.role === employeeRole.clientManager &&
           item?.performers.clientManager) ||
           userEmployee?.role === employeeRole.admin ||

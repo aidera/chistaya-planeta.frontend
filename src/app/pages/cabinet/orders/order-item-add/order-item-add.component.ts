@@ -545,6 +545,93 @@ export class OrderItemAddComponent
     /* --------------------------- */
 
     super.ngOnInit();
+
+    /* ------------------------------------- */
+    /* --- Getting query params for form --- */
+    /* ------------------------------------- */
+    this.route.queryParams.subscribe((params) => {
+      const type = params.type;
+      const locality = params.locality;
+      const client = params.client;
+      const offersItems = params.offersItems
+        ? JSON.parse(params.offersItems)
+        : '';
+      const offersAmountUnit = params.offersAmountUnit;
+      const offersAmount = params.offersAmount;
+      const servicesAmountUnit = params.servicesAmountUnit;
+      const servicesAmount = params.servicesAmount;
+      const customerContactName = params.customerContactName;
+      const customerContactPhone = params.customerContactPhone;
+      const customerOrganizationLegalName =
+        params.customerOrganizationLegalName;
+      const customerOrganizationActualName =
+        params.customerOrganizationActualName;
+      const deliveryType = params.deliveryType;
+      const deliveryCustomerCarNumber = params.deliveryCustomerCarNumber;
+      const deliveryHasAssistant = params.deliveryHasAssistant;
+      const deliveryAddressFromStreet = params.deliveryAddressFromStreet;
+      const deliveryAddressFromHouse = params.deliveryAddressFromHouse;
+      const paymentMethod = params.paymentMethod;
+      const paymentMethodData = params.paymentMethodData;
+
+      if (this.form) {
+        this.form.get('type').setValue(type);
+        this.form.get('locality').setValue(locality);
+
+        if (+type === OrderType.offer) {
+          this.form.get('offersItems').setValue(offersItems);
+          this.form.get('offersAmountUnit').setValue(offersAmountUnit);
+          this.form.get('offersAmount').setValue(offersAmount);
+        }
+
+        if (+type === OrderType.service) {
+          this.form.get('servicesAmountUnit').setValue(servicesAmountUnit);
+          this.form.get('servicesAmount').setValue(servicesAmount);
+        }
+
+        this.form.get('deliveryType').setValue(deliveryType);
+
+        if (
+          +type === OrderType.service ||
+          (+type === OrderType.offer && +deliveryType === DeliveryType.company)
+        ) {
+          this.form
+            .get('deliveryAddressFromStreet')
+            .setValue(deliveryAddressFromStreet);
+          this.form
+            .get('deliveryAddressFromHouse')
+            .setValue(deliveryAddressFromHouse);
+          this.form
+            .get('deliveryHasAssistant')
+            .setValue(deliveryHasAssistant === 'true');
+        }
+
+        if (
+          +type === OrderType.offer &&
+          +deliveryType === DeliveryType.pickup
+        ) {
+          this.form
+            .get('deliveryCustomerCarNumber')
+            .setValue(deliveryCustomerCarNumber);
+        }
+
+        this.form.get('client').setValue(client);
+
+        this.form.get('customerContactName').setValue(customerContactName);
+        this.form
+          .get('customerContactPhone')
+          .setValue(customerContactPhone?.substr(2) || '');
+        this.form
+          .get('customerOrganizationLegalName')
+          .setValue(customerOrganizationLegalName);
+        this.form
+          .get('customerOrganizationActualName')
+          .setValue(customerOrganizationActualName);
+
+        this.form.get('paymentMethod').setValue(paymentMethod);
+        this.form.get('paymentMethodData').setValue(paymentMethodData);
+      }
+    });
   }
 
   ngOnDestroy(): void {

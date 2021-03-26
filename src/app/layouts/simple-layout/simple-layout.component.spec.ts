@@ -4,6 +4,9 @@ import { MatCardModule } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 
 import { SimpleLayoutComponent } from './simple-layout.component';
+import { FooterComponent } from '../../components/footer/footer.component';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('SimpleLayoutComponent', () => {
   let component: SimpleLayoutComponent;
@@ -11,8 +14,14 @@ describe('SimpleLayoutComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SimpleLayoutComponent],
-      imports: [RouterTestingModule, MatCardModule],
+      declarations: [SimpleLayoutComponent, FooterComponent],
+      imports: [
+        RouterTestingModule,
+        MatCardModule,
+        RouterTestingModule,
+        InlineSVGModule.forRoot(),
+        HttpClientModule,
+      ],
     }).compileComponents();
   }));
 
