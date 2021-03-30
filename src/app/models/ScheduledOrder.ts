@@ -16,6 +16,7 @@ export interface IScheduledOrder extends Document {
   periodType: PeriodType;
   periodAmount: number;
   startDate: string;
+  nextUpdate?: Date;
   createdAt: string;
   updatedAt: string;
 
