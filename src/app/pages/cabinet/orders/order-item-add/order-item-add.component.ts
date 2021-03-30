@@ -555,7 +555,7 @@ export class OrderItemAddComponent
       const client = params.client;
       const offersItems = params.offersItems
         ? JSON.parse(params.offersItems)
-        : '';
+        : undefined;
       const offersAmountUnit = params.offersAmountUnit;
       const offersAmount = params.offersAmount;
       const servicesAmountUnit = params.servicesAmountUnit;
@@ -575,61 +575,98 @@ export class OrderItemAddComponent
       const paymentMethodData = params.paymentMethodData;
 
       if (this.form) {
-        this.form.get('type').setValue(type);
-        this.form.get('locality').setValue(locality);
+        if (type !== undefined) {
+          this.form.get('type').setValue(type);
+        }
+        if (locality !== undefined) {
+          this.form.get('locality').setValue(locality);
+        }
 
         if (+type === OrderType.offer) {
-          this.form.get('offersItems').setValue(offersItems);
-          this.form.get('offersAmountUnit').setValue(offersAmountUnit);
-          this.form.get('offersAmount').setValue(offersAmount);
+          if (offersItems !== undefined) {
+            this.form.get('offersItems').setValue(offersItems);
+          }
+          if (offersAmountUnit !== undefined) {
+            this.form.get('offersAmountUnit').setValue(offersAmountUnit);
+          }
+          if (offersAmount !== undefined) {
+            this.form.get('offersAmount').setValue(offersAmount);
+          }
         }
 
         if (+type === OrderType.service) {
-          this.form.get('servicesAmountUnit').setValue(servicesAmountUnit);
-          this.form.get('servicesAmount').setValue(servicesAmount);
+          if (servicesAmountUnit !== undefined) {
+            this.form.get('servicesAmountUnit').setValue(servicesAmountUnit);
+          }
+          if (servicesAmount !== undefined) {
+            this.form.get('servicesAmount').setValue(servicesAmount);
+          }
         }
 
-        this.form.get('deliveryType').setValue(deliveryType);
+        if (deliveryType !== undefined) {
+          this.form.get('deliveryType').setValue(deliveryType);
+        }
 
         if (
           +type === OrderType.service ||
           (+type === OrderType.offer && +deliveryType === DeliveryType.company)
         ) {
-          this.form
-            .get('deliveryAddressFromStreet')
-            .setValue(deliveryAddressFromStreet);
-          this.form
-            .get('deliveryAddressFromHouse')
-            .setValue(deliveryAddressFromHouse);
-          this.form
-            .get('deliveryHasAssistant')
-            .setValue(deliveryHasAssistant === 'true');
+          if (deliveryAddressFromStreet !== undefined) {
+            this.form
+              .get('deliveryAddressFromStreet')
+              .setValue(deliveryAddressFromStreet);
+          }
+          if (deliveryAddressFromHouse !== undefined) {
+            this.form
+              .get('deliveryAddressFromHouse')
+              .setValue(deliveryAddressFromHouse);
+          }
+          if (deliveryHasAssistant !== undefined) {
+            this.form
+              .get('deliveryHasAssistant')
+              .setValue(deliveryHasAssistant === 'true');
+          }
         }
 
         if (
           +type === OrderType.offer &&
           +deliveryType === DeliveryType.pickup
         ) {
-          this.form
-            .get('deliveryCustomerCarNumber')
-            .setValue(deliveryCustomerCarNumber);
+          if (deliveryCustomerCarNumber !== undefined) {
+            this.form
+              .get('deliveryCustomerCarNumber')
+              .setValue(deliveryCustomerCarNumber);
+          }
+        }
+        if (client !== undefined) {
+          this.form.get('client').setValue(client);
         }
 
-        this.form.get('client').setValue(client);
+        if (customerContactName !== undefined) {
+          this.form.get('customerContactName').setValue(customerContactName);
+        }
+        if (customerContactPhone !== undefined) {
+          this.form
+            .get('customerContactPhone')
+            .setValue(customerContactPhone?.substr(2) || '');
+        }
+        if (customerOrganizationLegalName !== undefined) {
+          this.form
+            .get('customerOrganizationLegalName')
+            .setValue(customerOrganizationLegalName);
+        }
+        if (customerOrganizationActualName !== undefined) {
+          this.form
+            .get('customerOrganizationActualName')
+            .setValue(customerOrganizationActualName);
+        }
 
-        this.form.get('customerContactName').setValue(customerContactName);
-        this.form
-          .get('customerContactPhone')
-          .setValue(customerContactPhone?.substr(2) || '');
-        this.form
-          .get('customerOrganizationLegalName')
-          .setValue(customerOrganizationLegalName);
-        this.form
-          .get('customerOrganizationActualName')
-          .setValue(customerOrganizationActualName);
-
-        this.form.get('paymentMethod').setValue(paymentMethod);
-        this.form.get('paymentMethodData').setValue(paymentMethodData);
+        if (paymentMethod !== undefined) {
+          this.form.get('paymentMethod').setValue(paymentMethod);
+        }
+        if (paymentMethodData !== undefined) {
+          this.form.get('paymentMethodData').setValue(paymentMethodData);
+        }
       }
     });
   }
