@@ -1,5 +1,4 @@
 import DeliveryType from './enums/DeliveryType';
-import ScheduledOrderStatus from './enums/ScheduledOrderStatus';
 import PeriodType from './enums/PeriodType';
 import OrderType from './enums/OrderType';
 import { IClient } from './Client';
@@ -8,11 +7,12 @@ import { IOffer } from './Offer';
 import Unit from './enums/Unit';
 import { IService } from './Service';
 import PaymentMethod from './enums/PaymentMethod';
+import SimpleStatus from './enums/SimpleStatus';
 
 export interface IScheduledOrder extends Document {
   /* Refers to schedule */
   _id: string;
-  status: ScheduledOrderStatus;
+  status: SimpleStatus;
   periodType: PeriodType;
   periodAmount: number;
   startDate: string;
