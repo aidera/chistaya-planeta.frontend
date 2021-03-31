@@ -28,11 +28,17 @@ export const menuLinksMain: MenuLink[] = [
     ],
     clientCanSee: true,
   },
-  // {
-  //   title: 'Периодические заявки',
-  //   iconPath: 'assets/icons/scheduled-order.svg',
-  //   link: 'scheduled-orders',
-  // },
+  {
+    title: 'Периодические заявки',
+    iconPath: 'assets/icons/scheduled-order.svg',
+    link: 'scheduled-orders',
+    employeesCanSee: [
+      EmployeeRole.head,
+      EmployeeRole.admin,
+      EmployeeRole.clientManager,
+    ],
+    clientCanSee: true,
+  },
   {
     title: 'Клиенты',
     iconPath: 'assets/icons/customer.svg',

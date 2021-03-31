@@ -38,6 +38,7 @@ import { IsRoleClientManagerOrReceivingManagerGuard } from './services/auth/is-r
 import { IsRoleClientManagerGuard } from './services/auth/is-role-client-manager.guard';
 import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/clients-table.component';
 import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-item.component';
+import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/scheduled-orders-table/scheduled-orders-table.component';
 
 export const routes: Routes = [
   {
@@ -57,6 +58,12 @@ export const routes: Routes = [
       },
       { path: 'orders/weigh/:id', component: OrderItemWeighComponent },
       { path: 'orders/:id', component: OrderItemComponent },
+
+      {
+        path: 'scheduled-orders',
+        component: ScheduledOrdersTableComponent,
+        canActivate: [IsRoleClientManagerGuard],
+      },
 
       {
         path: 'clients',
@@ -153,6 +160,9 @@ export const routes: Routes = [
         component: OrderItemAddComponent,
       },
       { path: 'orders/:id', component: OrderItemComponent },
+
+      { path: 'scheduled-orders', component: ScheduledOrdersTableComponent },
+
       { path: 'prices', component: PricesComponent },
       { path: 'profile', component: ProfileComponent },
       { path: '**', component: ItemNotFoundComponent },

@@ -1,7 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { NgxMaskModule } from 'ngx-mask';
 
-import { OrdersTableComponent } from './orders-table.component';
+import { ScheduledOrdersTableComponent } from './scheduled-orders-table.component';
 import { TablePageComponent } from '../../table-page.component';
 import { TableComponent } from '../../../../components/table/table.component';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
@@ -10,22 +16,16 @@ import { SelectComponent } from '../../../../components/form-controls/select/sel
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { OptionsService } from '../../../../services/options/options.service';
 import { ConverterService } from '../../../../services/converter/converter.service';
-import { provideMockStore } from '@ngrx/store/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../../../modules/material/material.module';
-import { HttpClientModule } from '@angular/common/http';
-import { InlineSVGModule } from 'ng-inline-svg';
-import { NgxMaskModule } from 'ngx-mask';
 
-describe('OrdersComponent', () => {
-  let component: OrdersTableComponent;
-  let fixture: ComponentFixture<OrdersTableComponent>;
+describe('ScheduledOrdersTableComponent', () => {
+  let component: ScheduledOrdersTableComponent;
+  let fixture: ComponentFixture<ScheduledOrdersTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OrdersTableComponent,
+        ScheduledOrdersTableComponent,
         TablePageComponent,
         TableComponent,
         TextInputComponent,
@@ -40,12 +40,9 @@ describe('OrdersComponent', () => {
           initialState: {
             app: {
               localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
             },
-            orders: {
-              orders: [],
+            scheduledOrders: {
+              scheduledOrders: [],
             },
             users: {
               user: null,
@@ -67,7 +64,7 @@ describe('OrdersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrdersTableComponent);
+    fixture = TestBed.createComponent(ScheduledOrdersTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -85,6 +85,7 @@ import { OrderItemWeighComponent } from './pages/cabinet/orders/order-item-weigh
 import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/clients-table.component';
 import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-item.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/scheduled-orders-table/scheduled-orders-table.component';
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ import { FooterComponent } from './components/footer/footer.component';
     ClientsTableComponent,
     ClientItemComponent,
     FooterComponent,
+    ScheduledOrdersTableComponent,
   ],
   imports: [
     BrowserModule,

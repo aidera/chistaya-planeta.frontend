@@ -231,7 +231,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     rawString: string,
     searchValue: string
   ): string {
-    if (searchValue) {
+    if (searchValue && rawString) {
       const clearQuickSearchValue = this.converter
         .clearServerRequestString(searchValue)
         .toLowerCase();

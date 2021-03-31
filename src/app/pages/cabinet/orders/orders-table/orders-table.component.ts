@@ -13,13 +13,13 @@ import { ILocality } from '../../../../models/Locality';
 import { IDivision } from '../../../../models/Division';
 import { ICar } from '../../../../models/Car';
 import {
-  orderStatusOptions,
   orderStatusColors,
+  orderStatusOptions,
   orderStatusStrings,
 } from '../../../../data/orderStatusData';
 import {
-  orderTypeStrings,
   orderTypeOptions,
+  orderTypeStrings,
 } from '../../../../data/orderTypeData';
 import {
   deliveryTypeOptions,
@@ -384,21 +384,45 @@ export class OrdersTableComponent
       /* Divisions */
       this.divisionsOptions$?.unsubscribe();
       this.divisionsOptions$ = this.options
-        .getDivisionsOptions({})
+        .getDivisionsOptions({
+          localitiesIds:
+            this.userEmployee &&
+            this.userEmployee.role !== EmployeeRole.admin &&
+            this.userEmployee.role !== EmployeeRole.head
+              ? [(this.userEmployee.locality as ILocality)._id]
+              : undefined,
+        })
         .subscribe((value) => {
           this.divisionsOptions = value;
         });
 
       /* Cars */
       this.carsOptions$?.unsubscribe();
-      this.carsOptions$ = this.options.getCarsOptions({}).subscribe((value) => {
-        this.carsOptions = value;
-      });
+      this.carsOptions$ = this.options
+        .getCarsOptions({
+          localitiesIds:
+            this.userEmployee &&
+            this.userEmployee.role !== EmployeeRole.admin &&
+            this.userEmployee.role !== EmployeeRole.head
+              ? [(this.userEmployee.locality as ILocality)._id]
+              : undefined,
+        })
+        .subscribe((value) => {
+          this.carsOptions = value;
+        });
 
       /* Client Managers */
       this.clientManagersOptions$?.unsubscribe();
       this.clientManagersOptions$ = this.options
-        .getEmployeesOptions({ roles: [EmployeeRole.clientManager] })
+        .getEmployeesOptions({
+          roles: [EmployeeRole.clientManager],
+          localitiesIds:
+            this.userEmployee &&
+            this.userEmployee.role !== EmployeeRole.admin &&
+            this.userEmployee.role !== EmployeeRole.head
+              ? [(this.userEmployee.locality as ILocality)._id]
+              : undefined,
+        })
         .subscribe((value) => {
           this.clientManagersOptions = value;
         });
@@ -406,7 +430,15 @@ export class OrdersTableComponent
       /* Receiving Managers */
       this.receivingManagersOptions$?.unsubscribe();
       this.receivingManagersOptions$ = this.options
-        .getEmployeesOptions({ roles: [EmployeeRole.receivingManager] })
+        .getEmployeesOptions({
+          roles: [EmployeeRole.receivingManager],
+          localitiesIds:
+            this.userEmployee &&
+            this.userEmployee.role !== EmployeeRole.admin &&
+            this.userEmployee.role !== EmployeeRole.head
+              ? [(this.userEmployee.locality as ILocality)._id]
+              : undefined,
+        })
         .subscribe((value) => {
           this.receivingManagersOptions = value;
         });
@@ -414,7 +446,15 @@ export class OrdersTableComponent
       /* Drivers */
       this.driversOptions$?.unsubscribe();
       this.driversOptions$ = this.options
-        .getEmployeesOptions({ roles: [EmployeeRole.driver] })
+        .getEmployeesOptions({
+          roles: [EmployeeRole.driver],
+          localitiesIds:
+            this.userEmployee &&
+            this.userEmployee.role !== EmployeeRole.admin &&
+            this.userEmployee.role !== EmployeeRole.head
+              ? [(this.userEmployee.locality as ILocality)._id]
+              : undefined,
+        })
         .subscribe((value) => {
           this.driversOptions = value;
         });

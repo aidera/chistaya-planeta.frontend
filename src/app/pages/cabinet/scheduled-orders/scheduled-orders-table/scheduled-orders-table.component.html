@@ -1,13 +1,12 @@
 <div class="cabinet-header">
-  <h1>Заявки</h1>
+  <h1>Периодические заявки</h1>
   <div class="cabinet-header__actions">
     <button
       *ngIf="
         (userEmployee &&
           (userEmployee.role === employeeRole.head ||
             userEmployee.role === employeeRole.admin ||
-            userEmployee.role === employeeRole.clientManager ||
-            userEmployee.role === employeeRole.receivingManager)) ||
+            userEmployee.role === employeeRole.clientManager)) ||
         userClient
       "
       mat-raised-button
@@ -49,7 +48,7 @@
           <app-select
             [control]="advancedSearchForm.get('status')"
             label="Статус:"
-            [options]="orderStatusOptions"
+            [options]="simpleStatusOptions"
             [isMultiple]="true"
           ></app-select>
 
@@ -129,57 +128,20 @@
             [control]="advancedSearchForm.get('paymentMethodData')"
             label="Данные об оплате содержат:"
           ></app-text-input>
-
-          <app-number-from-to-input
-            [control]="advancedSearchForm.get('weighedPaymentAmount')"
-            label="Итоговая стоимость:"
-          ></app-number-from-to-input>
         </app-accordion>
 
-        <app-accordion title="Компания" [isOpenInitial]="false">
+        <app-accordion
+          *ngIf="
+            userEmployee?.role === employeeRole.admin ||
+            userEmployee?.role === employeeRole.head
+          "
+          title="Компания"
+          [isOpenInitial]="false"
+        >
           <app-select
-            *ngIf="
-              userEmployee?.role === employeeRole.admin ||
-              userEmployee?.role === employeeRole.head
-            "
             [control]="advancedSearchForm.get('localities')"
             label="Населённые пункты:"
             [options]="localitiesOptions"
-            [isMultiple]="true"
-          ></app-select>
-
-          <app-select
-            [control]="advancedSearchForm.get('divisions')"
-            label="Подразделения:"
-            [options]="divisionsOptions"
-            [isMultiple]="true"
-          ></app-select>
-
-          <app-select
-            [control]="advancedSearchForm.get('performersClientManagers')"
-            label="Менеджеры по работе с клиентами:"
-            [options]="clientManagersOptions"
-            [isMultiple]="true"
-          ></app-select>
-
-          <app-select
-            [control]="advancedSearchForm.get('performersReceivingManagers')"
-            label="Принимающие менеджеры:"
-            [options]="receivingManagersOptions"
-            [isMultiple]="true"
-          ></app-select>
-
-          <app-select
-            [control]="advancedSearchForm.get('performersDrivers')"
-            label="Водители:"
-            [options]="driversOptions"
-            [isMultiple]="true"
-          ></app-select>
-
-          <app-select
-            [control]="advancedSearchForm.get('performersCars')"
-            label="Автомобили компании:"
-            [options]="carsOptions"
             [isMultiple]="true"
           ></app-select>
         </app-accordion>
@@ -189,34 +151,32 @@
             [control]="advancedSearchForm.get('customerComment')"
             label="Комментарий клиента содержит:"
           ></app-text-input>
-
-          <app-text-input
-            [control]="advancedSearchForm.get('companyComment')"
-            label="Комментарий компании содержит:"
-          ></app-text-input>
-
-          <app-text-input
-            [control]="advancedSearchForm.get('customerCancellationReason')"
-            label="Причина отмены заказа клиентом содержит:"
-          ></app-text-input>
-
-          <app-text-input
-            [control]="advancedSearchForm.get('companyCancellationReason')"
-            label="Причина отмены заказа сотрудником содержит:"
-          ></app-text-input>
         </app-accordion>
 
         <app-accordion title="История" [isOpenInitial]="false">
           <br />
-          <h3>Желаемая дата доставки</h3>
+          <h3>Дата начала</h3>
           <br />
           <app-date-time-input
-            [control]="advancedSearchForm.get('deadlineFrom')"
+            [control]="advancedSearchForm.get('startDateFrom')"
             label="от:"
           ></app-date-time-input>
 
           <app-date-time-input
-            [control]="advancedSearchForm.get('deadlineTo')"
+            [control]="advancedSearchForm.get('startDateTo')"
+            label="до:"
+          ></app-date-time-input>
+
+          <br />
+          <h3>Дата создания следующей заявки</h3>
+          <br />
+          <app-date-time-input
+            [control]="advancedSearchForm.get('nextUpdateFrom')"
+            label="от:"
+          ></app-date-time-input>
+
+          <app-date-time-input
+            [control]="advancedSearchForm.get('nextUpdateTo')"
             label="до:"
           ></app-date-time-input>
 
@@ -245,76 +205,6 @@
 
           <app-date-time-input
             [control]="advancedSearchForm.get('updatedAtTo')"
-            label="до:"
-          ></app-date-time-input>
-
-          <br />
-          <h3>Дата обработки</h3>
-          <br />
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateAcceptedFrom')"
-            label="от:"
-          ></app-date-time-input>
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateAcceptedTo')"
-            label="до:"
-          ></app-date-time-input>
-
-          <br />
-          <h3>Дата доставки</h3>
-          <br />
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateDeliveredFrom')"
-            label="от:"
-          ></app-date-time-input>
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateDeliveredTo')"
-            label="до:"
-          ></app-date-time-input>
-
-          <br />
-          <h3>Дата взвешивания</h3>
-          <br />
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateWeighedFrom')"
-            label="от:"
-          ></app-date-time-input>
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateWeighedTo')"
-            label="до:"
-          ></app-date-time-input>
-
-          <br />
-          <h3>Дата завершения</h3>
-          <br />
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateCompletedFrom')"
-            label="от:"
-          ></app-date-time-input>
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateCompletedTo')"
-            label="до:"
-          ></app-date-time-input>
-
-          <br />
-          <h3>Дата отмены/отказа</h3>
-          <br />
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateRefusedFrom')"
-            label="от:"
-          ></app-date-time-input>
-
-          <app-date-time-input
-            [control]="advancedSearchForm.get('statusDateRefusedTo')"
             label="до:"
           ></app-date-time-input>
         </app-accordion>
