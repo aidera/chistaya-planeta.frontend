@@ -1,0 +1,470 @@
+<!-- Header -->
+<div class="cabinet-header">
+  <h1>Добавить периодическую заявку</h1>
+</div>
+
+<!-- Content -->
+<form class="cabinet-content" [formGroup]="form" (ngSubmit)="sendForm()">
+  <div class="cabinet-content__grid">
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Период</h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <div class="combined-fields">
+              <!-- Period Amount -->
+              <app-text-input
+                fieldId="periodAmount"
+                [control]="form.get('periodAmount')"
+                [label]="'Создавать каждые'"
+                fieldType="number"
+                [isRequired]="true"
+              >
+              </app-text-input>
+
+              <!-- Period Type -->
+              <app-select
+                fieldId="periodType"
+                [control]="form.get('periodType')"
+                [options]="periodTypeOptions"
+              ></app-select>
+            </div>
+
+            <!-- Start Date -->
+            <app-date-input
+              [control]="form.get('startDate')"
+              fieldId="startDate"
+              [label]="'Начиная с'"
+              [isRequired]="true"
+              [minDate]="startMinDate"
+              [errorMessages]="{ required: 'Обязательное поле' }"
+            ></app-date-input>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Основная информация</h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <!-- Locality -->
+            <app-select
+              *ngIf="userEmployee?.role !== employeeRole.receivingManager"
+              fieldId="locality"
+              [control]="form.get('locality')"
+              [options]="localitiesOptions"
+              [label]="'Населённый пункт'"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-select>
+
+            <!-- Type -->
+            <app-select
+              fieldId="type"
+              [control]="form.get('type')"
+              [options]="orderTypeOptions"
+              [label]="'Тип'"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-select>
+          </div>
+        </mat-card>
+      </div>
+
+      <div
+        *ngIf="form.get('type').value === ''"
+        class="cabinet-content__grid-item"
+        [class.cabinet-content__grid-item_inactive]="
+          form.get('type').value === ''
+        "
+      >
+        <mat-card>
+          <h2>Вторсырьё / отходы</h2>
+        </mat-card>
+      </div>
+
+      <div
+        *ngIf="form.get('type').value === orderType.offer + ''"
+        class="cabinet-content__grid-item"
+      >
+        <mat-card>
+          <h2>Вторсырьё</h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <!-- Offers Items -->
+            <app-select
+              fieldId="offersItems"
+              [control]="form.get('offersItems')"
+              [options]="offersOptions"
+              [isMultiple]="true"
+              [label]="'Типы вторсырья'"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-select>
+
+            <div class="combined-fields combined-fields_mobile-wrap">
+              <!-- Offers Amount -->
+              <app-text-input
+                fieldId="offersAmount"
+                [control]="form.get('offersAmount')"
+                label="Приблизительное количество"
+                labelHint="Нужно, чтобы определить тип автомобиля"
+                fieldType="number"
+                [isRequired]="true"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              >
+              </app-text-input>
+
+              <!-- Offers Amount Unit -->
+              <app-select
+                fieldId="offersAmountUnit"
+                label="ед."
+                [control]="form.get('offersAmountUnit')"
+                [options]="offersUnitOptions"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-select>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <div
+        *ngIf="form.get('type').value === orderType.service + ''"
+        class="cabinet-content__grid-item"
+      >
+        <mat-card>
+          <h2>Отходы</h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <div class="combined-fields combined-fields_mobile-wrap">
+              <!-- Services Amount -->
+              <app-text-input
+                fieldId="servicesAmount"
+                [control]="form.get('servicesAmount')"
+                label="Приблизительное количество"
+                labelHint="Нужно, чтобы определить тип автомобиля"
+                fieldType="number"
+                [isRequired]="true"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              >
+              </app-text-input>
+
+              <!-- Services Amount Unit -->
+              <app-select
+                fieldId="servicesAmountUnit"
+                label="ед."
+                [control]="form.get('servicesAmountUnit')"
+                [options]="servicesUnitOptions"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              ></app-select>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <div
+        class="cabinet-content__grid-item"
+        [class.cabinet-content__grid-item_inactive]="
+          form.get('type').value === '' || form.get('locality').value === ''
+        "
+      >
+        <mat-card>
+          <h2>
+            {{
+              form.get('type').value === orderType.offer + ''
+                ? 'Доставка'
+                : 'Вывоз'
+            }}
+          </h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <!-- Delivery type -->
+            <app-select
+              *ngIf="form.get('type').value === orderType.offer + ''"
+              fieldId="deliveryType"
+              label="Тип доставки"
+              [control]="form.get('deliveryType')"
+              [options]="deliveryTypeOptions"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-select>
+
+            <!-- Delivery customer car number -->
+            <app-text-input
+              *ngIf="
+                form.get('type').value === orderType.offer + '' &&
+                form.get('deliveryType').value === deliveryType.pickup + ''
+              "
+              [control]="form.get('deliveryCustomerCarNumber')"
+              fieldId="deliveryCustomerCarNumber"
+              label="Номер автомобиля"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле',
+                minlength: 'Слишком короткий номер автомобиля'
+              }"
+            ></app-text-input>
+
+            <div
+              class="combined-fields combined-fields_mobile-wrap"
+              *ngIf="
+                form.get('type').value === orderType.service + '' ||
+                (form.get('type').value === orderType.offer + '' &&
+                  form.get('deliveryType').value === deliveryType.company + '')
+              "
+            >
+              <!-- Delivery address street -->
+              <app-text-input
+                fieldId="deliveryAddressFromStreet"
+                [control]="form.get('deliveryAddressFromStreet')"
+                label="Улица"
+                [isRequired]="true"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              >
+              </app-text-input>
+
+              <!-- Delivery address house -->
+              <app-text-input
+                fieldId="deliveryAddressFromHouse"
+                [control]="form.get('deliveryAddressFromHouse')"
+                label="Дом"
+                [isRequired]="true"
+                [errorMessages]="{
+                  required: 'Обязательное поле'
+                }"
+              >
+              </app-text-input>
+            </div>
+
+            <!-- Delivery has assistant -->
+            <app-checkbox
+              *ngIf="
+                form.get('deliveryType').value === deliveryType.company + '' ||
+                form.get('type').value === orderType.service + ''
+              "
+              [control]="form.get('deliveryHasAssistant')"
+              fieldId="deliveryHasAssistant"
+              label="Есть помошник?"
+              labelHint="Поставьте галочку, если на месте будет человек, котрый поможет загрузить сырье или мусор"
+            ></app-checkbox>
+
+            <!-- Divisions -->
+            <ng-container
+              *ngIf="
+                form.get('type').value === orderType.offer + '' &&
+                form.get('deliveryType').value === deliveryType.pickup + ''
+              "
+            >
+              <div class="field-spacer"></div>
+
+              <small>Пункты приёма:</small>
+              <br />
+              <p *ngFor="let division of divisionsOptions">
+                {{ division.text }}
+              </p>
+            </ng-container>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="cabinet-content__grid-column">
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Контактные данные</h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <!-- Client ID -->
+            <app-text-input
+              *ngIf="userEmployee"
+              fieldId="client"
+              [control]="form.get('client')"
+              label="Идентификатор клиента"
+              [errorMessages]="{
+                notExists: 'Нет такого клиента'
+              }"
+            >
+            </app-text-input>
+
+            <!-- Customer contact name -->
+            <app-text-input
+              fieldId="customerContactName"
+              [control]="form.get('customerContactName')"
+              label="Контактное лицо"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            >
+            </app-text-input>
+
+            <!-- Customer contact phone -->
+            <app-text-input
+              [control]="form.get('customerContactPhone')"
+              fieldId="customerContactPhone"
+              label="Контактный телефон"
+              mask="(000) 000-00-00"
+              prefix="+7 "
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле',
+                minlength: 'Слишком короткий номер телефона'
+              }"
+            ></app-text-input>
+
+            <!-- Customer organization legal name -->
+            <app-text-input
+              fieldId="customerOrganizationLegalName"
+              [control]="form.get('customerOrganizationLegalName')"
+              label="Юридическое наименование организации"
+            >
+            </app-text-input>
+
+            <!-- Customer organization actual name -->
+            <app-text-input
+              fieldId="customerOrganizationActualName"
+              [control]="form.get('customerOrganizationActualName')"
+              label="Фактическое наименование организации"
+            >
+            </app-text-input>
+          </div>
+        </mat-card>
+      </div>
+
+      <div
+        class="cabinet-content__grid-item"
+        [class.cabinet-content__grid-item_inactive]="
+          form.get('type').value === '' ||
+          (form.get('type').value === orderType.offer + '' &&
+            !approximateRemunerationCost)
+        "
+      >
+        <mat-card>
+          <h2>
+            {{
+              form.get('type').value === orderType.offer + ''
+                ? 'Вознаграждение'
+                : form.get('type').value === orderType.service + ''
+                ? 'Оплата'
+                : 'Оплата / вознаграждение'
+            }}
+          </h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <div
+              *ngIf="
+                approximatePaymentCost &&
+                form.get('type').value === orderType.service + ''
+              "
+            >
+              <label>Приблизительная стоимость оплаты</label>
+              <p>{{ approximatePaymentCost }}</p>
+              <a target="_blank" [routerLink]="['../../', 'prices']"
+                >Расценки</a
+              >
+              <br />
+              <br />
+            </div>
+
+            <div
+              *ngIf="
+                approximateRemunerationCost &&
+                form.get('type').value === orderType.offer + ''
+              "
+            >
+              <label>Приблизительная стоимость вознаграждения</label>
+              <p>{{ approximateRemunerationCost }}</p>
+              <a target="_blank" [routerLink]="['../../', 'prices']"
+                >Расценки</a
+              >
+              <br />
+              <br />
+            </div>
+
+            <!-- Payment method -->
+            <app-select
+              fieldId="paymentMethod"
+              [control]="form.get('paymentMethod')"
+              [options]="
+                form.get('type').value === orderType.offer + ''
+                  ? paymentMethodOffersOptions
+                  : paymentMethodServicesOptions
+              "
+              [label]="'Способ оплаты'"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            ></app-select>
+
+            <!-- Payment method data -->
+            <app-textarea
+              *ngIf="
+                form.get('type').value === orderType.offer + '' &&
+                form.get('paymentMethod').value !== paymentMethod.cash + '' &&
+                form.get('paymentMethod').value !== ''
+              "
+              fieldId="paymentMethodData"
+              [control]="form.get('paymentMethodData')"
+              label="Данные для платежа"
+              labelHint="Данные, с помощью которых мы сможем отправить вознаграждение на Ваш счёт"
+              [isRequired]="true"
+              [errorMessages]="{
+                required: 'Обязательное поле'
+              }"
+            >
+            </app-textarea>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cabinet-content__grid-item">
+        <mat-card>
+          <h2>Комментарий</h2>
+
+          <div class="cabinet-content__grid-item-form-content">
+            <!-- Customer/company comment -->
+            <app-textarea
+              fieldId="customerComment"
+              [control]="form.get('customerComment')"
+            >
+            </app-textarea>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="cabinet-content__actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="isFetching"
+    >
+      Добавить
+    </button>
+  </div>
+  <div *ngIf="serverError" class="cabinet-content__bottom-error">
+    {{ serverError }}
+  </div>
+</form>

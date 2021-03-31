@@ -86,6 +86,7 @@ import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/cli
 import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-item.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/scheduled-orders-table/scheduled-orders-table.component';
+import { ScheduledOrderItemAddComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item-add/scheduled-order-item-add.component';
 
 @NgModule({
   declarations: [
@@ -149,6 +150,7 @@ import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/
     ClientItemComponent,
     FooterComponent,
     ScheduledOrdersTableComponent,
+    ScheduledOrderItemAddComponent,
   ],
   imports: [
     BrowserModule,

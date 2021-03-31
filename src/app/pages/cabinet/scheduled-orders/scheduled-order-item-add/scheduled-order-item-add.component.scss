@@ -1,0 +1,9 @@
+.scheduled-order__period {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+  > * {
+    width: 30%;
+  }
+}
