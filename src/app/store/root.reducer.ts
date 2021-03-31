@@ -11,6 +11,7 @@ import * as fromEmployees from './employees/employees.reducer';
 import * as fromOffers from './offers/offers.reducer';
 import * as fromServices from './services/services.reducer';
 import * as fromTasks from './tasks/tasks.reducer';
+import * as fromScheduledOrders from './scheduled-orders/scheduled-orders.reducer';
 import { LOGOUT } from './users/users.actions';
 
 export interface State {
@@ -25,6 +26,7 @@ export interface State {
   offers: fromOffers.OffersState;
   services: fromServices.ServicesState;
   tasks: fromTasks.TasksState;
+  scheduledOrders: fromScheduledOrders.ScheduledOrdersState;
 }
 
 export const rootReducer: ActionReducerMap<State> = {
@@ -39,6 +41,7 @@ export const rootReducer: ActionReducerMap<State> = {
   offers: fromOffers.offersReducer,
   services: fromServices.servicesReducer,
   tasks: fromTasks.tasksReducer,
+  scheduledOrders: fromScheduledOrders.scheduledOrdersReducer,
 };
 
 export function clearState(reducer): any {

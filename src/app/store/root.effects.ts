@@ -9,6 +9,7 @@ import { OffersEffects } from './offers/offers.effects';
 import { ServicesEffects } from './services/services.effects';
 import { TasksEffects } from './tasks/tasks.effects';
 import { ClientsEffects } from './clients/clients.effects';
+import { ScheduledOrdersEffects } from './scheduled-orders/scheduled-orders.effects';
 
 export const rootEffects = [
   AppEffects,
@@ -22,4 +23,5 @@ export const rootEffects = [
   OffersEffects,
   ServicesEffects,
   TasksEffects,
+  ScheduledOrdersEffects,
 ];
