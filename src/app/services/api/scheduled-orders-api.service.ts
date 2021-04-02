@@ -35,8 +35,11 @@ export interface IGetScheduledOrdersResponse extends ServerResponse {
 }
 
 export interface IUpdateScheduledOrderRequest {
+  status?: SimpleStatus;
+
   periodType?: PeriodType;
   periodAmount?: number;
+  startDate?: Date;
 
   type?: OrderType;
 
@@ -144,8 +147,13 @@ export class ScheduledOrdersApiService {
     fields: IUpdateScheduledOrderRequest
   ): Observable<IUpdateScheduledOrderResponse> {
     return this.http.patch<IUpdateScheduledOrderResponse>(
-      `${environment.serverURL}/${this.path}/update/${id}`,
-      { ...fields }
+      `${environment.serverURL}/${this.path}/${id}`,
+      {
+        ...fields,
+        startDate: fields.startDate
+          ? fields.startDate.toISOString()
+          : undefined,
+      }
     );
   }
 

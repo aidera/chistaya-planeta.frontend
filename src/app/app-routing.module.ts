@@ -40,6 +40,7 @@ import { ClientsTableComponent } from './pages/cabinet/clients/clients-table/cli
 import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-item.component';
 import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/scheduled-orders-table/scheduled-orders-table.component';
 import { ScheduledOrderItemAddComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item-add/scheduled-order-item-add.component';
+import { ScheduledOrderItemComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item/scheduled-order-item.component';
 
 export const routes: Routes = [
   {
@@ -68,6 +69,11 @@ export const routes: Routes = [
       {
         path: 'scheduled-orders/add',
         component: ScheduledOrderItemAddComponent,
+        canActivate: [IsRoleClientManagerGuard],
+      },
+      {
+        path: 'scheduled-orders/:id',
+        component: ScheduledOrderItemComponent,
         canActivate: [IsRoleClientManagerGuard],
       },
 
@@ -171,6 +177,10 @@ export const routes: Routes = [
       {
         path: 'scheduled-orders/add',
         component: ScheduledOrderItemAddComponent,
+      },
+      {
+        path: 'scheduled-orders/:id',
+        component: ScheduledOrderItemComponent,
       },
 
       { path: 'prices', component: PricesComponent },

@@ -1,0 +1,14 @@
+.combined-small-fields {
+  display: flex;
+
+  > * {
+    width: 30%;
+    margin-right: 5%;
+    &:last-child {
+      margin-right: 0;
+    }
+    ::ng-deep p {
+      padding-top: 16px;
+    }
+  }
+}

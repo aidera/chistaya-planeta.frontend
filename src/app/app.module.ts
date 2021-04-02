@@ -87,6 +87,7 @@ import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-
 import { FooterComponent } from './components/footer/footer.component';
 import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/scheduled-orders-table/scheduled-orders-table.component';
 import { ScheduledOrderItemAddComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item-add/scheduled-order-item-add.component';
+import { ScheduledOrderItemComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item/scheduled-order-item.component';
 
 @NgModule({
   declarations: [
@@ -151,6 +152,7 @@ import { ScheduledOrderItemAddComponent } from './pages/cabinet/scheduled-orders
     FooterComponent,
     ScheduledOrdersTableComponent,
     ScheduledOrderItemAddComponent,
+    ScheduledOrderItemComponent,
   ],
   imports: [
     BrowserModule,
