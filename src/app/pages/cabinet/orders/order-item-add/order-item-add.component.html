@@ -14,7 +14,10 @@
           <div class="cabinet-content__grid-item-form-content">
             <!-- Locality -->
             <app-select
-              *ngIf="userEmployee?.role !== employeeRole.receivingManager"
+              *ngIf="
+                userEmployee?.role !== employeeRole.receivingManager &&
+                userEmployee?.role !== employeeRole.clientManager
+              "
               fieldId="locality"
               [control]="form.get('locality')"
               [options]="localitiesOptions"

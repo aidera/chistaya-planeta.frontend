@@ -200,7 +200,8 @@ export class OrderItemAddComponent
 
       if (
         this.userEmployee &&
-        this.userEmployee.role === EmployeeRole.receivingManager
+        (this.userEmployee.role === EmployeeRole.receivingManager ||
+          this.userEmployee.role === EmployeeRole.clientManager)
       ) {
         this.form
           ?.get('locality')
@@ -573,7 +574,8 @@ export class OrderItemAddComponent
     this.userInitCallback = () => {
       if (
         this.userEmployee &&
-        this.userEmployee.role === EmployeeRole.receivingManager
+        (this.userEmployee.role === EmployeeRole.receivingManager ||
+          this.userEmployee.role === EmployeeRole.clientManager)
       ) {
         this.form
           ?.get('locality')
@@ -726,6 +728,7 @@ export class OrderItemAddComponent
     this.socket.get()?.off('offers');
     this.socket.get()?.off('services');
   }
+
   public approximateCostChange(): void {
     const orderType = this.form.get('type').value;
     const offersItems = this.form.get('offersItems').value;

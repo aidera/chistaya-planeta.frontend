@@ -539,6 +539,7 @@
                 (userEmployee?.role === employeeRole.head ||
                   userEmployee?.role === employeeRole.admin ||
                   userEmployee?.role === employeeRole.clientManager) &&
+                item?.status !== orderStatus.raw &&
                 item?.status !== orderStatus.refused &&
                 item?.status !== orderStatus.cancelled &&
                 item?.status !== orderStatus.completed
@@ -608,6 +609,7 @@
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
                   userEmployee?.role === employeeRole.admin) &&
+                item?.status !== orderStatus.raw &&
                 item?.status !== orderStatus.refused &&
                 item?.status !== orderStatus.cancelled &&
                 item?.status !== orderStatus.completed
@@ -685,6 +687,7 @@
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
                   userEmployee?.role === employeeRole.admin) &&
+                item?.status !== orderStatus.raw &&
                 item?.status !== orderStatus.refused &&
                 item?.status !== orderStatus.cancelled &&
                 item?.status !== orderStatus.completed
@@ -765,6 +768,7 @@
                 (userEmployee?.role === employeeRole.head ||
                   userEmployee?.role === employeeRole.admin ||
                   userEmployee?.role === employeeRole.clientManager) &&
+                item?.status !== orderStatus.raw &&
                 item?.status !== orderStatus.refused &&
                 item?.status !== orderStatus.cancelled &&
                 item?.status !== orderStatus.completed
@@ -832,6 +836,7 @@
                 (userEmployee?.role === employeeRole.head ||
                   userEmployee?.role === employeeRole.admin ||
                   userEmployee?.role === employeeRole.clientManager) &&
+                item?.status !== orderStatus.raw &&
                 item?.status !== orderStatus.refused &&
                 item?.status !== orderStatus.cancelled &&
                 item?.status !== orderStatus.completed
