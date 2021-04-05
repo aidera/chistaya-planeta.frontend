@@ -7,7 +7,6 @@ import { TextInputComponent } from '../../../../components/form-controls/text-in
 import { DateTimeInputComponent } from '../../../../components/form-controls/date-time-input/date-time-input.component';
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 describe('EmployeesTableComponent', () => {
   let component: EmployeesTableComponent;
@@ -35,7 +35,7 @@ describe('EmployeesTableComponent', () => {
       ],
       providers: [
         OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             employees: {

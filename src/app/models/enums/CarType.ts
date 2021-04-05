@@ -5,10 +5,8 @@
  * -- самосвал
  */
 
-enum CarType {
+export enum CarType {
   small,
   van,
   tipper,
 }
-
-export default CarType;

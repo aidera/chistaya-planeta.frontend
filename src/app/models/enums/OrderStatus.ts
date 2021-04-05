@@ -11,7 +11,7 @@
  * -- завершено
  */
 
-enum OrderStatus {
+export enum OrderStatus {
   raw,
   refused,
   cancelled,
@@ -22,5 +22,3 @@ enum OrderStatus {
   weighed,
   completed,
 }
-
-export default OrderStatus;

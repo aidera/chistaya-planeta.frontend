@@ -1,6 +1,6 @@
 import { SimpleStatus } from './enums/SimpleStatus';
-import Price from './types/Price';
-import Unit from './enums/Unit';
+import { Price } from './types/Price';
+import { Unit } from './enums/Unit';
 
 export interface IService {
   _id: string;

@@ -1,8 +1,8 @@
-import DeliveryType from './enums/DeliveryType';
-import PaymentMethod from './enums/PaymentMethod';
-import OrderStatus from './enums/OrderStatus';
-import OrderType from './enums/OrderType';
-import Unit from './enums/Unit';
+import { DeliveryType } from './enums/DeliveryType';
+import { PaymentMethod } from './enums/PaymentMethod';
+import { OrderStatus } from './enums/OrderStatus';
+import { OrderType } from './enums/OrderType';
+import { Unit } from './enums/Unit';
 import { IDivision } from './Division';
 import { IOffer } from './Offer';
 import { IService } from './Service';

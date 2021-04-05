@@ -5,10 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 import { HttpClientModule } from '@angular/common/http';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { SignUpComponent } from './sign-up.component';
 import { TextInputComponent } from '../../components/form-controls/text-input/text-input.component';
-import { provideMockStore } from '@ngrx/store/testing';
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;

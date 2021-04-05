@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { TasksComponent } from './tasks.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../../modules/material/material.module';
-import { RouterTestingModule } from '@angular/router/testing';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
-import { provideMockStore } from '@ngrx/store/testing';
 
 describe('TasksComponent', () => {
   let component: TasksComponent;

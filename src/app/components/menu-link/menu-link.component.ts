@@ -6,7 +6,7 @@ import * as fromRoot from '../../store/root.reducer';
 import * as AppSelectors from '../../store/app/app.selectors';
 import * as AppActions from '../../store/app/app.actions';
 import { MenuLink } from '../../models/types/MenuLink';
-import EmployeeRole from '../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
 
 @Component({
   selector: 'app-menu-link',

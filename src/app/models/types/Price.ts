@@ -1,7 +1,7 @@
-import PriceType from '../enums/PriceType';
-import Unit from '../enums/Unit';
+import { PriceType } from '../enums/PriceType';
+import { Unit } from '../enums/Unit';
 
-type Price = {
+export type Price = {
   type: PriceType;
   unit?: Unit;
   amountWithDelivery?: number;
@@ -9,5 +9,3 @@ type Price = {
   amount?: number;
   description?: string;
 };
-
-export default Price;

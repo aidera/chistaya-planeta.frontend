@@ -7,17 +7,17 @@ import * as fromRoot from '../../store/root.reducer';
 import * as AppActions from '../../store/app/app.actions';
 import * as AppSelectors from '../../store/app/app.selectors';
 import { OptionType } from '../../models/types/OptionType';
-import SimpleStatus from '../../models/enums/SimpleStatus';
-import CarStatus from '../../models/enums/CarStatus';
-import EmployeeRole from '../../models/enums/EmployeeRole';
-import EmployeeStatus from '../../models/enums/EmployeeStatus';
+import { SimpleStatus } from '../../models/enums/SimpleStatus';
+import { CarStatus } from '../../models/enums/CarStatus';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
+import { EmployeeStatus } from '../../models/enums/EmployeeStatus';
 import { SocketIoService } from '../socket-io/socket-io.service';
-import { ConverterService } from '../converter/converter.service';
 import { LocalitiesApiService } from '../api/localities-api.service';
 import { DivisionsApiService } from '../api/divisions-api.service';
 import { CarsApiService } from '../api/cars-api.service';
 import { EmployeesApiService } from '../api/employees-api.service';
 import { OffersApiService } from '../api/offers-api.service';
+import { GettersService } from '../getters/getters.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class OptionsService {
   constructor(
     protected store: Store<fromRoot.State>,
     protected socket: SocketIoService,
-    protected converter: ConverterService,
+    protected getters: GettersService,
     protected localitiesApi: LocalitiesApiService,
     protected divisionsApi: DivisionsApiService,
     protected carsApi: CarsApiService,
@@ -306,7 +306,7 @@ export class OptionsService {
 
         employeesToSelect?.forEach((el) => {
           employeesOptions.push({
-            text: this.converter.getUserInitials(
+            text: this.getters.getUserInitials(
               el.name,
               el.surname,
               el.patronymic

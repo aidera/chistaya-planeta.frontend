@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import ServerResponse from '../../models/ServerResponse';
+import { ServerResponse } from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ApiService } from './api.service';
 import { ICar, ICarLessInfo } from '../../models/Car';
-import CarStatus from '../../models/enums/CarStatus';
-import CarType from '../../models/enums/CarType';
+import { CarStatus } from '../../models/enums/CarStatus';
+import { CarType } from '../../models/enums/CarType';
 import { IEmployee } from '../../models/Employee';
 
 export interface IGetAllCarsResponse extends ServerResponse {

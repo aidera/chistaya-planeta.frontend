@@ -7,8 +7,11 @@ import {
   MatSnackBarRef,
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
+import { switchMap } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
 
 import * as fromRoot from '../../../store/root.reducer';
+import * as UsersSelectors from '../../../store/users/users.selectors';
 import * as OffersSelectors from '../../../store/offers/offers.selectors';
 import * as OffersActions from '../../../store/offers/offers.actions';
 import * as ServicesSelectors from '../../../store/services/services.selectors';
@@ -16,16 +19,14 @@ import * as ServicesActions from '../../../store/services/services.actions';
 import { IService } from '../../../models/Service';
 import { IOffer } from '../../../models/Offer';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
-import PriceType from '../../../models/enums/PriceType';
-import SimpleStatus from '../../../models/enums/SimpleStatus';
-import Price from '../../../models/types/Price';
-import Unit from '../../../models/enums/Unit';
+import { PriceType } from '../../../models/enums/PriceType';
+import { SimpleStatus } from '../../../models/enums/SimpleStatus';
+import { Price } from '../../../models/types/Price';
+import { Unit } from '../../../models/enums/Unit';
 import { IEmployee } from '../../../models/Employee';
 import { IClient } from '../../../models/Client';
 import { UserType } from '../../../models/enums/UserType';
-import EmployeeRole from '../../../models/enums/EmployeeRole';
-import * as UsersSelectors from '../../../store/users/users.selectors';
-import { switchMap } from 'rxjs/operators';
+import { EmployeeRole } from '../../../models/enums/EmployeeRole';
 
 @Component({
   selector: 'app-prices',
@@ -72,10 +73,13 @@ export class PricesComponent implements OnInit, OnDestroy {
   public employeeRole = EmployeeRole;
 
   constructor(
-    protected store: Store<fromRoot.State>,
-    protected snackBar: MatSnackBar,
-    protected socket: SocketIoService
-  ) {}
+    private store: Store<fromRoot.State>,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private title: Title
+  ) {
+    title.setTitle('Расценки - Чистая планета');
+  }
 
   ngOnInit(): void {
     this.user$ = this.store

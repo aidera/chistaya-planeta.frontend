@@ -8,7 +8,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DivisionsTableComponent } from './divisions-table.component';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { TablePageComponent } from '../../table-page.component';
 import { TableComponent } from '../../../../components/table/table.component';
@@ -18,6 +17,7 @@ import { SelectComponent } from '../../../../components/form-controls/select/sel
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { ErrorMessageComponent } from '../../../../components/form-controls/error-message/error-message.component';
 import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 describe('DivisionsTableComponent', () => {
   let component: DivisionsTableComponent;
@@ -37,7 +37,7 @@ describe('DivisionsTableComponent', () => {
       ],
       providers: [
         OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             app: {

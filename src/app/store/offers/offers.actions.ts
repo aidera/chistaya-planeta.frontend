@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 
 import { ServerError } from '../../models/ServerResponse';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
-import Price from '../../models/types/Price';
+import { Price } from '../../models/types/Price';
 import { IOffer } from '../../models/Offer';
 
 /* ------------------ */

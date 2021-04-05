@@ -7,7 +7,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
 import * as AppActions from '../../store/app/app.actions';
 import { MenuLinkComponent } from './menu-link.component';
-import EmployeeRole from '../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
 
 let store: MockStore;
 let storeDispatchSpy: jasmine.Spy;

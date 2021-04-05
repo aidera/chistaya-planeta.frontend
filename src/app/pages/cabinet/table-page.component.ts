@@ -1,15 +1,11 @@
-import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import {
-  MatSnackBar,
-  MatSnackBarRef,
-  TextOnlySnackBar,
-} from '@angular/material/snack-bar';
+import { MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
@@ -24,13 +20,11 @@ import {
 } from '../../components/table/table.component';
 import { dateISOStringRegex } from '../../utils/regexes';
 import { removeURLParameter } from '../../utils/removeUrlParameter';
-import { ConverterService } from '../../services/converter/converter.service';
-import { SocketIoService } from '../../services/socket-io/socket-io.service';
-import { OptionsService } from '../../services/options/options.service';
+import { GettersService } from '../../services/getters/getters.service';
 import { IEmployee } from '../../models/Employee';
 import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
-import EmployeeRole from '../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
 
 @Component({
   template: '',
@@ -48,6 +42,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
   /* ------------------- */
   /* Main items settings */
   /* ------------------- */
+  protected items$: Subscription;
+  public items: any[];
   protected isFetching$: Subscription;
   public isFetching: boolean;
   protected getItemsError$: Subscription;
@@ -81,7 +77,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     request: GetRouteParamsType,
     withLoading: boolean
   ) => any;
-  protected getItemsSnackbar: MatSnackBarRef<TextOnlySnackBar>;
+  protected getItemsResultSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   /* ----------- */
   /* Static data */
@@ -91,14 +87,10 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   constructor(
     protected store: Store<fromRoot.State>,
-    @Inject(LOCALE_ID) protected locale: string,
-    protected converter: ConverterService,
-    protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected location: Location,
-    protected socket: SocketIoService,
-    protected snackBar: MatSnackBar,
-    protected options: OptionsService
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location
   ) {}
 
   ngOnInit(): void {
@@ -133,7 +125,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
     /* Getting search, sorting, filters, pages and displaying */
     /* ------------------------------------------------------ */
 
-    this.activatedRoute.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       /* Display */
       if (params.display) {
         this.displayedColumns = params.display.split(';');
@@ -165,7 +157,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
         }
       } else {
         this.router.navigate([], {
-          relativeTo: this.activatedRoute,
+          relativeTo: this.route,
           queryParams: {
             sortingField: params.sortingField || undefined,
             sortingType: params.sortingType || undefined,
@@ -222,6 +214,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.user$?.unsubscribe?.();
+    this.items$?.unsubscribe?.();
     this.isFetching$?.unsubscribe?.();
     this.getItemsError$?.unsubscribe?.();
     this.pagination$?.unsubscribe?.();
@@ -232,8 +225,8 @@ export class TablePageComponent implements OnInit, OnDestroy {
     searchValue: string
   ): string {
     if (searchValue && rawString) {
-      const clearQuickSearchValue = this.converter
-        .clearServerRequestString(searchValue)
+      const clearQuickSearchValue = this.getters
+        .getClearServerRequestString(searchValue)
         .toLowerCase();
       const clearObjectValue = rawString.toLowerCase();
       const indexFrom = clearObjectValue.indexOf(clearQuickSearchValue);
@@ -261,7 +254,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(500))
       .subscribe((formValues) => {
         this.router.navigate([], {
-          relativeTo: this.activatedRoute,
+          relativeTo: this.route,
           queryParams: {
             sortingField: this.tableSorting
               ? this.tableSorting.field
@@ -309,7 +302,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
           });
 
           this.router.navigate([], {
-            relativeTo: this.activatedRoute,
+            relativeTo: this.route,
             queryParams: {
               display:
                 this.displayedColumns &&
@@ -375,7 +368,7 @@ export class TablePageComponent implements OnInit, OnDestroy {
   public onTableSort(event: TableSortType): void {
     this.tableSorting = event;
     this.router.navigate([], {
-      relativeTo: this.activatedRoute,
+      relativeTo: this.route,
       queryParams: {
         sortingField: this.tableSorting.field,
         sortingType: this.tableSorting.type,
@@ -387,13 +380,23 @@ export class TablePageComponent implements OnInit, OnDestroy {
   public onTablePaginate(newPage: number): void {
     this.tablePagination = { ...this.tablePagination, page: newPage };
     this.router.navigate([], {
-      relativeTo: this.activatedRoute,
+      relativeTo: this.route,
       queryParams: { page: this.tablePagination.page },
       queryParamsHandling: 'merge',
     });
   }
 
-  public onTableItemClick(index: number): void {}
+  public onTableItemClick(index: number): void {
+    const currentItemId =
+      this.items && this.items[index] && this.items[index]._id
+        ? this.items[index]._id
+        : undefined;
+    if (currentItemId) {
+      this.router.navigate([`./${currentItemId}`], {
+        relativeTo: this.route,
+      });
+    }
+  }
 
   public sendRequest(withLoading: boolean): void {
     let filter;

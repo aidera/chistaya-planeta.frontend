@@ -5,13 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { TablePageComponent } from './table-page.component';
-import { ConverterService } from '../../services/converter/converter.service';
-import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { routes } from '../../app-routing.module';
-import { OptionsService } from '../../services/options/options.service';
-import { HttpClientModule } from '@angular/common/http';
+import { GettersService } from '../../services/getters/getters.service';
 
 describe('TablePageComponent', () => {
   let component: TablePageComponent;
@@ -23,9 +21,7 @@ describe('TablePageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [TablePageComponent],
       providers: [
-        SocketIoService,
-        OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             app: {

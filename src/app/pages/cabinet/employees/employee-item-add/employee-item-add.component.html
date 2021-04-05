@@ -90,8 +90,8 @@
                 error
                 *ngIf="form.get('email')?.errors?.alreadyExists"
               >
-                <a [routerLink]="['../', alreadyExistId]">Сотрудник</a> с таким
-                email уже существует.
+                <a [routerLink]="['../', alreadyExistIdEmail]">Сотрудник</a> с
+                таким email уже существует.
               </ng-container>
             </app-text-input>
 
@@ -114,8 +114,8 @@
                 error
                 *ngIf="form.get('phone')?.errors?.alreadyExists"
               >
-                <a [routerLink]="['../', alreadyExistId2]">Сотрудник</a> с таким
-                телефоном уже существует.
+                <a [routerLink]="['../', alreadyExistIdPhone]">Сотрудник</a> с
+                таким телефоном уже существует.
               </ng-container>
             </app-text-input>
           </div>

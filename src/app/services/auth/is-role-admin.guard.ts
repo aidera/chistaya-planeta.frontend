@@ -13,7 +13,7 @@ import { filter, map, take } from 'rxjs/operators';
 import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
 import { IEmployee } from '../../models/Employee';
-import EmployeeRole from '../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
 
 @Injectable({ providedIn: 'root' })
 export class IsRoleAdminGuard implements CanActivate, CanActivateChild {

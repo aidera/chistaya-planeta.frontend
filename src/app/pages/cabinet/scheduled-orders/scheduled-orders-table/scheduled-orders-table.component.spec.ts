@@ -15,8 +15,8 @@ import { DateTimeInputComponent } from '../../../../components/form-controls/dat
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { OptionsService } from '../../../../services/options/options.service';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { MaterialModule } from '../../../../modules/material/material.module';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 describe('ScheduledOrdersTableComponent', () => {
   let component: ScheduledOrdersTableComponent;
@@ -35,7 +35,7 @@ describe('ScheduledOrdersTableComponent', () => {
       ],
       providers: [
         OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             app: {

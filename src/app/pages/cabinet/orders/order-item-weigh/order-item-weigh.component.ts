@@ -8,6 +8,7 @@ import {
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 import * as fromRoot from '../../../../store/root.reducer';
 import * as UsersSelectors from '../../../../store/users/users.selectors';
@@ -20,22 +21,22 @@ import * as ServicesActions from '../../../../store/services/services.actions';
 import { IOrder } from '../../../../models/Order';
 import { IEmployee } from '../../../../models/Employee';
 import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { OptionsService } from '../../../../services/options/options.service';
 import { OptionType } from '../../../../models/types/OptionType';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import {
   unitOffersOptions,
   unitServicesOptions,
   unitStrings,
 } from '../../../../data/unitOptions';
 import { responseCodes } from '../../../../data/responseCodes';
-import OrderType from '../../../../models/enums/OrderType';
+import { OrderType } from '../../../../models/enums/OrderType';
 import { orderTypeStrings } from '../../../../data/orderTypeData';
 import { IOffer, IOfferToWeigh } from '../../../../models/Offer';
 import { IService, IServiceToWeigh } from '../../../../models/Service';
-import DeliveryType from 'src/app/models/enums/DeliveryType';
+import { DeliveryType } from 'src/app/models/enums/DeliveryType';
 import { deliveryTypeStrings } from '../../../../data/deliveryTypeData';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-order-item-weigh',
@@ -43,8 +44,16 @@ import { deliveryTypeStrings } from '../../../../data/deliveryTypeData';
   styleUrls: ['./order-item-weigh.component.scss'],
 })
 export class OrderItemWeighComponent implements OnInit, OnDestroy {
-  public orderId: string;
+  /* ------------- */
+  /* User settings */
+  /* --------------*/
+  protected user$: Subscription;
+  public user: IEmployee;
 
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
+  public orderId: string;
   private order$: Subscription;
   public order: IOrder;
   private orderIsFetching$: Subscription;
@@ -57,25 +66,32 @@ export class OrderItemWeighComponent implements OnInit, OnDestroy {
   public updateOrderError: string | null;
   private orderIsUpdatedSucceed$: Subscription;
 
-  protected user$: Subscription;
-  public user: IEmployee;
-
+  /* -------------------- */
+  /* Other items settings */
+  /* -------------------- */
   public offers$: Subscription;
   public offers: IOffer[];
   public services$: Subscription;
   public services: IService[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public offersOptions$: Subscription;
   public offersOptions: OptionType[] = [];
   public servicesOptions$: Subscription;
   public servicesOptions: OptionType[] = [];
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
   public form: FormGroup;
-
   public paymentSum = 0;
-
   protected updateSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public orderType = OrderType;
   public orderTypeStrings = orderTypeStrings;
   public unitStrings = unitStrings;
@@ -84,14 +100,17 @@ export class OrderItemWeighComponent implements OnInit, OnDestroy {
   public deliveryTypeStrings = deliveryTypeStrings;
 
   constructor(
-    protected store: Store<fromRoot.State>,
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected snackBar: MatSnackBar,
-    protected socket: SocketIoService,
-    public converter: ConverterService,
-    public options: OptionsService
-  ) {}
+    private title: Title,
+    private store: Store<fromRoot.State>,
+    private route: ActivatedRoute,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private options: OptionsService,
+    public getters: GettersService
+  ) {
+    title.setTitle('Взвесить заявку - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* --------------------------------- */

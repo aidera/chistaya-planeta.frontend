@@ -1,5 +1,5 @@
 import { OptionType } from '../models/types/OptionType';
-import PeriodType from '../models/enums/PeriodType';
+import { PeriodType } from '../models/enums/PeriodType';
 
 export const periodTypeStrings: string[] = [];
 periodTypeStrings[PeriodType.month] = 'мес.';

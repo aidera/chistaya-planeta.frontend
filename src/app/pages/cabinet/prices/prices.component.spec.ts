@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PricesComponent } from './prices.component';
+import { InlineSVGModule } from 'ng-inline-svg';
+import { provideMockStore } from '@ngrx/store/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+
+import { PricesComponent } from './prices.component';
 import { MaterialModule } from '../../../modules/material/material.module';
-import { InlineSVGModule } from 'ng-inline-svg';
-import { provideMockStore } from '@ngrx/store/testing';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
 
 describe('PricesComponent', () => {

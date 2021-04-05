@@ -1,14 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as LocalitiesActions from '../../../../store/localities/localities.actions';
 import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { ILocality } from '../../../../models/Locality';
 import { ModalAction } from '../../../../components/modal/modal.component';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
-import CarStatus from '../../../../models/enums/CarStatus';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import { CarStatus } from '../../../../models/enums/CarStatus';
+import { EmployeeStatus } from '../../../../models/enums/EmployeeStatus';
 import { responseCodes } from '../../../../data/responseCodes';
 import {
   simpleStatusColors,
@@ -16,6 +21,9 @@ import {
   simpleStatusStrings,
 } from '../../../../data/simpleStatusData';
 import { ItemPageComponent } from '../../item-page.component';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { LocalitiesApiService } from '../../../../services/api/localities-api.service';
 
 @Component({
   selector: 'app-locality-item',
@@ -25,16 +33,43 @@ import { ItemPageComponent } from '../../item-page.component';
 export class LocalityItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: ILocality;
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public alreadyExistId: string;
   public isDeactivateModalOpen = false;
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public simpleStatus = SimpleStatus;
   public employeeStatus = EmployeeStatus;
   public carStatus = CarStatus;
   public simpleStatusOptions = simpleStatusOptions;
   public simpleStatusStrings = simpleStatusStrings;
   public simpleStatusColors = simpleStatusColors;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private localitiesApi: LocalitiesApiService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Населённый пункт - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------- */
@@ -106,6 +141,12 @@ export class LocalityItemComponent
       .subscribe((locality) => {
         this.item = locality;
 
+        if (locality) {
+          this.title.setTitle(
+            `Населённый пункт - ${locality.name} - Чистая планета`
+          );
+        }
+
         this.initForm();
 
         if (this.form) {
@@ -151,9 +192,13 @@ export class LocalityItemComponent
         if (status === true) {
           this.activeField = null;
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(LocalitiesActions.refreshUpdateLocalitySucceed());
         }
@@ -167,7 +212,7 @@ export class LocalityItemComponent
             this.form.get('name').setErrors({ alreadyExists: true });
             this.alreadyExistId = error.foundedItem._id;
           } else {
-            this.updateSnackbar = this.snackBar.open(
+            this.updateResultSnackbar = this.snackBar.open(
               'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -195,7 +240,7 @@ export class LocalityItemComponent
 
           this.store.dispatch(LocalitiesActions.refreshRemoveLocalitySucceed());
 
-          this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
+          this.removeResultSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -209,7 +254,7 @@ export class LocalityItemComponent
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
         } else if (error) {
-          this.removeSnackbar = this.snackBar.open(
+          this.removeResultSnackbar = this.snackBar.open(
             'Ошибка при удалении. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -236,7 +281,6 @@ export class LocalityItemComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 

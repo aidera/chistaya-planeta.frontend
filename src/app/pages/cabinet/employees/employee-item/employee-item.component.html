@@ -547,7 +547,7 @@
           >
             <app-item-field-inactive-list
               *ngIf="activeField !== 'cars'"
-              [list]="getItemCarsFieldListElements(item?.cars || [])"
+              [list]="getters.getItemCarsFieldListElements(item?.cars || [])"
               [hint]="
                 !item?.locality || !item?.division
                   ? 'Выберите населённый пункт и подразделение'
@@ -571,7 +571,10 @@
             <div
               *ngIf="activeField === 'cars'"
               (clickOutside)="
-                removeActiveField('cars', getCarsValuesArray(item?.cars || []))
+                removeActiveField(
+                  'cars',
+                  getters.getCarsValuesArray(item?.cars || [])
+                )
               "
               [delayClickOutsideInit]="true"
               [exclude]="
@@ -594,7 +597,7 @@
                 [disable]="
                   itemIsUpdating ||
                   form.get('cars').value ===
-                    getCarsValuesArray(item?.cars || [])
+                    getters.getCarsValuesArray(item?.cars || [])
                 "
               ></app-item-field-save-button>
             </div>

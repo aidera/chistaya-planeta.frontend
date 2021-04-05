@@ -4,7 +4,7 @@ import { ServerError } from '../../models/ServerResponse';
 import { PaginationType } from '../../models/types/PaginationType';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { IClient } from '../../models/Client';
-import ClientStatus from '../../models/enums/ClientStatus';
+import { ClientStatus } from '../../models/enums/ClientStatus';
 
 /* ------------------- */
 /* --- Get Clients --- */

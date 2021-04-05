@@ -13,9 +13,9 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import * as UsersActions from '../../store/users/users.actions';
 import { LoginComponent } from './login.component';
 import { TextInputComponent } from '../../components/form-controls/text-input/text-input.component';
-import * as UsersActions from '../../store/users/users.actions';
 import { UserType } from '../../models/enums/UserType';
 import { MaterialModule } from '../../modules/material/material.module';
 import { ErrorMessageComponent } from '../../components/form-controls/error-message/error-message.component';

@@ -2,15 +2,20 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
 import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
 import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
 import { OptionType } from '../../../../models/types/OptionType';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
-import CarStatus from '../../../../models/enums/CarStatus';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import { CarStatus } from '../../../../models/enums/CarStatus';
+import { EmployeeStatus } from '../../../../models/enums/EmployeeStatus';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 import {
@@ -18,6 +23,10 @@ import {
   simpleStatusStrings,
   simpleStatusColors,
 } from '../../../../data/simpleStatusData';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { DivisionsApiService } from '../../../../services/api/divisions-api.service';
 
 @Component({
   selector: 'app-division-item',
@@ -27,18 +36,49 @@ import {
 export class DivisionItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: IDivision;
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public alreadyExistId: string;
+
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public simpleStatus = SimpleStatus;
+  public employeeStatus = EmployeeStatus;
+  public carStatus = CarStatus;
   public simpleStatusOptions = simpleStatusOptions;
   public simpleStatusStrings = simpleStatusStrings;
   public simpleStatusColors = simpleStatusColors;
 
-  public simpleStatus = SimpleStatus;
-  public employeeStatus = EmployeeStatus;
-  public carStatus = CarStatus;
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private options: OptionsService,
+    private divisionsApi: DivisionsApiService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Подразделение - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -137,6 +177,12 @@ export class DivisionItemComponent
       .subscribe((division) => {
         this.item = division;
 
+        if (division) {
+          this.title.setTitle(
+            `Подразделение - ${division.name} - Чистая планета`
+          );
+        }
+
         this.initForm();
 
         if (this.form) {
@@ -179,9 +225,13 @@ export class DivisionItemComponent
         if (status === true) {
           this.activeField = null;
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(DivisionsActions.refreshUpdateDivisionSucceed());
         }
@@ -195,7 +245,7 @@ export class DivisionItemComponent
             this.form.get('name').setErrors({ alreadyExists: true });
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('locality')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -205,7 +255,7 @@ export class DivisionItemComponent
               );
             }
           } else {
-            this.updateSnackbar = this.snackBar.open(
+            this.updateResultSnackbar = this.snackBar.open(
               'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -233,7 +283,7 @@ export class DivisionItemComponent
 
           this.store.dispatch(DivisionsActions.refreshRemoveDivisionSucceed());
 
-          this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
+          this.removeResultSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -247,7 +297,7 @@ export class DivisionItemComponent
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
         } else if (error) {
-          this.removeSnackbar = this.snackBar.open(
+          this.removeResultSnackbar = this.snackBar.open(
             'Ошибка при удалении. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -274,7 +324,6 @@ export class DivisionItemComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 

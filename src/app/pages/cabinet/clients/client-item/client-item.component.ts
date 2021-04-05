@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as ClientsActions from '../../../../store/clients/clients.actions';
 import * as ClientsSelectors from '../../../../store/clients/clients.selectors';
 import { ItemPageComponent } from '../../item-page.component';
@@ -10,8 +15,10 @@ import {
   clientStatusStrings,
 } from '../../../../data/clientStatusData';
 import { responseCodes } from '../../../../data/responseCodes';
-import ClientStatus from '../../../../models/enums/ClientStatus';
+import { ClientStatus } from '../../../../models/enums/ClientStatus';
 import { ModalAction } from '../../../../components/modal/modal.component';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-client-item',
@@ -21,15 +28,39 @@ import { ModalAction } from '../../../../components/modal/modal.component';
 export class ClientItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: IClient;
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
   public isUpdateStatusModalOpen = false;
   public updateStatusForm: FormGroup;
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public clientStatusStrings = clientStatusStrings;
   public clientStatusColors = clientStatusColors;
-
   public clientStatus = ClientStatus;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Клиент - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------- */
@@ -55,6 +86,10 @@ export class ClientItemComponent
       .select(ClientsSelectors.selectClient)
       .subscribe((client) => {
         this.item = client;
+
+        if (client) {
+          this.title.setTitle(`Клиент - ${client.name} - Чистая планета`);
+        }
       });
 
     this.getItemError$ = this.store
@@ -90,9 +125,13 @@ export class ClientItemComponent
             blockReason: '',
           });
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(ClientsActions.refreshUpdateClientSucceed());
         }
@@ -102,7 +141,7 @@ export class ClientItemComponent
       .select(ClientsSelectors.selectUpdateClientError)
       .subscribe((error) => {
         if (error) {
-          this.updateSnackbar = this.snackBar.open(
+          this.updateResultSnackbar = this.snackBar.open(
             'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -129,7 +168,6 @@ export class ClientItemComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 

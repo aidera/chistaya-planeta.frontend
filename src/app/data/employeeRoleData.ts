@@ -1,5 +1,5 @@
 import { OptionType } from '../models/types/OptionType';
-import EmployeeRole from '../models/enums/EmployeeRole';
+import { EmployeeRole } from '../models/enums/EmployeeRole';
 
 export const employeeRoleStrings: string[] = [];
 employeeRoleStrings[EmployeeRole.head] = 'Глава';

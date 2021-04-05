@@ -8,6 +8,7 @@ import {
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
@@ -31,11 +32,27 @@ export class RestorePasswordComponent implements OnInit, OnDestroy {
   private restoreSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   constructor(
+    private title: Title,
+    private meta: Meta,
     private store: Store<fromRoot.State>,
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    title.setTitle('Восстановление пароля - Чистая планета');
+    meta.addTags([
+      {
+        name: 'keywords',
+        content:
+          'чистая планета, забыл пароль, восстановление пароля, сменить пароль, поменять пароль',
+      },
+      {
+        name: 'description',
+        content:
+          'Сменить пароль от личного кабинета. Чистая Планета - сохраним природу детям!',
+      },
+    ]);
+  }
 
   ngOnInit(): void {
     this.formInit();

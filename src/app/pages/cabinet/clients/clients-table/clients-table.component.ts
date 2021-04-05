@@ -1,8 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as ClientsActions from '../../../../store/clients/clients.actions';
 import * as ClientsSelectors from '../../../../store/clients/clients.selectors';
 import { TablePageComponent } from '../../table-page.component';
@@ -12,6 +16,8 @@ import {
   clientStatusStrings,
 } from '../../../../data/clientStatusData';
 import { IClient } from '../../../../models/Client';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-clients-table',
@@ -21,10 +27,33 @@ import { IClient } from '../../../../models/Client';
 export class ClientsTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
-  private clients$: Subscription;
-  private clients: IClient[];
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
+  public items: IClient[];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public clientStatusOptions = clientStatusOptions;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected snackBar: MatSnackBar,
+    protected socket: SocketIoService,
+    /* this */
+    private title: Title
+  ) {
+    super(store, router, route, getters, location);
+
+    title.setTitle('Клиенты - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -108,33 +137,33 @@ export class ClientsTableComponent
     this.createServerRequestFilter = () => {
       return {
         name:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('name').value
           ) || undefined,
         status:
           this.advancedSearchForm.get('status').value.length <= 0 ||
           this.advancedSearchForm.get('status').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('status').value
               ),
         email:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('email').value
           ) || undefined,
         phone:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('phone').value
           ) || undefined,
         blockReason:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('blockReason').value
           ) || undefined,
-        createdAt: this.converter.getServerFromToDateInISOStringArray(
+        createdAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
         ),
-        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+        updatedAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('updatedAtFrom').value,
           this.advancedSearchForm.get('updatedAtTo').value
         ),
@@ -152,8 +181,8 @@ export class ClientsTableComponent
         this.sendRequest(false);
       }
       if (data.action === 'update' && data.id) {
-        if (this.clients && this.clients.length > 0) {
-          const isExist = this.clients.find((client) => {
+        if (this.items && this.items.length > 0) {
+          const isExist = this.items.find((client) => {
             return client._id === data.id;
           });
           if (isExist) {
@@ -167,10 +196,10 @@ export class ClientsTableComponent
     /* --- NgRx connections --- */
     /* ------------------------ */
 
-    this.clients$ = this.store
+    this.items$ = this.store
       .select(ClientsSelectors.selectClients)
       .subscribe((clients) => {
-        this.clients = clients;
+        this.items = clients;
         if (clients) {
           this.tableData = clients.map((client) => {
             return {
@@ -202,7 +231,7 @@ export class ClientsTableComponent
                       ? this.quickSearchForm.get('search').value
                       : ''
                   )
-                : this.converter.beautifyPhoneNumber(client.phone),
+                : this.getters.getBeautifiedPhoneNumber(client.phone),
               blockReason: this.highlightSearchedValue(
                 client.blockReason || '',
                 this.quickSearchForm
@@ -234,7 +263,7 @@ export class ClientsTableComponent
       .select(ClientsSelectors.selectGetClientsError)
       .subscribe((error) => {
         if (error) {
-          this.getItemsSnackbar = this.snackBar.open(
+          this.getItemsResultSnackbar = this.snackBar.open(
             'Ошибка при запросе подразделений. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -254,23 +283,12 @@ export class ClientsTableComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.clients$?.unsubscribe?.();
     this.socket.get()?.off('clients');
-  }
-
-  public onTableItemClick(index: number): void {
-    const currentItemId = this.clients?.[index]?._id;
-    if (currentItemId) {
-      this.router.navigate([`./${currentItemId}`], {
-        relativeTo: this.activatedRoute,
-      });
-    }
   }
 }

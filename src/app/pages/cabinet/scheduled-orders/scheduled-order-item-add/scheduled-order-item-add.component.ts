@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as ScheduledOrdersSelectors from '../../../../store/scheduled-orders/scheduled-orders.selectors';
 import * as ScheduledOrdersActions from '../../../../store/scheduled-orders/scheduled-orders.actions';
 import * as OffersActions from '../../../../store/offers/offers.actions';
@@ -13,15 +18,15 @@ import { ItemAddPageComponent } from '../../item-add-page.component';
 import { OptionType } from '../../../../models/types/OptionType';
 import { IOffer } from '../../../../models/Offer';
 import { IService } from '../../../../models/Service';
-import timeOptions from '../../../../data/timeOptions';
+import { timeOptions } from '../../../../data/timeOptions';
 import {
   unitOffersOptions,
   unitServicesOptions,
 } from '../../../../data/unitOptions';
-import OrderType from '../../../../models/enums/OrderType';
-import DeliveryType from '../../../../models/enums/DeliveryType';
-import PaymentMethod from '../../../../models/enums/PaymentMethod';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { OrderType } from '../../../../models/enums/OrderType';
+import { DeliveryType } from '../../../../models/enums/DeliveryType';
+import { PaymentMethod } from '../../../../models/enums/PaymentMethod';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
 import { tomorrow } from '../../../../utils/date.functions';
 import { orderTypeOptions } from '../../../../data/orderTypeData';
 import { deliveryTypeOptions } from '../../../../data/deliveryTypeData';
@@ -29,11 +34,14 @@ import {
   paymentMethodOffersOptions,
   paymentMethodServicesOptions,
 } from '../../../../data/paymentMethodData';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ILocality } from '../../../../models/Locality';
 import { responseCodes } from '../../../../data/responseCodes';
 import { IAddScheduledOrderRequest } from '../../../../services/api/scheduled-orders-api.service';
 import { periodTypeOptions } from '../../../../data/periodTypeData';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { ClientsApiService } from '../../../../services/api/clients-api.service';
 
 @Component({
   selector: 'app-scheduled-order-item-add',
@@ -43,6 +51,17 @@ import { periodTypeOptions } from '../../../../data/periodTypeData';
 export class ScheduledOrderItemAddComponent
   extends ItemAddPageComponent
   implements OnInit, OnDestroy {
+  /* -------------------- */
+  /* Other Items Settings */
+  /* -------------------- */
+  public offers$: Subscription;
+  public offers: IOffer[];
+  public services$: Subscription;
+  public services: IService[];
+
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -52,14 +71,20 @@ export class ScheduledOrderItemAddComponent
   public servicesOptions$: Subscription;
   public servicesOptions: OptionType[] = [];
 
-  public offers$: Subscription;
-  public offers: IOffer[];
-  public services$: Subscription;
-  public services: IService[];
-
+  /* ------------------ */
+  /* Interface settings */
+  /* ------------------ */
+  public startMinDate = tomorrow;
   public approximatePaymentCost: string;
   public approximateRemunerationCost: string;
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public orderType = OrderType;
+  public deliveryType = DeliveryType;
+  public paymentMethod = PaymentMethod;
+  public employeeRole = EmployeeRole;
   public periodTypeOptions = periodTypeOptions;
   public orderTypeOptions = orderTypeOptions;
   public deliveryTypeOptions = deliveryTypeOptions;
@@ -69,12 +94,22 @@ export class ScheduledOrderItemAddComponent
   public offersUnitOptions = unitOffersOptions;
   public servicesUnitOptions = unitServicesOptions;
 
-  public orderType = OrderType;
-  public deliveryType = DeliveryType;
-  public paymentMethod = PaymentMethod;
-  public employeeRole = EmployeeRole;
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private options: OptionsService,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private clientsApi: ClientsApiService
+  ) {
+    super(store, router, route);
 
-  public startMinDate = tomorrow;
+    title.setTitle('Добавить периодическую заявку - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -361,7 +396,7 @@ export class ScheduledOrderItemAddComponent
       .select(ScheduledOrdersSelectors.selectAddScheduledOrderSucceed)
       .subscribe((status) => {
         if (status === true) {
-          this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
+          this.addResultSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -380,7 +415,7 @@ export class ScheduledOrderItemAddComponent
           if (error.description.includes('client')) {
             this.form.get('client').setErrors({ notExists: true });
           } else {
-            this.addSnackbar = this.snackBar.open(
+            this.addResultSnackbar = this.snackBar.open(
               'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {

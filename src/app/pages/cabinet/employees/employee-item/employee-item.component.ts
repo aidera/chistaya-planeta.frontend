@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as EmployeesActions from '../../../../store/employees/employees.actions';
 import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
 import { ICar } from '../../../../models/Car';
@@ -10,10 +15,10 @@ import { IDivision } from '../../../../models/Division';
 import { ILocality } from '../../../../models/Locality';
 import { IEmployee } from '../../../../models/Employee';
 import { OptionType } from '../../../../models/types/OptionType';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
-import CarStatus from '../../../../models/enums/CarStatus';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { EmployeeStatus } from '../../../../models/enums/EmployeeStatus';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
+import { CarStatus } from '../../../../models/enums/CarStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 import {
@@ -25,6 +30,10 @@ import {
   employeeStatusOptions,
   employeeStatusStrings,
 } from '../../../../data/employeeStatusData';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { EmployeesApiService } from '../../../../services/api/employees-api.service';
 
 @Component({
   selector: 'app-employee-item',
@@ -34,8 +43,14 @@ import {
 export class EmployeeItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: IEmployee;
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -43,6 +58,19 @@ export class EmployeeItemComponent
   public carsOptions$: Subscription;
   public carsOptions: OptionType[] = [];
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public alreadyExistEmailId: string;
+  public alreadyExistPhoneId: string;
+
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public simpleStatus = SimpleStatus;
+  public carStatus = CarStatus;
+  public employeeStatus = EmployeeStatus;
+  public employeeRole = EmployeeRole;
   public employeeRoleOptions = employeeRoleOptions.filter(
     (el) => el.value !== EmployeeRole.head + ''
   );
@@ -51,13 +79,23 @@ export class EmployeeItemComponent
   public employeeStatusColors = employeeStatusColors;
   public employeeStatusStrings = employeeStatusStrings;
 
-  public simpleStatus = SimpleStatus;
-  public carStatus = CarStatus;
-  public employeeStatus = EmployeeStatus;
-  public employeeRole = EmployeeRole;
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private options: OptionsService,
+    private employeesApi: EmployeesApiService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
 
-  public alreadyExistEmailId: string;
-  public alreadyExistPhoneId: string;
+    title.setTitle('Сотрудник - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -209,6 +247,16 @@ export class EmployeeItemComponent
       .subscribe((employee) => {
         this.item = employee;
 
+        if (employee) {
+          this.title.setTitle(
+            `Сотрудник - ${this.getters.getUserInitials(
+              employee.name,
+              employee.surname,
+              employee.patronymic
+            )} - Чистая планета`
+          );
+        }
+
         this.initForm();
 
         if (this.form && employee) {
@@ -294,9 +342,13 @@ export class EmployeeItemComponent
         if (status === true) {
           this.activeField = null;
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(EmployeesActions.refreshUpdateEmployeeSucceed());
         }
@@ -317,7 +369,7 @@ export class EmployeeItemComponent
             }
           } else if (error.code === responseCodes.validationFailed) {
             if (error.errors[0].param === 'email') {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Некорректный email',
                 'Скрыть',
                 {
@@ -328,7 +380,7 @@ export class EmployeeItemComponent
             }
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('locality')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -338,7 +390,7 @@ export class EmployeeItemComponent
               );
             }
             if (error.description.includes('division')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка подразделения. Возможно, оно былы удалёно',
                 'Скрыть',
                 {
@@ -348,7 +400,7 @@ export class EmployeeItemComponent
               );
             }
           } else {
-            this.updateSnackbar = this.snackBar.open(
+            this.updateResultSnackbar = this.snackBar.open(
               'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -376,7 +428,7 @@ export class EmployeeItemComponent
 
           this.store.dispatch(EmployeesActions.refreshRemoveEmployeeSucceed());
 
-          this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
+          this.removeResultSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -390,7 +442,7 @@ export class EmployeeItemComponent
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
         } else if (error) {
-          this.removeSnackbar = this.snackBar.open(
+          this.removeResultSnackbar = this.snackBar.open(
             'Ошибка при удалении. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -417,7 +469,6 @@ export class EmployeeItemComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
@@ -433,13 +484,5 @@ export class EmployeeItemComponent
     this.options.destroyLocalitiesOptions();
     this.options.destroyDivisionsOptions();
     this.options.destroyCarsOptions();
-  }
-
-  public getCarsValuesArray(cars: (ICar | string)[]): string[] {
-    return (
-      (cars as ICar[])?.map((el) => {
-        return el._id;
-      }) || []
-    );
   }
 }

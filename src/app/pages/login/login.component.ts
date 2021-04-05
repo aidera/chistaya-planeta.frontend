@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { Title, Meta } from '@angular/platform-browser';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as UsersActions from '../../store/users/users.actions';
@@ -26,10 +27,26 @@ export class LoginComponent implements OnInit, OnDestroy {
   public serverError: string | null;
 
   constructor(
+    private title: Title,
+    private meta: Meta,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<fromRoot.State>
-  ) {}
+  ) {
+    title.setTitle('Авторизация - Чистая планета');
+    meta.addTags([
+      {
+        name: 'keywords',
+        content:
+          'чистая планета, авторизация, авторизоваться, войти, войти в личный кабинет',
+      },
+      {
+        name: 'description',
+        content:
+          'Авторизация в личном кабинете. Чистая Планета - сохраним природу детям!',
+      },
+    ]);
+  }
 
   ngOnInit(): void {
     if (this.route.parent) {

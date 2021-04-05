@@ -1,5 +1,5 @@
-import CarStatus from './enums/CarStatus';
-import CarType from './enums/CarType';
+import { CarStatus } from './enums/CarStatus';
+import { CarType } from './enums/CarType';
 import { IEmployee } from './Employee';
 import { ILocality } from './Locality';
 import { IDivision } from './Division';

@@ -1,6 +1,6 @@
 import { OptionType } from '../models/types/OptionType';
 import { TextColor } from '../models/types/TextColor';
-import ClientStatus from '../models/enums/ClientStatus';
+import { ClientStatus } from '../models/enums/ClientStatus';
 
 export const clientStatusStrings: string[] = [];
 clientStatusStrings[ClientStatus.active] = 'Активно';

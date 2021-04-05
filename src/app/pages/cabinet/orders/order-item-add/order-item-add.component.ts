@@ -1,7 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime, take } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as OrdersSelectors from '../../../../store/orders/orders.selectors';
 import * as OrdersActions from '../../../../store/orders/orders.actions';
 import * as OffersSelectors from '../../../../store/offers/offers.selectors';
@@ -9,15 +15,15 @@ import * as OffersActions from '../../../../store/offers/offers.actions';
 import * as ServicesSelectors from '../../../../store/services/services.selectors';
 import * as ServicesActions from '../../../../store/services/services.actions';
 import { ItemAddPageComponent } from '../../item-add-page.component';
-import OrderType from '../../../../models/enums/OrderType';
-import DeliveryType from '../../../../models/enums/DeliveryType';
-import PaymentMethod from '../../../../models/enums/PaymentMethod';
+import { OrderType } from '../../../../models/enums/OrderType';
+import { DeliveryType } from '../../../../models/enums/DeliveryType';
+import { PaymentMethod } from '../../../../models/enums/PaymentMethod';
 import { deliveryTypeOptions } from '../../../../data/deliveryTypeData';
 import { orderTypeOptions } from 'src/app/data/orderTypeData';
 import { tomorrow } from '../../../../utils/date.functions';
-import timeOptions from '../../../../data/timeOptions';
+import { timeOptions } from '../../../../data/timeOptions';
 import { OptionType } from '../../../../models/types/OptionType';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import {
   paymentMethodOffersOptions,
   paymentMethodServicesOptions,
@@ -28,10 +34,13 @@ import {
 } from '../../../../data/unitOptions';
 import { IOffer } from '../../../../models/Offer';
 import { IService } from '../../../../models/Service';
-import { debounceTime, take } from 'rxjs/operators';
 import { responseCodes } from '../../../../data/responseCodes';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
 import { ILocality } from '../../../../models/Locality';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { OrdersApiService } from '../../../../services/api/orders-api.service';
+import { ClientsApiService } from '../../../../services/api/clients-api.service';
 
 @Component({
   selector: 'app-order-item-add',
@@ -41,6 +50,9 @@ import { ILocality } from '../../../../models/Locality';
 export class OrderItemAddComponent
   extends ItemAddPageComponent
   implements OnInit, OnDestroy {
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -50,14 +62,32 @@ export class OrderItemAddComponent
   public servicesOptions$: Subscription;
   public servicesOptions: OptionType[] = [];
 
+  /* -------------------- */
+  /* Other items settings */
+  /* -------------------- */
   public offers$: Subscription;
   public offers: IOffer[];
   public services$: Subscription;
   public services: IService[];
 
+  /* ------------------ */
+  /* Interface settings */
+  /* ------------------ */
   public approximatePaymentCost: string;
   public approximateRemunerationCost: string;
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public deadlineMinDate = tomorrow;
+
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public orderType = OrderType;
+  public deliveryType = DeliveryType;
+  public paymentMethod = PaymentMethod;
+  public employeeRole = EmployeeRole;
   public orderTypeOptions = orderTypeOptions;
   public deliveryTypeOptions = deliveryTypeOptions;
   public paymentMethodOffersOptions = paymentMethodOffersOptions;
@@ -66,12 +96,23 @@ export class OrderItemAddComponent
   public offersUnitOptions = unitOffersOptions;
   public servicesUnitOptions = unitServicesOptions;
 
-  public orderType = OrderType;
-  public deliveryType = DeliveryType;
-  public paymentMethod = PaymentMethod;
-  public employeeRole = EmployeeRole;
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private options: OptionsService,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private ordersApi: OrdersApiService,
+    private clientsApi: ClientsApiService
+  ) {
+    super(store, router, route);
 
-  public deadlineMinDate = tomorrow;
+    title.setTitle('Добавить заявку - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -365,7 +406,7 @@ export class OrderItemAddComponent
       .select(OrdersSelectors.selectAddOrderSucceed)
       .subscribe((status) => {
         if (status === true) {
-          this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
+          this.addResultSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -382,7 +423,7 @@ export class OrderItemAddComponent
           if (error.description.includes('client')) {
             this.form.get('client').setErrors({ notExists: true });
           } else {
-            this.addSnackbar = this.snackBar.open(
+            this.addResultSnackbar = this.snackBar.open(
               'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -685,7 +726,6 @@ export class OrderItemAddComponent
     this.socket.get()?.off('offers');
     this.socket.get()?.off('services');
   }
-
   public approximateCostChange(): void {
     const orderType = this.form.get('type').value;
     const offersItems = this.form.get('offersItems').value;

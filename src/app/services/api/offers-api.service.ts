@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import ServerResponse from '../../models/ServerResponse';
+import { ServerResponse } from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { IOffer, IOfferLessInfo } from '../../models/Offer';
-import Price from '../../models/types/Price';
+import { Price } from '../../models/types/Price';
 
 export interface IGetAllOffersResponse extends ServerResponse {
   offers?: IOfferLessInfo[];

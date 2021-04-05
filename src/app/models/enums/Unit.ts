@@ -6,12 +6,10 @@
  * -- мешок 160л
  */
 
-enum Unit {
+export enum Unit {
   pc,
   kg,
   cube,
   bag120,
   bag160,
 }
-
-export default Unit;

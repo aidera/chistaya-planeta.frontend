@@ -10,7 +10,7 @@ export interface ServerError {
   foundedItem?: any;
 }
 
-export default interface ServerResponse {
+export interface ServerResponse {
   message?: string;
   error?: ServerError;
 }

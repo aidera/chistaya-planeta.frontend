@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import ServerResponse from '../../models/ServerResponse';
+import { ServerResponse } from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ApiService } from './api.service';
 import { IEmployee, IEmployeeLessInfo } from '../../models/Employee';
-import EmployeeStatus from '../../models/enums/EmployeeStatus';
-import EmployeeRole from '../../models/enums/EmployeeRole';
+import { EmployeeStatus } from '../../models/enums/EmployeeStatus';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
 
 export interface IGetAllEmployeesResponse extends ServerResponse {
   employees?: IEmployeeLessInfo[];

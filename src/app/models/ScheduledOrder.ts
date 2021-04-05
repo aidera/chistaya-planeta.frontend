@@ -1,13 +1,13 @@
-import DeliveryType from './enums/DeliveryType';
-import PeriodType from './enums/PeriodType';
-import OrderType from './enums/OrderType';
+import { DeliveryType } from './enums/DeliveryType';
+import { PeriodType } from './enums/PeriodType';
+import { OrderType } from './enums/OrderType';
+import { PaymentMethod } from './enums/PaymentMethod';
+import { SimpleStatus } from './enums/SimpleStatus';
+import { Unit } from './enums/Unit';
 import { IClient } from './Client';
 import { ILocality } from './Locality';
 import { IOffer } from './Offer';
-import Unit from './enums/Unit';
 import { IService } from './Service';
-import PaymentMethod from './enums/PaymentMethod';
-import SimpleStatus from './enums/SimpleStatus';
 
 export interface IScheduledOrder extends Document {
   /* Refers to schedule */

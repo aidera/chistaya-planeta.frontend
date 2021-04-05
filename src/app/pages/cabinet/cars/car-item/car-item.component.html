@@ -375,7 +375,9 @@
             <app-item-field-inactive-list
               *ngIf="activeField !== 'divisions'"
               label="Подразделения"
-              [list]="getItemDivisionsFieldListElements(item?.divisions || [])"
+              [list]="
+                getters.getItemDivisionsFieldListElements(item?.divisions || [])
+              "
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'divisions']"
               [moreLinkQueryParams]="{
@@ -396,7 +398,7 @@
               (clickOutside)="
                 removeActiveField(
                   'divisions',
-                  getDivisionsValuesArray(item?.divisions || [])
+                  getters.getDivisionsValuesArray(item?.divisions || [])
                 )
               "
               [delayClickOutsideInit]="true"
@@ -420,7 +422,7 @@
                 [disable]="
                   itemIsUpdating ||
                   form.get('divisions').value ===
-                    getDivisionsValuesArray(item?.divisions || [])
+                    getters.getDivisionsValuesArray(item?.divisions || [])
                 "
               ></app-item-field-save-button>
             </div>
@@ -436,7 +438,9 @@
           <div class="cabinet-content__field" style="margin-top: -16px">
             <app-item-field-inactive-list
               *ngIf="activeField !== 'drivers'"
-              [list]="getItemEmployeesFieldListElements(item?.drivers || [])"
+              [list]="
+                getters.getItemEmployeesFieldListElements(item?.drivers || [])
+              "
               [hint]="
                 !item?.locality ||
                 !item?.divisions ||
@@ -464,7 +468,7 @@
               (clickOutside)="
                 removeActiveField(
                   'drivers',
-                  getEmployeesValuesArray(item?.drivers || [])
+                  getters.getEmployeesValuesArray(item?.drivers || [])
                 )
               "
               [delayClickOutsideInit]="true"
@@ -488,7 +492,7 @@
                 [disable]="
                   itemIsUpdating ||
                   form.get('drivers').value ===
-                    getEmployeesValuesArray(item?.drivers || [])
+                    getters.getEmployeesValuesArray(item?.drivers || [])
                 "
               ></app-item-field-save-button>
             </div>

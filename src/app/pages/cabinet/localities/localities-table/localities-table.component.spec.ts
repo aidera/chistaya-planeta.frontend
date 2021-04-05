@@ -9,7 +9,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { LocalitiesTableComponent } from './localities-table.component';
 import { TablePageComponent } from '../../table-page.component';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { TableComponent } from '../../../../components/table/table.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
@@ -17,6 +16,7 @@ import { DateTimeInputComponent } from '../../../../components/form-controls/dat
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 describe('LocalitiesTableComponent', () => {
   let component: LocalitiesTableComponent;
@@ -35,7 +35,7 @@ describe('LocalitiesTableComponent', () => {
       ],
       providers: [
         OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             app: {

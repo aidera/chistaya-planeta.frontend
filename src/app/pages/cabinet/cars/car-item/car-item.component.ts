@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as CarsSelectors from '../../../../store/cars/cars.selectors';
 import * as CarsActions from '../../../../store/cars/cars.actions';
 import { ICar } from '../../../../models/Car';
@@ -10,9 +15,9 @@ import { ILocality } from '../../../../models/Locality';
 import { IDivision } from '../../../../models/Division';
 import { IEmployee } from '../../../../models/Employee';
 import { OptionType } from '../../../../models/types/OptionType';
-import CarStatus from '../../../../models/enums/CarStatus';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { CarStatus } from '../../../../models/enums/CarStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
 import { ItemPageComponent } from '../../item-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
 import { carTypeOptions, carTypeStrings } from '../../../../data/carTypeData';
@@ -21,7 +26,11 @@ import {
   carStatusOptions,
   carStatusStrings,
 } from '../../../../data/carStatusData';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { EmployeeStatus } from '../../../../models/enums/EmployeeStatus';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { CarsApiService } from '../../../../services/api/cars-api.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-car-item',
@@ -31,8 +40,14 @@ import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
 export class CarItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: ICar;
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -40,6 +55,14 @@ export class CarItemComponent
   public employeesOptions$: Subscription;
   public employeesOptions: OptionType[] = [];
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public alreadyExistId: string;
+
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public carStatus = CarStatus;
   public simpleStatus = SimpleStatus;
   public employeeRole = EmployeeRole;
@@ -48,6 +71,24 @@ export class CarItemComponent
   public carStatusColors = carStatusColors;
   public carTypeOptions = carTypeOptions;
   public carTypeStrings = carTypeStrings;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private options: OptionsService,
+    private carsApi: CarsApiService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Автомобиль - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -157,6 +198,12 @@ export class CarItemComponent
     this.item$ = this.store.select(CarsSelectors.selectCar).subscribe((car) => {
       this.item = car;
 
+      if (car) {
+        this.title.setTitle(
+          `Автомобиль - ${car.licensePlate} - Чистая планета`
+        );
+      }
+
       this.initForm();
 
       if (this.form) {
@@ -241,9 +288,13 @@ export class CarItemComponent
         if (status === true) {
           this.activeField = null;
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(CarsActions.refreshUpdateCarSucceed());
         }
@@ -258,7 +309,7 @@ export class CarItemComponent
             this.alreadyExistId = error.foundedItem._id;
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('locality')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -268,7 +319,7 @@ export class CarItemComponent
               );
             }
             if (error.description.includes('division')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка подразделения. Возможно, оно было удалёно',
                 'Скрыть',
                 {
@@ -278,7 +329,7 @@ export class CarItemComponent
               );
             }
           } else {
-            this.updateSnackbar = this.snackBar.open(
+            this.updateResultSnackbar = this.snackBar.open(
               'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -306,7 +357,7 @@ export class CarItemComponent
 
           this.store.dispatch(CarsActions.refreshRemoveCarSucceed());
 
-          this.removeSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
+          this.removeResultSnackbar = this.snackBar.open('Удалено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -320,7 +371,7 @@ export class CarItemComponent
         if (error && error.foundedItem) {
           this.isRemoveModalOpen = false;
         } else if (error) {
-          this.removeSnackbar = this.snackBar.open(
+          this.removeResultSnackbar = this.snackBar.open(
             'Ошибка при удалении. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -347,7 +398,6 @@ export class CarItemComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
@@ -363,21 +413,5 @@ export class CarItemComponent
     this.options.destroyLocalitiesOptions();
     this.options.destroyDivisionsOptions();
     this.options.destroyEmployeesOptions();
-  }
-
-  public getDivisionsValuesArray(divisions: (IDivision | string)[]): string[] {
-    return (
-      (divisions as IDivision[])?.map((el) => {
-        return el._id;
-      }) || []
-    );
-  }
-
-  public getEmployeesValuesArray(employees: (IEmployee | string)[]): string[] {
-    return (
-      (employees as IEmployee[])?.map((el) => {
-        return el._id;
-      }) || []
-    );
   }
 }

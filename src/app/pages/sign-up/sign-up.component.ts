@@ -3,12 +3,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { debounceTime, take } from 'rxjs/operators';
+import { Title, Meta } from '@angular/platform-browser';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
 import * as UsersActions from '../../store/users/users.actions';
 import { responseCodes } from '../../data/responseCodes';
-import { debounceTime, take } from 'rxjs/operators';
 import { ClientsApiService } from '../../services/api/clients-api.service';
 
 @Component({
@@ -26,11 +27,27 @@ export class SignUpComponent implements OnInit {
   public serverError: string | null;
 
   constructor(
+    private title: Title,
+    private meta: Meta,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<fromRoot.State>,
     private clientsApi: ClientsApiService
-  ) {}
+  ) {
+    title.setTitle('Регистрация - Чистая планета');
+    meta.addTags([
+      {
+        name: 'keywords',
+        content:
+          'чистая планета, регистрация, зарегистрироваться, новый аккаунт',
+      },
+      {
+        name: 'description',
+        content:
+          'Зарегистрироваться в личном кабинете. Чистая Планета - сохраним природу детям!',
+      },
+    ]);
+  }
 
   ngOnInit(): void {
     this.client$ = this.store

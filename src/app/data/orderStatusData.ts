@@ -1,6 +1,6 @@
 import { OptionType } from '../models/types/OptionType';
 import { TextColor } from '../models/types/TextColor';
-import OrderStatus from '../models/enums/OrderStatus';
+import { OrderStatus } from '../models/enums/OrderStatus';
 
 export const orderStatusStrings: string[] = [];
 orderStatusStrings[OrderStatus.raw] = 'Необработано';

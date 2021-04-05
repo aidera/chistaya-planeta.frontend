@@ -1,5 +1,5 @@
 import { OptionType } from '../models/types/OptionType';
-import OrderType from '../models/enums/OrderType';
+import { OrderType } from '../models/enums/OrderType';
 
 export const orderTypeStrings: string[] = [];
 orderTypeStrings[OrderType.offer] = 'Продажа вторсырья';

@@ -4,9 +4,7 @@
  * -- Вывоз мусора
  */
 
-enum OrderType {
+export enum OrderType {
   offer,
   service,
 }
-
-export default OrderType;

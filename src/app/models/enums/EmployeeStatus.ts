@@ -4,10 +4,8 @@
  * -- уволен
  */
 
-enum EmployeeStatus {
+export enum EmployeeStatus {
   active,
   vacation,
   fired,
 }
-
-export default EmployeeStatus;

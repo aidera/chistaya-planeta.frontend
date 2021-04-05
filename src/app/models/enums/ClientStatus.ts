@@ -4,9 +4,7 @@
  * -- заблокированный
  */
 
-enum ClientStatus {
+export enum ClientStatus {
   active,
   blocked,
 }
-
-export default ClientStatus;

@@ -8,16 +8,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ItemPageComponent } from './item-page.component';
-import { SocketIoService } from '../../services/socket-io/socket-io.service';
-import { HttpClientModule } from '@angular/common/http';
-import { ConverterService } from '../../services/converter/converter.service';
-import { LocalitiesApiService } from '../../services/api/localities-api.service';
-import { DivisionsApiService } from '../../services/api/divisions-api.service';
-import { CarsApiService } from '../../services/api/cars-api.service';
-import { EmployeesApiService } from '../../services/api/employees-api.service';
-import { OptionsService } from '../../services/options/options.service';
 
 describe('ItemPageComponent', () => {
   let component: ItemPageComponent;
@@ -33,13 +26,6 @@ describe('ItemPageComponent', () => {
         ReactiveFormsModule,
       ],
       providers: [
-        SocketIoService,
-        ConverterService,
-        LocalitiesApiService,
-        DivisionsApiService,
-        CarsApiService,
-        EmployeesApiService,
-        OptionsService,
         provideMockStore({
           initialState: {
             app: {

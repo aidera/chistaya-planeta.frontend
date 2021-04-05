@@ -1,4 +1,4 @@
-import PaymentMethod from '../models/enums/PaymentMethod';
+import { PaymentMethod } from '../models/enums/PaymentMethod';
 import { OptionType } from '../models/types/OptionType';
 
 export const paymentMethodStrings: string[] = [];

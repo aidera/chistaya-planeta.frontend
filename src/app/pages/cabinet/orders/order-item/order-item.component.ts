@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as OrdersActions from '../../../../store/orders/orders.actions';
 import * as OrdersSelectors from '../../../../store/orders/orders.selectors';
 import * as OffersActions from '../../../../store/offers/offers.actions';
@@ -12,8 +17,8 @@ import * as ServicesSelectors from '../../../../store/services/services.selector
 import { ItemPageComponent } from '../../item-page.component';
 import { IEmployee } from '../../../../models/Employee';
 import { OptionType } from '../../../../models/types/OptionType';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
-import CarStatus from '../../../../models/enums/CarStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import { CarStatus } from '../../../../models/enums/CarStatus';
 import { responseCodes } from '../../../../data/responseCodes';
 import { ILocality } from '../../../../models/Locality';
 import { IDivision } from '../../../../models/Division';
@@ -21,26 +26,29 @@ import { ICar } from '../../../../models/Car';
 import { IOrder } from '../../../../models/Order';
 import {
   orderStatusColors,
-  orderStatusOptions,
   orderStatusStrings,
 } from '../../../../data/orderStatusData';
 import { orderTypeStrings } from '../../../../data/orderTypeData';
-import OrderType from '../../../../models/enums/OrderType';
+import { OrderType } from '../../../../models/enums/OrderType';
 import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import { IOffer } from '../../../../models/Offer';
-import DeliveryType from '../../../../models/enums/DeliveryType';
+import { DeliveryType } from '../../../../models/enums/DeliveryType';
 import { deliveryTypeStrings } from '../../../../data/deliveryTypeData';
 import { paymentMethodStrings } from '../../../../data/paymentMethodData';
 import { unitStrings } from '../../../../data/unitOptions';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
-import OrderStatus from '../../../../models/enums/OrderStatus';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
+import { OrderStatus } from '../../../../models/enums/OrderStatus';
 import { tomorrow } from '../../../../utils/date.functions';
 import { ModalAction } from '../../../../components/modal/modal.component';
-import timeOptions from '../../../../data/timeOptions';
-import EmployeeStatus from '../../../../models/enums/EmployeeStatus';
+import { timeOptions } from '../../../../data/timeOptions';
+import { EmployeeStatus } from '../../../../models/enums/EmployeeStatus';
 import { IService } from '../../../../models/Service';
-import Unit from '../../../../models/enums/Unit';
 import { IClient } from '../../../../models/Client';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { OrdersApiService } from '../../../../services/api/orders-api.service';
+import { ClientsApiService } from '../../../../services/api/clients-api.service';
 
 @Component({
   selector: 'app-order-item',
@@ -50,13 +58,22 @@ import { IClient } from '../../../../models/Client';
 export class OrderItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: IOrder;
 
+  /* -------------------- */
+  /* Other items settings */
+  /* -------------------- */
   public offers$: Subscription;
   public offers: IOffer[];
   public services$: Subscription;
   public services: IService[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public divisionsOptions$: Subscription;
   public divisionsOptions: OptionType[] = [];
   public clientManagersOptions$: Subscription;
@@ -67,26 +84,31 @@ export class OrderItemComponent
   public receivingManagersOptions: OptionType[] = [];
   public carsOptions$: Subscription;
   public carsOptions: OptionType[] = [];
+  //
+  public processFormDivisionsOptions$: Subscription;
+  public processFormDivisionsOptions: OptionType[] = [];
+  public processFormDriversOptions$: Subscription;
+  public processFormDriversOptions: OptionType[] = [];
+  public processFormCarsOptions$: Subscription;
+  public processFormCarsOptions: OptionType[] = [];
 
-  public processDivisionsOptions$: Subscription;
-  public processDivisionsOptions: OptionType[] = [];
-  public processDriversOptions$: Subscription;
-  public processDriversOptions: OptionType[] = [];
-  public processCarsOptions$: Subscription;
-  public processCarsOptions: OptionType[] = [];
-
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
   public processForm: FormGroup;
   public isProcessFormModalOpen = false;
   public deadlineMinDate = tomorrow;
   public timeOptions = timeOptions;
-
+  //
   public refuseForm: FormGroup;
   public isRefuseFormModalOpen = false;
-
+  //
   public completeForm: FormGroup;
   public isCompleteFormModalOpen = false;
 
-  public orderStatusOptions = orderStatusOptions;
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public orderStatusColors = orderStatusColors;
   public orderStatusStrings = orderStatusStrings;
   public orderTypeStrings = orderTypeStrings;
@@ -96,6 +118,25 @@ export class OrderItemComponent
   public orderType = OrderType;
   public orderStatus = OrderStatus;
   public deliveryType = DeliveryType;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private options: OptionsService,
+    private ordersApi: OrdersApiService,
+    private clientsApi: ClientsApiService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Заявка - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -154,28 +195,28 @@ export class OrderItemComponent
 
     this.processForm.get('division').valueChanges.subscribe((fieldValue) => {
       /* Process Drivers */
-      this.processDriversOptions$?.unsubscribe();
-      this.processDriversOptions$ = this.options
+      this.processFormDriversOptions$?.unsubscribe();
+      this.processFormDriversOptions$ = this.options
         .getEmployeesOptions({
           statuses: [EmployeeStatus.active],
           roles: [EmployeeRole.driver],
           divisionsIds: [fieldValue],
         })
         .subscribe((value) => {
-          this.processDriversOptions = value;
+          this.processFormDriversOptions = value;
         });
     });
 
     this.processForm.get('driver').valueChanges.subscribe((fieldValue) => {
       /* Process Cars */
-      this.processCarsOptions$?.unsubscribe();
-      this.processCarsOptions$ = this.options
+      this.processFormCarsOptions$?.unsubscribe();
+      this.processFormCarsOptions$ = this.options
         .getCarsOptions({
           statuses: [CarStatus.active],
           driversIds: [fieldValue],
         })
         .subscribe((value) => {
-          this.processCarsOptions = value;
+          this.processFormCarsOptions = value;
         });
     });
 
@@ -314,8 +355,8 @@ export class OrderItemComponent
           });
 
         /* Process Divisions */
-        this.processDivisionsOptions$?.unsubscribe();
-        this.processDivisionsOptions$ = this.options
+        this.processFormDivisionsOptions$?.unsubscribe();
+        this.processFormDivisionsOptions$ = this.options
           .getDivisionsOptions({
             useAddress: true,
             statuses: [SimpleStatus.active],
@@ -324,7 +365,7 @@ export class OrderItemComponent
               : undefined,
           })
           .subscribe((value) => {
-            this.processDivisionsOptions = value;
+            this.processFormDivisionsOptions = value;
           });
       });
 
@@ -360,9 +401,13 @@ export class OrderItemComponent
           this.isRefuseFormModalOpen = false;
           this.isCompleteFormModalOpen = false;
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(OrdersActions.refreshUpdateOrderSucceed());
         }
@@ -374,7 +419,7 @@ export class OrderItemComponent
         if (error) {
           if (error.code === responseCodes.validationFailed) {
             if (error.errors[0].param === 'email') {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Некорректный email',
                 'Скрыть',
                 {
@@ -385,7 +430,7 @@ export class OrderItemComponent
             }
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('client')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка. Клиент не найден',
                 'Скрыть',
                 {
@@ -394,7 +439,7 @@ export class OrderItemComponent
                 }
               );
             } else if (error.description.includes('locality')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -404,7 +449,7 @@ export class OrderItemComponent
               );
             }
             if (error.description.includes('division')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка подразделения. Возможно, оно былы удалёно',
                 'Скрыть',
                 {
@@ -414,7 +459,7 @@ export class OrderItemComponent
               );
             }
           } else {
-            this.updateSnackbar = this.snackBar.open(
+            this.updateResultSnackbar = this.snackBar.open(
               'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -469,7 +514,6 @@ export class OrderItemComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
@@ -489,21 +533,13 @@ export class OrderItemComponent
     this.receivingManagersOptions$?.unsubscribe?.();
     this.carsOptions$?.unsubscribe?.();
 
-    this.processDivisionsOptions$?.unsubscribe?.();
-    this.processDriversOptions$?.unsubscribe?.();
-    this.processCarsOptions$?.unsubscribe?.();
+    this.processFormDivisionsOptions$?.unsubscribe?.();
+    this.processFormDriversOptions$?.unsubscribe?.();
+    this.processFormCarsOptions$?.unsubscribe?.();
 
     this.options.destroyDivisionsOptions();
     this.options.destroyEmployeesOptions();
     this.options.destroyCarsOptions();
-  }
-
-  public getOffersAmount(): string | undefined {
-    if (this.item?.offers) {
-      const unit = unitStrings[this.item?.offers?.amountUnit];
-      return this.item.offers.amount + ' ' + unit;
-    }
-    return undefined;
   }
 
   public getServicesAmount(): string | undefined {
@@ -520,45 +556,6 @@ export class OrderItemComponent
         return {
           text: offer.name,
           color: offer.status === SimpleStatus.inactive ? 'red' : undefined,
-        };
-      });
-    }
-    return [];
-  }
-
-  public getWeighedOffersList(): ItemFieldListElement[] {
-    if (this.item?.weighed?.offers) {
-      return (this.item?.weighed?.offers).map((offer) => {
-        const allPrices = this.offers
-          ?.find((el) => el._id === (offer.item as IOffer)?._id)
-          ?.prices.find((el) => el.unit === offer.amountUnit);
-        const price =
-          this.item.delivery._type === DeliveryType.company ||
-          this.item.type === OrderType.service
-            ? allPrices?.amountWithDelivery
-            : allPrices?.amountWithoutDelivery;
-
-        return {
-          text:
-            (offer.item as IOffer)?.name +
-            ' - ' +
-            offer.amount +
-            ' ' +
-            unitStrings[offer.amountUnit] +
-            ' (' +
-            price * offer.amount +
-            ' руб.)',
-        };
-      });
-    }
-    return [];
-  }
-
-  public getWeighedServicesList(): ItemFieldListElement[] {
-    if (this.item?.weighed?.services) {
-      return (this.item?.weighed?.services).map((service) => {
-        return {
-          text: service.amount + ' ' + unitStrings[service.amountUnit],
         };
       });
     }
@@ -729,38 +726,6 @@ export class OrderItemComponent
     }
   }
 
-  public getOfferCost(id: string, unit: Unit, amount: number): number {
-    if (this.item && this.offers) {
-      const targetOffer = this.offers.find((offer) => offer._id === id)?.prices;
-      const targetOfferPrice = targetOffer?.find(
-        (price) => price.unit === +unit
-      );
-      if (this.item.delivery._type === DeliveryType.company) {
-        return targetOfferPrice
-          ? targetOfferPrice?.amountWithDelivery * amount
-          : 0;
-      } else {
-        return targetOfferPrice
-          ? targetOfferPrice?.amountWithoutDelivery * amount
-          : 0;
-      }
-    } else {
-      return 0;
-    }
-  }
-
-  public getServiceCost(unit: Unit, amount: number): number {
-    if (this.item && this.services) {
-      const targetService = this.services[0].prices;
-      const targetServicePrice = targetService?.find(
-        (price) => price.unit === +unit
-      );
-      return targetServicePrice ? targetServicePrice?.amount * amount : 0;
-    } else {
-      return 0;
-    }
-  }
-
   public onCompleteOrderModalAction(action: ModalAction): void {
     switch (action) {
       case 'cancel':
@@ -907,18 +872,5 @@ export class OrderItemComponent
         })
       );
     }
-  }
-
-  getOfferItemsArrayString(): string {
-    if (this.item?.offers) {
-      return JSON.stringify(
-        (this.item.offers.items as IOffer[])
-          .map((el) => {
-            return el._id;
-          })
-          .concat()
-      );
-    }
-    return '';
   }
 }

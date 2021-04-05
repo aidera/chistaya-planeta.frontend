@@ -4,9 +4,7 @@
  * -- за единицу
  */
 
-enum PriceType {
+export enum PriceType {
   single,
   unit,
 }
-
-export default PriceType;

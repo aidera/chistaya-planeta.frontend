@@ -1,5 +1,5 @@
 import { OptionType } from '../models/types/OptionType';
-import DeliveryType from '../models/enums/DeliveryType';
+import { DeliveryType } from '../models/enums/DeliveryType';
 
 export const deliveryTypeStrings: string[] = [];
 deliveryTypeStrings[DeliveryType.without] = '-';

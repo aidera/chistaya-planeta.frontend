@@ -4,8 +4,8 @@ import { ServerError } from '../../models/ServerResponse';
 import { PaginationType } from '../../models/types/PaginationType';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { ICar } from '../../models/Car';
-import CarStatus from '../../models/enums/CarStatus';
-import CarType from '../../models/enums/CarType';
+import { CarStatus } from '../../models/enums/CarStatus';
+import { CarType } from '../../models/enums/CarType';
 import { IEmployee } from '../../models/Employee';
 
 /* ---------------------- */

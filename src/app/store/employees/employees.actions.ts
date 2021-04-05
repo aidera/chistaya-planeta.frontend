@@ -4,8 +4,8 @@ import { ServerError } from '../../models/ServerResponse';
 import { PaginationType } from '../../models/types/PaginationType';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { IEmployee } from '../../models/Employee';
-import EmployeeStatus from '../../models/enums/EmployeeStatus';
-import EmployeeRole from '../../models/enums/EmployeeRole';
+import { EmployeeStatus } from '../../models/enums/EmployeeStatus';
+import { EmployeeRole } from '../../models/enums/EmployeeRole';
 
 /* --------------------- */
 /* --- Get Employees --- */

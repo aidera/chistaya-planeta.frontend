@@ -7,12 +7,10 @@
  * -- принимающий менеджер
  */
 
-enum EmployeeRole {
+export enum EmployeeRole {
   head,
   admin,
   clientManager,
   driver,
   receivingManager,
 }
-
-export default EmployeeRole;

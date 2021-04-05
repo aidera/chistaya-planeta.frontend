@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 import * as fromRoot from '../../../store/root.reducer';
 import * as TasksSelectors from '../../../store/tasks/tasks.selectors';
@@ -11,10 +12,10 @@ import * as UsersActions from '../../../store/users/users.actions';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
 import { IEmployee } from '../../../models/Employee';
 import { IOrderLessInfo } from '../../../models/Order';
-import OrderStatus from '../../../models/enums/OrderStatus';
+import { OrderStatus } from '../../../models/enums/OrderStatus';
 import { orderStatusStrings } from '../../../data/orderStatusData';
 import { orderTypeStrings } from '../../../data/orderTypeData';
-import EmployeeRole from '../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../models/enums/EmployeeRole';
 import { IDivision } from '../../../models/Division';
 
 @Component({
@@ -38,8 +39,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   public tasksWithDeliveredStatus: IOrderLessInfo[];
   public tasksWithDeliveredStatusAndCurrentDivision: IOrderLessInfo[];
   public tasksWithWeighedStatus: IOrderLessInfo[];
-  public tasksWithCompletedStatus: IOrderLessInfo[];
-  public tasksWithRefusedStatus: IOrderLessInfo[];
 
   public dateNow = new Date();
 
@@ -49,8 +48,11 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<fromRoot.State>,
-    private socket: SocketIoService
-  ) {}
+    private socket: SocketIoService,
+    private title: Title
+  ) {
+    title.setTitle('Задачи - Чистая планета');
+  }
 
   ngOnInit(): void {
     this.store.dispatch(TasksActions.getTasksRequest());
@@ -74,8 +76,6 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.tasksWithDeliveredStatus = this.getTasksWithDeliveredStatus();
         this.tasksWithDeliveredStatusAndCurrentDivision = this.getTasksWithDeliveredStatusAndCurrentDivision();
         this.tasksWithWeighedStatus = this.getTasksWithWeighedStatus();
-        this.tasksWithCompletedStatus = this.getTasksWithCompletedStatus();
-        this.tasksWithRefusedStatus = this.getTasksWithRefusedStatus();
       });
 
     this.tasksAreFetching$ = this.store

@@ -1,6 +1,6 @@
 import { OptionType } from '../models/types/OptionType';
 import { TextColor } from '../models/types/TextColor';
-import CarStatus from '../models/enums/CarStatus';
+import { CarStatus } from '../models/enums/CarStatus';
 
 export const carStatusStrings: string[] = [];
 carStatusStrings[CarStatus.active] = 'Активно';

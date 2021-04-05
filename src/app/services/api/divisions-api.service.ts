@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import ServerResponse from '../../models/ServerResponse';
+import { ServerResponse } from '../../models/ServerResponse';
 import { IDivision, IDivisionLessInfo } from '../../models/Division';
 import { environment } from '../../../environments/environment';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';

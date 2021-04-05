@@ -1,6 +1,6 @@
 import { OptionType } from '../models/types/OptionType';
 import { TextColor } from '../models/types/TextColor';
-import EmployeeStatus from '../models/enums/EmployeeStatus';
+import { EmployeeStatus } from '../models/enums/EmployeeStatus';
 
 export const employeeStatusStrings: string[] = [];
 employeeStatusStrings[EmployeeStatus.active] = 'Активно';

@@ -1,5 +1,5 @@
 import { OptionType } from '../models/types/OptionType';
-import Unit from '../models/enums/Unit';
+import { Unit } from '../models/enums/Unit';
 
 export const unitStrings: string[] = [];
 unitStrings[Unit.pc] = 'шт';

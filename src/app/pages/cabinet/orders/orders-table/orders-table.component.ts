@@ -1,8 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as OrdersActions from '../../../../store/orders/orders.actions';
 import * as OrdersSelectors from '../../../../store/orders/orders.selectors';
 import { PhonePipe } from '../../../../pipes/phone.pipe';
@@ -26,9 +31,12 @@ import {
   deliveryTypeStrings,
 } from '../../../../data/deliveryTypeData';
 import { IOrder } from '../../../../models/Order';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
 import { paymentMethodOffersOptions } from 'src/app/data/paymentMethodData';
 import { IClient } from '../../../../models/Client';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
 
 @Component({
   selector: 'app-orders-table',
@@ -39,9 +47,14 @@ import { IClient } from '../../../../models/Client';
 export class OrdersTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
-  private orders$: Subscription;
-  private orders: IOrder[];
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
+  public items: IOrder[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -55,10 +68,32 @@ export class OrdersTableComponent
   public driversOptions$: Subscription;
   public driversOptions: OptionType[] = [];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public orderStatusOptions = orderStatusOptions;
   public orderTypeOptions = orderTypeOptions;
   public deliveryTypeOptions = deliveryTypeOptions;
   public paymentMethodOptions = paymentMethodOffersOptions;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected snackBar: MatSnackBar,
+    protected options: OptionsService,
+    protected socket: SocketIoService,
+    /* this */
+    private title: Title
+  ) {
+    super(store, router, route, getters, location);
+
+    title.setTitle('Заявки - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -587,110 +622,110 @@ export class OrdersTableComponent
       return {
         status:
           this.advancedSearchForm.get('status').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('status').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         type:
           this.advancedSearchForm.get('type').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('type').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
-        deadline: this.converter.getServerFromToDateInISOStringArray(
+        deadline: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('deadlineFrom').value,
           this.advancedSearchForm.get('deadlineTo').value
         ),
 
         scheduledOrder:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('scheduledOrder').value
           ) || undefined,
         client:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('client').value
           ) || undefined,
 
         customerOrganizationLegalName:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerOrganizationLegalName').value
           ) || undefined,
         customerOrganizationActualName:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerOrganizationActualName').value
           ) || undefined,
         customerContactName:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerContactName').value
           ) || undefined,
         customerContactPhone:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerContactPhone').value
           ) || undefined,
 
         deliveryType:
           this.advancedSearchForm.get('deliveryType').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('deliveryType').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         deliveryCustomerCarNumber:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('deliveryCustomerCarNumber').value
           ) || undefined,
-        deliveryHasAssistant: this.converter.getArrayOrUndefined<boolean>(
+        deliveryHasAssistant: this.getters.getArrayOrUndefined<boolean>(
           this.advancedSearchForm.get('deliveryHasAssistant').value,
           1,
-          this.converter.convertArrayOfStringedBooleanToRealBoolean
+          this.getters.getArrayFromStringedBooleanToRealBoolean
         ),
         deliveryAddressFromStreet:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('deliveryAddressFromStreet').value
           ) || undefined,
         deliveryAddressFromHouse:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('deliveryAddressFromHouse').value
           ) || undefined,
 
         paymentMethod:
           this.advancedSearchForm.get('paymentMethod').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('paymentMethod').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         paymentMethodData:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('paymentMethodData').value
           ) || undefined,
 
-        weighedPaymentAmount: this.converter.getArrayOrUndefined<number | null>(
+        weighedPaymentAmount: this.getters.getArrayOrUndefined<number | null>(
           this.advancedSearchForm.get('weighedPaymentAmount').value,
           2,
-          this.converter.convertArrayOfStringsToNullOrString
+          this.getters.getArrayFromStringsToNullOrString
         ),
 
         customerComment:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerComment').value
           ) || undefined,
         companyComment:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('companyComment').value
           ) || undefined,
         customerCancellationReason:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerCancellationReason').value
           ) || undefined,
         companyCancellationReason:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('companyCancellationReason').value
           ) || undefined,
 
@@ -698,14 +733,14 @@ export class OrdersTableComponent
           this.advancedSearchForm.get('localities').value.length <= 0 ||
           this.advancedSearchForm.get('localities').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('localities').value
               ),
         divisions:
           this.advancedSearchForm.get('divisions').value.length <= 0 ||
           this.advancedSearchForm.get('divisions').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('divisions').value
               ),
 
@@ -715,7 +750,7 @@ export class OrdersTableComponent
           this.advancedSearchForm.get('performersClientManagers').value[0] ===
             ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('performersClientManagers').value
               ),
         performersReceivingManagers:
@@ -724,49 +759,49 @@ export class OrdersTableComponent
           this.advancedSearchForm.get('performersReceivingManagers')
             .value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('performersReceivingManagers').value
               ),
         performersDrivers:
           this.advancedSearchForm.get('performersDrivers').value.length <= 0 ||
           this.advancedSearchForm.get('performersDrivers').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('performersDrivers').value
               ),
         performersCars:
           this.advancedSearchForm.get('performersCars').value.length <= 0 ||
           this.advancedSearchForm.get('performersCars').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('performersCars').value
               ),
 
-        createdAt: this.converter.getServerFromToDateInISOStringArray(
+        createdAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
         ),
-        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+        updatedAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('updatedAtFrom').value,
           this.advancedSearchForm.get('updatedAtTo').value
         ),
-        statusDateAccepted: this.converter.getServerFromToDateInISOStringArray(
+        statusDateAccepted: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('statusDateAcceptedFrom').value,
           this.advancedSearchForm.get('statusDateAcceptedTo').value
         ),
-        statusDateDelivered: this.converter.getServerFromToDateInISOStringArray(
+        statusDateDelivered: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('statusDateDeliveredFrom').value,
           this.advancedSearchForm.get('statusDateDeliveredTo').value
         ),
-        statusDateWeighed: this.converter.getServerFromToDateInISOStringArray(
+        statusDateWeighed: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('statusDateWeighedFrom').value,
           this.advancedSearchForm.get('statusDateWeighedTo').value
         ),
-        statusDateCompleted: this.converter.getServerFromToDateInISOStringArray(
+        statusDateCompleted: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('statusDateCompletedFrom').value,
           this.advancedSearchForm.get('statusDateCompletedTo').value
         ),
-        statusDateRefused: this.converter.getServerFromToDateInISOStringArray(
+        statusDateRefused: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('statusDateRefusedFrom').value,
           this.advancedSearchForm.get('statusDateRefusedTo').value
         ),
@@ -784,8 +819,8 @@ export class OrdersTableComponent
         this.sendRequest(false);
       }
       if (data.action === 'update' && data.id) {
-        if (this.orders && this.orders.length > 0) {
-          const isExist = this.orders.find((order) => {
+        if (this.items && this.items.length > 0) {
+          const isExist = this.items.find((order) => {
             return order._id === data.id;
           });
           if (isExist) {
@@ -799,10 +834,10 @@ export class OrdersTableComponent
     /* --- NgRx connections --- */
     /* ------------------------ */
 
-    this.orders$ = this.store
+    this.items$ = this.store
       .select(OrdersSelectors.selectOrders)
       .subscribe((orders) => {
-        this.orders = orders;
+        this.items = orders;
         if (orders) {
           this.tableData = orders.map((order) => {
             return {
@@ -867,7 +902,7 @@ export class OrdersTableComponent
                       ? this.quickSearchForm.get('search').value
                       : ''
                   )
-                : this.converter.beautifyPhoneNumber(
+                : this.getters.getBeautifiedPhoneNumber(
                     order.customer.contactPhone
                   ),
 
@@ -915,12 +950,12 @@ export class OrdersTableComponent
               performersClientManager: (order.performers
                 .clientManager as IEmployee)
                 ? order.performers.clientManagerAccepted === true
-                  ? `<p class='green-text'>${this.converter.getUserInitials(
+                  ? `<p class='green-text'>${this.getters.getUserInitials(
                       (order.performers.clientManager as IEmployee).name,
                       (order.performers.clientManager as IEmployee).surname,
                       (order.performers.clientManager as IEmployee).patronymic
                     )}</p>`
-                  : `<p class='yellow-text'>${this.converter.getUserInitials(
+                  : `<p class='yellow-text'>${this.getters.getUserInitials(
                       (order.performers.clientManager as IEmployee).name,
                       (order.performers.clientManager as IEmployee).surname,
                       (order.performers.clientManager as IEmployee).patronymic
@@ -929,13 +964,13 @@ export class OrdersTableComponent
               performersReceivingManager: (order.performers
                 .receivingManager as IEmployee)
                 ? order.performers.receivingManagerAccepted === true
-                  ? `<p class='green-text'>${this.converter.getUserInitials(
+                  ? `<p class='green-text'>${this.getters.getUserInitials(
                       (order.performers.receivingManager as IEmployee).name,
                       (order.performers.receivingManager as IEmployee).surname,
                       (order.performers.receivingManager as IEmployee)
                         .patronymic
                     )}</p>`
-                  : `<p class='yellow-text'>${this.converter.getUserInitials(
+                  : `<p class='yellow-text'>${this.getters.getUserInitials(
                       (order.performers.receivingManager as IEmployee).name,
                       (order.performers.receivingManager as IEmployee).surname,
                       (order.performers.receivingManager as IEmployee)
@@ -944,12 +979,12 @@ export class OrdersTableComponent
                 : '',
               performersDriver: (order.performers.driver as IEmployee)
                 ? order.performers.driverAccepted === true
-                  ? `<p class='green-text'>${this.converter.getUserInitials(
+                  ? `<p class='green-text'>${this.getters.getUserInitials(
                       (order.performers.driver as IEmployee).name,
                       (order.performers.driver as IEmployee).surname,
                       (order.performers.driver as IEmployee).patronymic
                     )}</p>`
-                  : `<p class='yellow-text'>${this.converter.getUserInitials(
+                  : `<p class='yellow-text'>${this.getters.getUserInitials(
                       (order.performers.driver as IEmployee).name,
                       (order.performers.driver as IEmployee).surname,
                       (order.performers.driver as IEmployee).patronymic
@@ -1059,7 +1094,7 @@ export class OrdersTableComponent
       .select(OrdersSelectors.selectGetOrdersError)
       .subscribe((error) => {
         if (error) {
-          this.getItemsSnackbar = this.snackBar.open(
+          this.getItemsResultSnackbar = this.snackBar.open(
             'Ошибка при запросе заказов. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -1086,7 +1121,6 @@ export class OrdersTableComponent
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.orders$?.unsubscribe?.();
     this.socket.get()?.off('orders');
 
     this.options.destroyLocalitiesOptions();
@@ -1097,12 +1131,12 @@ export class OrdersTableComponent
 
   public onTableItemClick(index: number): void {
     const currentItemId =
-      this.orders && this.orders[index] && this.orders[index]._id
-        ? this.orders[index]._id
+      this.items && this.items[index] && this.items[index]._id
+        ? this.items[index]._id
         : undefined;
     if (currentItemId) {
       this.router.navigate([`./${currentItemId}`], {
-        relativeTo: this.activatedRoute,
+        relativeTo: this.route,
       });
     }
   }

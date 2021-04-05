@@ -1,8 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as ScheduledOrdersActions from '../../../../store/scheduled-orders/scheduled-orders.actions';
 import * as ScheduledOrdersSelectors from '../../../../store/scheduled-orders/scheduled-orders.selectors';
 import { TablePageComponent } from '../../table-page.component';
@@ -16,7 +21,7 @@ import {
   deliveryTypeOptions,
   deliveryTypeStrings,
 } from '../../../../data/deliveryTypeData';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
 import { IClient } from '../../../../models/Client';
 import { ILocality } from '../../../../models/Locality';
 import { IScheduledOrder } from '../../../../models/ScheduledOrder';
@@ -25,10 +30,10 @@ import {
   simpleStatusOptions,
   simpleStatusStrings,
 } from '../../../../data/simpleStatusData';
-import {
-  periodTypeOptions,
-  periodTypeStrings,
-} from '../../../../data/periodTypeData';
+import { periodTypeStrings } from '../../../../data/periodTypeData';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
 
 @Component({
   selector: 'app-scheduled-orders-table',
@@ -38,17 +43,43 @@ import {
 export class ScheduledOrdersTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
-  private scheduledOrders$: Subscription;
-  private scheduledOrders: IScheduledOrder[];
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
+  public items: IScheduledOrder[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public simpleStatusOptions = simpleStatusOptions;
-  public periodTypeOptions = periodTypeOptions;
   public orderTypeOptions = orderTypeOptions;
   public deliveryTypeOptions = deliveryTypeOptions;
   public paymentMethodOptions = paymentMethodOffersOptions;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected snackBar: MatSnackBar,
+    protected options: OptionsService,
+    protected socket: SocketIoService,
+    /* this */
+    private title: Title
+  ) {
+    super(store, router, route, getters, location);
+
+    title.setTitle('Периодические заявки - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -302,84 +333,84 @@ export class ScheduledOrdersTableComponent
       return {
         status:
           this.advancedSearchForm.get('status').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('status').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         type:
           this.advancedSearchForm.get('type').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('type').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
 
         client:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('client').value
           ) || undefined,
 
         customerOrganizationLegalName:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerOrganizationLegalName').value
           ) || undefined,
         customerOrganizationActualName:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerOrganizationActualName').value
           ) || undefined,
         customerContactName:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerContactName').value
           ) || undefined,
         customerContactPhone:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerContactPhone').value
           ) || undefined,
 
         deliveryType:
           this.advancedSearchForm.get('deliveryType').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('deliveryType').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         deliveryCustomerCarNumber:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('deliveryCustomerCarNumber').value
           ) || undefined,
-        deliveryHasAssistant: this.converter.getArrayOrUndefined<boolean>(
+        deliveryHasAssistant: this.getters.getArrayOrUndefined<boolean>(
           this.advancedSearchForm.get('deliveryHasAssistant').value,
           1,
-          this.converter.convertArrayOfStringedBooleanToRealBoolean
+          this.getters.getArrayFromStringedBooleanToRealBoolean
         ),
         deliveryAddressFromStreet:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('deliveryAddressFromStreet').value
           ) || undefined,
         deliveryAddressFromHouse:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('deliveryAddressFromHouse').value
           ) || undefined,
 
         paymentMethod:
           this.advancedSearchForm.get('paymentMethod').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('paymentMethod').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         paymentMethodData:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('paymentMethodData').value
           ) || undefined,
 
         customerComment:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('customerComment').value
           ) || undefined,
 
@@ -387,23 +418,23 @@ export class ScheduledOrdersTableComponent
           this.advancedSearchForm.get('localities').value.length <= 0 ||
           this.advancedSearchForm.get('localities').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('localities').value
               ),
 
-        startDate: this.converter.getServerFromToDateInISOStringArray(
+        startDate: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('startDateFrom').value,
           this.advancedSearchForm.get('startDateTo').value
         ),
-        nextUpdate: this.converter.getServerFromToDateInISOStringArray(
+        nextUpdate: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('nextUpdateFrom').value,
           this.advancedSearchForm.get('nextUpdateTo').value
         ),
-        createdAt: this.converter.getServerFromToDateInISOStringArray(
+        createdAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
         ),
-        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+        updatedAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('updatedAtFrom').value,
           this.advancedSearchForm.get('updatedAtTo').value
         ),
@@ -424,9 +455,9 @@ export class ScheduledOrdersTableComponent
         this.sendRequest(false);
       }
       if (data.action === 'update' && data.id) {
-        if (this.scheduledOrders && this.scheduledOrders.length > 0) {
-          const isExist = this.scheduledOrders.find((scheduledOrder) => {
-            return scheduledOrder._id === data.id;
+        if (this.items && this.items.length > 0) {
+          const isExist = this.items.find((item) => {
+            return item._id === data.id;
           });
           if (isExist) {
             this.sendRequest(false);
@@ -439,10 +470,10 @@ export class ScheduledOrdersTableComponent
     /* --- NgRx connections --- */
     /* ------------------------ */
 
-    this.scheduledOrders$ = this.store
+    this.items$ = this.store
       .select(ScheduledOrdersSelectors.selectScheduledOrders)
       .subscribe((scheduledOrders) => {
-        this.scheduledOrders = scheduledOrders;
+        this.items = scheduledOrders;
         if (scheduledOrders) {
           this.tableData = scheduledOrders.map((scheduledOrder) => {
             return {
@@ -511,7 +542,7 @@ export class ScheduledOrdersTableComponent
                       ? this.quickSearchForm.get('search').value
                       : ''
                   )
-                : this.converter.beautifyPhoneNumber(
+                : this.getters.getBeautifiedPhoneNumber(
                     scheduledOrder.customer.contactPhone
                   ),
 
@@ -593,7 +624,7 @@ export class ScheduledOrdersTableComponent
       .select(ScheduledOrdersSelectors.selectGetScheduledOrdersError)
       .subscribe((error) => {
         if (error) {
-          this.getItemsSnackbar = this.snackBar.open(
+          this.getItemsResultSnackbar = this.snackBar.open(
             'Ошибка при запросе периодических заказов. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -620,23 +651,8 @@ export class ScheduledOrdersTableComponent
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.scheduledOrders$?.unsubscribe?.();
     this.socket.get()?.off('scheduledOrders');
 
     this.options.destroyLocalitiesOptions();
-  }
-
-  public onTableItemClick(index: number): void {
-    const currentItemId =
-      this.scheduledOrders &&
-      this.scheduledOrders[index] &&
-      this.scheduledOrders[index]._id
-        ? this.scheduledOrders[index]._id
-        : undefined;
-    if (currentItemId) {
-      this.router.navigate([`./${currentItemId}`], {
-        relativeTo: this.activatedRoute,
-      });
-    }
   }
 }

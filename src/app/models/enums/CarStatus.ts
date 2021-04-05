@@ -5,10 +5,8 @@
  * -- недоступен
  */
 
-enum CarStatus {
+export enum CarStatus {
   active,
   temporaryUnavailable,
   unavailable,
 }
-
-export default CarStatus;

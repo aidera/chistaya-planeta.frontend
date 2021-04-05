@@ -4,10 +4,8 @@
  * -- самовывоз
  */
 
-enum DeliveryType {
+export enum DeliveryType {
   without,
   company,
   pickup,
 }
-
-export default DeliveryType;

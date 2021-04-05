@@ -1,8 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as CarsActions from '../../../../store/cars/cars.actions';
 import * as CarsSelectors from '../../../../store/cars/cars.selectors';
 import { ICar } from '../../../../models/Car';
@@ -17,7 +22,10 @@ import {
   carStatusStrings,
 } from '../../../../data/carStatusData';
 import { TablePageComponent } from '../../table-page.component';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-cars-table',
@@ -27,9 +35,14 @@ import EmployeeRole from '../../../../models/enums/EmployeeRole';
 export class CarsTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
-  private cars$: Subscription;
-  private cars: ICar[];
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
+  public items: ICar[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -37,9 +50,31 @@ export class CarsTableComponent
   public employeesOptions$: Subscription;
   public employeesOptions: OptionType[] = [];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public carTypeOptions = carTypeOptions;
   public carTypeStrings = carTypeStrings;
   public carStatusOptions = carStatusOptions;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected snackBar: MatSnackBar,
+    protected options: OptionsService,
+    protected socket: SocketIoService,
+    /* this */
+    private title: Title
+  ) {
+    super(store, router, route, getters, location);
+
+    title.setTitle('Автомобили - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -316,56 +351,56 @@ export class CarsTableComponent
           this.advancedSearchForm.get('status').value.length <= 0 ||
           this.advancedSearchForm.get('status').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('status').value
               ),
         licensePlate:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('licensePlate').value
           ) || undefined,
         type:
           this.advancedSearchForm.get('type').value.length <= 0 ||
           this.advancedSearchForm.get('type').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('type').value
               ),
-        weight: this.converter.getArrayOrUndefined<number | null>(
+        weight: this.getters.getArrayOrUndefined<number | null>(
           this.advancedSearchForm.get('weight').value,
           2,
-          this.converter.convertArrayOfStringsToNullOrString
+          this.getters.getArrayFromStringsToNullOrString
         ),
-        isCorporate: this.converter.getArrayOrUndefined<boolean>(
+        isCorporate: this.getters.getArrayOrUndefined<boolean>(
           this.advancedSearchForm.get('isCorporate').value,
           1,
-          this.converter.convertArrayOfStringedBooleanToRealBoolean
+          this.getters.getArrayFromStringedBooleanToRealBoolean
         ),
         localities:
           this.advancedSearchForm.get('localities').value.length <= 0 ||
           this.advancedSearchForm.get('localities').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('localities').value
               ),
         divisions:
           this.advancedSearchForm.get('divisions').value.length <= 0 ||
           this.advancedSearchForm.get('divisions').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('divisions').value
               ),
         drivers:
           this.advancedSearchForm.get('employees').value.length <= 0 ||
           this.advancedSearchForm.get('employees').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('employees').value
               ),
-        createdAt: this.converter.getServerFromToDateInISOStringArray(
+        createdAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
         ),
-        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+        updatedAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('updatedAtFrom').value,
           this.advancedSearchForm.get('updatedAtTo').value
         ),
@@ -383,8 +418,8 @@ export class CarsTableComponent
         this.sendRequest(false);
       }
       if (data.action === 'update' && data.id) {
-        if (this.cars && this.cars.length > 0) {
-          const isExist = this.cars.find((car) => {
+        if (this.items && this.items.length > 0) {
+          const isExist = this.items.find((car) => {
             return car._id === data.id;
           });
           if (isExist) {
@@ -398,10 +433,10 @@ export class CarsTableComponent
     /* --- NgRx connections --- */
     /* ------------------------ */
 
-    this.cars$ = this.store
+    this.items$ = this.store
       .select(CarsSelectors.selectCars)
       .subscribe((cars) => {
-        this.cars = cars;
+        this.items = cars;
         if (cars) {
           this.tableData = cars.map((car) => {
             const isCorporateText = car.isCorporate
@@ -441,13 +476,13 @@ export class CarsTableComponent
               drivers: car.drivers
                 .map((employee: IEmployee, i) => {
                   return i === 0
-                    ? this.converter.getUserInitials(
+                    ? this.getters.getUserInitials(
                         employee.name,
                         employee.surname,
                         employee.patronymic
                       )
                     : ' ' +
-                        this.converter.getUserInitials(
+                        this.getters.getUserInitials(
                           employee.name,
                           employee.surname,
                           employee.patronymic
@@ -479,7 +514,7 @@ export class CarsTableComponent
       .select(CarsSelectors.selectGetCarsError)
       .subscribe((error) => {
         if (error) {
-          this.getItemsSnackbar = this.snackBar.open(
+          this.getItemsResultSnackbar = this.snackBar.open(
             'Ошибка при запросе автомобилей. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -499,30 +534,16 @@ export class CarsTableComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.cars$?.unsubscribe?.();
     this.socket.get()?.off('cars');
 
     this.options.destroyLocalitiesOptions();
     this.options.destroyDivisionsOptions();
     this.options.destroyEmployeesOptions();
-  }
-
-  public onTableItemClick(index: number): void {
-    const currentItemId =
-      this.cars && this.cars[index] && this.cars[index]._id
-        ? this.cars[index]._id
-        : undefined;
-    if (currentItemId) {
-      this.router.navigate([`./${currentItemId}`], {
-        relativeTo: this.activatedRoute,
-      });
-    }
   }
 }

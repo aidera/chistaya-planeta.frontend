@@ -9,7 +9,6 @@ import { DateTimeInputComponent } from '../../../../components/form-controls/dat
 import { SelectComponent } from '../../../../components/form-controls/select/select.component';
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { OptionsService } from '../../../../services/options/options.service';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +16,7 @@ import { MaterialModule } from '../../../../modules/material/material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 describe('OrdersComponent', () => {
   let component: OrdersTableComponent;
@@ -35,7 +35,7 @@ describe('OrdersComponent', () => {
       ],
       providers: [
         OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             app: {

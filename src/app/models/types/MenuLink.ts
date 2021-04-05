@@ -1,4 +1,4 @@
-import EmployeeRole from '../enums/EmployeeRole';
+import { EmployeeRole } from '../enums/EmployeeRole';
 
 export type MenuLink = {
   title: string;

@@ -3,9 +3,8 @@ import { createAction, props } from '@ngrx/store';
 import { ServerError } from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { PaginationType } from '../../models/types/PaginationType';
-import OrderStatus from '../../models/enums/OrderStatus';
 import { IScheduledOrder } from '../../models/ScheduledOrder';
-import SimpleStatus from '../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import {
   IAddScheduledOrderRequest,
   IUpdateScheduledOrderRequest,

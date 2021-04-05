@@ -157,7 +157,9 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-list
               label="Подразделения"
-              [list]="getItemDivisionsFieldListElements(item?.divisions || [])"
+              [list]="
+                getters.getItemDivisionsFieldListElements(item?.divisions || [])
+              "
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'divisions']"
               [moreLinkQueryParams]="{
@@ -187,7 +189,7 @@
           >
             <app-item-field-inactive-list
               label="Автомобили"
-              [list]="getItemCarsFieldListElements(item?.cars || [])"
+              [list]="getters.getItemCarsFieldListElements(item?.cars || [])"
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'cars']"
               [moreLinkQueryParams]="{
@@ -217,7 +219,9 @@
           >
             <app-item-field-inactive-list
               label="Сотрудники"
-              [list]="getItemEmployeesFieldListElements(item?.employees || [])"
+              [list]="
+                getters.getItemEmployeesFieldListElements(item?.employees || [])
+              "
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'employees']"
               [moreLinkQueryParams]="{

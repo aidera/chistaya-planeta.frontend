@@ -1,5 +1,5 @@
 import { OptionType } from '../models/types/OptionType';
-import CarType from '../models/enums/CarType';
+import { CarType } from '../models/enums/CarType';
 
 export const carTypeStrings: string[] = [];
 carTypeStrings[CarType.small] = 'Легковой';

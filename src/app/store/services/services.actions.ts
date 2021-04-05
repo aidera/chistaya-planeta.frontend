@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { ServerError } from '../../models/ServerResponse';
 import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { IService } from '../../models/Service';
-import Price from '../../models/types/Price';
+import { Price } from '../../models/types/Price';
 
 /* -------------------- */
 /* --- Get Services --- */

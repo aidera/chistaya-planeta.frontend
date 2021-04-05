@@ -1,8 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as EmployeesActions from '../../../../store/employees/employees.actions';
 import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
 import { IEmployee } from '../../../../models/Employee';
@@ -20,7 +25,10 @@ import {
   employeeStatusOptions,
   employeeStatusStrings,
 } from '../../../../data/employeeStatusData';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-employees-table',
@@ -30,9 +38,14 @@ import EmployeeRole from '../../../../models/enums/EmployeeRole';
 export class EmployeesTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
-  private employees$: Subscription;
-  private employees: IEmployee[];
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
+  public items: IEmployee[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -40,8 +53,30 @@ export class EmployeesTableComponent
   public carsOptions$: Subscription;
   public carsOptions: OptionType[] = [];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public employeeStatusOptions = employeeStatusOptions;
   public employeeRoleOptions = employeeRoleOptions;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected snackBar: MatSnackBar,
+    protected options: OptionsService,
+    protected socket: SocketIoService,
+    /* this */
+    private title: Title
+  ) {
+    super(store, router, route, getters, location);
+
+    title.setTitle('Сотрудники - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -329,66 +364,66 @@ export class EmployeesTableComponent
       return {
         status:
           this.advancedSearchForm.get('status').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('status').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         role:
           this.advancedSearchForm.get('role').value.length > 0
-            ? this.converter.getArrayOrUndefined<string>(
+            ? this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('role').value,
                 undefined,
-                this.converter.convertArrayOfAnyToString
+                this.getters.getArrayFromAnyToString
               )
             : undefined,
         name:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('name').value
           ) || undefined,
         surname:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('surname').value
           ) || undefined,
         patronymic:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('patronymic').value
           ) || undefined,
         email:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('email').value
           ) || undefined,
         phone:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('phone').value
           ) || undefined,
         localities:
           this.advancedSearchForm.get('localities').value.length <= 0 ||
           this.advancedSearchForm.get('localities').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('localities').value
               ),
         divisions:
           this.advancedSearchForm.get('divisions').value.length <= 0 ||
           this.advancedSearchForm.get('divisions').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('divisions').value
               ),
         cars:
           this.advancedSearchForm.get('cars').value.length <= 0 ||
           this.advancedSearchForm.get('cars').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('cars').value
               ),
-        createdAt: this.converter.getServerFromToDateInISOStringArray(
+        createdAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
         ),
-        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+        updatedAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('updatedAtFrom').value,
           this.advancedSearchForm.get('updatedAtTo').value
         ),
@@ -406,8 +441,8 @@ export class EmployeesTableComponent
         this.sendRequest(false);
       }
       if (data.action === 'update' && data.id) {
-        if (this.employees && this.employees.length > 0) {
-          const isExist = this.employees.find((employee) => {
+        if (this.items && this.items.length > 0) {
+          const isExist = this.items.find((employee) => {
             return employee._id === data.id;
           });
           if (isExist) {
@@ -421,10 +456,10 @@ export class EmployeesTableComponent
     /* --- NgRx connections --- */
     /* ------------------------ */
 
-    this.employees$ = this.store
+    this.items$ = this.store
       .select(EmployeesSelectors.selectEmployees)
       .subscribe((employees) => {
-        this.employees = employees;
+        this.items = employees;
         if (employees) {
           this.tableData = employees.map((employee) => {
             return {
@@ -469,7 +504,7 @@ export class EmployeesTableComponent
                       ? this.quickSearchForm.get('search').value
                       : ''
                   )
-                : this.converter.beautifyPhoneNumber(employee.phone),
+                : this.getters.getBeautifiedPhoneNumber(employee.phone),
               locality: (employee.locality as ILocality)?.name || '',
               division: (employee.division as IDivision)?.name || '',
               cars: employee.cars
@@ -502,7 +537,7 @@ export class EmployeesTableComponent
       .select(EmployeesSelectors.selectGetEmployeesError)
       .subscribe((error) => {
         if (error) {
-          this.getItemsSnackbar = this.snackBar.open(
+          this.getItemsResultSnackbar = this.snackBar.open(
             'Ошибка при запросе сотрудников. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -522,30 +557,16 @@ export class EmployeesTableComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.employees$?.unsubscribe?.();
     this.socket.get()?.off('employees');
 
     this.options.destroyLocalitiesOptions();
     this.options.destroyDivisionsOptions();
     this.options.destroyCarsOptions();
-  }
-
-  public onTableItemClick(index: number): void {
-    const currentItemId =
-      this.employees && this.employees[index] && this.employees[index]._id
-        ? this.employees[index]._id
-        : undefined;
-    if (currentItemId) {
-      this.router.navigate([`./${currentItemId}`], {
-        relativeTo: this.activatedRoute,
-      });
-    }
   }
 }

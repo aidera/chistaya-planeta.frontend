@@ -1,5 +1,5 @@
 import { MenuLink } from '../models/types/MenuLink';
-import EmployeeRole from '../models/enums/EmployeeRole';
+import { EmployeeRole } from '../models/enums/EmployeeRole';
 
 export const menuLinksMain: MenuLink[] = [
   {

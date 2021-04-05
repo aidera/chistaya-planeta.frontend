@@ -165,7 +165,7 @@
           >
             <app-item-field-inactive-list
               label="Автомобили"
-              [list]="getItemCarsFieldListElements(item?.cars || [])"
+              [list]="getters.getItemCarsFieldListElements(item?.cars || [])"
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'cars']"
               [moreLinkQueryParams]="{
@@ -198,7 +198,9 @@
           >
             <app-item-field-inactive-list
               label="Сотрудники"
-              [list]="getItemEmployeesFieldListElements(item?.employees || [])"
+              [list]="
+                getters.getItemEmployeesFieldListElements(item?.employees || [])
+              "
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'employees']"
               [moreLinkQueryParams]="{

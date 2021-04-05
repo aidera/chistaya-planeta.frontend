@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as ScheduledOrdersActions from '../../../../store/scheduled-orders/scheduled-orders.actions';
 import * as ScheduledOrdersSelectors from '../../../../store/scheduled-orders/scheduled-orders.selectors';
 import * as OffersActions from '../../../../store/offers/offers.actions';
@@ -12,8 +17,8 @@ import * as ServicesSelectors from '../../../../store/services/services.selector
 import { ItemPageComponent } from '../../item-page.component';
 import { IOffer } from '../../../../models/Offer';
 import { IService } from '../../../../models/Service';
-import OrderType from '../../../../models/enums/OrderType';
-import DeliveryType from '../../../../models/enums/DeliveryType';
+import { OrderType } from '../../../../models/enums/OrderType';
+import { DeliveryType } from '../../../../models/enums/DeliveryType';
 import { IScheduledOrder } from '../../../../models/ScheduledOrder';
 import { deliveryTypeStrings } from '../../../../data/deliveryTypeData';
 import { orderTypeStrings } from '../../../../data/orderTypeData';
@@ -29,9 +34,7 @@ import {
 } from '../../../../data/paymentMethodData';
 import { responseCodes } from '../../../../data/responseCodes';
 import { IClient } from '../../../../models/Client';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
-import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
-import Unit from '../../../../models/enums/Unit';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import {
   simpleStatusColors,
   simpleStatusOptions,
@@ -43,7 +46,11 @@ import {
 } from '../../../../data/periodTypeData';
 import { tomorrow } from '../../../../utils/date.functions';
 import { OptionType } from '../../../../models/types/OptionType';
-import PaymentMethod from '../../../../models/enums/PaymentMethod';
+import { PaymentMethod } from '../../../../models/enums/PaymentMethod';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { OptionsService } from '../../../../services/options/options.service';
+import { GettersService } from '../../../../services/getters/getters.service';
+import { ClientsApiService } from '../../../../services/api/clients-api.service';
 
 @Component({
   selector: 'app-scheduled-order-item',
@@ -53,15 +60,32 @@ import PaymentMethod from '../../../../models/enums/PaymentMethod';
 export class ScheduledOrderItemComponent
   extends ItemPageComponent
   implements OnInit, OnDestroy {
+  /* ------------------ */
+  /* Main item settings */
+  /* ------------------ */
   public item: IScheduledOrder;
 
+  /* -------------------- */
+  /* Other items settings */
+  /* -------------------- */
   public offers$: Subscription;
   public offers: IOffer[];
   public services$: Subscription;
   public services: IService[];
+
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public offersOptions: OptionType[] = [];
   public servicesOptions: OptionType[] = [];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
+  public orderType = OrderType;
+  public simpleStatus = SimpleStatus;
+  public deliveryType = DeliveryType;
+  public paymentMethod = PaymentMethod;
   public simpleStatusOptions = simpleStatusOptions;
   public periodTypeOptions = periodTypeOptions;
   public periodTypeStrings = periodTypeStrings;
@@ -75,12 +99,25 @@ export class ScheduledOrderItemComponent
   public unitStrings = unitStrings;
   public offersUnitOptions = unitOffersOptions;
   public servicesUnitOptions = unitServicesOptions;
-  public orderType = OrderType;
-  public simpleStatus = SimpleStatus;
-  public deliveryType = DeliveryType;
-  public paymentMethod = PaymentMethod;
-
   public startMinDate = tomorrow;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private options: OptionsService,
+    private clientsApi: ClientsApiService,
+    public getters: GettersService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Периодическая заявка - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -377,9 +414,13 @@ export class ScheduledOrderItemComponent
         if (status === true) {
           this.activeField = null;
 
-          this.updateSnackbar = this.snackBar.open('Обновлено', 'Скрыть', {
-            duration: 2000,
-          });
+          this.updateResultSnackbar = this.snackBar.open(
+            'Обновлено',
+            'Скрыть',
+            {
+              duration: 2000,
+            }
+          );
 
           this.store.dispatch(
             ScheduledOrdersActions.refreshUpdateScheduledOrderSucceed()
@@ -393,7 +434,7 @@ export class ScheduledOrderItemComponent
         if (error) {
           if (error.code === responseCodes.validationFailed) {
             if (error.errors[0].param === 'email') {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Некорректный email',
                 'Скрыть',
                 {
@@ -404,7 +445,7 @@ export class ScheduledOrderItemComponent
             }
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('client')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка. Клиент не найден',
                 'Скрыть',
                 {
@@ -413,7 +454,7 @@ export class ScheduledOrderItemComponent
                 }
               );
             } else if (error.description.includes('locality')) {
-              this.updateSnackbar = this.snackBar.open(
+              this.updateResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -423,7 +464,7 @@ export class ScheduledOrderItemComponent
               );
             }
           } else {
-            this.updateSnackbar = this.snackBar.open(
+            this.updateResultSnackbar = this.snackBar.open(
               'Ошибка при обновлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -491,74 +532,5 @@ export class ScheduledOrderItemComponent
     this.socket.get()?.off('offers');
     this.services$?.unsubscribe?.();
     this.socket.get()?.off('services');
-  }
-
-  public getOffersAmount(): string | undefined {
-    if (this.item?.offers) {
-      const unit = unitStrings[this.item?.offers?.amountUnit];
-      return this.item.offers.amount + ' ' + unit;
-    }
-    return undefined;
-  }
-
-  public getServicesAmount(): string | undefined {
-    if (this.item?.services) {
-      const unit = unitStrings[this.item?.services?.amountUnit];
-      return this.item.services.amount + ' ' + unit;
-    }
-    return undefined;
-  }
-
-  public getOffersList(): ItemFieldListElement[] {
-    if (this.item?.offers?.items) {
-      return (this.item.offers.items as IOffer[]).map((offer) => {
-        return {
-          text: offer.name,
-          color: offer.status === SimpleStatus.inactive ? 'red' : undefined,
-        };
-      });
-    }
-    return [];
-  }
-
-  public getOfferCost(id: string, unit: Unit, amount: number): number {
-    if (this.item && this.offers) {
-      const targetOffer = this.offers.find((offer) => offer._id === id)?.prices;
-      const targetOfferPrice = targetOffer?.find(
-        (price) => price.unit === +unit
-      );
-      if (this.item.delivery._type === DeliveryType.company) {
-        return targetOfferPrice
-          ? targetOfferPrice?.amountWithDelivery * amount
-          : 0;
-      } else {
-        return targetOfferPrice
-          ? targetOfferPrice?.amountWithoutDelivery * amount
-          : 0;
-      }
-    } else {
-      return 0;
-    }
-  }
-
-  public getServiceCost(unit: Unit, amount: number): number {
-    if (this.item && this.services) {
-      const targetService = this.services[0].prices;
-      const targetServicePrice = targetService?.find(
-        (price) => price.unit === +unit
-      );
-      return targetServicePrice ? targetServicePrice?.amount * amount : 0;
-    } else {
-      return 0;
-    }
-  }
-
-  getOfferItemsArray(): string[] {
-    if (this.item?.offers) {
-      return (this.item.offers.items as IOffer[]).map((el) => {
-        return el._id;
-      });
-    }
-    return [];
   }
 }

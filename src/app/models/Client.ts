@@ -1,4 +1,4 @@
-import ClientStatus from './enums/ClientStatus';
+import { ClientStatus } from './enums/ClientStatus';
 
 export interface IClient {
   _id: string;

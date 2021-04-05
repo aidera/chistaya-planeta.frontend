@@ -138,63 +138,6 @@
         </a>
       </div>
     </div>
-
-    <div class="tasks__container" *ngIf="tasksWithCompletedStatus?.length > 0">
-      <h2 class="green-text">Недавно завершённые</h2>
-
-      <div class="tasks__orders">
-        <a
-          class="tasks__order"
-          *ngFor="let task of tasksWithCompletedStatus"
-          [routerLink]="['../', 'orders', task._id]"
-        >
-          <mat-card>
-            <span class="tasks__order-type">{{
-              orderTypeStrings[task.type]
-            }}</span>
-            <span class="tasks__order-name"
-              >Имя: {{ task.customer.contactName }}</span
-            >
-            <span class="tasks__order-phone"
-              >Телефон: {{ task.customer.contactPhone | phone }}</span
-            >
-            <span class="tasks__order-deadline"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
-            >
-          </mat-card>
-        </a>
-      </div>
-    </div>
-
-    <div class="tasks__container" *ngIf="tasksWithRefusedStatus?.length > 0">
-      <h2 class="red-text">Недавно отменённые</h2>
-
-      <div class="tasks__orders">
-        <a
-          class="tasks__order"
-          *ngFor="let task of tasksWithRefusedStatus"
-          [routerLink]="['../', 'orders', task._id]"
-        >
-          <mat-card>
-            <span class="tasks__order-type">{{
-              orderTypeStrings[task.type]
-            }}</span>
-            <span class="tasks__order-status">{{
-              orderStatusStrings[task.status]
-            }}</span>
-            <span class="tasks__order-name"
-              >Имя: {{ task.customer.contactName }}</span
-            >
-            <span class="tasks__order-phone"
-              >Телефон: {{ task.customer.contactPhone | phone }}</span
-            >
-            <span class="tasks__order-deadline"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
-            >
-          </mat-card>
-        </a>
-      </div>
-    </div>
   </ng-container>
 
   <ng-container *ngIf="!tasksAreFetching && user?.role === employeeRole.driver">

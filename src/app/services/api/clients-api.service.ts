@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import ServerResponse from '../../models/ServerResponse';
+import { ServerResponse } from '../../models/ServerResponse';
 import { environment } from '../../../environments/environment';
 import { ApiService } from './api.service';
 import { IClient } from '../../models/Client';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
-import ClientStatus from '../../models/enums/ClientStatus';
+import { ClientStatus } from '../../models/enums/ClientStatus';
 
 export interface ICheckClientResponse extends ServerResponse {
   id?: string;

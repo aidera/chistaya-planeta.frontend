@@ -3,15 +3,23 @@ import { ItemAddPageComponent } from '../../item-add-page.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as EmployeesSelectors from '../../../../store/employees/employees.selectors';
 import * as EmployeesActions from '../../../../store/employees/employees.actions';
-import EmployeeRole from '../../../../models/enums/EmployeeRole';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
-import CarStatus from '../../../../models/enums/CarStatus';
+import { EmployeeRole } from '../../../../models/enums/EmployeeRole';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
+import { CarStatus } from '../../../../models/enums/CarStatus';
 import { OptionType } from '../../../../models/types/OptionType';
 import { responseCodes } from '../../../../data/responseCodes';
 import { employeeRoleOptions } from '../../../../data/employeeRoleData';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { EmployeesApiService } from '../../../../services/api/employees-api.service';
 
 @Component({
   selector: 'app-employee-item-add',
@@ -21,6 +29,9 @@ import { employeeRoleOptions } from '../../../../data/employeeRoleData';
 export class EmployeeItemAddComponent
   extends ItemAddPageComponent
   implements OnInit, OnDestroy {
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
   public divisionsOptions$: Subscription;
@@ -28,12 +39,36 @@ export class EmployeeItemAddComponent
   public carsOptions$: Subscription;
   public carsOptions: OptionType[] = [];
 
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public alreadyExistIdPhone: string;
+  public alreadyExistIdEmail: string;
+
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public employeeRole = EmployeeRole;
   public employeeRoleOptions = employeeRoleOptions.filter(
     (el) => el.value !== EmployeeRole.head + ''
   );
 
-  public alreadyExistId2: string;
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private options: OptionsService,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private employeesApi: EmployeesApiService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Добавить сотрудника - Чистая планета');
+  }
 
   ngOnInit(): void {
     this.userInitCallback = () => {
@@ -105,7 +140,7 @@ export class EmployeeItemAddComponent
                 if (response?.responseCode === responseCodes.found) {
                   this.form.get('email').markAsTouched();
                   this.form.get('email').setErrors({ alreadyExists: true });
-                  this.alreadyExistId = response.id;
+                  this.alreadyExistIdEmail = response.id;
                 }
               });
           }
@@ -123,7 +158,7 @@ export class EmployeeItemAddComponent
                 if (response?.responseCode === responseCodes.found) {
                   this.form.get('phone').markAsTouched();
                   this.form.get('phone').setErrors({ alreadyExists: true });
-                  this.alreadyExistId2 = response.id;
+                  this.alreadyExistIdPhone = response.id;
                 }
               });
           }
@@ -182,7 +217,7 @@ export class EmployeeItemAddComponent
       .select(EmployeesSelectors.selectAddEmployeeSucceed)
       .subscribe((status) => {
         if (status === true) {
-          this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
+          this.addResultSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -199,15 +234,15 @@ export class EmployeeItemAddComponent
           if (error.foundedItem) {
             if (error.description?.includes('email')) {
               this.form.get('email').setErrors({ alreadyExists: true });
-              this.alreadyExistId = error.foundedItem._id;
+              this.alreadyExistIdEmail = error.foundedItem._id;
             }
             if (error.description?.includes('phone')) {
               this.form.get('phone').setErrors({ alreadyExists: true });
-              this.alreadyExistId2 = error.foundedItem._id;
+              this.alreadyExistIdPhone = error.foundedItem._id;
             }
           } else if (error.code === responseCodes.validationFailed) {
             if (error.errors[0].param === 'email') {
-              this.addSnackbar = this.snackBar.open(
+              this.addResultSnackbar = this.snackBar.open(
                 'Некорректный email',
                 'Скрыть',
                 {
@@ -218,7 +253,7 @@ export class EmployeeItemAddComponent
             }
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('locality')) {
-              this.addSnackbar = this.snackBar.open(
+              this.addResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -228,7 +263,7 @@ export class EmployeeItemAddComponent
               );
             }
             if (error.description.includes('division')) {
-              this.addSnackbar = this.snackBar.open(
+              this.addResultSnackbar = this.snackBar.open(
                 'Ошибка подразделения. Возможно, оно было удалёно',
                 'Скрыть',
                 {
@@ -238,7 +273,7 @@ export class EmployeeItemAddComponent
               );
             }
           } else {
-            this.addSnackbar = this.snackBar.open(
+            this.addResultSnackbar = this.snackBar.open(
               'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -278,7 +313,6 @@ export class EmployeeItemAddComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 

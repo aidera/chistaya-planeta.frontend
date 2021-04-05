@@ -129,7 +129,7 @@
         type: item.type,
         locality: item.locality._id,
         client: userEmployee ? item.client?._id || '' : '',
-        offersItems: getOfferItemsArrayString(),
+        offersItems: getters.getOrderOfferItemsArrayString(item),
         offersAmountUnit: item.offers.amountUnit,
         offersAmount: item.offers.amount,
         servicesAmountUnit: item.services.amountUnit,
@@ -315,7 +315,7 @@
             <div class="cabinet-content__field">
               <app-item-field-inactive-string
                 label="Количество"
-                [content]="getOffersAmount()"
+                [content]="getters.getOrderOffersAmount(item)"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-string>
@@ -584,7 +584,7 @@
               label="Менеджер по работе с клиентами"
               [content]="
                 item?.performers?.clientManager?.name
-                  ? converter.getUserInitials(
+                  ? getters.getUserInitials(
                       item?.performers?.clientManager?.name,
                       item?.performers?.clientManager?.surname,
                       item?.performers?.clientManager?.patronymic
@@ -658,7 +658,7 @@
               label="Принимающий менеджер"
               [content]="
                 item?.performers?.receivingManager?.name
-                  ? converter.getUserInitials(
+                  ? getters.getUserInitials(
                       item?.performers?.receivingManager?.name,
                       item?.performers?.receivingManager?.surname,
                       item?.performers?.receivingManager?.patronymic
@@ -742,7 +742,7 @@
               label="Водитель"
               [content]="
                 item?.performers?.driver?.name
-                  ? converter.getUserInitials(
+                  ? getters.getUserInitials(
                       item?.performers?.driver?.name,
                       item?.performers?.driver?.surname,
                       item?.performers?.driver?.patronymic
@@ -905,7 +905,7 @@
             <!-- Weighed offers -->
             <div class="cabinet-content__field">
               <app-item-field-inactive-list
-                [list]="getWeighedOffersList()"
+                [list]="getters.getOrderWeighedOffersList(item, offers)"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-list>
@@ -916,7 +916,7 @@
             <!-- Weighed services -->
             <div class="cabinet-content__field">
               <app-item-field-inactive-string
-                [content]="getWeighedServicesList()[0]?.text"
+                [content]="getters.getOrderWeighedServicesList(item)[0]?.text"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-string>
@@ -1197,7 +1197,7 @@
         this.item?.type === orderType.service
       "
       [control]="processForm?.get('division')"
-      [options]="processDivisionsOptions"
+      [options]="processFormDivisionsOptions"
       [label]="'Подразделение'"
       [isRequired]="true"
       [errorMessages]="{
@@ -1214,7 +1214,7 @@
         this.item?.type === orderType.service
       "
       [control]="processForm?.get('driver')"
-      [options]="processDriversOptions"
+      [options]="processFormDriversOptions"
       [label]="'Водитель'"
       [isRequired]="true"
       [errorMessages]="{
@@ -1231,7 +1231,7 @@
         this.item?.type === orderType.service
       "
       [control]="processForm?.get('car')"
-      [options]="processCarsOptions"
+      [options]="processFormCarsOptions"
       [label]="'Автомобиль'"
       [isRequired]="true"
       [errorMessages]="{
@@ -1323,10 +1323,12 @@
         - {{ item.weighed.offers[idx].amount || 0 }}
         {{ unitStrings[item.weighed.offers[idx].amountUnit || 0] }}
         ({{
-          getOfferCost(
+          getters.getOrderOfferCost(
             item.weighed.offers[idx].item?._id,
             item.weighed.offers[idx].amountUnit,
-            item.weighed.offers[idx].amount
+            item.weighed.offers[idx].amount,
+            item,
+            offers
           )
         }}
         руб.)

@@ -16,8 +16,8 @@ import { SelectComponent } from '../../../../components/form-controls/select/sel
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { ErrorMessageComponent } from '../../../../components/form-controls/error-message/error-message.component';
 import { OptionsService } from '../../../../services/options/options.service';
-import { ConverterService } from '../../../../services/converter/converter.service';
 import { MaterialModule } from '../../../../modules/material/material.module';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 describe('ClientsTableComponent', () => {
   let component: ClientsTableComponent;
@@ -37,7 +37,7 @@ describe('ClientsTableComponent', () => {
       ],
       providers: [
         OptionsService,
-        { provide: ConverterService },
+        { provide: GettersService },
         provideMockStore({
           initialState: {
             app: {

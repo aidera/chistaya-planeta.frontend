@@ -2,13 +2,21 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as DivisionsSelectors from '../../../../store/divisions/divisions.selectors';
 import * as DivisionsActions from '../../../../store/divisions/divisions.actions';
-import SimpleStatus from '../../../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../../../models/enums/SimpleStatus';
 import { OptionType } from '../../../../models/types/OptionType';
 import { ItemAddPageComponent } from '../../item-add-page.component';
 import { responseCodes } from '../../../../data/responseCodes';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { DivisionsApiService } from '../../../../services/api/divisions-api.service';
 
 @Component({
   selector: 'app-division-item-add',
@@ -18,8 +26,33 @@ import { responseCodes } from '../../../../data/responseCodes';
 export class DivisionItemAddComponent
   extends ItemAddPageComponent
   implements OnInit, OnDestroy {
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public localitiesOptions$: Subscription;
   public localitiesOptions: OptionType[] = [];
+
+  /* -------------- */
+  /* Forms settings */
+  /* -------------- */
+  public alreadyExistId: string;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    /* this */
+    private title: Title,
+    private options: OptionsService,
+    private snackBar: MatSnackBar,
+    private socket: SocketIoService,
+    private divisionsApi: DivisionsApiService
+  ) {
+    super(store, router, route);
+
+    title.setTitle('Добавить подразделение - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -90,7 +123,7 @@ export class DivisionItemAddComponent
       .select(DivisionsSelectors.selectAddDivisionSucceed)
       .subscribe((status) => {
         if (status === true) {
-          this.addSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
+          this.addResultSnackbar = this.snackBar.open('Добавлено', 'Скрыть', {
             duration: 2000,
           });
 
@@ -108,7 +141,7 @@ export class DivisionItemAddComponent
             this.form.get('name').setErrors({ alreadyExists: true });
           } else if (error.code === responseCodes.notFound) {
             if (error.description.includes('locality')) {
-              this.addSnackbar = this.snackBar.open(
+              this.addResultSnackbar = this.snackBar.open(
                 'Ошибка населённого пункта. Возможно, он был удалён',
                 'Скрыть',
                 {
@@ -118,7 +151,7 @@ export class DivisionItemAddComponent
               );
             }
           } else {
-            this.addSnackbar = this.snackBar.open(
+            this.addResultSnackbar = this.snackBar.open(
               'Ошибка при добавлении. Пожалуйста, обратитесь в отдел разработки',
               'Скрыть',
               {
@@ -150,7 +183,6 @@ export class DivisionItemAddComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 

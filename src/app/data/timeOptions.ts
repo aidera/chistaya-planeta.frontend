@@ -1,6 +1,6 @@
 import { OptionType } from '../models/types/OptionType';
 
-const timeOptions: OptionType[] = [
+export const timeOptions: OptionType[] = [
   { text: '10:00', value: '10:00' },
   { text: '10:30', value: '10:30' },
   { text: '11:00', value: '11:00' },
@@ -23,5 +23,3 @@ const timeOptions: OptionType[] = [
   { text: '19:30', value: '19:30' },
   { text: '20:00', value: '20:00' },
 ];
-
-export default timeOptions;

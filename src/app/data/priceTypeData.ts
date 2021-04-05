@@ -1,4 +1,4 @@
-import PriceType from '../models/enums/PriceType';
+import { PriceType } from '../models/enums/PriceType';
 
 export const priceTypeStrings: string[] = [];
 priceTypeStrings[PriceType.single] = 'Единая стоимость';

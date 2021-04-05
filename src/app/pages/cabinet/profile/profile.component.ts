@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, switchMap, take } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
 
 import * as fromRoot from '../../../store/root.reducer';
 import * as UsersSelectors from '../../../store/users/users.selectors';
@@ -16,13 +17,13 @@ import * as UsersActions from '../../../store/users/users.actions';
 import { IEmployee } from '../../../models/Employee';
 import { IClient } from '../../../models/Client';
 import { SocketIoService } from '../../../services/socket-io/socket-io.service';
-import SimpleStatus from '../../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../../models/enums/SimpleStatus';
 import { UserType } from '../../../models/enums/UserType';
 import { employeeRoleStrings } from '../../../data/employeeRoleData';
 import { ICar } from '../../../models/Car';
 import { ItemFieldListElement } from '../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import { carStatusColors } from '../../../data/carStatusData';
-import EmployeeRole from '../../../models/enums/EmployeeRole';
+import { EmployeeRole } from '../../../models/enums/EmployeeRole';
 import { responseCodes } from '../../../data/responseCodes';
 import { EmployeesApiService } from '../../../services/api/employees-api.service';
 import { ModalAction } from '../../../components/modal/modal.component';
@@ -67,8 +68,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private socket: SocketIoService,
     private employeesApi: EmployeesApiService,
-    private clientsApi: ClientsApiService
-  ) {}
+    private clientsApi: ClientsApiService,
+    private title: Title
+  ) {
+    title.setTitle('Профиль - Чистая планета');
+  }
 
   ngOnInit(): void {
     this.initChangePasswordForm();

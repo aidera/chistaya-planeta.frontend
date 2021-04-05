@@ -5,7 +5,7 @@ import { ServerError } from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
 import { PaginationType } from '../../models/types/PaginationType';
 import { IOrder } from 'src/app/models/Order';
-import OrderStatus from '../../models/enums/OrderStatus';
+import { OrderStatus } from '../../models/enums/OrderStatus';
 import { IServiceToWeigh } from '../../models/Service';
 import { IOfferToWeigh } from '../../models/Offer';
 

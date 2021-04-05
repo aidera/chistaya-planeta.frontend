@@ -3,16 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ApiService } from './api.service';
-import OrderType from '../../models/enums/OrderType';
-import DeliveryType from '../../models/enums/DeliveryType';
-import PaymentMethod from '../../models/enums/PaymentMethod';
+import { OrderType } from '../../models/enums/OrderType';
+import { DeliveryType } from '../../models/enums/DeliveryType';
+import { PaymentMethod } from '../../models/enums/PaymentMethod';
 import { environment } from '../../../environments/environment';
-import ServerResponse from '../../models/ServerResponse';
+import { ServerResponse } from '../../models/ServerResponse';
 import { GetRouteParamsType } from '../../models/types/GetRouteParamsType';
-import Unit from '../../models/enums/Unit';
+import { Unit } from '../../models/enums/Unit';
 import { IScheduledOrder } from '../../models/ScheduledOrder';
-import PeriodType from '../../models/enums/PeriodType';
-import SimpleStatus from '../../models/enums/SimpleStatus';
+import { PeriodType } from '../../models/enums/PeriodType';
+import { SimpleStatus } from '../../models/enums/SimpleStatus';
 
 export interface IGetOneScheduledOrderResponse extends ServerResponse {
   scheduledOrder?: IScheduledOrder;

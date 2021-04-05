@@ -1,5 +1,5 @@
-import EmployeeStatus from './enums/EmployeeStatus';
-import EmployeeRole from './enums/EmployeeRole';
+import { EmployeeStatus } from './enums/EmployeeStatus';
+import { EmployeeRole } from './enums/EmployeeRole';
 import { ILocality } from './Locality';
 import { IDivision } from './Division';
 import { ICar } from './Car';

@@ -1,28 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  MatSnackBar,
-  MatSnackBarRef,
-  TextOnlySnackBar,
-} from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as UsersSelectors from '../../store/users/users.selectors';
-import { SocketIoService } from '../../services/socket-io/socket-io.service';
-import { ConverterService } from '../../services/converter/converter.service';
-import { LocalitiesApiService } from '../../services/api/localities-api.service';
-import { DivisionsApiService } from '../../services/api/divisions-api.service';
-import { CarsApiService } from '../../services/api/cars-api.service';
-import { EmployeesApiService } from '../../services/api/employees-api.service';
-import { OptionsService } from '../../services/options/options.service';
 import { IEmployee } from '../../models/Employee';
 import { IClient } from '../../models/Client';
 import { UserType } from '../../models/enums/UserType';
-import { ClientsApiService } from '../../services/api/clients-api.service';
 
 @Component({
   template: '',
@@ -45,15 +33,12 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
   protected serverError$: Subscription;
   public serverError: string;
   protected addingSucceed$: Subscription;
-  //
-  protected addSnackbar: MatSnackBarRef<TextOnlySnackBar>;
 
   /* ------------- */
   /* Form settings */
   /* ------------- */
   public form: FormGroup;
   protected initForm: () => void;
-  public alreadyExistId: string;
 
   /* ------------------------- */
   /* Url query params settings */
@@ -68,19 +53,15 @@ export class ItemAddPageComponent implements OnInit, OnDestroy {
   /* ---------------- */
   protected createRequest: () => void;
 
+  /* ------------------ */
+  /* Interface settings */
+  /* ------------------ */
+  protected addResultSnackbar: MatSnackBarRef<TextOnlySnackBar>;
+
   constructor(
     protected store: Store<fromRoot.State>,
-    protected route: ActivatedRoute,
     protected router: Router,
-    protected snackBar: MatSnackBar,
-    protected socket: SocketIoService,
-    protected converter: ConverterService,
-    protected localitiesApi: LocalitiesApiService,
-    protected divisionsApi: DivisionsApiService,
-    protected carsApi: CarsApiService,
-    protected employeesApi: EmployeesApiService,
-    protected clientsApi: ClientsApiService,
-    protected options: OptionsService
+    protected route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {

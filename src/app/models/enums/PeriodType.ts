@@ -5,10 +5,8 @@
  * -- день
  */
 
-enum PeriodType {
+export enum PeriodType {
   month,
   week,
   day,
 }
-
-export default PeriodType;

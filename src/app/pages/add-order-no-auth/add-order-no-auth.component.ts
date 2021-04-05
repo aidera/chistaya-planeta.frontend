@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { Title, Meta } from '@angular/platform-browser';
 
 import * as fromRoot from '../../store/root.reducer';
 import * as OrdersActions from '../../store/orders/orders.actions';
@@ -13,11 +14,11 @@ import * as ServicesActions from '../../store/services/services.actions';
 import * as ServicesSelectors from '../../store/services/services.selectors';
 import { orderTypeOptions } from '../../data/orderTypeData';
 import { deliveryTypeOptions } from '../../data/deliveryTypeData';
-import timeOptions from '../../data/timeOptions';
+import { timeOptions } from '../../data/timeOptions';
 import { tomorrow } from '../../utils/date.functions';
-import DeliveryType from '../../models/enums/DeliveryType';
-import PaymentMethod from '../../models/enums/PaymentMethod';
-import OrderType from '../../models/enums/OrderType';
+import { DeliveryType } from '../../models/enums/DeliveryType';
+import { PaymentMethod } from '../../models/enums/PaymentMethod';
+import { OrderType } from '../../models/enums/OrderType';
 import { OptionType } from '../../models/types/OptionType';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import {
@@ -27,10 +28,10 @@ import {
 import { unitOffersOptions, unitServicesOptions } from '../../data/unitOptions';
 import { IOffer } from '../../models/Offer';
 import { IService } from '../../models/Service';
-import SimpleStatus from '../../models/enums/SimpleStatus';
+import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { OptionsService } from '../../services/options/options.service';
-import Unit from '../../models/enums/Unit';
-import Price from '../../models/types/Price';
+import { Unit } from '../../models/enums/Unit';
+import { Price } from '../../models/types/Price';
 
 @Component({
   selector: 'app-add-order-no-auth',
@@ -81,11 +82,27 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   public isPricesModalOpen = false;
 
   constructor(
+    private title: Title,
+    private meta: Meta,
     private router: Router,
     private store: Store<fromRoot.State>,
     protected socket: SocketIoService,
     protected options: OptionsService
-  ) {}
+  ) {
+    title.setTitle('Оставить заявку - Чистая планета');
+    meta.addTags([
+      {
+        name: 'keywords',
+        content:
+          'чистая планета, оставить заявку, заказать, вывести вторсырье, вывести мусор, продать вторсырье',
+      },
+      {
+        name: 'description',
+        content:
+          'Оставить заявку на вывоз и продажу вторсырья, а также на вывоз мусора. Чистая Планета - сохраним природу детям!',
+      },
+    ]);
+  }
 
   ngOnInit(): void {
     /* ------------ */
@@ -314,7 +331,7 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     адресом, улицей и домом, а также помошником */
     /* Если тип доставки выбран "Самовывоз", то поля с городом, адресом, улицей,
     домом и помошником убираются, но появляется номер автомобиля заказчика */
-    this.form.get('deliveryType').valueChanges.subscribe((value) => {
+    this.form.get('deliveryType').valueChanges.subscribe(() => {
       const orderType = this.form.get('type').value;
       const deliveryType = this.form.get('deliveryType').value;
 

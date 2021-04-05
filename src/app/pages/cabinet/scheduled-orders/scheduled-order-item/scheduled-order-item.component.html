@@ -344,7 +344,7 @@
               <app-item-field-inactive-list
                 *ngIf="activeField !== 'offersItems'"
                 label="Типы вторсырья"
-                [list]="getOffersList()"
+                [list]="getters.getScheduledOrderOffersList()"
                 [isFetching]="itemIsFetching"
                 [useEditButton]="true"
                 (editClick)="setActiveField('offersItems')"
@@ -354,7 +354,10 @@
               <div
                 *ngIf="activeField === 'offersItems'"
                 (clickOutside)="
-                  removeActiveField('offersItems', getOfferItemsArray())
+                  removeActiveField(
+                    'offersItems',
+                    getters.getScheduledOrderOfferItemsArray()
+                  )
                 "
                 [delayClickOutsideInit]="true"
                 [exclude]="
@@ -377,7 +380,7 @@
                   [disable]="
                     itemIsUpdating ||
                     form.get('offersItems').value.toString() ===
-                      getOfferItemsArray().toString()
+                      getters.getScheduledOrderOfferItemsArray().toString()
                   "
                 ></app-item-field-save-button>
               </div>

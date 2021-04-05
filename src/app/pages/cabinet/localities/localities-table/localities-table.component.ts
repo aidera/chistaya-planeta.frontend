@@ -1,8 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
+import * as fromRoot from '../../../../store/root.reducer';
 import * as LocalitiesActions from '../../../../store/localities/localities.actions';
 import * as LocalitiesSelectors from '../../../../store/localities/localities.selectors';
 import { IDivision } from '../../../../models/Division';
@@ -16,6 +21,9 @@ import {
   simpleStatusOptions,
   simpleStatusStrings,
 } from '../../../../data/simpleStatusData';
+import { OptionsService } from '../../../../services/options/options.service';
+import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
+import { GettersService } from '../../../../services/getters/getters.service';
 
 @Component({
   selector: 'app-localities-table',
@@ -25,9 +33,14 @@ import {
 export class LocalitiesTableComponent
   extends TablePageComponent
   implements OnInit, OnDestroy {
-  private localities$: Subscription;
-  private localities: ILocality[];
+  /* ------------------- */
+  /* Main items settings */
+  /* ------------------- */
+  public items: ILocality[];
 
+  /* ---------------- */
+  /* Options settings */
+  /* ---------------- */
   public divisionsOptions$: Subscription;
   public divisionsOptions: OptionType[] = [];
   public carsOptions$: Subscription;
@@ -35,7 +48,29 @@ export class LocalitiesTableComponent
   public employeesOptions$: Subscription;
   public employeesOptions: OptionType[] = [];
 
+  /* ----------- */
+  /* Static data */
+  /* ----------- */
   public simpleStatusOptions = simpleStatusOptions;
+
+  constructor(
+    /* parent */
+    protected store: Store<fromRoot.State>,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected getters: GettersService,
+    protected location: Location,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected snackBar: MatSnackBar,
+    protected options: OptionsService,
+    protected socket: SocketIoService,
+    /* this */
+    private title: Title
+  ) {
+    super(store, router, route, getters, location);
+
+    title.setTitle('Населённые пункты - Чистая планета');
+  }
 
   ngOnInit(): void {
     /* ---------------------- */
@@ -180,42 +215,42 @@ export class LocalitiesTableComponent
     this.createServerRequestFilter = () => {
       return {
         name:
-          this.converter.clearServerRequestString(
+          this.getters.getClearServerRequestString(
             this.advancedSearchForm.get('name').value
           ) || undefined,
         status:
           this.advancedSearchForm.get('status').value.length <= 0 ||
           this.advancedSearchForm.get('status').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('status').value
               ),
         divisions:
           this.advancedSearchForm.get('divisions').value.length <= 0 ||
           this.advancedSearchForm.get('divisions').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('divisions').value
               ),
         cars:
           this.advancedSearchForm.get('cars').value.length <= 0 ||
           this.advancedSearchForm.get('cars').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('cars').value
               ),
         employees:
           this.advancedSearchForm.get('employees').value.length <= 0 ||
           this.advancedSearchForm.get('employees').value[0] === ''
             ? undefined
-            : this.converter.getArrayOrUndefined<string>(
+            : this.getters.getArrayOrUndefined<string>(
                 this.advancedSearchForm.get('employees').value
               ),
-        createdAt: this.converter.getServerFromToDateInISOStringArray(
+        createdAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('createdAtFrom').value,
           this.advancedSearchForm.get('createdAtTo').value
         ),
-        updatedAt: this.converter.getServerFromToDateInISOStringArray(
+        updatedAt: this.getters.getServerFromToDateInISOStringArray(
           this.advancedSearchForm.get('updatedAtFrom').value,
           this.advancedSearchForm.get('updatedAtTo').value
         ),
@@ -233,8 +268,8 @@ export class LocalitiesTableComponent
         this.sendRequest(false);
       }
       if (data.action === 'update' && data.id) {
-        if (this.localities && this.localities.length > 0) {
-          const isExist = this.localities.find((locality) => {
+        if (this.items && this.items.length > 0) {
+          const isExist = this.items.find((locality) => {
             return locality._id === data.id;
           });
           if (isExist) {
@@ -248,10 +283,10 @@ export class LocalitiesTableComponent
     /* --- NgRx connections --- */
     /* ------------------------ */
 
-    this.localities$ = this.store
+    this.items$ = this.store
       .select(LocalitiesSelectors.selectLocalities)
       .subscribe((localities) => {
-        this.localities = localities;
+        this.items = localities;
         if (localities) {
           this.tableData = localities.map((locality) => {
             return {
@@ -283,13 +318,13 @@ export class LocalitiesTableComponent
               employees: locality.employees
                 .map((employee: IEmployee, i) => {
                   return i === 0
-                    ? this.converter.getUserInitials(
+                    ? this.getters.getUserInitials(
                         employee.name,
                         employee.surname,
                         employee.patronymic
                       )
                     : ' ' +
-                        this.converter.getUserInitials(
+                        this.getters.getUserInitials(
                           employee.name,
                           employee.surname,
                           employee.patronymic
@@ -321,7 +356,7 @@ export class LocalitiesTableComponent
       .select(LocalitiesSelectors.selectGetLocalitiesError)
       .subscribe((error) => {
         if (error) {
-          this.getItemsSnackbar = this.snackBar.open(
+          this.getItemsResultSnackbar = this.snackBar.open(
             'Ошибка при запросе населённых пунктов. Пожалуйста, обратитесь в отдел разработки',
             'Скрыть',
             {
@@ -341,30 +376,16 @@ export class LocalitiesTableComponent
     /* --------------------------- */
     /* --- Parent class ngInit --- */
     /* --------------------------- */
-
     super.ngOnInit();
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.localities$?.unsubscribe?.();
     this.socket.get()?.off('localities');
 
     this.options.destroyDivisionsOptions();
     this.options.destroyCarsOptions();
     this.options.destroyEmployeesOptions();
-  }
-
-  public onTableItemClick(index: number): void {
-    const currentItemId =
-      this.localities && this.localities[index] && this.localities[index]._id
-        ? this.localities[index]._id
-        : undefined;
-    if (currentItemId) {
-      this.router.navigate([`./${currentItemId}`], {
-        relativeTo: this.activatedRoute,
-      });
-    }
   }
 }
