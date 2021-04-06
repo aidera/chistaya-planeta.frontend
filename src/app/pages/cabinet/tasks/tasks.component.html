@@ -68,10 +68,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -97,10 +102,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -129,10 +139,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -160,10 +175,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -189,10 +209,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -218,10 +243,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span
-              class="tasks__order-deadline"
-              [class.red-text]="getDate(task.deadline) <= dateNow"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -247,8 +277,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span class="tasks__order-deadline"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -278,8 +315,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span class="tasks__order-deadline"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -308,8 +352,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span class="tasks__order-deadline"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>
@@ -335,8 +386,15 @@
             <span class="tasks__order-phone"
               >Телефон: {{ task.customer.contactPhone | phone }}</span
             >
-            <span class="tasks__order-deadline"
-              >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+            <ng-container *ngIf="task.deadline">
+              <span
+                class="tasks__order-deadline"
+                [class.red-text]="getDate(task.deadline) <= dateNow"
+                >Дедлайн: {{ task.deadline | date: 'dd.MM.yyyy - HH:mm' }}</span
+              >
+            </ng-container>
+            <span *ngIf="!task.deadline" class="tasks__order-deadline"
+              >Дедлайн: -</span
             >
           </mat-card>
         </a>

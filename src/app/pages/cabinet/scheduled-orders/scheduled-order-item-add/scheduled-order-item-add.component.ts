@@ -197,6 +197,7 @@ export class ScheduledOrderItemAddComponent
         paymentMethodData: new FormControl(''),
 
         customerComment: new FormControl(''),
+        companyComment: new FormControl(''),
       });
 
       this.form
@@ -523,6 +524,7 @@ export class ScheduledOrderItemAddComponent
             : undefined,
 
         customerComment: this.form.get('customerComment').value,
+        companyComment: this.form.get('companyComment').value,
       };
 
       this.store.dispatch(

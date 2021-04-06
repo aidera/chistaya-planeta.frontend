@@ -532,6 +532,7 @@ export class OrderItemAddComponent
             : undefined,
 
         customerComment: this.form.get('customerComment').value,
+        companyComment: this.form.get('companyComment').value,
       };
 
       this.store.dispatch(OrdersActions.addOrderRequest({ order }));

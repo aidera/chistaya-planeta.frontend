@@ -433,10 +433,19 @@
           <h2>Комментарий</h2>
 
           <div class="cabinet-content__grid-item-form-content">
-            <!-- Customer/company comment -->
+            <!-- Customer comment -->
             <app-textarea
+              *ngIf="userClient"
               fieldId="customerComment"
               [control]="form.get('customerComment')"
+            >
+            </app-textarea>
+
+            <!-- Company comment -->
+            <app-textarea
+              *ngIf="userEmployee"
+              fieldId="companyComment"
+              [control]="form.get('companyComment')"
             >
             </app-textarea>
           </div>

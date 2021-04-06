@@ -74,6 +74,7 @@ export interface IAddOrderRequest {
   paymentMethodData?: string;
 
   customerComment?: string;
+  companyComment?: string;
 }
 
 export interface IAddOrderResponse extends ServerResponse {
@@ -327,6 +328,7 @@ export class OrdersApiService {
       paymentMethodData: order.paymentMethodData,
 
       customerComment: order.customerComment,
+      companyComment: order.companyComment,
     };
 
     return this.http.put<IAddOrderResponse>(

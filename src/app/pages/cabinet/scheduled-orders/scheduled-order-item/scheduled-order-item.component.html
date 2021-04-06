@@ -1136,13 +1136,13 @@
 
       <div class="cabinet-content__grid-item">
         <mat-card>
-          <h2>Комментарий клиента</h2>
+          <h2>Комментарии</h2>
 
-          <!-- Customer Comment -->
+          <!-- Customer comment -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
               *ngIf="activeField !== 'customerComment'"
-              label="&nbsp;"
+              label="Комментарий заказчика"
               [content]="item?.customerComment"
               [isFetching]="itemIsFetching"
               [useEditButton]="userType === userTypeEnum.client"
@@ -1159,14 +1159,13 @@
                 )
               "
               [delayClickOutsideInit]="true"
-              [exclude]="
-                '.mat-select,.mat-select-panel,.mat-option,.cdk-overlay-container'
-              "
-              [excludeBeforeClick]="true"
               class="cabinet-content__field-active"
             >
               <form [formGroup]="form" (ngSubmit)="update()">
-                <app-textarea [control]="form.get('customerComment')">
+                <app-textarea
+                  label="Комментарий заказчика"
+                  [control]="form.get('customerComment')"
+                >
                 </app-textarea>
               </form>
 
@@ -1175,6 +1174,44 @@
                 [disable]="
                   itemIsUpdating ||
                   form.get('customerComment').value === item?.customerComment
+                "
+              ></app-item-field-save-button>
+            </div>
+          </div>
+
+          <!-- Company comment -->
+          <div class="cabinet-content__field" *ngIf="userEmployee">
+            <app-item-field-inactive-string
+              *ngIf="activeField !== 'companyComment'"
+              label="Комментарий компании"
+              [content]="item?.companyComment"
+              [isFetching]="itemIsFetching"
+              [useEditButton]="userType === userTypeEnum.employee"
+              (editClick)="setActiveField('companyComment')"
+            >
+            </app-item-field-inactive-string>
+
+            <div
+              *ngIf="activeField === 'companyComment'"
+              (clickOutside)="
+                removeActiveField('companyComment', item?.companyComment || '')
+              "
+              [delayClickOutsideInit]="true"
+              class="cabinet-content__field-active"
+            >
+              <form [formGroup]="form" (ngSubmit)="update()">
+                <app-textarea
+                  label="Комментарий компании"
+                  [control]="form.get('companyComment')"
+                >
+                </app-textarea>
+              </form>
+
+              <app-item-field-save-button
+                (update)="update()"
+                [disable]="
+                  itemIsUpdating ||
+                  form.get('companyComment').value === item?.companyComment
                 "
               ></app-item-field-save-button>
             </div>

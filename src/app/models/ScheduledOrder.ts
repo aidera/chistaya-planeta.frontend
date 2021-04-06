@@ -60,4 +60,5 @@ export interface IScheduledOrder extends Document {
   };
 
   customerComment?: string;
+  companyComment?: string;
 }

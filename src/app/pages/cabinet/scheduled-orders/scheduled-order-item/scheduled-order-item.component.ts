@@ -171,6 +171,7 @@ export class ScheduledOrderItemComponent
         paymentMethodData: new FormControl(''),
 
         customerComment: new FormControl(''),
+        companyComment: new FormControl(''),
       });
 
       this.form
@@ -294,6 +295,10 @@ export class ScheduledOrderItemComponent
               this.activeField === 'customerComment'
                 ? this.form.get('customerComment').value
                 : undefined,
+            companyComment:
+              this.activeField === 'companyComment'
+                ? this.form.get('companyComment').value
+                : undefined,
           },
         })
       );
@@ -381,6 +386,7 @@ export class ScheduledOrderItemComponent
             paymentMethodData: scheduledOrder.payment?.methodData || '',
 
             customerComment: scheduledOrder.customerComment || '',
+            companyComment: scheduledOrder.companyComment || '',
           });
         }
       });

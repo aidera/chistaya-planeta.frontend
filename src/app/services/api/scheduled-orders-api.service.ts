@@ -74,6 +74,7 @@ export interface IUpdateScheduledOrderRequest {
   paymentMethodData?: string;
 
   customerComment?: string;
+  companyComment?: string;
 }
 
 export interface IAddScheduledOrderRequest {
@@ -114,6 +115,7 @@ export interface IAddScheduledOrderRequest {
   paymentMethodData?: string;
 
   customerComment?: string;
+  companyComment?: string;
 }
 
 export interface IAddScheduledOrderResponse extends ServerResponse {
