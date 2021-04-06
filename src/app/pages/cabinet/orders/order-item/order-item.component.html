@@ -273,6 +273,21 @@
             </div>
           </div>
 
+          <!-- Scheduled Order ID -->
+          <div class="cabinet-content__field">
+            <app-item-field-inactive-string
+              label="Периодическая заявка"
+              [content]="item?.scheduledOrder"
+              [isFetching]="itemIsFetching"
+              [linkArray]="
+                item?.scheduledOrder
+                  ? ['../../', 'scheduled-orders', item?.scheduledOrder]
+                  : undefined
+              "
+            >
+            </app-item-field-inactive-string>
+          </div>
+
           <!-- Type -->
           <div class="cabinet-content__field">
             <app-item-field-inactive-string

@@ -253,9 +253,14 @@ export class OrderItemComponent
         this.refreshProcessForm();
 
         if (this.form && order) {
-          const deadlineDate = new Date(Date.parse(this.item.deadline));
-          const deadlineHours = deadlineDate.getHours();
-          const deadlineMinutes = deadlineDate.getMinutes() || '00';
+          let deadlineDate;
+          let deadlineHours;
+          let deadlineMinutes;
+          if (this.item.deadline) {
+            deadlineDate = new Date(Date.parse(this.item.deadline));
+            deadlineHours = deadlineDate.getHours();
+            deadlineMinutes = deadlineDate.getMinutes() || '00';
+          }
 
           this.form.setValue({
             status: order.status || '',
@@ -268,8 +273,11 @@ export class OrderItemComponent
               (order.performers.receivingManager as IEmployee)?._id || '',
             driver: (order.performers.driver as IEmployee)?._id || '',
             car: (order.performers.car as ICar)?._id || '',
-            deadlineDate,
-            deadlineTime: deadlineHours + ':' + deadlineMinutes,
+            deadlineDate: deadlineDate !== undefined ? deadlineDate : '',
+            deadlineTime:
+              deadlineHours !== undefined
+                ? deadlineHours + ':' + deadlineMinutes
+                : '',
           });
         }
 
@@ -584,16 +592,24 @@ export class OrderItemComponent
 
   private refreshProcessForm(): void {
     if (this.item) {
-      const deadlineDate = new Date(Date.parse(this.item.deadline));
-      const deadlineHours = deadlineDate.getHours();
-      const deadlineMinutes = deadlineDate.getMinutes() || '00';
+      let deadlineDate;
+      let deadlineHours;
+      let deadlineMinutes;
+      if (this.item.deadline) {
+        deadlineDate = new Date(Date.parse(this.item.deadline));
+        deadlineHours = deadlineDate.getHours();
+        deadlineMinutes = deadlineDate.getMinutes() || '00';
+      }
 
       this.processForm.setValue({
         division: (this.item.division as IDivision)?._id || '',
         driver: '',
         car: '',
-        deadlineDate,
-        deadlineTime: deadlineHours + ':' + deadlineMinutes,
+        deadlineDate: deadlineDate !== undefined ? deadlineDate : '',
+        deadlineTime:
+          deadlineHours !== undefined
+            ? deadlineHours + ':' + deadlineMinutes
+            : '',
         comment: '',
       });
 

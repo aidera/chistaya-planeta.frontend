@@ -851,11 +851,9 @@ export class OrdersTableComponent
                 orderStatusStrings[order.status]
               }</p>`,
               type: orderTypeStrings[order.type],
-              deadline: formatDate(
-                order.deadline,
-                'dd.MM.yyyy - HH:mm',
-                this.locale
-              ),
+              deadline: order.deadline
+                ? formatDate(order.deadline, 'dd.MM.yyyy - HH:mm', this.locale)
+                : undefined,
 
               scheduledOrder: order.scheduledOrder
                 ? this.highlightSearchedValue(

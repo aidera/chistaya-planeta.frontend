@@ -15,7 +15,7 @@ export interface IOrder {
   _id: string;
   status: OrderStatus;
   type: OrderType;
-  deadline: string;
+  deadline?: string;
 
   scheduledOrder?: string;
   client?: IClient | string;
