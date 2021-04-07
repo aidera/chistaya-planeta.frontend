@@ -14,6 +14,7 @@ import { SelectComponent } from '../../../../components/form-controls/select/sel
 import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 import { DateInputComponent } from '../../../../components/form-controls/date-input/date-input.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
+import { HelpersService } from '../../../../services/helpers/helpers.service';
 
 describe('ScheduledOrderItemAddComponent', () => {
   let component: ScheduledOrderItemAddComponent;
@@ -39,6 +40,7 @@ describe('ScheduledOrderItemAddComponent', () => {
         NgxMaskModule.forRoot(),
       ],
       providers: [
+        HelpersService,
         provideMockStore({
           initialState: {
             scheduledOrders: {

@@ -26,6 +26,7 @@ import { timeOptions } from '../../data/timeOptions';
 import { SocketIoService } from '../../services/socket-io/socket-io.service';
 import { ErrorMessageComponent } from '../../components/form-controls/error-message/error-message.component';
 import { ModalComponent } from '../../components/modal/modal.component';
+import { HelpersService } from '../../services/helpers/helpers.service';
 
 let store: MockStore;
 // let storeDispatchSpy: jasmine.Spy;
@@ -59,6 +60,7 @@ describe('AddOrderNoAuthComponent', () => {
       ],
       providers: [
         SocketIoService,
+        HelpersService,
         provideMockStore({
           initialState: {
             app: {

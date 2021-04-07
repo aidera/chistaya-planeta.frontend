@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { ILocality } from '../../models/Locality';
 import { ItemFieldListElement } from '../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 import { simpleStatusColors } from '../../data/simpleStatusData';

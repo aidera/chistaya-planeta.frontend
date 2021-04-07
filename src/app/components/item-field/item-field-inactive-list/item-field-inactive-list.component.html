@@ -1,4 +1,7 @@
-<div class="cabinet-content__field-inactive">
+<div
+  class="cabinet-content__field-inactive"
+  (dblclick)="editClick && editClick.emit()"
+>
   <label *ngIf="label">{{ label }}</label>
   <label *ngIf="!label" class="no-label"></label>
 

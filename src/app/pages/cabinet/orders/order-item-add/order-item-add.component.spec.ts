@@ -14,6 +14,7 @@ import { CheckboxComponent } from '../../../../components/form-controls/checkbox
 import { TextareaComponent } from '../../../../components/form-controls/textarea/textarea.component';
 import { MaterialModule } from '../../../../modules/material/material.module';
 import { DateInputComponent } from '../../../../components/form-controls/date-input/date-input.component';
+import { HelpersService } from '../../../../services/helpers/helpers.service';
 
 describe('OrderItemAddComponent', () => {
   let component: OrderItemAddComponent;
@@ -39,6 +40,7 @@ describe('OrderItemAddComponent', () => {
         NgxMaskModule.forRoot(),
       ],
       providers: [
+        HelpersService,
         provideMockStore({
           initialState: {
             orders: {

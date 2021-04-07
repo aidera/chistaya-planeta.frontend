@@ -32,6 +32,7 @@ import { SimpleStatus } from '../../models/enums/SimpleStatus';
 import { OptionsService } from '../../services/options/options.service';
 import { Unit } from '../../models/enums/Unit';
 import { Price } from '../../models/types/Price';
+import { HelpersService } from '../../services/helpers/helpers.service';
 
 @Component({
   selector: 'app-add-order-no-auth',
@@ -86,8 +87,9 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
     private meta: Meta,
     private router: Router,
     private store: Store<fromRoot.State>,
-    protected socket: SocketIoService,
-    protected options: OptionsService
+    private socket: SocketIoService,
+    private options: OptionsService,
+    private helpers: HelpersService
   ) {
     title.setTitle('Оставить заявку - Чистая планета');
     meta.addTags([
@@ -414,108 +416,73 @@ export class AddOrderNoAuthComponent implements OnInit, OnDestroy {
   }
 
   public approximateCostChange(): void {
-    const orderType = this.form.get('type').value;
-    const offersItems = this.form.get('offersItems').value;
-    const offersUnit = +this.form.get('offersAmountUnit').value;
-    const offersAmount = +this.form.get('offersAmount').value;
+    const orderType =
+      this.form.get('type') && this.form.get('type').value !== ''
+        ? +this.form.get('type').value
+        : undefined;
+    const offers = this.offers;
+    const services = this.services;
+    const offersItems =
+      this.form.get('offersItems') &&
+      this.form.get('offersItems').value.length > 0
+        ? this.form.get('offersItems').value
+        : undefined;
+    const offersAmount =
+      this.form.get('offersAmount') &&
+      this.form.get('offersAmount').value !== ''
+        ? +this.form.get('offersAmount').value
+        : undefined;
+    const offersUnit =
+      this.form.get('offersAmountUnit') &&
+      this.form.get('offersAmountUnit').value !== ''
+        ? +this.form.get('offersAmountUnit').value
+        : undefined;
+    const servicesItems =
+      this.form.get('servicesItems') &&
+      this.form.get('servicesItems').value.length > 0
+        ? this.form.get('servicesItems').value
+        : undefined;
+    const servicesAmount =
+      this.form.get('servicesAmount') &&
+      this.form.get('servicesAmount').value !== ''
+        ? +this.form.get('servicesAmount').value
+        : undefined;
+    const servicesUnit =
+      this.form.get('servicesAmountUnit') &&
+      this.form.get('servicesAmountUnit').value !== ''
+        ? +this.form.get('servicesAmountUnit').value
+        : undefined;
     const hasDelivery =
+      this.form.get('deliveryType') &&
       this.form.get('deliveryType').value === DeliveryType.company + ''
         ? true
         : this.form.get('deliveryType').value === DeliveryType.pickup + ''
         ? false
         : undefined;
 
-    let priceFrom = 0;
-    let priceTo = 0;
+    const cost = this.helpers.getOrderApproximateCost({
+      orderType,
+      offers,
+      services,
+      offersItems,
+      offersAmount,
+      offersUnit,
+      servicesItems,
+      servicesAmount,
+      servicesUnit,
+      hasDelivery,
+    });
 
-    if (orderType === OrderType.offer + '') {
-      this.approximatePaymentCost = undefined;
-      offersItems.forEach((offer, i) => {
-        const offerPrices = this.offers?.find((el) => el._id === offer).prices;
+    this.approximateRemunerationCost = cost.approximateRemunerationCost.string;
+    this.approximatePaymentCost = cost.approximatePaymentCost.string;
 
-        offerPrices?.forEach((price) => {
-          if (price.unit === offersUnit) {
-            if (hasDelivery === true) {
-              if (price.amountWithDelivery > priceTo) {
-                priceTo = price.amountWithDelivery;
-              }
-              if (
-                price.amountWithDelivery <= priceFrom ||
-                offersItems.length === 1
-              ) {
-                priceFrom = price.amountWithDelivery;
-              }
-              if (i === 0) {
-                priceTo = price.amountWithDelivery;
-                priceFrom = price.amountWithDelivery;
-              }
-            } else if (hasDelivery === false) {
-              if (price.amountWithoutDelivery > priceTo) {
-                priceTo = price.amountWithoutDelivery;
-              }
-              if (
-                price.amountWithoutDelivery <= priceFrom ||
-                offersItems.length === 1
-              ) {
-                priceFrom = price.amountWithoutDelivery;
-              }
-              if (i === 0) {
-                priceTo = price.amountWithoutDelivery;
-                priceFrom = price.amountWithoutDelivery;
-              }
-            }
-          }
-        });
-      });
-
-      if (priceFrom === 0 && priceTo === 0) {
-        this.approximateRemunerationCost = undefined;
-        this.form.get('paymentMethod').clearValidators();
-        this.form.get('paymentMethod').setErrors(null);
-      } else if (priceFrom === priceTo) {
-        this.approximateRemunerationCost = `${priceFrom * offersAmount} руб.`;
-        this.form.get('paymentMethod').setValidators(Validators.required);
-        this.form.get('paymentMethod').updateValueAndValidity();
-      } else if (priceFrom === 0) {
-        this.approximateRemunerationCost = `до ${priceTo * offersAmount} руб.`;
-        this.form.get('paymentMethod').setValidators(Validators.required);
-        this.form.get('paymentMethod').updateValueAndValidity();
-      } else {
-        this.form.get('paymentMethod').setValidators(Validators.required);
-        this.form.get('paymentMethod').updateValueAndValidity();
-        this.approximateRemunerationCost = `от ${
-          priceFrom * offersAmount
-        } руб. до ${priceTo * offersAmount} руб.`;
-      }
-    } else if (orderType === OrderType.service + '') {
-      this.approximateRemunerationCost = undefined;
-      this.form.get('paymentMethod').setValidators(Validators.required);
-      this.form.get('paymentMethod').updateValueAndValidity();
-
-      const service = this.services?.[0];
-      const serviceUnit = +this.form.get('servicesAmountUnit').value;
-      const serviceAmount = +this.form.get('servicesAmount').value;
-      const servicePrices = service?.prices;
-
-      let finalPrice = 0;
-
-      servicePrices?.forEach((price) => {
-        if (price.unit === serviceUnit) {
-          finalPrice = price.amount;
-        }
-      });
-
-      if (finalPrice === 0) {
-        this.approximatePaymentCost = undefined;
-      } else {
-        this.approximatePaymentCost = `${finalPrice * serviceAmount} руб.`;
-      }
-    } else {
-      this.form.get('paymentMethod').clearValidators();
-      this.form.get('paymentMethod').setErrors(null);
-      this.approximatePaymentCost = undefined;
-      this.approximateRemunerationCost = undefined;
-    }
+    this.helpers.updateValidatorsOnCostChange({
+      orderType,
+      approximateRemunerationCostTo: cost.approximateRemunerationCost.to,
+      approximateRemunerationCostFrom: cost.approximateRemunerationCost.from,
+      approximatePaymentCostFinal: cost.approximatePaymentCost.final,
+      fields: { paymentMethod: this.form.get('paymentMethod') },
+    });
   }
 
   public submit(): void {

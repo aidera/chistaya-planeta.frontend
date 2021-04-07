@@ -1,4 +1,7 @@
-<div class="cabinet-content__field-inactive">
+<div
+  class="cabinet-content__field-inactive"
+  (dblclick)="editClick && editClick.emit()"
+>
   <ng-container *ngIf="!isFetching">
     <h2>
       Статус:
