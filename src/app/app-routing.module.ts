@@ -41,6 +41,9 @@ import { ClientItemComponent } from './pages/cabinet/clients/client-item/client-
 import { ScheduledOrdersTableComponent } from './pages/cabinet/scheduled-orders/scheduled-orders-table/scheduled-orders-table.component';
 import { ScheduledOrderItemAddComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item-add/scheduled-order-item-add.component';
 import { ScheduledOrderItemComponent } from './pages/cabinet/scheduled-orders/scheduled-order-item/scheduled-order-item.component';
+import { TermsOfUseComponent } from './pages/terms-of-use/terms-of-use.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { DocumentsLayoutComponent } from './layouts/documents-layout/documents-layout.component';
 
 export const routes: Routes = [
   {
@@ -156,6 +159,14 @@ export const routes: Routes = [
         canActivate: [IsNotAuthGuard],
         component: LoginComponent,
       },
+    ],
+  },
+  {
+    path: 'documents',
+    component: DocumentsLayoutComponent,
+    children: [
+      { path: 'terms-of-use', component: TermsOfUseComponent },
+      { path: 'privacy-policy', component: PrivacyPolicyComponent },
     ],
   },
   {
