@@ -2,7 +2,11 @@
 <div class="cabinet-header">
   <h1>
     Сотрудник{{
-      item ? ': ' + item.surname + ' ' + item.name + ' ' + item.patronymic : ''
+      item && item.patronymic
+        ? ': ' + item.surname + ' ' + item.name + ' ' + item.patronymic
+        : item
+        ? ': ' + item.surname + ' ' + item.name
+        : ''
     }}
   </h1>
   <div class="cabinet-header__actions">
@@ -562,7 +566,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  userEmployee?.role === employeeRole.admin) &&
+                item?.locality !== undefined &&
+                item?.division !== undefined
               "
               (editClick)="setActiveField('cars')"
             >

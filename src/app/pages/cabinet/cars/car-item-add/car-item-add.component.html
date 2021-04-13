@@ -164,7 +164,7 @@
             <app-select
               *ngIf="
                 form.get('divisions').value.length >= 1 &&
-                employeesOptions.length > 0
+                employeesOptions?.length > 0
               "
               fieldId="employees"
               [control]="form.get('employees')"
@@ -174,14 +174,14 @@
             <div
               *ngIf="
                 form.get('divisions').value.length < 1 ||
-                employeesOptions.length <= 0
+                employeesOptions?.length <= 0
               "
               class="cabinet-content__field-inactive"
             >
               <i
                 *ngIf="
                   form.get('divisions').value.length > 0 &&
-                  employeesOptions.length <= 1
+                  employeesOptions?.length <= 1
                 "
               >
                 Нет активных водителей в этом подразделении

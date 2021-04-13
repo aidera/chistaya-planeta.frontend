@@ -74,14 +74,43 @@ export class CarItemAddComponent
     this.options.initDivisionsOptions();
     this.options.initEmployeesOptions();
 
-    /* -------------------------- */
-    /* Localities options request */
-    /* -------------------------- */
+    /* ---------------- */
+    /* Options requests */
+    /* ---------------- */
+
     this.localitiesOptions$ = this.options
       .getLocalitiesOptions({ statuses: [SimpleStatus.active] })
       .subscribe((value) => {
         this.localitiesOptions = value;
       });
+
+    this.route.queryParams.subscribe((params) => {
+      if (params.locality) {
+        this.divisionsOptions$ = this.options
+          .getDivisionsOptions({
+            statuses: [SimpleStatus.active],
+            localitiesIds: [params.locality],
+          })
+          .subscribe((value) => {
+            this.divisionsOptions = value;
+            if (this.divisionsOptions?.length === 1) {
+              this.form
+                .get('divisions')
+                .setValue([this.divisionsOptions[0].value]);
+            }
+          });
+
+        this.employeesOptions$ = this.options
+          .getEmployeesOptions({
+            statuses: [EmployeeStatus.active],
+            localitiesIds: [params.locality],
+            roles: [EmployeeRole.driver],
+          })
+          .subscribe((value) => {
+            this.employeesOptions = value;
+          });
+      }
+    });
 
     /* --------------------- */
     /* --- Form settings --- */
