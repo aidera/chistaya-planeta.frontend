@@ -57,7 +57,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('status')"
             ></app-item-field-inactive-status>
@@ -121,7 +123,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('role')"
             >
@@ -176,7 +180,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('name')"
             >
@@ -222,7 +228,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('surname')"
             >
@@ -268,7 +276,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('patronymic')"
             >
@@ -320,7 +330,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('email')"
             >
@@ -381,7 +393,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('phone')"
             >
@@ -449,7 +463,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('locality')"
             >
@@ -496,7 +512,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin)
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin))
               "
               (editClick)="setActiveField('division')"
             >
@@ -566,7 +584,9 @@
               [useEditButton]="
                 userType === userTypeEnum.employee &&
                 (userEmployee?.role === employeeRole.head ||
-                  userEmployee?.role === employeeRole.admin) &&
+                  (userEmployee?.role === employeeRole.admin &&
+                    item?.role !== employeeRole.head &&
+                    item?.role !== employeeRole.admin)) &&
                 item?.locality !== undefined &&
                 item?.division !== undefined
               "
