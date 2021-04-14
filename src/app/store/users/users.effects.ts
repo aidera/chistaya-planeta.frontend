@@ -17,7 +17,7 @@ export class UsersEffects {
         return this.usersApi
           .login({
             type: action.userType,
-            email: action.email,
+            login: action.login,
             password: action.password,
           })
           .pipe(

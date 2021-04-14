@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           switch (errorCode) {
             case responseCodes.emailOrPasswordIsNotCorrect:
-              this.serverError = 'Неправильный e-mail или пароль';
+              this.serverError = 'Неправильный логин или пароль';
               break;
             case responseCodes.invalidEmail:
               this.serverError = 'Некорректный e-mail';
@@ -119,7 +119,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private formInit(): void {
     this.form = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      login: new FormControl('', [
+        Validators.required,
+        Validators.minLength(5),
+      ]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
@@ -142,7 +145,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         UsersActions.loginRequest({
           userType: this.isEmployee ? UserType.employee : UserType.client,
-          email: this.form.get('email').value,
+          login: this.form.get('login').value,
           password: this.form.get('password').value,
         })
       );

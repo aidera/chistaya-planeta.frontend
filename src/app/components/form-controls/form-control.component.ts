@@ -11,6 +11,7 @@ export class FormControlComponent implements DoCheck {
   @Input() isRequired?: boolean;
   @Input() labelHint?: string;
   @Input() control?: FormControl | AbstractControl;
+  @Input() disabled?: boolean;
 
   currentErrorMessage: string | null = null;
 

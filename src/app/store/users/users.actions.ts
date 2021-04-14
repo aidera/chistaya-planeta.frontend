@@ -80,7 +80,7 @@ export const REFRESH_RESET_CLIENTS_PASSWORD_FAILURE =
 export const loginRequest = createAction(
   LOGIN_REQUEST,
   props<{
-    email: string;
+    login: string;
     password: string;
     userType: UserType;
   }>()

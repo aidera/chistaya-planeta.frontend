@@ -61,7 +61,7 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
 
     component.form = new FormGroup({
-      email: new FormControl('', Validators.required),
+      login: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
     });
 
@@ -93,21 +93,12 @@ describe('LoginComponent', () => {
   });
 
   it('should has required validation error, if the email field is empty', () => {
-    const field = component.form.get('email');
+    const field = component.form.get('login');
 
     field.setValue('');
     fixture.detectChanges();
 
     expect(field.errors.required).toBeTruthy();
-  });
-
-  it('should has invalid email validation error, if the email is not correct', () => {
-    const field = component.form.get('email');
-
-    field.setValue('test');
-    fixture.detectChanges();
-
-    expect(field.errors.email).toBeTruthy();
   });
 
   it('should has required validation error, if the password field is empty', () => {
@@ -132,7 +123,7 @@ describe('LoginComponent', () => {
     storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
 
     component.isEmployee = true;
-    component.form.controls.email.setValue('test@test.test');
+    component.form.controls.login.setValue('test@test.test');
     component.form.controls.password.setValue('987987987');
     fixture.detectChanges();
 
@@ -144,7 +135,7 @@ describe('LoginComponent', () => {
       UsersActions.loginRequest({
         userType: UserType.employee,
         password: '987987987',
-        email: 'test@test.test',
+        login: 'test@test.test',
       })
     );
   });
@@ -153,7 +144,7 @@ describe('LoginComponent', () => {
     storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
 
     component.isEmployee = false;
-    component.form.controls.email.setValue('test@test.test');
+    component.form.controls.login.setValue('test@test.test');
     component.form.controls.password.setValue('987987987');
     fixture.detectChanges();
 
@@ -165,7 +156,7 @@ describe('LoginComponent', () => {
       UsersActions.loginRequest({
         userType: UserType.client,
         password: '987987987',
-        email: 'test@test.test',
+        login: 'test@test.test',
       })
     );
   });
@@ -173,7 +164,7 @@ describe('LoginComponent', () => {
   it('should not dispatch a client login action if the fields are not correct', () => {
     storeDispatchSpy = spyOn(store, 'dispatch').and.callThrough();
 
-    component.form.controls.email.setValue('test@t.t');
+    component.form.controls.login.setValue('test@t.t');
     component.form.controls.password.setValue('9987');
     fixture.detectChanges();
 

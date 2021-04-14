@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { NgxMaskModule } from 'ngx-mask';
 import { provideMockStore } from '@ngrx/store/testing';
+import { CheckboxComponent } from '../../../../components/form-controls/checkbox/checkbox.component';
 
 describe('EmployeeItemAddComponent', () => {
   let component: EmployeeItemAddComponent;
@@ -22,6 +23,7 @@ describe('EmployeeItemAddComponent', () => {
         EmployeeItemAddComponent,
         TextInputComponent,
         SelectComponent,
+        CheckboxComponent,
       ],
       imports: [
         BrowserAnimationsModule,

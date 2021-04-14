@@ -85,6 +85,7 @@
                 required: 'Обязательное поле',
                 email: 'Некорректный email'
               }"
+              [disabled]="form.get('hasNoEmail').value === true"
             >
               <ng-container
                 error
@@ -94,6 +95,15 @@
                 таким email уже существует.
               </ng-container>
             </app-text-input>
+
+            <br />
+            <app-checkbox
+              fieldId="hasNoEmail"
+              [control]="form.get('hasNoEmail')"
+              [label]="
+                'У сотрудника нет e-mail. Выслать пароль на мой почтовый адрес.'
+              "
+            ></app-checkbox>
 
             <br /><br />
 

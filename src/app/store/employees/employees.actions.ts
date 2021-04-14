@@ -147,7 +147,7 @@ export const addEmployeeRequest = createAction(
     surname: string;
     patronymic?: string;
     phone: string;
-    email: string;
+    email?: string;
     division: string;
     locality: string;
     cars?: string[];

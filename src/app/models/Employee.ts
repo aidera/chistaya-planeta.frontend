@@ -12,7 +12,7 @@ export interface IEmployee {
   surname: string;
   patronymic: string;
   phone: string;
-  email: string;
+  email?: string;
   password?: string;
   locality: ILocality | string;
   division: IDivision | string;

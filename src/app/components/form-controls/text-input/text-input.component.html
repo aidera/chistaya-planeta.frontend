@@ -1,4 +1,7 @@
-<mat-form-field appearance="standard" [ngClass]="{ 'has-icon': icon }">
+<mat-form-field
+  appearance="standard"
+  [ngClass]="{ 'has-icon': icon, disabled: disabled }"
+>
   <label [for]="fieldId">
     {{ label }}
     <span class="required-field-star" *ngIf="isRequired">*</span>
@@ -19,6 +22,7 @@
       [prefix]="prefix || ''"
       [mask]="mask"
       [dropSpecialCharacters]="maskDropSpecialCharacters"
+      [attr.disabled]="disabled"
     />
 
     <span

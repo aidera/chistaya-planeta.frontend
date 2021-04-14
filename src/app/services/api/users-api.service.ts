@@ -10,7 +10,7 @@ import { IClient } from '../../models/Client';
 
 export interface ILoginRequest extends ServerResponse {
   type: UserType;
-  email: string;
+  login: string;
   password: string;
 }
 

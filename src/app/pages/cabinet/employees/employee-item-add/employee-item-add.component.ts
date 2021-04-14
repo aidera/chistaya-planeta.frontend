@@ -88,6 +88,10 @@ export class EmployeeItemAddComponent
         default:
           this.employeeRoleOptions = [];
       }
+
+      if (!this.userEmployee || !this.userEmployee.email) {
+        this.form?.get('hasNoEmail').disable();
+      }
     };
     /* ------------ */
     /* Options init */
@@ -144,7 +148,25 @@ export class EmployeeItemAddComponent
           Validators.required
         ),
         cars: new FormControl(''),
+        hasNoEmail: new FormControl(false),
       });
+
+      if (!this.userEmployee || !this.userEmployee.email) {
+        this.form.get('hasNoEmail').disable();
+      }
+
+      this.form
+        .get('hasNoEmail')
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe((value) => {
+          if (value) {
+            this.form.get('email').setValue('');
+            this.form.get('email').clearValidators();
+            this.form.get('email').setErrors(null);
+          } else {
+            this.form.get('email').setValidators(Validators.required);
+          }
+        });
 
       this.form
         .get('email')
@@ -316,7 +338,7 @@ export class EmployeeItemAddComponent
           name: this.form.get('name').value,
           surname: this.form.get('surname').value,
           patronymic: this.form.get('patronymic').value,
-          email: this.form.get('email').value,
+          email: this.form.get('email').value || undefined,
           phone: '+7' + this.form.get('phone').value,
           locality: this.form.get('locality').value,
           division: this.form.get('division').value,

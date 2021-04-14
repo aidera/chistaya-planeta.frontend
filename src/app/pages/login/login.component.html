@@ -4,11 +4,11 @@
   <br />
 
   <app-text-input
-    [control]="form.get('email')"
-    label="E-mail"
+    [control]="form.get('login')"
+    [label]="isEmployee ? 'E-mail или телефон (+7)' : 'E-mail'"
     [errorMessages]="{
       required: 'Обязательное поле',
-      email: 'Некорретный e-mail'
+      minlength: ''
     }"
   ></app-text-input>
 

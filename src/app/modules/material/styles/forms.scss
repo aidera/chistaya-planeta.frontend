@@ -162,6 +162,20 @@ textarea.mat-input-element {
   }
 }
 
+.mat-form-field.disabled {
+  .required-field-star {
+    color: $disable-color;
+  }
+  label {
+    color: $disable-color;
+    cursor: default;
+  }
+  .mat-form-field-infix input,
+  .mat-form-field-infix textarea {
+    border-color: $disable-color;
+  }
+}
+
 /* Select */
 
 .mat-select {
