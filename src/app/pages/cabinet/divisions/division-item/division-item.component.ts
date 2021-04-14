@@ -27,6 +27,7 @@ import { SocketIoService } from '../../../../services/socket-io/socket-io.servic
 import { OptionsService } from '../../../../services/options/options.service';
 import { GettersService } from '../../../../services/getters/getters.service';
 import { DivisionsApiService } from '../../../../services/api/divisions-api.service';
+import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 
 @Component({
   selector: 'app-division-item',
@@ -40,6 +41,11 @@ export class DivisionItemComponent
   /* Main item settings */
   /* ------------------ */
   public item: IDivision;
+
+  /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public carsList: ItemFieldListElement[] = [];
 
   /* ---------------- */
   /* Options settings */
@@ -177,11 +183,29 @@ export class DivisionItemComponent
       .subscribe((division) => {
         this.item = division;
 
+        /* ---------- */
+        /* Page Title */
+        /* ---------- */
+
         if (division) {
           this.title.setTitle(
             `Подразделение - ${division.name} - Чистая планета`
           );
         }
+
+        /* -------------------- */
+        /* Display data helpers */
+        /* -------------------- */
+
+        if (division?.cars?.length > 0) {
+          this.carsList = this.getters.getItemCarsFieldListElements(
+            division.cars
+          );
+        }
+
+        /* ------------- */
+        /* Form settings */
+        /* ------------- */
 
         this.initForm();
 

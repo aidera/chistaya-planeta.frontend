@@ -51,6 +51,7 @@ import { SocketIoService } from '../../../../services/socket-io/socket-io.servic
 import { OptionsService } from '../../../../services/options/options.service';
 import { GettersService } from '../../../../services/getters/getters.service';
 import { ClientsApiService } from '../../../../services/api/clients-api.service';
+import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 
 @Component({
   selector: 'app-scheduled-order-item',
@@ -64,6 +65,11 @@ export class ScheduledOrderItemComponent
   /* Main item settings */
   /* ------------------ */
   public item: IScheduledOrder;
+
+  /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public offersList: ItemFieldListElement[] = [];
 
   /* -------------------- */
   /* Other items settings */
@@ -321,6 +327,20 @@ export class ScheduledOrderItemComponent
       .select(ScheduledOrdersSelectors.selectScheduledOrder)
       .subscribe((scheduledOrder) => {
         this.item = scheduledOrder;
+
+        /* -------------------- */
+        /* Display data helpers */
+        /* -------------------- */
+
+        if (scheduledOrder) {
+          this.offersList = this.getters.getScheduledOrderOffersList(
+            scheduledOrder
+          );
+        }
+
+        /* ------------- */
+        /* Form settings */
+        /* ------------- */
 
         this.initForm();
 

@@ -129,7 +129,7 @@
         type: item.type,
         locality: item.locality._id,
         client: userEmployee ? item.client?._id || '' : '',
-        offersItems: getters.getOrderOfferItemsArrayString(item),
+        offersItems: offersItemsArrayString,
         offersAmountUnit: item.offers.amountUnit,
         offersAmount: item.offers.amount,
         servicesAmountUnit: item.services.amountUnit,
@@ -320,7 +320,7 @@
             <div class="cabinet-content__field">
               <app-item-field-inactive-list
                 label="Типы вторсырья"
-                [list]="getOffersList()"
+                [list]="offersList"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-list>
@@ -330,7 +330,7 @@
             <div class="cabinet-content__field">
               <app-item-field-inactive-string
                 label="Количество"
-                [content]="getters.getOrderOffersAmount(item)"
+                [content]="orderOffersAmount"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-string>
@@ -598,15 +598,7 @@
             <app-item-field-inactive-string
               *ngIf="activeField !== 'clientManager'"
               label="Менеджер по работе с клиентами"
-              [content]="
-                item?.performers?.clientManager?.name
-                  ? getters.getUserInitials(
-                      item?.performers?.clientManager?.name,
-                      item?.performers?.clientManager?.surname,
-                      item?.performers?.clientManager?.patronymic
-                    )
-                  : undefined
-              "
+              [content]="clientManagerInitials"
               [color]="
                 item?.performers?.clientManagerAccepted ? 'green' : 'yellow'
               "
@@ -673,15 +665,7 @@
             <app-item-field-inactive-string
               *ngIf="activeField !== 'receivingManager'"
               label="Принимающий менеджер"
-              [content]="
-                item?.performers?.receivingManager?.name
-                  ? getters.getUserInitials(
-                      item?.performers?.receivingManager?.name,
-                      item?.performers?.receivingManager?.surname,
-                      item?.performers?.receivingManager?.patronymic
-                    )
-                  : undefined
-              "
+              [content]="receivingManagerInitials"
               [color]="
                 item?.performers?.receivingManager &&
                 item?.performers?.receivingManagerAccepted
@@ -758,15 +742,7 @@
             <app-item-field-inactive-string
               *ngIf="activeField !== 'driver'"
               label="Водитель"
-              [content]="
-                item?.performers?.driver?.name
-                  ? getters.getUserInitials(
-                      item?.performers?.driver?.name,
-                      item?.performers?.driver?.surname,
-                      item?.performers?.driver?.patronymic
-                    )
-                  : undefined
-              "
+              [content]="driverInitials"
               [color]="
                 item?.performers?.driver && item?.performers?.driverAccepted
                   ? 'green'
@@ -925,7 +901,7 @@
             <!-- Weighed offers -->
             <div class="cabinet-content__field">
               <app-item-field-inactive-list
-                [list]="getters.getOrderWeighedOffersList(item, offers)"
+                [list]="weighedOffersList"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-list>
@@ -936,7 +912,7 @@
             <!-- Weighed services -->
             <div class="cabinet-content__field">
               <app-item-field-inactive-string
-                [content]="getters.getOrderWeighedServicesList(item)[0]?.text"
+                [content]="weighedServiceText"
                 [isFetching]="itemIsFetching"
               >
               </app-item-field-inactive-string>
@@ -1336,24 +1312,24 @@
     [formGroup]="completeForm"
     (ngSubmit)="completeOrder()"
   >
-    <ul *ngIf="item?.type === orderType.offer">
-      <li *ngFor="let control of item.weighed.offers; let idx = index">
-        {{ idx + 1 }}.
-        {{ item.weighed.offers[idx].item?.name || '' }}
-        - {{ item.weighed.offers[idx].amount || 0 }}
-        {{ unitStrings[item.weighed.offers[idx].amountUnit || 0] }}
-        ({{
-          getters.getOrderOfferCost(
-            item.weighed.offers[idx].item?._id,
-            item.weighed.offers[idx].amountUnit,
-            item.weighed.offers[idx].amount,
-            item,
-            offers
-          )
-        }}
-        руб.)
-      </li>
-    </ul>
+    <!--    <ul *ngIf="item?.type === orderType.offer">-->
+    <!--      <li *ngFor="let control of item.weighed.offers; let idx = index">-->
+    <!--        {{ idx + 1 }}.-->
+    <!--        {{ item.weighed.offers[idx].item?.name || '' }}-->
+    <!--        - {{ item.weighed.offers[idx].amount || 0 }}-->
+    <!--        {{ unitStrings[item.weighed.offers[idx].amountUnit || 0] }}-->
+    <!--        ({{-->
+    <!--          getters.getOrderOfferCost(-->
+    <!--            item.weighed.offers[idx].item?._id,-->
+    <!--            item.weighed.offers[idx].amountUnit,-->
+    <!--            item.weighed.offers[idx].amount,-->
+    <!--            item,-->
+    <!--            offers-->
+    <!--          )-->
+    <!--        }}-->
+    <!--        руб.)-->
+    <!--      </li>-->
+    <!--    </ul>-->
 
     <br />
     <!-- Final sum -->

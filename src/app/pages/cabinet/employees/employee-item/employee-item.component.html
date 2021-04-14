@@ -569,7 +569,7 @@
           >
             <app-item-field-inactive-list
               *ngIf="activeField !== 'cars'"
-              [list]="getters.getItemCarsFieldListElements(item?.cars || [])"
+              [list]="carsList"
               [hint]="
                 !item?.locality || !item?.division
                   ? 'Выберите населённый пункт и подразделение'

@@ -19,6 +19,7 @@ import { ClientStatus } from '../../../../models/enums/ClientStatus';
 import { ModalAction } from '../../../../components/modal/modal.component';
 import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
 import { GettersService } from '../../../../services/getters/getters.service';
+import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 
 @Component({
   selector: 'app-client-item',
@@ -32,6 +33,11 @@ export class ClientItemComponent
   /* Main item settings */
   /* ------------------ */
   public item: IClient;
+
+  /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public beautifiedPhone = '';
 
   /* -------------- */
   /* Forms settings */
@@ -87,8 +93,22 @@ export class ClientItemComponent
       .subscribe((client) => {
         this.item = client;
 
+        /* ---------- */
+        /* Page Title */
+        /* ---------- */
+
         if (client) {
           this.title.setTitle(`Клиент - ${client.name} - Чистая планета`);
+        }
+
+        /* -------------------- */
+        /* Display data helpers */
+        /* -------------------- */
+
+        if (client && client.phone) {
+          this.beautifiedPhone = this.getters.getBeautifiedPhoneNumber(
+            client.phone
+          );
         }
       });
 

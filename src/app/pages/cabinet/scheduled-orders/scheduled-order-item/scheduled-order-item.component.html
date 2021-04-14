@@ -344,7 +344,7 @@
               <app-item-field-inactive-list
                 *ngIf="activeField !== 'offersItems'"
                 label="Типы вторсырья"
-                [list]="getters.getScheduledOrderOffersList()"
+                [list]="offersList"
                 [isFetching]="itemIsFetching"
                 [useEditButton]="true"
                 (editClick)="setActiveField('offersItems')"

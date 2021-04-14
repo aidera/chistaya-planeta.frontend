@@ -165,7 +165,7 @@
           >
             <app-item-field-inactive-list
               label="Автомобили"
-              [list]="getters.getItemCarsFieldListElements(item?.cars || [])"
+              [list]="carsList"
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'cars']"
               [moreLinkQueryParams]="{

@@ -31,6 +31,7 @@ import { SocketIoService } from '../../../../services/socket-io/socket-io.servic
 import { OptionsService } from '../../../../services/options/options.service';
 import { CarsApiService } from '../../../../services/api/cars-api.service';
 import { GettersService } from '../../../../services/getters/getters.service';
+import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 
 @Component({
   selector: 'app-car-item',
@@ -44,6 +45,12 @@ export class CarItemComponent
   /* Main item settings */
   /* ------------------ */
   public item: ICar;
+
+  /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public divisionsList: ItemFieldListElement[] = [];
+  public driversList: ItemFieldListElement[] = [];
 
   /* ---------------- */
   /* Options settings */
@@ -198,11 +205,34 @@ export class CarItemComponent
     this.item$ = this.store.select(CarsSelectors.selectCar).subscribe((car) => {
       this.item = car;
 
+      /* ---------- */
+      /* Page Title */
+      /* ---------- */
+
       if (car) {
         this.title.setTitle(
           `Автомобиль - ${car.licensePlate} - Чистая планета`
         );
       }
+
+      /* -------------------- */
+      /* Display data helpers */
+      /* -------------------- */
+
+      if (car?.divisions?.length > 0) {
+        this.divisionsList = this.getters.getItemDivisionsFieldListElements(
+          car.divisions
+        );
+      }
+      if (car?.drivers?.length > 0) {
+        this.driversList = this.getters.getItemEmployeesFieldListElements(
+          car.drivers
+        );
+      }
+
+      /* ------------- */
+      /* Form settings */
+      /* ------------- */
 
       this.initForm();
 

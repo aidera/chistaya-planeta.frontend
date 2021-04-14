@@ -240,6 +240,18 @@ export class GettersService {
     );
   }
 
+  public getOffersFieldListElements(order?: IOrder): ItemFieldListElement[] {
+    if (order?.offers?.items) {
+      return (order.offers.items as IOffer[]).map((offer) => {
+        return {
+          text: offer.name,
+          color: offer.status === SimpleStatus.inactive ? 'red' : undefined,
+        };
+      });
+    }
+    return [];
+  }
+
   public getDivisionsValuesArray(divisions: (IDivision | string)[]): string[] {
     return (
       (divisions as IDivision[])?.map((el) => {

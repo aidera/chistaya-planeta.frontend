@@ -375,9 +375,7 @@
             <app-item-field-inactive-list
               *ngIf="activeField !== 'divisions'"
               label="Подразделения"
-              [list]="
-                getters.getItemDivisionsFieldListElements(item?.divisions || [])
-              "
+              [list]="divisionsList"
               [isFetching]="itemIsFetching"
               [moreLinkArray]="['../../', 'divisions']"
               [moreLinkQueryParams]="{
@@ -438,9 +436,7 @@
           <div class="cabinet-content__field" style="margin-top: -16px">
             <app-item-field-inactive-list
               *ngIf="activeField !== 'drivers'"
-              [list]="
-                getters.getItemEmployeesFieldListElements(item?.drivers || [])
-              "
+              [list]="driversList"
               [hint]="
                 !item?.locality ||
                 !item?.divisions ||

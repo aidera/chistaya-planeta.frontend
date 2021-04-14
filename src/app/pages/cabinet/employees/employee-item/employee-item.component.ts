@@ -34,6 +34,7 @@ import { SocketIoService } from '../../../../services/socket-io/socket-io.servic
 import { OptionsService } from '../../../../services/options/options.service';
 import { GettersService } from '../../../../services/getters/getters.service';
 import { EmployeesApiService } from '../../../../services/api/employees-api.service';
+import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 
 @Component({
   selector: 'app-employee-item',
@@ -47,6 +48,11 @@ export class EmployeeItemComponent
   /* Main item settings */
   /* ------------------ */
   public item: IEmployee;
+
+  /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public carsList: ItemFieldListElement[] = [];
 
   /* ---------------- */
   /* Options settings */
@@ -247,6 +253,10 @@ export class EmployeeItemComponent
       .subscribe((employee) => {
         this.item = employee;
 
+        /* ---------- */
+        /* Page Title */
+        /* ---------- */
+
         if (employee) {
           this.title.setTitle(
             `Сотрудник - ${this.getters.getUserInitials(
@@ -256,6 +266,20 @@ export class EmployeeItemComponent
             )} - Чистая планета`
           );
         }
+
+        /* -------------------- */
+        /* Display data helpers */
+        /* -------------------- */
+
+        if (employee?.cars?.length > 0) {
+          this.carsList = this.getters.getItemCarsFieldListElements(
+            employee.cars
+          );
+        }
+
+        /* ------------- */
+        /* Form settings */
+        /* ------------- */
 
         this.initForm();
 

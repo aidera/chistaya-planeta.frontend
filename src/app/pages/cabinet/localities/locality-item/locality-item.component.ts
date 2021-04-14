@@ -24,6 +24,7 @@ import { ItemPageComponent } from '../../item-page.component';
 import { SocketIoService } from '../../../../services/socket-io/socket-io.service';
 import { GettersService } from '../../../../services/getters/getters.service';
 import { LocalitiesApiService } from '../../../../services/api/localities-api.service';
+import { ItemFieldListElement } from '../../../../components/item-field/item-field-inactive-list/item-field-inactive-list.component';
 
 @Component({
   selector: 'app-locality-item',
@@ -37,6 +38,13 @@ export class LocalityItemComponent
   /* Main item settings */
   /* ------------------ */
   public item: ILocality;
+
+  /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public divisionsList: ItemFieldListElement[] = [];
+  public employeesList: ItemFieldListElement[] = [];
+  public carsList: ItemFieldListElement[] = [];
 
   /* -------------- */
   /* Forms settings */
@@ -141,11 +149,41 @@ export class LocalityItemComponent
       .subscribe((locality) => {
         this.item = locality;
 
+        /* ---------- */
+        /* Page Title */
+        /* ---------- */
+
         if (locality) {
           this.title.setTitle(
             `Населённый пункт - ${locality.name} - Чистая планета`
           );
         }
+
+        /* -------------------- */
+        /* Display data helpers */
+        /* -------------------- */
+
+        if (locality?.divisions?.length > 0) {
+          this.divisionsList = this.getters.getItemDivisionsFieldListElements(
+            locality.divisions
+          );
+        }
+
+        if (locality?.employees?.length > 0) {
+          this.employeesList = this.getters.getItemEmployeesFieldListElements(
+            locality.employees
+          );
+        }
+
+        if (locality?.cars?.length > 0) {
+          this.carsList = this.getters.getItemCarsFieldListElements(
+            locality.cars
+          );
+        }
+
+        /* ------------- */
+        /* Form settings */
+        /* ------------- */
 
         this.initForm();
 

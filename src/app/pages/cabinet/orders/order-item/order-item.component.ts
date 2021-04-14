@@ -64,6 +64,18 @@ export class OrderItemComponent
   public item: IOrder;
 
   /* -------------------- */
+  /* Display helpers data */
+  /* -------------------- */
+  public offersItemsArrayString = '';
+  public orderOffersAmount: string | undefined;
+  public clientManagerInitials: string | undefined;
+  public receivingManagerInitials: string | undefined;
+  public driverInitials: string | undefined;
+  public offersList: ItemFieldListElement[] = [];
+  public weighedOffersList: ItemFieldListElement[] = [];
+  public weighedServiceText: string | undefined;
+
+  /* -------------------- */
   /* Other items settings */
   /* -------------------- */
   public offers$: Subscription;
@@ -247,6 +259,57 @@ export class OrderItemComponent
       .select(OrdersSelectors.selectOrder)
       .subscribe((order) => {
         this.item = order;
+
+        /* -------------------- */
+        /* Display data helpers */
+        /* -------------------- */
+        if (order) {
+          this.offersItemsArrayString = this.getters.getOrderOfferItemsArrayString(
+            order
+          );
+        }
+        if (order) {
+          this.orderOffersAmount = this.getters.getOrderOffersAmount(order);
+        }
+        if ((order?.performers?.clientManager as IEmployee)?.name) {
+          this.clientManagerInitials = this.getters.getUserInitials(
+            (order.performers.clientManager as IEmployee).name,
+            (order.performers.clientManager as IEmployee).surname,
+            (order.performers.clientManager as IEmployee).patronymic
+          );
+        }
+        if ((order?.performers?.receivingManager as IEmployee)?.name) {
+          this.receivingManagerInitials = this.getters.getUserInitials(
+            (order.performers.receivingManager as IEmployee).name,
+            (order.performers.receivingManager as IEmployee).surname,
+            (order.performers.receivingManager as IEmployee).patronymic
+          );
+        }
+        if ((order?.performers?.driver as IEmployee)?.name) {
+          this.driverInitials = this.getters.getUserInitials(
+            (order.performers.driver as IEmployee).name,
+            (order.performers.driver as IEmployee).surname,
+            (order.performers.driver as IEmployee).patronymic
+          );
+        }
+        if (order?.offers?.items?.length > 0) {
+          this.offersList = this.getters.getOffersFieldListElements(order);
+        }
+        if (order && this.offers) {
+          this.weighedOffersList = this.getters.getOrderWeighedOffersList(
+            order,
+            this.offers
+          );
+        }
+        if (order) {
+          this.weighedServiceText = this.getters.getOrderWeighedServicesList(
+            order
+          )[0]?.text;
+        }
+
+        /* ------------- */
+        /* Form settings */
+        /* ------------- */
 
         this.initForm();
 
@@ -497,6 +560,12 @@ export class OrderItemComponent
       .select(OffersSelectors.selectOffers)
       .subscribe((offers) => {
         this.offers = offers;
+        if (this.item && offers) {
+          this.weighedOffersList = this.getters.getOrderWeighedOffersList(
+            this.item,
+            offers
+          );
+        }
       });
     this.socket.get()?.on('offers', () => {
       this.store.dispatch(OffersActions.getOffersRequest());
@@ -556,18 +625,6 @@ export class OrderItemComponent
       return this.item.services.amount + ' ' + unit;
     }
     return undefined;
-  }
-
-  public getOffersList(): ItemFieldListElement[] {
-    if (this.item?.offers?.items) {
-      return (this.item.offers.items as IOffer[]).map((offer) => {
-        return {
-          text: offer.name,
-          color: offer.status === SimpleStatus.inactive ? 'red' : undefined,
-        };
-      });
-    }
-    return [];
   }
 
   public takeToWork(): void {

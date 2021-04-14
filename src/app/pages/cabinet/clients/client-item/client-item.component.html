@@ -102,9 +102,7 @@
           <div class="cabinet-content__field">
             <app-item-field-inactive-string
               label="Телефон"
-              [content]="
-                item ? getters.getBeautifiedPhoneNumber(item.phone) : ''
-              "
+              [content]="beautifiedPhone"
               [isFetching]="itemIsFetching"
             >
             </app-item-field-inactive-string>
