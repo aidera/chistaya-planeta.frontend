@@ -223,11 +223,15 @@ export class CarItemComponent
         this.divisionsList = this.getters.getItemDivisionsFieldListElements(
           car.divisions
         );
+      } else {
+        this.divisionsList = [];
       }
       if (car?.drivers?.length > 0) {
         this.driversList = this.getters.getItemEmployeesFieldListElements(
           car.drivers
         );
+      } else {
+        this.driversList = [];
       }
 
       /* ------------- */

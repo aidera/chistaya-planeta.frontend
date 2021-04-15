@@ -267,44 +267,67 @@ export class OrderItemComponent
           this.offersItemsArrayString = this.getters.getOrderOfferItemsArrayString(
             order
           );
+        } else {
+          this.offersItemsArrayString = '';
         }
+
         if (order) {
           this.orderOffersAmount = this.getters.getOrderOffersAmount(order);
+        } else {
+          this.orderOffersAmount = undefined;
         }
+
         if ((order?.performers?.clientManager as IEmployee)?.name) {
           this.clientManagerInitials = this.getters.getUserInitials(
             (order.performers.clientManager as IEmployee).name,
             (order.performers.clientManager as IEmployee).surname,
             (order.performers.clientManager as IEmployee).patronymic
           );
+        } else {
+          this.clientManagerInitials = undefined;
         }
+
         if ((order?.performers?.receivingManager as IEmployee)?.name) {
           this.receivingManagerInitials = this.getters.getUserInitials(
             (order.performers.receivingManager as IEmployee).name,
             (order.performers.receivingManager as IEmployee).surname,
             (order.performers.receivingManager as IEmployee).patronymic
           );
+        } else {
+          this.receivingManagerInitials = undefined;
         }
+
         if ((order?.performers?.driver as IEmployee)?.name) {
           this.driverInitials = this.getters.getUserInitials(
             (order.performers.driver as IEmployee).name,
             (order.performers.driver as IEmployee).surname,
             (order.performers.driver as IEmployee).patronymic
           );
+        } else {
+          this.driverInitials = undefined;
         }
+
         if (order?.offers?.items?.length > 0) {
           this.offersList = this.getters.getOffersFieldListElements(order);
+        } else {
+          this.offersList = [];
         }
+
         if (order && this.offers) {
           this.weighedOffersList = this.getters.getOrderWeighedOffersList(
             order,
             this.offers
           );
+        } else {
+          this.weighedOffersList = [];
         }
+
         if (order) {
           this.weighedServiceText = this.getters.getOrderWeighedServicesList(
             order
           )[0]?.text;
+        } else {
+          this.weighedServiceText = undefined;
         }
 
         /* ------------- */

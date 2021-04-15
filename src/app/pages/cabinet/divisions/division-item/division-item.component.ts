@@ -201,6 +201,8 @@ export class DivisionItemComponent
           this.carsList = this.getters.getItemCarsFieldListElements(
             division.cars
           );
+        } else {
+          this.carsList = [];
         }
 
         /* ------------- */

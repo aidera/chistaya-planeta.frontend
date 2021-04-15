@@ -109,6 +109,8 @@ export class ClientItemComponent
           this.beautifiedPhone = this.getters.getBeautifiedPhoneNumber(
             client.phone
           );
+        } else {
+          this.beautifiedPhone = '';
         }
       });
 

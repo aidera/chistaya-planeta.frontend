@@ -167,18 +167,24 @@ export class LocalityItemComponent
           this.divisionsList = this.getters.getItemDivisionsFieldListElements(
             locality.divisions
           );
+        } else {
+          this.divisionsList = [];
         }
 
         if (locality?.employees?.length > 0) {
           this.employeesList = this.getters.getItemEmployeesFieldListElements(
             locality.employees
           );
+        } else {
+          this.employeesList = [];
         }
 
         if (locality?.cars?.length > 0) {
           this.carsList = this.getters.getItemCarsFieldListElements(
             locality.cars
           );
+        } else {
+          this.carsList = [];
         }
 
         /* ------------- */

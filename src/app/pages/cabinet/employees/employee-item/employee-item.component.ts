@@ -275,6 +275,8 @@ export class EmployeeItemComponent
           this.carsList = this.getters.getItemCarsFieldListElements(
             employee.cars
           );
+        } else {
+          this.carsList = [];
         }
 
         /* ------------- */

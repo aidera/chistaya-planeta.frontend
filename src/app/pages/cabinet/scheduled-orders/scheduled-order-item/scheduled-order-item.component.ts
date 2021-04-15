@@ -336,6 +336,8 @@ export class ScheduledOrderItemComponent
           this.offersList = this.getters.getScheduledOrderOffersList(
             scheduledOrder
           );
+        } else {
+          this.offersList = [];
         }
 
         /* ------------- */
