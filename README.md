@@ -1,6 +1,6 @@
 # ChistayaPlaneta
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.7.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11. Node version 14.20.
 
 ## Development server
 
