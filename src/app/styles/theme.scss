@@ -190,3 +190,7 @@ input[type='number'] {
 }
 
 /* Material theme files are located in modules/material/styles */
+
+.mat-input-element {
+  box-sizing: border-box !important;
+}
