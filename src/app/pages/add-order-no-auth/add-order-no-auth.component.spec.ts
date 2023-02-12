@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -35,59 +35,61 @@ describe('AddOrderNoAuthComponent', () => {
   let component: AddOrderNoAuthComponent;
   let fixture: ComponentFixture<AddOrderNoAuthComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AddOrderNoAuthComponent,
-        TextInputComponent,
-        TextareaComponent,
-        DateInputComponent,
-        SelectComponent,
-        CheckboxComponent,
-        AuthNotifyComponent,
-        QuestionHintComponent,
-        ErrorMessageComponent,
-        ModalComponent,
-      ],
-      imports: [
-        RouterTestingModule,
-        MaterialModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        NgxMaskModule.forRoot(),
-        InlineSVGModule.forRoot(),
-        HttpClientModule,
-      ],
-      providers: [
-        SocketIoService,
-        HelpersService,
-        provideMockStore({
-          initialState: {
-            app: {
-              localitiesOptionsToSelect: [
-                { value: '1', text: 'City 1' },
-                { value: '2', text: 'City 2' },
-              ],
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-              offersToSelect: null,
-              servicesToSelect: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          AddOrderNoAuthComponent,
+          TextInputComponent,
+          TextareaComponent,
+          DateInputComponent,
+          SelectComponent,
+          CheckboxComponent,
+          AuthNotifyComponent,
+          QuestionHintComponent,
+          ErrorMessageComponent,
+          ModalComponent,
+        ],
+        imports: [
+          RouterTestingModule,
+          MaterialModule,
+          ReactiveFormsModule,
+          BrowserAnimationsModule,
+          NgxMaskModule.forRoot(),
+          InlineSVGModule.forRoot(),
+          HttpClientModule,
+        ],
+        providers: [
+          SocketIoService,
+          HelpersService,
+          provideMockStore({
+            initialState: {
+              app: {
+                localitiesOptionsToSelect: [
+                  { value: '1', text: 'City 1' },
+                  { value: '2', text: 'City 2' },
+                ],
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+                offersToSelect: null,
+                servicesToSelect: null,
+              },
+              orders: {
+                order: null,
+              },
+              offers: {
+                offers: null,
+              },
+              services: {
+                services: null,
+              },
             },
-            orders: {
-              order: null,
-            },
-            offers: {
-              offers: null,
-            },
-            services: {
-              services: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);

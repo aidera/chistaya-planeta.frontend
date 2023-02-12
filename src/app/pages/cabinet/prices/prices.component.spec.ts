@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -13,35 +13,37 @@ describe('PricesComponent', () => {
   let component: PricesComponent;
   let fixture: ComponentFixture<PricesComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PricesComponent],
-      imports: [
-        MatSnackBarModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        MaterialModule,
-        InlineSVGModule.forRoot(),
-      ],
-      providers: [
-        SocketIoService,
-        provideMockStore({
-          initialState: {
-            offers: {
-              offers: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PricesComponent],
+        imports: [
+          MatSnackBarModule,
+          HttpClientModule,
+          ReactiveFormsModule,
+          MaterialModule,
+          InlineSVGModule.forRoot(),
+        ],
+        providers: [
+          SocketIoService,
+          provideMockStore({
+            initialState: {
+              offers: {
+                offers: null,
+              },
+              services: {
+                services: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            services: {
-              services: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PricesComponent);

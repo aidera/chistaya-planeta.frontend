@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,46 +19,48 @@ describe('LocalityItemComponent', () => {
   let component: LocalityItemComponent;
   let fixture: ComponentFixture<LocalityItemComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        LocalityItemComponent,
-        SkeletonComponent,
-        ModalComponent,
-        ItemFieldInactiveListComponent,
-        ItemFieldInactiveStatusComponent,
-        ItemFieldInactiveStringComponent,
-        ItemFieldSaveButtonComponent,
-        ItemNotFoundComponent,
-      ],
-      imports: [
-        RouterTestingModule,
-        MaterialModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-      ],
-      providers: [
-        OptionsService,
-        provideMockStore({
-          initialState: {
-            localities: {
-              locality: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          LocalityItemComponent,
+          SkeletonComponent,
+          ModalComponent,
+          ItemFieldInactiveListComponent,
+          ItemFieldInactiveStatusComponent,
+          ItemFieldInactiveStringComponent,
+          ItemFieldSaveButtonComponent,
+          ItemNotFoundComponent,
+        ],
+        imports: [
+          RouterTestingModule,
+          MaterialModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+        ],
+        providers: [
+          OptionsService,
+          provideMockStore({
+            initialState: {
+              localities: {
+                locality: null,
+              },
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LocalityItemComponent);

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,30 +16,32 @@ describe('FullscreenMenuComponent', () => {
   let component: FullscreenMenuComponent;
   let fixture: ComponentFixture<FullscreenMenuComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [FullscreenMenuComponent, MenuLinkComponent],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        RouterTestingModule,
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            app: {
-              isFullscreenMenuOpen: false,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FullscreenMenuComponent, MenuLinkComponent],
+        imports: [
+          BrowserAnimationsModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          RouterTestingModule,
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              app: {
+                isFullscreenMenuOpen: false,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);

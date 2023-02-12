@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EmployeeItemAddComponent } from './employee-item-add.component';
 import { TextInputComponent } from '../../../../components/form-controls/text-input/text-input.component';
@@ -17,44 +17,46 @@ describe('EmployeeItemAddComponent', () => {
   let component: EmployeeItemAddComponent;
   let fixture: ComponentFixture<EmployeeItemAddComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        EmployeeItemAddComponent,
-        TextInputComponent,
-        SelectComponent,
-        CheckboxComponent,
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        MaterialModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            employees: {
-              employee: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          EmployeeItemAddComponent,
+          TextInputComponent,
+          SelectComponent,
+          CheckboxComponent,
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          RouterTestingModule,
+          MaterialModule,
+          ReactiveFormsModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              employees: {
+                employee: null,
+              },
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EmployeeItemAddComponent);

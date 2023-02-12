@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -10,17 +10,19 @@ describe('ItemNotFoundComponent', () => {
   let component: ItemNotFoundComponent;
   let fixture: ComponentFixture<ItemNotFoundComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ItemNotFoundComponent],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientModule,
-        MaterialModule,
-        InlineSVGModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ItemNotFoundComponent],
+        imports: [
+          BrowserAnimationsModule,
+          HttpClientModule,
+          MaterialModule,
+          InlineSVGModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ItemNotFoundComponent);

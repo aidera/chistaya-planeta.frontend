@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatCardModule } from '@angular/material/card';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -11,18 +11,20 @@ describe('DocumentsLayoutComponent', () => {
   let component: DocumentsLayoutComponent;
   let fixture: ComponentFixture<DocumentsLayoutComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [DocumentsLayoutComponent, FooterComponent],
-      imports: [
-        RouterTestingModule,
-        MatCardModule,
-        RouterTestingModule,
-        InlineSVGModule.forRoot(),
-        HttpClientModule,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DocumentsLayoutComponent, FooterComponent],
+        imports: [
+          RouterTestingModule,
+          MatCardModule,
+          RouterTestingModule,
+          InlineSVGModule.forRoot(),
+          HttpClientModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentsLayoutComponent);

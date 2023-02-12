@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EmployeesTableComponent } from './employees-table.component';
 import { TablePageComponent } from '../../table-page.component';
@@ -22,49 +22,51 @@ describe('EmployeesTableComponent', () => {
   let component: EmployeesTableComponent;
   let fixture: ComponentFixture<EmployeesTableComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        EmployeesTableComponent,
-        TablePageComponent,
-        TableComponent,
-        TextInputComponent,
-        DateTimeInputComponent,
-        SelectComponent,
-        CheckboxComponent,
-      ],
-      providers: [
-        OptionsService,
-        { provide: GettersService },
-        provideMockStore({
-          initialState: {
-            employees: {
-              employees: [],
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          EmployeesTableComponent,
+          TablePageComponent,
+          TableComponent,
+          TextInputComponent,
+          DateTimeInputComponent,
+          SelectComponent,
+          CheckboxComponent,
+        ],
+        providers: [
+          OptionsService,
+          { provide: GettersService },
+          provideMockStore({
+            initialState: {
+              employees: {
+                employees: [],
+              },
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-      imports: [
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+        imports: [
+          ReactiveFormsModule,
+          BrowserAnimationsModule,
+          MaterialModule,
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EmployeesTableComponent);

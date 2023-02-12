@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -17,17 +17,19 @@ describe('SelectComponent', () => {
   let component: SelectComponent;
   let fixture: ComponentFixture<SelectComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SelectComponent, ErrorMessageComponent],
-      imports: [
-        MatSelectModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SelectComponent, ErrorMessageComponent],
+        imports: [
+          MatSelectModule,
+          BrowserAnimationsModule,
+          ReactiveFormsModule,
+          MatFormFieldModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectComponent);

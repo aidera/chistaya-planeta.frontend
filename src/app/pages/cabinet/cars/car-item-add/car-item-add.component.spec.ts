@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,39 +16,45 @@ describe('CarItemAddComponent', () => {
   let component: CarItemAddComponent;
   let fixture: ComponentFixture<CarItemAddComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [CarItemAddComponent, TextInputComponent, SelectComponent],
-      imports: [
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        MaterialModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            cars: {
-              car: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          CarItemAddComponent,
+          TextInputComponent,
+          SelectComponent,
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          RouterTestingModule,
+          MaterialModule,
+          ReactiveFormsModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              cars: {
+                car: null,
+              },
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CarItemAddComponent);

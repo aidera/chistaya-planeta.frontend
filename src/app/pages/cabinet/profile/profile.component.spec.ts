@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,44 +26,46 @@ describe('ProfileComponent', () => {
   let component: ProfileComponent;
   let fixture: ComponentFixture<ProfileComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        ProfileComponent,
-        ModalComponent,
-        ItemFieldInactiveStringComponent,
-        ItemFieldInactiveListComponent,
-        TextInputComponent,
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        MaterialModule,
-        MatSnackBarModule,
-        RouterTestingModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-      providers: [
-        SocketIoService,
-        GettersService,
-        LocalitiesApiService,
-        DivisionsApiService,
-        CarsApiService,
-        EmployeesApiService,
-        OptionsService,
-        provideMockStore({
-          initialState: {
-            users: {
-              type: null,
-              user: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ProfileComponent,
+          ModalComponent,
+          ItemFieldInactiveStringComponent,
+          ItemFieldInactiveListComponent,
+          TextInputComponent,
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          MaterialModule,
+          MatSnackBarModule,
+          RouterTestingModule,
+          HttpClientModule,
+          ReactiveFormsModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+        providers: [
+          SocketIoService,
+          GettersService,
+          LocalitiesApiService,
+          DivisionsApiService,
+          CarsApiService,
+          EmployeesApiService,
+          OptionsService,
+          provideMockStore({
+            initialState: {
+              users: {
+                type: null,
+                user: null,
+              },
             },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProfileComponent);

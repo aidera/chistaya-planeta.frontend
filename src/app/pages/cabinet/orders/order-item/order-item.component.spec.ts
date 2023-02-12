@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -26,59 +26,61 @@ describe('OrderItemComponent', () => {
   let component: OrderItemComponent;
   let fixture: ComponentFixture<OrderItemComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        OrderItemComponent,
-        SkeletonComponent,
-        ModalComponent,
-        SelectComponent,
-        ItemFieldInactiveListComponent,
-        ItemFieldInactiveStatusComponent,
-        ItemFieldInactiveStringComponent,
-        ItemFieldSaveButtonComponent,
-        ItemNotFoundComponent,
-        PhonePipe,
-        TextInputComponent,
-        TextareaComponent,
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        MaterialModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-      providers: [
-        OptionsService,
-        provideMockStore({
-          initialState: {
-            orders: {
-              order: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          OrderItemComponent,
+          SkeletonComponent,
+          ModalComponent,
+          SelectComponent,
+          ItemFieldInactiveListComponent,
+          ItemFieldInactiveStatusComponent,
+          ItemFieldInactiveStringComponent,
+          ItemFieldSaveButtonComponent,
+          ItemNotFoundComponent,
+          PhonePipe,
+          TextInputComponent,
+          TextareaComponent,
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          ReactiveFormsModule,
+          RouterTestingModule,
+          MaterialModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+        providers: [
+          OptionsService,
+          provideMockStore({
+            initialState: {
+              orders: {
+                order: null,
+              },
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
+              offers: {
+                offers: null,
+              },
+              services: {
+                services: null,
+              },
             },
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-            offers: {
-              offers: null,
-            },
-            services: {
-              services: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OrderItemComponent);

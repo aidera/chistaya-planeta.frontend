@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   FormControl,
@@ -21,21 +21,23 @@ describe('DateInputComponent', () => {
   let component: DateInputComponent;
   let fixture: ComponentFixture<DateInputComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [DateInputComponent, ErrorMessageComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        BrowserAnimationsModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatInputModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DateInputComponent, ErrorMessageComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatFormFieldModule,
+          BrowserAnimationsModule,
+          MatDatepickerModule,
+          MatNativeDateModule,
+          MatInputModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DateInputComponent);

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -19,46 +19,48 @@ describe('DivisionItemComponent', () => {
   let component: DivisionItemComponent;
   let fixture: ComponentFixture<DivisionItemComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        DivisionItemComponent,
-        SkeletonComponent,
-        ModalComponent,
-        ItemFieldInactiveListComponent,
-        ItemFieldInactiveStatusComponent,
-        ItemFieldInactiveStringComponent,
-        ItemFieldSaveButtonComponent,
-        ItemNotFoundComponent,
-      ],
-      imports: [
-        RouterTestingModule,
-        MaterialModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-      ],
-      providers: [
-        OptionsService,
-        provideMockStore({
-          initialState: {
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          DivisionItemComponent,
+          SkeletonComponent,
+          ModalComponent,
+          ItemFieldInactiveListComponent,
+          ItemFieldInactiveStatusComponent,
+          ItemFieldInactiveStringComponent,
+          ItemFieldSaveButtonComponent,
+          ItemNotFoundComponent,
+        ],
+        imports: [
+          RouterTestingModule,
+          MaterialModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+        ],
+        providers: [
+          OptionsService,
+          provideMockStore({
+            initialState: {
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              divisions: {
+                division: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            divisions: {
-              division: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DivisionItemComponent);

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { By } from '@angular/platform-browser';
@@ -13,29 +13,31 @@ describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SidebarComponent, MenuLinkComponent],
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            app: {
-              isFullscreenMenuOpen: false,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SidebarComponent, MenuLinkComponent],
+        imports: [
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              app: {
+                isFullscreenMenuOpen: false,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SidebarComponent);

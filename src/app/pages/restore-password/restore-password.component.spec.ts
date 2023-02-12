@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,34 +15,36 @@ describe('RestorePasswordComponent', () => {
   let component: RestorePasswordComponent;
   let fixture: ComponentFixture<RestorePasswordComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [RestorePasswordComponent, TextInputComponent],
-      imports: [
-        MatSnackBarModule,
-        MatButtonModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-        HttpClientModule,
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            users: {
-              isLoginSucceed: false,
-              isLoggingIn: false,
-              user: null,
-              type: null,
-              serverError: null,
-              isRegistering: false,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RestorePasswordComponent, TextInputComponent],
+        imports: [
+          MatSnackBarModule,
+          MatButtonModule,
+          RouterTestingModule,
+          ReactiveFormsModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+          HttpClientModule,
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              users: {
+                isLoginSucceed: false,
+                isLoggingIn: false,
+                user: null,
+                type: null,
+                serverError: null,
+                isRegistering: false,
+              },
             },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RestorePasswordComponent);

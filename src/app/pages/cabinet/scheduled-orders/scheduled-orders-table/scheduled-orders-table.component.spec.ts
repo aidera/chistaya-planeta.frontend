@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,46 +22,48 @@ describe('ScheduledOrdersTableComponent', () => {
   let component: ScheduledOrdersTableComponent;
   let fixture: ComponentFixture<ScheduledOrdersTableComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        ScheduledOrdersTableComponent,
-        TablePageComponent,
-        TableComponent,
-        TextInputComponent,
-        DateTimeInputComponent,
-        SelectComponent,
-        CheckboxComponent,
-      ],
-      providers: [
-        OptionsService,
-        { provide: GettersService },
-        provideMockStore({
-          initialState: {
-            app: {
-              localitiesToSelect: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ScheduledOrdersTableComponent,
+          TablePageComponent,
+          TableComponent,
+          TextInputComponent,
+          DateTimeInputComponent,
+          SelectComponent,
+          CheckboxComponent,
+        ],
+        providers: [
+          OptionsService,
+          { provide: GettersService },
+          provideMockStore({
+            initialState: {
+              app: {
+                localitiesToSelect: null,
+              },
+              scheduledOrders: {
+                scheduledOrders: [],
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            scheduledOrders: {
-              scheduledOrders: [],
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-      imports: [
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+        imports: [
+          ReactiveFormsModule,
+          BrowserAnimationsModule,
+          MaterialModule,
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ScheduledOrdersTableComponent);

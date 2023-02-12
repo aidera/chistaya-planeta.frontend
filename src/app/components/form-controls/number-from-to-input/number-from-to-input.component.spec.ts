@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMaskModule } from 'ngx-mask';
@@ -17,26 +17,28 @@ describe('NumberFromToInputComponent', () => {
   let component: NumberFromToInputComponent;
   let fixture: ComponentFixture<NumberFromToInputComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        NumberFromToInputComponent,
-        TextInputComponent,
-        ErrorMessageComponent,
-      ],
-      imports: [
-        ReactiveFormsModule,
-        HttpClientModule,
-        NgxMaskModule.forRoot(),
-        MatDatepickerModule,
-        MatNativeDateModule,
-        InlineSVGModule.forRoot(),
-        MatFormFieldModule,
-        MatInputModule,
-        BrowserAnimationsModule,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          NumberFromToInputComponent,
+          TextInputComponent,
+          ErrorMessageComponent,
+        ],
+        imports: [
+          ReactiveFormsModule,
+          HttpClientModule,
+          NgxMaskModule.forRoot(),
+          MatDatepickerModule,
+          MatNativeDateModule,
+          InlineSVGModule.forRoot(),
+          MatFormFieldModule,
+          MatInputModule,
+          BrowserAnimationsModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NumberFromToInputComponent);

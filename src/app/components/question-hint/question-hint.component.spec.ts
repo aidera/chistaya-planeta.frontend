@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -9,12 +9,18 @@ describe('QuestionHintComponent', () => {
   let component: QuestionHintComponent;
   let fixture: ComponentFixture<QuestionHintComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [QuestionHintComponent],
-      imports: [HttpClientModule, InlineSVGModule.forRoot(), MatTooltipModule],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [QuestionHintComponent],
+        imports: [
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          MatTooltipModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(QuestionHintComponent);

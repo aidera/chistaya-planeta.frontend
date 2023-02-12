@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -18,27 +18,29 @@ describe('DateTimeInputComponent', () => {
   let component: DateTimeInputComponent;
   let fixture: ComponentFixture<DateTimeInputComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        DateTimeInputComponent,
-        DateInputComponent,
-        TextInputComponent,
-        ErrorMessageComponent,
-      ],
-      imports: [
-        ReactiveFormsModule,
-        HttpClientModule,
-        NgxMaskModule.forRoot(),
-        MatDatepickerModule,
-        MatNativeDateModule,
-        InlineSVGModule.forRoot(),
-        MatFormFieldModule,
-        MatInputModule,
-        BrowserAnimationsModule,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          DateTimeInputComponent,
+          DateInputComponent,
+          TextInputComponent,
+          ErrorMessageComponent,
+        ],
+        imports: [
+          ReactiveFormsModule,
+          HttpClientModule,
+          NgxMaskModule.forRoot(),
+          MatDatepickerModule,
+          MatNativeDateModule,
+          InlineSVGModule.forRoot(),
+          MatFormFieldModule,
+          MatInputModule,
+          BrowserAnimationsModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DateTimeInputComponent);

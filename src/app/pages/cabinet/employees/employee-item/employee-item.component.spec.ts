@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -23,50 +23,52 @@ describe('EmployeeItemComponent', () => {
   let component: EmployeeItemComponent;
   let fixture: ComponentFixture<EmployeeItemComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        EmployeeItemComponent,
-        SkeletonComponent,
-        ModalComponent,
-        SelectComponent,
-        ItemFieldInactiveListComponent,
-        ItemFieldInactiveStatusComponent,
-        ItemFieldInactiveStringComponent,
-        ItemFieldSaveButtonComponent,
-        ItemNotFoundComponent,
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        MaterialModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-      providers: [
-        OptionsService,
-        provideMockStore({
-          initialState: {
-            employees: {
-              employee: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          EmployeeItemComponent,
+          SkeletonComponent,
+          ModalComponent,
+          SelectComponent,
+          ItemFieldInactiveListComponent,
+          ItemFieldInactiveStatusComponent,
+          ItemFieldInactiveStringComponent,
+          ItemFieldSaveButtonComponent,
+          ItemNotFoundComponent,
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          ReactiveFormsModule,
+          RouterTestingModule,
+          MaterialModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+        providers: [
+          OptionsService,
+          provideMockStore({
+            initialState: {
+              employees: {
+                employee: null,
+              },
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EmployeeItemComponent);

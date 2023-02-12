@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -17,36 +17,38 @@ describe('CabinetLayoutComponent', () => {
   let component: CabinetLayoutComponent;
   let fixture: ComponentFixture<CabinetLayoutComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        CabinetLayoutComponent,
-        SidebarComponent,
-        MobileHeaderComponent,
-        FullscreenMenuComponent,
-        MenuLinkComponent,
-        FooterComponent,
-      ],
-      imports: [
-        RouterTestingModule,
-        InlineSVGModule.forRoot(),
-        HttpClientModule,
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            app: {
-              isFullscreenMenuOpen: false,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          CabinetLayoutComponent,
+          SidebarComponent,
+          MobileHeaderComponent,
+          FullscreenMenuComponent,
+          MenuLinkComponent,
+          FooterComponent,
+        ],
+        imports: [
+          RouterTestingModule,
+          InlineSVGModule.forRoot(),
+          HttpClientModule,
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              app: {
+                isFullscreenMenuOpen: false,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);

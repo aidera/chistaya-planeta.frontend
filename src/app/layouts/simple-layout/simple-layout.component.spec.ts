@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatCardModule } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
@@ -12,18 +12,20 @@ describe('SimpleLayoutComponent', () => {
   let component: SimpleLayoutComponent;
   let fixture: ComponentFixture<SimpleLayoutComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SimpleLayoutComponent, FooterComponent],
-      imports: [
-        RouterTestingModule,
-        MatCardModule,
-        RouterTestingModule,
-        InlineSVGModule.forRoot(),
-        HttpClientModule,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SimpleLayoutComponent, FooterComponent],
+        imports: [
+          RouterTestingModule,
+          MatCardModule,
+          RouterTestingModule,
+          InlineSVGModule.forRoot(),
+          HttpClientModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SimpleLayoutComponent);

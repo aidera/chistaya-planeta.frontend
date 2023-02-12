@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { OrdersTableComponent } from './orders-table.component';
@@ -22,49 +22,51 @@ describe('OrdersComponent', () => {
   let component: OrdersTableComponent;
   let fixture: ComponentFixture<OrdersTableComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        OrdersTableComponent,
-        TablePageComponent,
-        TableComponent,
-        TextInputComponent,
-        DateTimeInputComponent,
-        SelectComponent,
-        CheckboxComponent,
-      ],
-      providers: [
-        OptionsService,
-        { provide: GettersService },
-        provideMockStore({
-          initialState: {
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          OrdersTableComponent,
+          TablePageComponent,
+          TableComponent,
+          TextInputComponent,
+          DateTimeInputComponent,
+          SelectComponent,
+          CheckboxComponent,
+        ],
+        providers: [
+          OptionsService,
+          { provide: GettersService },
+          provideMockStore({
+            initialState: {
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              orders: {
+                orders: [],
+              },
+              users: {
+                user: null,
+                type: null,
+              },
             },
-            orders: {
-              orders: [],
-            },
-            users: {
-              user: null,
-              type: null,
-            },
-          },
-        }),
-      ],
-      imports: [
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+        imports: [
+          ReactiveFormsModule,
+          BrowserAnimationsModule,
+          MaterialModule,
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OrdersTableComponent);

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -62,25 +62,27 @@ describe('TableComponent', () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        TableComponent,
-        TextInputComponent,
-        CheckboxComponent,
-        DateInputComponent,
-      ],
-      imports: [
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          TableComponent,
+          TextInputComponent,
+          CheckboxComponent,
+          DateInputComponent,
+        ],
+        imports: [
+          ReactiveFormsModule,
+          BrowserAnimationsModule,
+          MaterialModule,
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TableComponent);

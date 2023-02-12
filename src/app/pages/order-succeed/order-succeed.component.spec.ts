@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -13,25 +13,27 @@ describe('OrderSucceedComponent', () => {
   let component: OrderSucceedComponent;
   let fixture: ComponentFixture<OrderSucceedComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [OrderSucceedComponent, AuthNotifyComponent],
-      imports: [
-        InlineSVGModule.forRoot(),
-        RouterTestingModule,
-        HttpClientModule,
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            orders: {
-              addOrderLocalities: [],
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [OrderSucceedComponent, AuthNotifyComponent],
+        imports: [
+          InlineSVGModule.forRoot(),
+          RouterTestingModule,
+          HttpClientModule,
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              orders: {
+                addOrderLocalities: [],
+              },
             },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);

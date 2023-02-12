@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,51 +23,53 @@ describe('ClientsTableComponent', () => {
   let component: ClientsTableComponent;
   let fixture: ComponentFixture<ClientsTableComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        ClientsTableComponent,
-        TablePageComponent,
-        TableComponent,
-        TextInputComponent,
-        DateTimeInputComponent,
-        SelectComponent,
-        CheckboxComponent,
-        ErrorMessageComponent,
-      ],
-      providers: [
-        OptionsService,
-        { provide: GettersService },
-        provideMockStore({
-          initialState: {
-            app: {
-              localitiesToSelect: null,
-              divisionsToSelect: null,
-              carsToSelect: null,
-              employeesToSelect: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ClientsTableComponent,
+          TablePageComponent,
+          TableComponent,
+          TextInputComponent,
+          DateTimeInputComponent,
+          SelectComponent,
+          CheckboxComponent,
+          ErrorMessageComponent,
+        ],
+        providers: [
+          OptionsService,
+          { provide: GettersService },
+          provideMockStore({
+            initialState: {
+              app: {
+                localitiesToSelect: null,
+                divisionsToSelect: null,
+                carsToSelect: null,
+                employeesToSelect: null,
+              },
+              users: {
+                user: null,
+                type: null,
+              },
+              clients: {
+                clients: [],
+                client: null,
+              },
             },
-            users: {
-              user: null,
-              type: null,
-            },
-            clients: {
-              clients: [],
-              client: null,
-            },
-          },
-        }),
-      ],
-      imports: [
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+        imports: [
+          ReactiveFormsModule,
+          BrowserAnimationsModule,
+          MaterialModule,
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClientsTableComponent);

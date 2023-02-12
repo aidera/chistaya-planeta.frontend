@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { InlineSVGModule } from 'ng-inline-svg';
 
@@ -12,21 +12,23 @@ describe('MobileHeaderComponent', () => {
   let component: MobileHeaderComponent;
   let fixture: ComponentFixture<MobileHeaderComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [MobileHeaderComponent],
-      providers: [
-        provideMockStore({
-          initialState: {
-            app: {
-              isFullscreenMenuOpen: false,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MobileHeaderComponent],
+        providers: [
+          provideMockStore({
+            initialState: {
+              app: {
+                isFullscreenMenuOpen: false,
+              },
             },
-          },
-        }),
-      ],
-      imports: [InlineSVGModule.forRoot()],
-    }).compileComponents();
-  }));
+          }),
+        ],
+        imports: [InlineSVGModule.forRoot()],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);

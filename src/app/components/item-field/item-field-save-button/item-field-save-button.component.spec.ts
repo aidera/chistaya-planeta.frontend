@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ItemFieldSaveButtonComponent } from './item-field-save-button.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,12 +8,14 @@ describe('ItemFieldSaveButtonComponent', () => {
   let component: ItemFieldSaveButtonComponent;
   let fixture: ComponentFixture<ItemFieldSaveButtonComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ItemFieldSaveButtonComponent],
-      imports: [HttpClientModule, InlineSVGModule.forRoot()],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ItemFieldSaveButtonComponent],
+        imports: [HttpClientModule, InlineSVGModule.forRoot()],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ItemFieldSaveButtonComponent);

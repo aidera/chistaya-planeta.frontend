@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { By } from '@angular/platform-browser';
@@ -16,25 +16,27 @@ describe('MenuLinkComponent', () => {
   let component: MenuLinkComponent;
   let fixture: ComponentFixture<MenuLinkComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [MenuLinkComponent],
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        InlineSVGModule.forRoot(),
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            app: {
-              isFullscreenMenuOpen: false,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MenuLinkComponent],
+        imports: [
+          RouterTestingModule,
+          HttpClientModule,
+          InlineSVGModule.forRoot(),
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              app: {
+                isFullscreenMenuOpen: false,
+              },
             },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);

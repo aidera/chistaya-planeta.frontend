@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   FormControl,
@@ -27,33 +27,39 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [LoginComponent, TextInputComponent, ErrorMessageComponent],
-      imports: [
-        BrowserAnimationsModule,
-        MaterialModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        InlineSVGModule.forRoot(),
-        NgxMaskModule.forRoot(),
-        HttpClientModule,
-      ],
-      providers: [
-        provideMockStore({
-          initialState: {
-            users: {
-              isLoginSucceed: false,
-              isLoggingIn: false,
-              user: null,
-              type: null,
-              serverError: null,
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          LoginComponent,
+          TextInputComponent,
+          ErrorMessageComponent,
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          MaterialModule,
+          RouterTestingModule,
+          ReactiveFormsModule,
+          InlineSVGModule.forRoot(),
+          NgxMaskModule.forRoot(),
+          HttpClientModule,
+        ],
+        providers: [
+          provideMockStore({
+            initialState: {
+              users: {
+                isLoginSucceed: false,
+                isLoggingIn: false,
+                user: null,
+                type: null,
+                serverError: null,
+              },
             },
-          },
-        }),
-      ],
-    }).compileComponents();
-  }));
+          }),
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     store = TestBed.inject(MockStore);
